@@ -26,60 +26,87 @@
     letter-spacing:.09em;text-transform:uppercase;padding:.28rem .45rem;border-radius:.35rem;cursor:pointer}
   .langues button[aria-pressed="true"]{color:var(--nuit);background:var(--eau);font-weight:700}
   section{padding:0 1.4rem}
-  .hero{min-height:auto;padding:4.5rem 0 3.6rem;display:flex;flex-direction:column;justify-content:center;max-width:52rem;margin:0 auto}
-  h1{font-size:clamp(2.9rem,11vw,6rem);line-height:.88;letter-spacing:-.03em;margin:0;
+  .hero{padding:5.5rem 0 4.5rem;max-width:52rem;margin:0 auto;text-align:center}
+  h1{font-size:clamp(3rem,12vw,6.4rem);line-height:.88;letter-spacing:-.03em;margin:0;
     text-transform:uppercase;font-weight:800}
   h1 span{display:block;color:var(--eau)}
-  .filet{width:5rem;height:3px;background:var(--rouge);margin:1.5rem 0}
-  .accroche{font-size:clamp(1.05rem,3.2vw,1.5rem);line-height:1.45;margin:0 0 .5rem;max-width:34rem}
-  .sous{color:var(--gris);margin:0;font-size:.95rem}
-  .chiffres{max-width:52rem;margin:0 auto 5rem}
-  h2{font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--eau);
-    font-weight:700;margin:0 0 1.4rem}
-  .grille{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem}
-  .tuile{display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:1.1rem .4rem;
-    border:1px solid rgba(126,214,214,.22);border-radius:1rem;background:rgba(12,36,64,.5)}
-  .tuile .logo svg{width:1.7rem;height:1.7rem;fill:var(--eau)}
-  .tuile .nombre{font-size:clamp(1rem,3.4vw,1.5rem);font-weight:700;letter-spacing:-.01em;
-    font-variant-numeric:tabular-nums}
-  a .tuile:hover{border-color:var(--eau);background:rgba(126,214,214,.08)}
-  .total{margin:1.3rem 0 0;color:var(--gris);font-size:.92rem;display:flex;flex-wrap:wrap;
-    gap:.45rem;align-items:baseline}
-  .total b{color:var(--creme);font-size:1.05rem;font-weight:700;font-variant-numeric:tabular-nums}
-  .total i{color:rgba(159,179,200,.45);font-style:normal;margin:0 .2rem}
+  .filet{width:5rem;height:3px;background:var(--rouge);margin:1.7rem auto}
+  .accroche{font-size:clamp(1.02rem,3vw,1.35rem);line-height:1.45;margin:0 auto .5rem;max-width:32rem}
+  .sous{color:var(--gris);margin:0;font-size:.93rem}
+  .reseaux-barre{display:flex;justify-content:center;gap:1.7rem;margin:2.6rem 0 0;align-items:center}
+  .reseau svg{width:2.05rem;height:2.05rem;display:block;transition:transform .18s ease}
+  .reseau:hover svg{transform:translateY(-3px) scale(1.06)}
+  .chiffres{max-width:52rem;margin:0 auto 7rem}
+  h2{font-size:.76rem;letter-spacing:.22em;text-transform:uppercase;color:var(--eau);
+    font-weight:700;margin:0 0 1.4rem;text-align:center}
+  .cadre{border:1px solid rgba(126,214,214,.28);border-radius:1.4rem;
+    background:linear-gradient(160deg,rgba(14,44,72,.75),rgba(8,22,40,.9));
+    padding:2.3rem 1.4rem;display:grid;grid-template-columns:repeat(5,1fr);gap:1.5rem .8rem;
+    text-align:center}
+  .grand b{display:block;font-size:clamp(1.02rem,1.9vw,1.55rem);font-weight:800;letter-spacing:-.01em;
+    font-variant-numeric:tabular-nums;color:var(--creme);white-space:nowrap}
+  .grand span{display:block;margin-top:.4rem;font-size:.7rem;line-height:1.25;color:var(--gris);
+    letter-spacing:.05em;text-transform:uppercase}
   .citations{border-top:1px solid rgba(126,214,214,.14);border-bottom:1px solid rgba(126,214,214,.14);
-    padding:3.2rem 0;overflow:hidden;background:rgba(6,16,32,.45)}
-  .piste{display:flex;width:max-content;animation:defile 150s linear infinite}
-  .citations:hover .piste{animation-play-state:paused}
-  @keyframes defile{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-  .citation{flex:none;width:min(30rem,86vw);margin:0;padding:0 2.2rem;border-left:1px solid rgba(126,214,214,.25)}
-  .citation blockquote{margin:0 0 .8rem;line-height:1.35}
-  .citation figcaption{font-size:.78rem;color:var(--gris);letter-spacing:.02em;display:flex;
-    flex-direction:column;gap:.15rem}
-  .citation figcaption strong{color:var(--eau);font-weight:600;letter-spacing:.05em;text-transform:uppercase;font-size:.72rem}
-  .ep18 blockquote{font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;font-size:1.28rem;font-style:italic}
-  .ep19 blockquote{font-family:"Palatino Linotype",Palatino,Georgia,serif;font-size:1.35rem}
-  .ep20 blockquote{font-family:"Helvetica Neue",Arial,sans-serif;font-size:1.25rem;font-weight:300;letter-spacing:.01em}
-  .ep21 blockquote{font-family:ui-sans-serif,system-ui,sans-serif;font-size:1.15rem;font-weight:600;letter-spacing:.03em}
-  .concours{max-width:52rem;margin:5.5rem auto}
-  .carte-jeu{border:1px solid rgba(126,214,214,.28);border-radius:1.3rem;padding:1.8rem 1.6rem;
+    padding:2.7rem 0 3.6rem;background:rgba(6,16,32,.45)}
+  .barre-cit{max-width:52rem;margin:0 auto 1.7rem;display:flex;justify-content:space-between;
+    align-items:center;gap:1rem;padding:0 1.4rem}
+  .barre-cit h2{margin:0;text-align:left}
+  .commandes{display:flex;gap:.4rem}
+  .commandes button{background:rgba(126,214,214,.08);border:1px solid rgba(126,214,214,.3);color:var(--eau);
+    width:2.15rem;height:2.15rem;border-radius:50%;cursor:pointer;font-size:.8rem;line-height:1;
+    display:flex;align-items:center;justify-content:center}
+  .commandes button:hover{background:rgba(126,214,214,.2)}
+  .fenetre{overflow:hidden;cursor:grab}
+  .fenetre:active{cursor:grabbing}
+  .piste{display:flex;width:max-content;will-change:transform}
+  .citation{flex:none;width:min(31rem,84vw);margin:0;padding:0 1.9rem;position:relative}
+  .citation blockquote{margin:0 0 .9rem;line-height:1.4}
+  .citation figcaption{font-size:.78rem;color:var(--gris);display:flex;flex-direction:column;gap:.15rem}
+  .citation figcaption strong{color:var(--eau);font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;font-size:.7rem}
+  .siecle{position:absolute;top:-1.4rem;right:1.6rem;font-size:.6rem;letter-spacing:.2em;
+    text-transform:uppercase;color:rgba(159,179,200,.5)}
+  .ep18{border-left:1px solid rgba(244,239,228,.18)}
+  .ep18 blockquote{font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;font-style:italic;
+    font-size:1.14rem;color:#f0e6d2;text-align:center;padding:0 .6rem}
+  .ep18 blockquote::before{content:"❦";display:block;color:var(--rouge);font-size:.9rem;
+    font-style:normal;margin-bottom:.5rem}
+  .ep18 figcaption{text-align:center;align-items:center}
+  .ep19{border-left:1px solid rgba(244,239,228,.18)}
+  .ep19 blockquote{font-family:"Palatino Linotype",Palatino,Georgia,serif;font-size:1.28rem;
+    color:#f6efe0}
+  .ep19 blockquote::first-letter{font-size:2.5rem;float:left;line-height:.9;padding:.1rem .35rem 0 0;
+    color:var(--eau)}
+  .ep20{border-left:1px solid rgba(244,239,228,.18)}
+  .ep20 blockquote{font-family:"Helvetica Neue",Arial,sans-serif;font-size:1.2rem;font-weight:300;
+    letter-spacing:.015em;background:rgba(126,214,214,.07);border-radius:.5rem;padding:1rem 1.1rem;
+    border-bottom:2px solid rgba(226,58,62,.55)}
+  .ep21{border-left:3px solid var(--eau)}
+  .ep21 blockquote{font-family:ui-sans-serif,system-ui,sans-serif;font-size:1rem;font-weight:600;
+    letter-spacing:.09em;text-transform:uppercase;line-height:1.5}
+  .concours{max-width:52rem;margin:7rem auto}
+  .carte-jeu{border:1px solid rgba(126,214,214,.28);border-radius:1.3rem;padding:2rem 1.7rem;
     background:linear-gradient(160deg,rgba(14,44,72,.85),rgba(8,22,40,.9))}
   .carte-jeu h3{margin:0 0 .7rem;font-size:clamp(1.5rem,4.4vw,2.1rem);letter-spacing:-.02em;font-weight:800}
-  .carte-jeu p{margin:0 0 1.4rem;color:var(--gris);line-height:1.55;max-width:34rem}
-  .bouton{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;padding:.85rem 1.4rem;
+  .carte-jeu p{margin:0 0 1.5rem;color:var(--gris);line-height:1.55;max-width:34rem}
+  .bouton{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.4rem;
     border-radius:999px;font-weight:700;font-size:.95rem;background:var(--eau);color:#062033;
     border:2px solid var(--eau)}
   .bouton:hover{background:#9fe6e6}
-  footer{border-top:1px solid rgba(126,214,214,.14);margin-top:4rem;padding:1.2rem 1.4rem 2rem;
+  footer{border-top:1px solid rgba(126,214,214,.14);margin-top:6.5rem;padding:1.4rem 1.4rem 2.4rem;
     display:flex;flex-wrap:wrap;gap:.6rem 1.3rem;justify-content:center;color:var(--gris);font-size:.84rem}
-  footer a{text-decoration:none;border-bottom:1px dotted rgba(159,179,200,.45)}
+  footer a{border-bottom:1px dotted rgba(159,179,200,.45)}
   footer a:hover{color:var(--eau)}
-  @media (max-width:620px){
-    .grille{grid-template-columns:repeat(2,1fr)}
-    .citation{width:84vw;padding:0 1.2rem}
-    .hero{min-height:66vh}
+  @media (max-width:760px){
+    .cadre{grid-template-columns:repeat(2,1fr);padding:1.8rem 1rem}
+    .grand:last-child{grid-column:span 2}
   }
-  @media (prefers-reduced-motion:reduce){.piste{animation:none}}
+  @media (max-width:620px){
+    .citation{width:86vw;padding:0 1.2rem}
+    .hero{padding:3.6rem 0 3.2rem}
+    .siecle{top:-1.2rem;right:1rem}
+  }
 </style>
 </head>
 <body>
@@ -96,16 +123,26 @@
   <div class="filet"></div>
   <p class="accroche" data-t="accroche">La voile et la course au large, en images</p>
   <p class="sous" data-t="sous">Chaque soir, sur Instagram et Facebook</p>
+  <div class="reseaux-barre"><a class="reseau" href="https://www.instagram.com/sailingmorehere/" target="_blank" rel="noopener" aria-label="instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="ig" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#feda75"/><stop offset=".35" stop-color="#fa7e1e"/><stop offset=".65" stop-color="#d62976"/><stop offset="1" stop-color="#962fbf"/></linearGradient></defs><path fill="url(#ig)" d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.9.3 2.4.5.6.2 1 .5 1.5 1 .5.5.8.9 1 1.5.2.5.4 1.2.5 2.4.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.9-.5 2.4-.2.6-.5 1-1 1.5-.5.5-.9.8-1.5 1-.5.2-1.2.4-2.4.5-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.9-.3-2.4-.5-.6-.2-1-.5-1.5-1-.5-.5-.8-.9-1-1.5-.2-.5-.4-1.2-.5-2.4C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.9.5-2.4.2-.6.5-1 1-1.5.5-.5.9-.8 1.5-1 .5-.2 1.2-.4 2.4-.5 1.3-.1 1.7-.1 4.9-.1zm0 3.2c-3.1 0-3.5 0-4.7.1-1 .1-1.4.2-1.7.4-.4.2-.7.4-1 .7-.3.3-.5.6-.7 1-.2.3-.3.7-.4 1.7-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 1 .2 1.4.4 1.7.2.4.4.7.7 1 .3.3.6.5 1 .7.3.2.7.3 1.7.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1-.1 1.4-.2 1.7-.4.4-.2.7-.4 1-.7.3-.3.5-.6.7-1 .2-.3.3-.7.4-1.7.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1-.2-1.4-.4-1.7-.2-.4-.4-.7-.7-1-.3-.3-.6-.5-1-.7-.3-.2-.7-.3-1.7-.4-1.2-.1-1.6-.1-4.7-.1zm0 3.1a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 3.2a2.3 2.3 0 1 0 0 4.6 2.3 2.3 0 0 0 0-4.6zm5.7-3.5a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6z"/></svg></a><a class="reseau" href="https://www.facebook.com/SailingMorehere/" target="_blank" rel="noopener" aria-label="facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#1877f2" d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.7-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg></a><span class="reseau" aria-label="youtube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#ff0000" d="M23 7.5a3 3 0 0 0-2.1-2.1C19 4.9 12 4.9 12 4.9s-7 0-8.9.5A3 3 0 0 0 1 7.5 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.5a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 23.5 12 31 31 0 0 0 23 7.5zM9.8 15.4V8.6L15.7 12z"/></svg></span><span class="reseau" aria-label="telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#29a9eb" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.6 6.6-1.6 7.6c-.1.5-.4.6-.8.4l-2.3-1.7-1.1 1.1c-.1.1-.2.2-.4.2l.2-2.5 4.6-4.1c.2-.2 0-.3-.3-.1l-5.7 3.6-2.4-.8c-.5-.2-.5-.5.1-.7l9.4-3.6c.4-.2.8 0 .6.6z"/></svg></span></div>
 </section>
 
 <section class="chiffres">
   <h2 data-t="chiffres">Sailing More en chiffres</h2>
-  <div class="grille"><a href="https://www.instagram.com/sailingmorehere/" target="_blank" rel="noopener"><div class="tuile"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.9.3 2.4.5.6.2 1 .5 1.5 1 .5.5.8.9 1 1.5.2.5.4 1.2.5 2.4.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.9-.5 2.4-.2.6-.5 1-1 1.5-.5.5-.9.8-1.5 1-.5.2-1.2.4-2.4.5-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.9-.3-2.4-.5-.6-.2-1-.5-1.5-1-.5-.5-.8-.9-1-1.5-.2-.5-.4-1.2-.5-2.4C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.9.5-2.4.2-.6.5-1 1-1.5.5-.5.9-.8 1.5-1 .5-.2 1.2-.4 2.4-.5 1.3-.1 1.7-.1 4.9-.1zm0 3.2c-3.1 0-3.5 0-4.7.1-1 .1-1.4.2-1.7.4-.4.2-.7.4-1 .7-.3.3-.5.6-.7 1-.2.3-.3.7-.4 1.7-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 1 .2 1.4.4 1.7.2.4.4.7.7 1 .3.3.6.5 1 .7.3.2.7.3 1.7.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1-.1 1.4-.2 1.7-.4.4-.2.7-.4 1-.7.3-.3.5-.6.7-1 .2-.3.3-.7.4-1.7.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1-.2-1.4-.4-1.7-.2-.4-.4-.7-.7-1-.3-.3-.6-.5-1-.7-.3-.2-.7-.3-1.7-.4-1.2-.1-1.6-.1-4.7-.1zm0 3.1a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 3.2a2.3 2.3 0 1 0 0 4.6 2.3 2.3 0 0 0 0-4.6zm5.7-3.5a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6z"/></svg></span><span class="nombre">17 042</span></div></a><a href="https://www.facebook.com/SailingMorehere/" target="_blank" rel="noopener"><div class="tuile"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.7-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg></span><span class="nombre">123 757</span></div></a><div><div class="tuile"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 7.5a3 3 0 0 0-2.1-2.1C19 4.9 12 4.9 12 4.9s-7 0-8.9.5A3 3 0 0 0 1 7.5 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.5a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 23.5 12 31 31 0 0 0 23 7.5zM9.8 15.4V8.6L15.7 12z"/></svg></span><span class="nombre">874</span></div></div><div><div class="tuile"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.6 6.6-1.6 7.6c-.1.5-.4.6-.8.4l-2.3-1.7-1.1 1.1c-.1.1-.2.2-.4.2l.2-2.5 4.6-4.1c.2-.2 0-.3-.3-.1l-5.7 3.6-2.4-.8c-.5-.2-.5-.5.1-.7l9.4-3.6c.4-.2.8 0 .6.6z"/></svg></span><span class="nombre">66</span></div></div></div>
-  <p class="total"><b>141 739</b> <span data-t="abonnes">abonnés</span><i>·</i><b>46.4 M</b> <span data-t="vues">vues</span><i>·</i><b>963</b> <span data-t="contenus">publications</span></p>
+  <div class="cadre"><div class="grand"><b>141 739</b><span data-t="abonnes">abonnes</span></div><div class="grand"><b>≈ 46 366 562</b><span data-t="vues">vues</span></div><div class="grand"><b>963</b><span data-t="contenus">contenus</span></div><div class="grand"><b>≈ 791 475</b><span data-t="vues28">vues28</span></div><div class="grand"><b>30 173 619</b><span data-t="vuesfb">vuesfb</span></div></div>
 </section>
 
-<section class="citations" aria-label="Citations">
-  <div class="piste"><figure class="citation ep19"><blockquote>«&nbsp;Oui ! je l’aime ! La mer est tout ! Elle couvre les sept dixièmes du globe terrestre. Son souffle est pur et sain.&nbsp;»</blockquote><figcaption><strong>Jules Verne — le capitaine Nemo</strong><span>Vingt mille lieues sous les mers, 1870</span></figcaption></figure><figure class="citation ep19"><blockquote>«&nbsp;The next step toward the goal of happiness found me before the mast in a full-rigged ship bound on a foreign voyage.&nbsp;»</blockquote><figcaption><strong>Joshua Slocum</strong><span>Sailing Alone Around the World, 1900</span></figcaption></figure><figure class="citation ep20"><blockquote>«&nbsp;Je continue sans escale vers les îles du Pacifique, parce que je suis heureux en mer, et peut-être aussi pour sauver mon âme.&nbsp;»</blockquote><figcaption><strong>Bernard Moitessier</strong><span>La Longue Route, 1971</span></figcaption></figure><figure class="citation ep20"><blockquote>«&nbsp;Allez vous faire foutre, me suis-je dit. Puisque c’est ainsi, j’irai naviguer toute seule.&nbsp;»</blockquote><figcaption><strong>Florence Arthaud</strong><span>Cette nuit, la mer est noire, 2007</span></figcaption></figure><figure class="citation ep19"><blockquote>«&nbsp;Oui ! je l’aime ! La mer est tout ! Elle couvre les sept dixièmes du globe terrestre. Son souffle est pur et sain.&nbsp;»</blockquote><figcaption><strong>Jules Verne — le capitaine Nemo</strong><span>Vingt mille lieues sous les mers, 1870</span></figcaption></figure><figure class="citation ep19"><blockquote>«&nbsp;The next step toward the goal of happiness found me before the mast in a full-rigged ship bound on a foreign voyage.&nbsp;»</blockquote><figcaption><strong>Joshua Slocum</strong><span>Sailing Alone Around the World, 1900</span></figcaption></figure><figure class="citation ep20"><blockquote>«&nbsp;Je continue sans escale vers les îles du Pacifique, parce que je suis heureux en mer, et peut-être aussi pour sauver mon âme.&nbsp;»</blockquote><figcaption><strong>Bernard Moitessier</strong><span>La Longue Route, 1971</span></figcaption></figure><figure class="citation ep20"><blockquote>«&nbsp;Allez vous faire foutre, me suis-je dit. Puisque c’est ainsi, j’irai naviguer toute seule.&nbsp;»</blockquote><figcaption><strong>Florence Arthaud</strong><span>Cette nuit, la mer est noire, 2007</span></figcaption></figure></div>
+<section class="citations">
+  <div class="barre-cit">
+    <h2 data-t="citations">Ils l'ont dit avant nous</h2>
+    <div class="commandes">
+      <button id="arret" aria-label="Arrêter ou reprendre" title="Arrêter / reprendre">❚❚</button>
+      <button id="gauche" aria-label="Précédent" title="Précédent">←</button>
+      <button id="droite" aria-label="Suivant" title="Suivant">→</button>
+    </div>
+  </div>
+  <div class="fenetre" id="fenetre">
+    <div class="piste" id="piste"><figure class="citation ep19"><span class="siecle">XIXe</span><blockquote>Oui ! je l’aime ! La mer est tout ! Elle couvre les sept dixièmes du globe terrestre. Son souffle est pur et sain.</blockquote><figcaption><strong>Jules Verne — le capitaine Nemo</strong><span>Vingt mille lieues sous les mers, 1870</span></figcaption></figure><figure class="citation ep19"><span class="siecle">XIXe</span><blockquote>The next step toward the goal of happiness found me before the mast in a full-rigged ship bound on a foreign voyage.</blockquote><figcaption><strong>Joshua Slocum</strong><span>Sailing Alone Around the World, 1900</span></figcaption></figure><figure class="citation ep20"><span class="siecle">XXe</span><blockquote>Je continue sans escale vers les îles du Pacifique, parce que je suis heureux en mer, et peut-être aussi pour sauver mon âme.</blockquote><figcaption><strong>Bernard Moitessier</strong><span>La Longue Route, 1971</span></figcaption></figure><figure class="citation ep21"><span class="siecle">XXIe</span><blockquote>Allez vous faire foutre, me suis-je dit. Puisque c’est ainsi, j’irai naviguer toute seule.</blockquote><figcaption><strong>Florence Arthaud</strong><span>Cette nuit, la mer est noire, 2007</span></figcaption></figure></div>
+  </div>
 </section>
 
 <section class="concours">
@@ -124,10 +161,9 @@
 </footer>
 
 <script>
-const T = {"fr": {"accroche": "La voile et la course au large, en images", "sous": "Chaque soir, sur Instagram et Facebook", "chiffres": "Sailing More en chiffres", "abonnes": "abonnés", "vues": "vues", "contenus": "publications", "reseaux": "Nos réseaux", "concours_titre": "Le jeu concours", "concours_texte": "Un jeu par mois pour un annonceur, six jours de stories, un tirage le dimanche. Prochain départ : mardi {date}.", "concours_bouton": "Voir le jeu", "langue": "Langue", "auto": "Auto"}, "en": {"accroche": "Sailing and offshore racing, in pictures", "sous": "Every evening, on Instagram and Facebook", "chiffres": "Sailing More in numbers", "abonnes": "followers", "vues": "views", "contenus": "posts", "reseaux": "Our channels", "concours_titre": "The giveaway", "concours_texte": "One giveaway a month for an advertiser, six days of stories, a draw on Sunday. Next start: Tuesday {date}.", "concours_bouton": "See the giveaway", "langue": "Language", "auto": "Auto"}, "it": {"accroche": "La vela e le regate oceaniche, in immagini", "sous": "Ogni sera, su Instagram e Facebook", "chiffres": "Sailing More in numeri", "abonnes": "follower", "vues": "visualizzazioni", "contenus": "pubblicazioni", "reseaux": "I nostri canali", "concours_titre": "Il concorso", "concours_texte": "Un concorso al mese per un inserzionista, sei giorni di storie, un sorteggio la domenica. Prossima partenza: martedì {date}.", "concours_bouton": "Vedi il concorso", "langue": "Lingua", "auto": "Auto"}, "es": {"accroche": "La vela y la regata oceánica, en imágenes", "sous": "Cada noche, en Instagram y Facebook", "chiffres": "Sailing More en cifras", "abonnes": "seguidores", "vues": "visualizaciones", "contenus": "publicaciones", "reseaux": "Nuestras redes", "concours_titre": "El sorteo", "concours_texte": "Un sorteo al mes para un anunciante, seis días de historias, un sorteo el domingo. Próxima salida: martes {date}.", "concours_bouton": "Ver el sorteo", "langue": "Idioma", "auto": "Auto"}, "pt": {"accroche": "A vela e as regatas oceânicas, em imagens", "sous": "Todas as noites, no Instagram e no Facebook", "chiffres": "Sailing More em números", "abonnes": "seguidores", "vues": "visualizações", "contenus": "publicações", "reseaux": "As nossas redes", "concours_titre": "O passatempo", "concours_texte": "Um passatempo por mês para um anunciante, seis dias de stories, um sorteio ao domingo. Próxima partida: terça-feira {date}.", "concours_bouton": "Ver o passatempo", "langue": "Idioma", "auto": "Auto"}, "de": {"accroche": "Segeln und Hochseerennen, in Bildern", "sous": "Jeden Abend, auf Instagram und Facebook", "chiffres": "Sailing More in Zahlen", "abonnes": "Follower", "vues": "Aufrufe", "contenus": "Beiträge", "reseaux": "Unsere Kanäle", "concours_titre": "Das Gewinnspiel", "concours_texte": "Ein Gewinnspiel pro Monat für einen Werbepartner, sechs Tage Stories, Ziehung am Sonntag. Nächster Start: Dienstag, {date}.", "concours_bouton": "Zum Gewinnspiel", "langue": "Sprache", "auto": "Auto"}};
+const T = {"fr": {"accroche": "La voile et la course au large, en images", "sous": "Chaque soir, sur Instagram et Facebook", "chiffres": "Sailing More en chiffres", "reseaux": "Nos réseaux", "citations": "Ils l'ont dit avant nous", "concours_titre": "Le jeu concours", "concours_texte": "Un jeu par mois pour un annonceur, six jours de stories, un tirage le dimanche. Prochain départ : mardi {date}.", "concours_bouton": "Voir le jeu", "abonnes": "abonnés", "contenus": "publications", "vues": "vues", "vues28": "vues, 28 derniers jours", "vuesfb": "vues sur Facebook", "auto": "Auto"}, "en": {"accroche": "Sailing and offshore racing, in pictures", "sous": "Every evening, on Instagram and Facebook", "chiffres": "Sailing More in numbers", "reseaux": "Our channels", "citations": "They said it before us", "concours_titre": "The giveaway", "concours_texte": "One giveaway a month for an advertiser, six days of stories, a draw on Sunday. Next start: Tuesday {date}.", "concours_bouton": "See the giveaway", "abonnes": "followers", "contenus": "posts", "vues": "views", "vues28": "views, last 28 days", "vuesfb": "views on Facebook", "auto": "Auto"}, "it": {"accroche": "La vela e le regate oceaniche, in immagini", "sous": "Ogni sera, su Instagram e Facebook", "chiffres": "Sailing More in numeri", "reseaux": "I nostri canali", "citations": "L'hanno detto prima di noi", "concours_titre": "Il concorso", "concours_texte": "Un concorso al mese per un inserzionista, sei giorni di storie, un sorteggio la domenica. Prossima partenza: martedì {date}.", "concours_bouton": "Vedi il concorso", "abonnes": "follower", "contenus": "pubblicazioni", "vues": "visualizzazioni", "vues28": "visualizzazioni, ultimi 28 giorni", "vuesfb": "visualizzazioni su Facebook", "auto": "Auto"}, "es": {"accroche": "La vela y la regata oceánica, en imágenes", "sous": "Cada noche, en Instagram y Facebook", "chiffres": "Sailing More en cifras", "reseaux": "Nuestras redes", "citations": "Lo dijeron antes que nosotros", "concours_titre": "El sorteo", "concours_texte": "Un sorteo al mes para un anunciante, seis días de historias, un sorteo el domingo. Próxima salida: martes {date}.", "concours_bouton": "Ver el sorteo", "abonnes": "seguidores", "contenus": "publicaciones", "vues": "visualizaciones", "vues28": "visualizaciones, últimos 28 días", "vuesfb": "visualizaciones en Facebook", "auto": "Auto"}, "pt": {"accroche": "A vela e as regatas oceânicas, em imagens", "sous": "Todas as noites, no Instagram e no Facebook", "chiffres": "Sailing More em números", "reseaux": "As nossas redes", "citations": "Disseram-no antes de nós", "concours_titre": "O passatempo", "concours_texte": "Um passatempo por mês para um anunciante, seis dias de stories, um sorteio ao domingo. Próxima partida: terça-feira {date}.", "concours_bouton": "Ver o passatempo", "abonnes": "seguidores", "contenus": "publicações", "vues": "visualizações", "vues28": "visualizações, últimos 28 dias", "vuesfb": "visualizações no Facebook", "auto": "Auto"}, "de": {"accroche": "Segeln und Hochseerennen, in Bildern", "sous": "Jeden Abend, auf Instagram und Facebook", "chiffres": "Sailing More in Zahlen", "reseaux": "Unsere Kanäle", "citations": "Sie sagten es vor uns", "concours_titre": "Das Gewinnspiel", "concours_texte": "Ein Gewinnspiel pro Monat für einen Werbepartner, sechs Tage Stories, Ziehung am Sonntag. Nächster Start: Dienstag, {date}.", "concours_bouton": "Zum Gewinnspiel", "abonnes": "Follower", "contenus": "Beiträge", "vues": "Aufrufe", "vues28": "Aufrufe, letzte 28 Tage", "vuesfb": "Aufrufe auf Facebook", "auto": "Auto"}};
 const MOIS = {"fr": ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"], "en": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], "it": ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"], "es": ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"], "pt": ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"], "de": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"]};
 const JEU = "2026-12-08";
-let langue = "fr";
 
 function choisir() {
   const force = localStorage.getItem("sm-langue");
@@ -141,7 +177,6 @@ function choisir() {
 }
 
 function appliquer(l) {
-  langue = l;
   const d = T[l];
   document.documentElement.lang = l;
   document.querySelectorAll("[data-t]").forEach(el => {
@@ -162,6 +197,46 @@ document.querySelectorAll("#langues button").forEach(b => b.addEventListener("cl
   localStorage.setItem("sm-langue", b.dataset.lang);
   appliquer(b.dataset.lang === "auto" ? choisir() : b.dataset.lang);
 }));
+
+/* Le bandeau avance toujours ; les boutons du dessus arrêtent, reculent, avancent. */
+const piste = document.getElementById("piste");
+const fenetre = document.getElementById("fenetre");
+let x = 0, enMarche = true, pauseSurvol = false, precedent = 0;
+const VITESSE = 11;
+
+function tiers() { return piste.scrollWidth / 2 || 1; }
+
+function avancer(t) {
+  if (!precedent) precedent = t;
+  const dt = Math.min((t - precedent) / 1000, 0.05);
+  precedent = t;
+  if (enMarche && !pauseSurvol) x -= VITESSE * dt;
+  const t2 = tiers();
+  if (x <= -t2) x += t2;
+  if (x > 0) x -= t2;
+  piste.style.transform = `translate3d(${x}px,0,0)`;
+  requestAnimationFrame(avancer);
+}
+requestAnimationFrame(avancer);
+
+fenetre.addEventListener("mouseenter", () => { pauseSurvol = true; });
+fenetre.addEventListener("mouseleave", () => { pauseSurvol = false; });
+
+document.getElementById("arret").addEventListener("click", e => {
+  enMarche = !enMarche;
+  e.currentTarget.textContent = enMarche ? "❚❚" : "▶";
+});
+document.getElementById("gauche").addEventListener("click", () => { x += 340; });
+document.getElementById("droite").addEventListener("click", () => { x -= 340; });
+
+let depart = null;
+fenetre.addEventListener("pointerdown", e => { depart = e.clientX; });
+fenetre.addEventListener("pointermove", e => {
+  if (depart === null) return;
+  x += e.clientX - depart;
+  depart = e.clientX;
+});
+window.addEventListener("pointerup", () => { depart = null; });
 
 appliquer(choisir());
 </script>
