@@ -65,7 +65,7 @@
   .citations{border-top:1px solid rgba(126,214,214,.14);border-bottom:1px solid rgba(126,214,214,.14);
     padding:2.7rem 0 3.6rem;background:rgba(6,16,32,.45)}
   .titre-cit{margin:0 auto 2.1rem;text-align:center}
-  .fenetre{overflow:hidden;cursor:grab}
+  .fenetre{overflow:hidden;cursor:grab;touch-action:pan-y;-webkit-user-select:none;user-select:none}
   .fenetre:active{cursor:grabbing}
   .piste{display:flex;width:max-content;will-change:transform}
   .citation{flex:none;width:min(31rem,84vw);margin:0;padding:0 1.9rem;position:relative}
@@ -213,35 +213,59 @@ document.querySelectorAll("#langues button").forEach(b => b.addEventListener("cl
   appliquer(b.dataset.lang === "auto" ? choisir() : b.dataset.lang);
 }));
 
-/* Le bandeau avance toujours ; les boutons du dessus arrêtent, reculent, avancent. */
+/* Le bandeau avance seul ; on peut l'arrêter et le pousser au doigt ou à la souris. */
 const piste = document.getElementById("piste");
 const fenetre = document.getElementById("fenetre");
-let x = 0, enMarche = true, pauseSurvol = false, precedent = 0;
+let x = 0, enMarche = true, glisse = false, depart = 0, vitesse = 0, precedent = 0;
 const VITESSE = 11;
 
 function tiers() { return piste.scrollWidth / 2 || 1; }
+
+function recaler() {
+  const t2 = tiers();
+  if (x <= -t2) x += t2;
+  if (x > 0) x -= t2;
+}
 
 function avancer(t) {
   if (!precedent) precedent = t;
   const dt = Math.min((t - precedent) / 1000, 0.05);
   precedent = t;
-  if (enMarche && !pauseSurvol) x -= VITESSE * dt;
-  const t2 = tiers();
-  if (x <= -t2) x += t2;
-  if (x > 0) x -= t2;
+  if (glisse) {
+    /* la position vient du doigt */
+  } else if (Math.abs(vitesse) > 0.4) {
+    x += vitesse; vitesse *= 0.93;          /* l'élan se perd tout seul */
+  } else if (enMarche) {
+    vitesse = 0;
+    x -= VITESSE * dt;
+  }
+  recaler();
   piste.style.transform = `translate3d(${x}px,0,0)`;
   requestAnimationFrame(avancer);
 }
 requestAnimationFrame(avancer);
 
-let depart = null;
-fenetre.addEventListener("pointerdown", e => { depart = e.clientX; });
-fenetre.addEventListener("pointermove", e => {
-  if (depart === null) return;
-  x += e.clientX - depart;
-  depart = e.clientX;
+fenetre.addEventListener("pointerdown", e => {
+  glisse = true; depart = e.clientX; vitesse = 0;
+  try { fenetre.setPointerCapture(e.pointerId); } catch (_) {}
 });
-window.addEventListener("pointerup", () => { depart = null; });
+fenetre.addEventListener("pointermove", e => {
+  if (!glisse) return;
+  const dx = e.clientX - depart;
+  depart = e.clientX;
+  x += dx;
+  vitesse = dx * 0.8;                        /* l'élan du geste, gardé pour le lâcher */
+  recaler();
+});
+function lacher() {
+  if (!glisse) return;
+  glisse = false;
+  setTimeout(() => { enMarche = true; }, 900);   /* le défilement reprend après une courte pause */
+}
+fenetre.addEventListener("pointerup", lacher);
+fenetre.addEventListener("pointercancel", lacher);
+fenetre.addEventListener("mouseenter", () => { if (!glisse) enMarche = false; });
+fenetre.addEventListener("mouseleave", () => { if (!glisse) enMarche = true; });
 
 appliquer(choisir());
 </script>
