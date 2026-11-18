@@ -24,11 +24,11 @@
     -webkit-font-smoothing:antialiased;
   }
   .mer{
-    position:fixed;left:0;right:0;bottom:0;height:38vh;pointer-events:none;
+    position:fixed;left:0;right:0;bottom:0;height:30vh;pointer-events:none;
     background:linear-gradient(180deg,transparent,rgba(20,90,120,.35) 40%,rgba(10,50,75,.85));
     clip-path:polygon(0 22%,100% 0,100% 100%,0 100%);
   }
-  main{position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:center;padding:6vh 1.5rem 4vh}
+  main{position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:center;padding:5vh 1.5rem 3vh}
   .carte{max-width:46rem;width:100%}
   .marque{
     font-size:clamp(2.6rem,9vw,5.2rem);line-height:.92;letter-spacing:-.02em;
@@ -49,8 +49,10 @@
   .bouton.plein{background:var(--eau);color:#062033;border-color:var(--eau)}
   .bouton.plein:hover{background:#9fe6e6}
   footer{
-    position:relative;z-index:1;padding:1.4rem 1.5rem 2rem;max-width:46rem;margin:0 auto;width:100%;
-    color:var(--gris);font-size:.85rem;display:flex;flex-wrap:wrap;gap:.6rem 1.2rem;align-items:center;
+    position:relative;z-index:2;padding:1.1rem 1.5rem;width:100%;
+    background:rgba(6,16,32,.86);border-top:1px solid rgba(126,214,214,.18);
+    color:var(--gris);font-size:.85rem;display:flex;flex-wrap:wrap;gap:.5rem 1.2rem;align-items:center;
+    justify-content:center;
   }
   footer a{color:var(--gris);text-decoration:none;border-bottom:1px dotted rgba(159,179,200,.5)}
   footer a:hover{color:var(--eau);border-color:var(--eau)}
