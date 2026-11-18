@@ -1,58 +1,88 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sailing More — Privacy policy / Confidentialité</title>
-<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;max-width:44rem;margin:3rem auto;padding:0 1.25rem;line-height:1.6;color:#111}h1{font-size:1.7rem}h2{margin-top:2rem;font-size:1.15rem}hr{margin:3rem 0;border:0;border-top:1px solid #ddd}small{color:#555}</style>
-</head><body>
-<h1>Sailing More — Privacy policy</h1>
-<p><small>Last updated: 5 November 2026</small></p>
-
-<p>Sailing More is an independent sailing and offshore racing outlet, publishing on Facebook and
-Instagram as <strong>Sailing More</strong>. This page explains what we do with the information people
-send us through those platforms.</p>
-
-<h2>What we receive</h2>
-<ul>
-<li>the messages and comments sent to our Facebook Page and our Instagram account;</li>
-<li>the photographs and documents attached to them;</li>
-<li>the basic technical data the platforms return with a message (account name, time, identifiers).</li>
-</ul>
-
-<h2>Why we use it</h2>
-<p>To read the message and answer it. If a reader sends a photograph or a piece of information, we may
-publish it, always with the credit the author asks for, and only if the author agrees.</p>
-
-<h2>What we never do</h2>
-<p>No advertising, no profiling, no automated messaging, no sale or transfer of this data to anyone.
-We do not send messages without a person at Sailing More having read them first.</p>
-
-<h2>Where it is kept</h2>
-<p>On our own server, under our control, and in our email mailbox. We keep a conversation for as long as
-it is being answered, then delete it.</p>
-
-<h2>Your rights</h2>
-<p>You may ask what we hold about you, ask us to correct it, or ask us to delete it: write to
-<a href="mailto:sailingmorehere@gmail.com">sailingmorehere@gmail.com</a>. We answer within 30 days.
-How deletion works is described on <a href="delete.html">this page</a>.</p>
-
-<h2>Cookies</h2>
-<p>This page sets no cookie and runs no analytics.</p>
-
-<hr>
-<h1>Confidentialité</h1>
-<p>Sailing More est un média indépendant de voile et de course au large, publiant sur Facebook et
-Instagram sous le nom <strong>Sailing More</strong>.</p>
-<p><strong>Ce que nous recevons</strong> : les messages et commentaires adressés à notre page Facebook et
-à notre compte Instagram, les photos et documents qui y sont joints, et les données techniques que les
-plateformes joignent à un message (nom du compte, date, identifiants).</p>
-<p><strong>Pourquoi</strong> : pour lire le message et y répondre. Si un lecteur nous envoie une photo ou
-une information, nous pouvons la publier, avec le crédit qu'il demande et seulement s'il est d'accord.</p>
-<p><strong>Ce que nous ne faisons jamais</strong> : ni publicité, ni profilage, ni envoi automatisé, ni
-vente ou transmission de ces données. Aucun message ne part sans qu'une personne de Sailing More ne
-l'ait lu au préalable.</p>
-<p><strong>Où c'est conservé</strong> : sur notre propre serveur, sous notre contrôle, et dans notre
-boîte mail. Une conversation est conservée le temps d'y répondre, puis supprimée.</p>
-<p><strong>Vos droits</strong> : demander ce que nous détenons, le faire corriger, le faire supprimer —
-écrivez à <a href="mailto:sailingmorehere@gmail.com">sailingmorehere@gmail.com</a>. Réponse sous 30 jours.
-La suppression est décrite sur <a href="delete.html">cette page</a>.</p>
-<p><strong>Cookies</strong> : cette page n'en pose aucun et ne mesure aucune audience.</p>
-</body></html>
+<title>Sailing More — la voile et la course au large, en images</title>
+<meta name="description" content="Sailing More — média indépendant de voile et de course au large. Stories quotidiennes, vidéos et régates, en français et en anglais.">
+<meta property="og:title" content="Sailing More">
+<meta property="og:description" content="La voile et la course au large, en images.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sailingmore.fr/">
+<style>
+  :root{
+    --nuit:#08162a; --nuit2:#0d2440; --eau:#7ed6d6; --blanc:#f8fafc;
+    --gris:#9fb3c8; --rouge:#e23a3e;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(120% 80% at 50% 0%, var(--nuit2) 0%, var(--nuit) 60%, #061020 100%);
+    color:var(--blanc);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    min-height:100vh;display:flex;flex-direction:column;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mer{
+    position:fixed;left:0;right:0;bottom:0;height:38vh;pointer-events:none;
+    background:linear-gradient(180deg,transparent,rgba(20,90,120,.35) 40%,rgba(10,50,75,.85));
+    clip-path:polygon(0 22%,100% 0,100% 100%,0 100%);
+  }
+  main{position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:center;padding:6vh 1.5rem 4vh}
+  .carte{max-width:46rem;width:100%}
+  .marque{
+    font-size:clamp(2.6rem,9vw,5.2rem);line-height:.92;letter-spacing:-.02em;
+    font-weight:800;margin:0;text-transform:uppercase;
+  }
+  .marque span{display:block;color:var(--eau)}
+  .ligne{width:5rem;height:3px;background:var(--rouge);margin:1.6rem 0}
+  .accroche{font-size:clamp(1.05rem,2.6vw,1.35rem);line-height:1.5;color:var(--blanc);margin:0 0 .7rem}
+  .accroche em{color:var(--eau);font-style:normal}
+  .en{color:var(--gris);font-size:.95rem;line-height:1.5;margin:0 0 2.2rem}
+  .boutons{display:flex;flex-wrap:wrap;gap:.8rem}
+  .bouton{
+    display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;
+    padding:.85rem 1.35rem;border-radius:999px;font-weight:600;font-size:.98rem;
+    border:2px solid var(--eau);color:var(--blanc);transition:transform .15s,background .15s;
+  }
+  .bouton:hover{transform:translateY(-2px);background:rgba(126,214,214,.12)}
+  .bouton.plein{background:var(--eau);color:#062033;border-color:var(--eau)}
+  .bouton.plein:hover{background:#9fe6e6}
+  footer{
+    position:relative;z-index:1;padding:1.4rem 1.5rem 2rem;max-width:46rem;margin:0 auto;width:100%;
+    color:var(--gris);font-size:.85rem;display:flex;flex-wrap:wrap;gap:.6rem 1.2rem;align-items:center;
+  }
+  footer a{color:var(--gris);text-decoration:none;border-bottom:1px dotted rgba(159,179,200,.5)}
+  footer a:hover{color:var(--eau);border-color:var(--eau)}
+  .paste{display:inline-flex;align-items:center;gap:.4rem;color:#5d7488}
+  .ico{width:1.05em;height:1.05em;fill:currentColor;flex:none}
+</style>
+</head>
+<body>
+<div class="mer"></div>
+<main>
+  <div class="carte">
+    <h1 class="marque">Sailing<span>More</span></h1>
+    <div class="ligne"></div>
+    <p class="accroche">La voile et la course au large, <em>en images</em> — chaque soir, sur Instagram et Facebook.</p>
+    <p class="en">Sailing and offshore racing, in pictures. Daily stories, reels and race coverage.</p>
+    <div class="boutons">
+      <a class="bouton plein" href="https://www.instagram.com/sailingmorehere/" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.9.3 2.4.5.6.2 1 .5 1.5 1 .5.5.8.9 1 1.5.2.5.4 1.2.5 2.4.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.9-.5 2.4-.2.6-.5 1-1 1.5-.5.5-.9.8-1.5 1-.5.2-1.2.4-2.4.5-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.9-.3-2.4-.5-.6-.2-1-.5-1.5-1-.5-.5-.8-.9-1-1.5-.2-.5-.4-1.2-.5-2.4C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.9.5-2.4.2-.6.5-1 1-1.5.5-.5.9-.8 1.5-1 .5-.2 1.2-.4 2.4-.5 1.3-.1 1.7-.1 4.9-.1zm0 3.2c-3.1 0-3.5 0-4.7.1-1 .1-1.4.2-1.7.4-.4.2-.7.4-1 .7-.3.3-.5.6-.7 1-.2.3-.3.7-.4 1.7-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 1 .2 1.4.4 1.7.2.4.4.7.7 1 .3.3.6.5 1 .7.3.2.7.3 1.7.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1-.1 1.4-.2 1.7-.4.4-.2.7-.4 1-.7.3-.3.5-.6.7-1 .2-.3.3-.7.4-1.7.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1-.2-1.4-.4-1.7-.2-.4-.4-.7-.7-1-.3-.3-.6-.5-1-.7-.3-.2-.7-.3-1.7-.4-1.2-.1-1.6-.1-4.7-.1zm0 3.1a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 3.2a2.3 2.3 0 1 0 0 4.6 2.3 2.3 0 0 0 0-4.6zm5.7-3.5a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6z"/></svg>
+        Instagram
+      </a>
+      <a class="bouton" href="https://www.facebook.com/SailingMorehere/" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.7-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg>
+        Facebook
+      </a>
+    </div>
+  </div>
+</main>
+<footer>
+  <a href="mailto:sailingmorehere@gmail.com">sailingmorehere@gmail.com</a>
+  <a href="confidentialite.html">Confidentialité · Privacy</a>
+  <a href="delete.html">Suppression de données · Data deletion</a>
+  <span class="paste">© 2026 Sailing More</span>
+</footer>
+</body>
+</html>
