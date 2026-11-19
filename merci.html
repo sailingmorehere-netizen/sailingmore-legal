@@ -245,7 +245,16 @@
     .citation{min-height:0}
   }
 
-</style></head><body><div class="bord-reserve" aria-hidden="true"></div><div class="page"><a class="retour" href="index.html">← Sailing More</a><h1>Merci.</h1><p>Votre demande est partie. Je réponds moi-même, sous 24 heures, du lundi au vendredi.</p><p>En attendant, la grille est là : trois packs, du post seul au trimestre partenaire.</p><p><a href="index.html#annonceurs">Revenir à la page des annonceurs</a></p></div><!--mer-debut-->
+</style></head><body><div class="mer-fond mer-fond-commandes">
+  <div class="heure">
+    <output class="lue" id="heureLue" for="heure">19 h 15</output>
+    <input class="piste" id="heure" type="range" min="0" max="24" step="0.25" value="19.25"
+      aria-label="Heure du jour" aria-valuetext="19 h 15, heure dorée">
+    <button class="auto" id="auto" type="button" role="switch" aria-checked="true"
+      aria-label="Heure automatique, selon l'horloge de l'appareil"><span class="pastille" aria-hidden="true"></span>Auto</button>
+  </div>
+  <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
+</div><div class="page"><a class="retour" href="index.html">← Sailing More</a><h1>Merci.</h1><p>Votre demande est partie. Je réponds moi-même, sous 24 heures, du lundi au vendredi.</p><p>En attendant, la grille est là : trois packs, du post seul au trimestre partenaire.</p><p><a href="index.html#annonceurs">Revenir à la page des annonceurs</a></p></div><!--mer-debut-->
 <div class="mer-fond" id="cadre">
 
   <canvas id="mer" aria-hidden="true"></canvas>
@@ -306,9 +315,12 @@
 
 /* Le tableau de bord détaché des pages annexes : mêmes commandes, hors de la couche du fond
    (z-index -1) qui les rendrait invisibles et incliquables. */
-.mer-fond.mer-fond-commandes{inset:auto;left:0;right:0;top:0;height:0;background:none;overflow:visible;
-  z-index:60;pointer-events:none}
-.mer-fond.mer-fond-commandes .heure,.mer-fond.mer-fond-commandes .choix{pointer-events:auto}
+.mer-fond.mer-fond-commandes{position:relative;inset:auto;height:auto;width:100%;max-width:100%;
+  background:none;overflow:visible;z-index:60;pointer-events:none;display:flex;flex-direction:column;
+  align-items:flex-start;gap:.55rem;padding:1rem 1.1rem .2rem}
+.mer-fond.mer-fond-commandes .heure,.mer-fond.mer-fond-commandes .choix{position:relative!important;
+  left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
+  margin:0!important;pointer-events:auto}
 .mer-fond .heure{position:absolute;left:14px;top:70px;z-index:4;height:46px;padding:0 8px 0 14px;
   display:flex;align-items:center;gap:10px;border-radius:999px;width:min(360px,calc(100% - 28px));
   background:rgba(6,18,33,.66);color:var(--creme,#f4efe4);
@@ -411,14 +423,5 @@
   window.addEventListener('resize', maj); maj();
 })();
 </script>
-<div class="mer-fond mer-fond-commandes">
-  <div class="heure">
-    <output class="lue" id="heureLue" for="heure">19 h 15</output>
-    <input class="piste" id="heure" type="range" min="0" max="24" step="0.25" value="19.25"
-      aria-label="Heure du jour" aria-valuetext="19 h 15, heure dorée">
-    <button class="auto" id="auto" type="button" role="switch" aria-checked="true"
-      aria-label="Heure automatique, selon l'horloge de l'appareil"><span class="pastille" aria-hidden="true"></span>Auto</button>
-  </div>
-  <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
-</div><style>.mer-fond{z-index:-1}.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer,.mer-fond .geste{display:none!important}.bord-reserve{height:0}@media(max-width:900px){.bord-reserve{height:104px}}</style><!--mer-fin-->
+<style>.mer-fond{z-index:-1}.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer,.mer-fond .geste{display:none!important}</style><!--mer-fin-->
 </body></html>
