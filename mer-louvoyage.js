@@ -1,3 +1,5 @@
+var MUET={children:[],innerHTML:'',textContent:'',style:{},classList:{add:function(){},remove:function(){},toggle:function(){}}};
+
 (function(){
 'use strict';
 
@@ -38,9 +40,8 @@ function regard(eye,cib){ /* renvoie la matrice de vue et la base de la caméra 
 /* ================================================================== RÉGLAGES
    Tout ce qui se bidouille est ici, par son nom. Changez un chiffre, enregistrez, rechargez la page. */
 var VENT_DEPART=0;        /* direction d'où vient le vent au départ, en degrés (0 = nord, 90 = est) */
-var GITE_MAX=20;          /* gîte au près, en degrés */
-var EQUIPAGE=true;        /* trois silhouettes à bord, qui changent de bord au virement (false pour les retirer) */
-var EMBRUNS=true;         /* gerbes d'embruns à l'étrave quand le bateau tape dans la houle */
+var EQUIPAGE=true;        /* l'équipage à bord, animé (false pour le retirer) */
+var EMBRUNS=true;         /* gerbes d'embruns : aux foils, à l'étrave */
 var BRUME_ENTREE=3.6;     /* durée de la sortie de brume à l'ouverture, en secondes (0 pour la retirer) */
 /* Heure du jour. La réglette en haut de la scène la règle de 0 à 24 h. */
 var AUTO_PAR_DEFAUT=true;  /* true : au chargement, la scène prend l'heure de l'horloge de l'appareil */
@@ -55,12 +56,13 @@ var LUNE={azimutDebut:26, azimutFin:10, hauteur:25};
    vers le côté sous le vent (degrés). focale : angle de champ (degrés, petit = téléobjectif).
    lenteur : temps pour passer à ce cadrage (s). duree : durée du plan d'ouverture (s).
    decal : sur écran large, décale le bateau vers la droite pour dégager la légende (m). */
+var RECUL=1.0, DECAL=18, ZS=1, FOCS=2.2;
 var PLANS={
   ouverture:{d:31, h:3.2, av:1,  y:6.6, tour:46,  travelling:0,  focale:36, lenteur:1.0, duree:3.4, decal:7},
   bord:     {d:31, h:11,  av:11, y:4.2, tour:0,   travelling:17, focale:40, lenteur:1.7, decal:3},
   virement: {d:24, h:6.5, av:4,  y:5.6, tour:0,   travelling:13, focale:40, lenteur:1.1, decal:4},
   bouee:    {d:32, h:6.5, av:5,  y:6.4, tour:24,  travelling:0,  focale:38, lenteur:2.0, decal:3},
-  portrait: {recul:1.30, focale:1.16}    /* téléphone tenu debout : même distance, champ un peu plus large */
+  portrait: {recul:1.3, focale:1.16}    /* téléphone tenu debout : même distance, champ un peu plus large */
 };
 /* Couleurs de la scène, heure par heure (rouge, vert, bleu, de 0 à 1). La scène passe en fondu d'une ligne à la
    suivante. h : l'heure. zenith et horizon : le ciel. soleil : la lueur autour de l'astre. disque : l'astre.
@@ -83,27 +85,154 @@ var COULEURS=[
   {h:24,   zenith:[0.025,0.05,0.125], horizon:[0.12,0.185,0.31], soleil:[0.62,0.72,0.95], disque:[0.92,0.95,1.0], eauFond:[0.012,0.042,0.09], eauClaire:[0.04,0.12,0.19], lueur:[0.05,0.16,0.24], ecume:[0.66,0.74,0.86], ambianceHaut:[0.25,0.32,0.48], ambianceBas:[0.08,0.12,0.20], voile:[0.84,0.88,0.97], lumiere:[0.56,0.64,0.88]}
 ];
 
-/* ------------------------------------------------------------------ voile : les chiffres */
-/* Polaire, par 14 nœuds de vent réel : angle au vent réel
-   en degrés, vitesse en nœuds. C'est une table générique de croiseur de 34 pieds, pas celle du chantier. Sous 32 degrés
-   la table ne dit rien : on pose la zone morte (vitesse nulle sous 24 degrés). */
-var POLAIRE=[[0,0],[24,0],[28,2.2],[32,5.1],[36,5.5],[40,5.8],[45,6.1],[50,6.3],[60,6.6],[90,7.0],[120,6.9],[150,6.0],[180,5.3]];
+/* ================================================================== LES BATEAUX
+   Un bloc par bateau : tout ce qui le concerne se règle ici, par son nom. La construction du modèle et les
+   postes de l'équipage sont plus bas, dans la partie « chantier ». */
+var BATEAU_DEPART='f50';   /* bateau affiché à l'ouverture : 'f50', 'skiff', 'tp52' */
+var BATEAUX={
+  f50:{
+    nom:'F50', classe:'catamaran volant à aile rigide',
+    vent:15,            /* vent réel, en nœuds */
+    /* polaire : [angle au vent réel en degrés, vitesse du bateau en nœuds] */
+    polaire:[[0,0],[22,0],[30,9],[38,23],[45,28],[50,30],[60,33],[90,38],[120,42],[140,43],[160,36],[180,28]],
+    pres:47,            /* angle de remontée au vent réel, en degrés */
+    accel:1,            /* 1 = temps réel : à cette vitesse, inutile d'accélérer */
+    depart:430,         /* distance du départ à la bouée, en mètres */
+    couloir:80,        /* demi-largeur du couloir de louvoyage, en mètres */
+    arrivee:62,         /* distance à laquelle on lofe pour s'arrêter à la bouée */
+    gite:-2,            /* gîte au près en degrés ; négatif = contre-gîte, le bateau penche vers le vent */
+    barre:19,           /* vitesse de rotation dans le virement, en degrés par seconde */
+    erre:7.5,           /* inertie : plus c'est grand, mieux le bateau garde sa vitesse dans le virement (s) */
+    relance:3.2,        /* temps de relance après le virement (s) */
+    repos:5,            /* délai minimal entre deux virements (s) */
+    incidence:13,       /* angle entre le vent apparent et l'aile, en degrés */
+    bomeMin:1, bomeMax:55,   /* débattement de l'aile, en degrés */
+    volet:16,           /* braquage du volet : la cambrure de l'aile, en degrés */
+    decollage:15,       /* vitesse à laquelle les coques sortent de l'eau, en nœuds */
+    hauteurVol:0.9,     /* hauteur des coques au-dessus de l'eau en vol, en mètres */
+    assiette:-0.6,      /* assiette en vol, en degrés (négatif = étrave légèrement basse) */
+    echelle:1.75,       /* recul de la caméra : 1 pour un bateau de 10 m */
+    zoom:{ouverture:0.4, bord:0.85, virement:0.5, bouee:0.8},   /* rapproche ou éloigne la caméra, plan par plan : l'ouverture est un gros plan */
+    longueur:15, demiBau:0.5, ecart:3.7,     /* longueur de coque, demi-largeur d'une coque, demi-écart entre coques (m) */
+    mat:[0,1.5,-1.4], hauteurMat:25.5, largeurGreement:2.9, teteMat:[0,27.3,-1.4],
+    sillage:0.95, sillageVol:0.3, bouee:1.7, goutte:2.6,
+    peinture:{seuils:[0.16,0.24,1.02,1.08], carene:[0.90,0.91,0.92], bande:[0.886,0.137,0.18]},
+    mots:{
+      voiles:'l’aile et le foc sont',
+      pres:', l’aile presque dans l’axe. Le bateau vole sur son foil sous le vent.',
+      titreVirement:'Virement sur les foils',
+      virement:['On lofe : le foil au vent redescend, les deux foils portent.',
+                'Bout au vent : l’étrave passe le lit du vent, le bateau reste en vol sur son erre.',
+                'L’aile inverse sa cambrure et l’équipage traverse d’une coque à l’autre.',
+                'On relance : l’ancien foil remonte, le bateau accélère sur le nouveau bord.'],
+      tropPres:'Trop près du vent, le bateau ralentit et retombe. On abat.',
+      empannage:'Le vent passe par l’arrière : l’aile change de bord.',
+      arrivee:'On lofe face au vent. Le bateau ralentit et se repose sur ses coques.',
+      repos:'Le bateau est arrêté bout au vent, posé sur ses coques. Tournez le vent pour repartir.'
+    },
+    temps:[['On lofe','Le foil au vent redescend : pendant la manœuvre, les deux foils sont dans l’eau.'],
+           ['Bout au vent','L’étrave passe le lit du vent. Le bateau reste en vol, porté par sa vitesse.'],
+           ['L’aile s’inverse','Le volet bascule, la cambrure change de côté. L’équipage traverse le trampoline en courant.'],
+           ['On relance','L’ancien foil remonte. Le bateau accélère, le vent apparent revient sur l’avant.']],
+    note:'F50 : temps réel, par 15 nœuds de vent. Les voiles sont réglées sur le vent apparent. Bateau de la classe aux couleurs Sailingmore, sans rapport avec une équipe existante.'
+  },
+  skiff:{
+    nom:'18 pieds', classe:'skiff australien, trois équipiers au trapèze',
+    vent:14,            /* vent réel, en nœuds */
+    polaire:[[0,0],[24,0],[32,4],[40,9],[47,11],[55,12.5],[70,14],[90,16],[120,20],[140,22],[160,18],[180,14]],
+    pres:47,            /* angle de remontée au vent réel, en degrés */
+    accel:1.2,          /* temps légèrement accéléré */
+    depart:185,         /* distance du départ à la bouée, en mètres */
+    couloir:32,         /* demi-largeur du couloir de louvoyage, en mètres */
+    arrivee:24,
+    gite:-3,            /* le skiff navigue à plat, avec une légère contre-gîte quand les trois sont au trapèze */
+    barre:27,           /* vitesse de rotation dans le virement, en degrés par seconde */
+    erre:2.3,           /* bateau léger : il perd vite sa vitesse dans le virement (s) */
+    relance:2.4, repos:4,
+    incidence:20,       /* angle entre le vent apparent et la grand-voile, en degrés */
+    bomeMin:3, bomeMax:80,
+    echelle:0.74,
+    zoom:{ouverture:0.5, bord:0.9, virement:0.6, bouee:0.9},   /* l'ouverture est un gros plan sur l'équipage au trapèze */
+    vue:{ouverture:-122, travelling:-1},   /* la caméra se place au vent, pour voir l'équipage au trapèze */
+    longueur:5.49, demiBau:0.86, ecart:0,
+    mat:[0,0.45,-0.95], hauteurMat:10.0, largeurGreement:2.0, teteMat:[0,10.55,-0.8],
+    demiAiles:2.135,    /* demi-largeur aux ailes de rappel : 4,27 m hors tout (règle de classe) */
+    sillage:0.55, bouee:0.8, goutte:0.9,
+    peinture:{seuils:[0.05,0.09,0.31,0.345], carene:[0.93,0.94,0.95], bande:[0.886,0.137,0.18]},
+    mots:{
+      voiles:'les voiles sont',
+      pres:', bordées à plat. Les trois équipiers sont au trapèze, barreur compris : le bateau reste à plat.',
+      titreVirement:'Virement de bord',
+      virement:['Paré à virer : on lofe, l\u2019équipier d\u2019avant choque un peu le foc.',
+                'Bout au vent : le barreur et l\u2019équipier d\u2019avant rentrent et traversent sous la bôme.',
+                'L\u2019équipier du milieu suit et ressort directement au trapèze. On reborde.',
+                'On relance : le barreur ressort le dernier, le bateau repart au planing.'],
+      tropPres:'Trop près du vent, les voiles faseyent. On abat.',
+      empannage:'Le vent passe par l\u2019arrière : la bôme change de bord, l\u2019équipage aussi.',
+      arrivee:'On lofe face au vent. Les voiles faseyent, l\u2019équipage rentre des trapèzes.',
+      repos:'Le bateau est arrêté bout au vent. Tournez le vent pour repartir.'
+    },
+    temps:[['Paré à virer','Le barreur annonce, on lofe. L\u2019équipier d\u2019avant choque un peu le foc.'],
+           ['On rentre','Barreur et équipier d\u2019avant décrochent du trapèze et traversent tout droit, sous la bôme.'],
+           ['On ressort','L\u2019équipier du milieu suit et ressort directement au trapèze, de l\u2019autre côté.'],
+           ['On relance','Le barreur finit la rotation et ressort le dernier. On reborde, le bateau repart au planing.']],
+    note:'18 pieds : temps accéléré 1,2 fois, par 14 nœuds de vent. Coque de 5,49 m, 4,27 m aux ailes, mât de 10,4 m (règle de classe). Les vitesses et les angles au près sont des estimations.'
+  },
+  tp52:{
+    nom:'TP52', classe:'monocoque de régate de 52 pieds, treize équipiers',
+    vent:14,            /* vent réel, en nœuds */
+    /* polaire calculée (programme de prédiction ORC), par 14 nœuds de vent */
+    polaire:[[0,0],[22,0],[28,3],[33,7.4],[38,8.6],[45,9.3],[52,9.7],[70,10.6],[90,11.4],[110,12.0],[135,12.4],[146,11.3],[165,9.8],[180,9.2]],
+    pres:38,            /* angle de remontée au vent réel, en degrés */
+    accel:1.7,          /* temps accéléré 1,7 fois */
+    depart:235,         /* distance du départ à la bouée, en mètres */
+    couloir:36,         /* demi-largeur du couloir de louvoyage, en mètres */
+    arrivee:42,
+    gite:20,            /* gîte au près, en degrés */
+    barre:14,           /* vitesse de rotation dans le virement, en degrés par seconde */
+    erre:14,            /* sept tonnes : le bateau garde bien sa vitesse dans le virement (s) */
+    relance:4, repos:5, embraque:0.9,
+    incidence:20,       /* angle entre le vent apparent et la grand-voile, en degrés */
+    bomeMin:2, bomeMax:80,
+    echelle:1.6,
+    zoom:{ouverture:0.42, bord:0.82, virement:0.48, bouee:0.8},   /* l'ouverture est un gros plan sur l'équipage au rappel */
+    vue:{ouverture:-124, travelling:-1},    /* la caméra se place au vent, pour voir l'équipage au rappel */
+    longueur:15.85, demiBau:2.0, ecart:0,
+    mat:[0,1.5,-1.0], hauteurMat:22.3, largeurGreement:3.4, teteMat:[0,24.0,-0.7],
+    sillage:1.35, bouee:1.5, goutte:1.6,
+    peinture:{seuils:[0.03,0.11,1.22,1.29], carene:[0.84,0.85,0.87], bande:[0.886,0.137,0.18]},
+    mots:{
+      voiles:'les voiles sont',
+      pres:', bordées serré. L\u2019équipage est au rappel sur le livet au vent.',
+      titreVirement:'Virement de bord',
+      virement:['Paré à virer : on lofe. Le régleur passe sous le vent pour larguer le foc, les grinders vont aux colonnes.',
+                'Bout au vent : le foc est largué, l\u2019équipage quitte le rappel et traverse le pont.',
+                'On embraque puis on mouline : le foc est bordé sur le nouveau bord, la grand-voile a passé.',
+                'On relance : tout le monde est au rappel, le bateau reprend sa gîte et sa vitesse.'],
+      tropPres:'Trop près du vent, les voiles faseyent. On abat.',
+      empannage:'Le vent passe par l\u2019arrière : la bôme change de bord.',
+      arrivee:'On lofe face au vent. Les voiles faseyent, le bateau s\u2019arrête sur son erre.',
+      repos:'Le bateau est arrêté bout au vent. Tournez le vent pour repartir.'
+    },
+    temps:[['Paré à virer','On lofe. Le régleur de foc passe sous le vent, les grinders rejoignent les colonnes.'],
+           ['On largue','Bout au vent, le foc est largué. L\u2019équipage quitte le rappel et traverse le pont.'],
+           ['On mouline','Le foc est embraqué à la main puis bordé aux colonnes sur le nouveau bord.'],
+           ['Au rappel','Tout le monde retourne sur le livet au vent. Le bateau reprend sa gîte et sa vitesse.']],
+    note:'TP52 : temps accéléré 1,7 fois, par 14 nœuds de vent. Dimensions de la règle de classe (15,85 m, 4,42 m de large, 3,50 m de tirant d\u2019eau). Polaire calculée, gîte et virement estimés.'
+  }
+};
+var B, POLAIRE, PRES, VPRES, ACCEL, KN, LONG, COULOIR, DEPART, ARRIVEE, GITE_MAX, VENT, MAX_GOUTTES=260;
 function polaire(aDeg){var i; for(i=1;i<POLAIRE.length;i++){ if(aDeg<=POLAIRE[i][0]){ var p=POLAIRE[i-1],q=POLAIRE[i]; return lerp(p[1],q[1],(aDeg-p[0])/(q[0]-p[0])) } } return POLAIRE[POLAIRE.length-1][1]}
-/* Angle de près : 42 degrés du vent réel, réglage de croisière. La table donnerait un meilleur gain au vent
-   vers 36 à 40 degrés, mais elle est générique : valeur à faire trancher par un moniteur. */
-var PRES=42*RAD;
-var VPRES=polaire(PRES/RAD);
-var ACCEL=2.0;
-var RECUL=1.75;   /* recul de la caméra sur le site (1 = cadrage de la démo) */
-var DECAL=20;     /* le bateau glisse vers la droite pour dégager le titre (mètres) */                 /* temps accéléré deux fois */
-var KN=0.5144*ACCEL;           /* nœuds vers mètres par seconde affichée */
-var LONG=10.4;                 /* longueur de coque, mètres */
-var COULOIR=14;                /* demi-largeur du couloir de louvoyage, mètres */
-var DEPART=142;                /* distance de la bouée au départ, mètres */
-var ARRIVEE=17;                /* distance à laquelle on lofe pour s'arrêter à la bouée */
+function choisirBateau(id){
+  B=BATEAUX[id]; B.id=id; POLAIRE=B.polaire; PRES=B.pres*RAD; VPRES=polaire(B.pres); ACCEL=B.accel; KN=0.5144*ACCEL;
+  LONG=B.longueur; COULOIR=B.couloir; DEPART=B.depart; ARRIVEE=B.arrivee; GITE_MAX=B.gite; VENT=B.vent;
+}
+/* vent apparent : angle entre l'axe du bateau et le vent ressenti à bord (vent réel plus vent de la vitesse) */
+function ventApparent(a,v){return Math.atan2(VENT*Math.sin(a),VENT*Math.cos(a)+v)}
+function bordeGV(awa){return clamp(awa-B.incidence*RAD,B.bomeMin*RAD,B.bomeMax*RAD)}        /* angle de la grand-voile ou de l'aile */
+function bordeFoc(awa){return clamp(awa-(B.incidence-1)*RAD,(B.bomeMin+5)*RAD,72*RAD)}     /* angle du foc */
 
-function bordeGV(a){return clamp((a-30*RAD)*0.62,6*RAD,78*RAD)}   /* angle de bôme réglé pour une allure */
-function bordeFoc(a){return clamp((a-26*RAD)*0.62,10*RAD,72*RAD)}
+choisirBateau(BATEAU_DEPART);
 
 /* houle : trois trains d'ondes, direction fixe (la houle ne tourne pas avec le vent) */
 var HOULE=[{l:19,a:0.17,d:0,p:0.3},{l:11.5,a:0.09,d:0.52,p:2.1},{l:6.4,a:0.05,d:-0.66,p:4.4}];
@@ -111,21 +240,17 @@ var HOULE_AZ=200*RAD;
 HOULE.forEach(function(h){h.k=TAU/h.l; h.w=Math.sqrt(9.81*h.k)*0.8; var az=HOULE_AZ+h.d; h.dx=Math.sin(az); h.dz=-Math.cos(az)});
 function houle(x,z,t){var y=0,gx=0,gz=0,i,h,ph; for(i=0;i<3;i++){h=HOULE[i]; ph=h.k*(h.dx*x+h.dz*z)-h.w*t+h.p; y+=h.a*Math.sin(ph); var c=h.a*h.k*Math.cos(ph); gx+=c*h.dx; gz+=c*h.dz} return [y,gx,gz]}
 
-/* forme de coque partagée entre le maillage et le shader de mer (écume de carène) */
-function demiBau(t){return t<0.62 ? 1.75*(1-Math.pow(1-t/0.62,1.55)) : 1.75-0.22*Math.pow((t-0.62)/0.38,2)}
-function quilleY(t){return -0.48*Math.pow(Math.sin(PI*clamp(0.04+t*0.9,0,1)),0.7)}
-function livetY(t){return 1.12-0.2*t-0.06*Math.sin(PI*t)}
-
 /* ------------------------------------------------------------------ simulation */
 var S={};
 var bouee={x:0,z:0};
 function nouveauDepart(vent){
   S={t:0, w:vent, camAz:vent, mode:'route', direct:false, amure:1, dernierVirement:-9, man:null, empannage:-9,
-     psi:wrap(vent-PRES), om:0, v:VPRES*0.9, cote:1, bome:-bordeGV(PRES), foc:-bordeFoc(PRES), ecoute:1,
+     psi:wrap(vent-PRES), om:0, v:VPRES*0.9, cote:1, bome:-bordeGV(ventApparent(PRES,VPRES)), foc:-bordeFoc(ventApparent(PRES,VPRES)), ecoute:1, awa:ventApparent(PRES,VPRES),
      creuxGV:-1, creuxFoc:-1, fasGV:0, fasFoc:0, gite:GITE_MAX*RAD*0.9, tangage:0, roulis:0, pilonnement:0,
      fin:0, echelle:1, sillage:[], dernierPoint:-1, derive:[0,0], risee:[0,0], twa:PRES,
-     cam:{d:PLANS.ouverture.d*RECUL,h:PLANS.ouverture.h*RECUL,av:PLANS.ouverture.av,az:PLANS.ouverture.tour*RAD,y:PLANS.ouverture.y,fov:PLANS.ouverture.focale,dec:PLANS.ouverture.decal}, foyer:[0,0], phase:null,
-     brume:BRUME_ENTREE>0?1:0, eq:[1,1,1], gouttes:[], reserve:0};
+     cam:{d:PLANS.bord.d*B.echelle*RECUL,h:PLANS.bord.h*B.echelle*RECUL,av:PLANS.bord.av*B.echelle,az:((B.vue&&B.vue.bord!=null)?B.vue.bord:PLANS.bord.tour)*RAD,y:PLANS.bord.y*B.echelle*RECUL,fov:PLANS.bord.focale*FOCS,dec:PLANS.bord.decal*B.echelle+DECAL}, foyer:[0,0], phase:null,
+     brume:BRUME_ENTREE>0?1:0, eq:B.equipage.map(function(){return {c:1,cible:1,attente:0}}), gouttes:[], reserve:[],
+     vol:(B.decollage&&VPRES>B.decollage)?1:0, foil:{'-1':1,'1':0}, moulin:0};
   var ux=Math.sin(vent), uz=-Math.cos(vent);
   bouee.x=0; bouee.z=0;
   S.x=bouee.x-ux*DEPART+Math.cos(vent)*6; S.z=bouee.z-uz*DEPART+Math.sin(vent)*6;
@@ -135,7 +260,7 @@ function nouveauDepart(vent){
 var stries=[]; (function(){for(var i=0;i<46;i++)stries.push({x:0,z:0,vie:0,max:1,l:6})})();
 function semer(s,partout){
   var ax=Math.sin(S.camAz), az=-Math.cos(S.camAz), rx=Math.cos(S.camAz), rz=Math.sin(S.camAz);
-  var a=(alea()-0.25)*190, b=(alea()-0.5)*170;
+  var a=(alea()-0.25)*190*B.echelle, b=(alea()-0.5)*170*B.echelle;
   s.x=S.foyer[0]+ax*a+rx*b; s.z=S.foyer[1]+az*a+rz*b; s.max=1.6+alea()*1.8; s.vie=partout?alea()*s.max:0; s.l=5+alea()*6;
 }
 
@@ -154,7 +279,7 @@ function pas(dt){
       if(Math.abs(theta)>=seuil){ S.direct=true; S.amure=-sgn(theta) }
       else{
         S.direct=false;
-        if(S.t-S.dernierVirement>2.5){
+        if(S.t-S.dernierVirement>(B.repos||2.5)){
           if(S.amure>0 && travers>COULOIR) S.amure=-1;
           else if(S.amure<0 && travers<-COULOIR) S.amure=1;
         }
@@ -170,7 +295,7 @@ function pas(dt){
   else cible=w; /* arrivée : bout au vent */
 
   /* ---- barre : le bateau tourne d'autant mieux qu'il a de la vitesse */
-  var err=wrap(cible-S.psi), vmax=36*RAD*clamp(S.v/VPRES,0.62,1);
+  var err=wrap(cible-S.psi), vmax=B.barre*RAD*clamp(S.v/VPRES,0.62,1);
   var omc=clamp(err*2.4,-vmax,vmax);
   S.om=damp(S.om,omc,0.32,dt);
   S.psi=wrap(S.psi+S.om*dt);
@@ -180,14 +305,16 @@ function pas(dt){
   if(sgn(twa)!==S.cote && a<174*RAD){ if(a>120*RAD) S.empannage=S.t; S.cote=sgn(twa) }
 
   /* ---- voiles : toujours sous le vent. Une voile ne peut pas être plus ouverte que le lit du vent. */
-  var fas=sstep(31*RAD,13*RAD,a);
-  var cGV=-S.cote*Math.min(bordeGV(a),a*0.86);
+  /* Les voiles se règlent sur le vent apparent : vent réel plus vent de la vitesse. Sur un bateau rapide il vient de très près. */
+  var awa=ventApparent(a,S.v); S.awa=awa;
+  var fas=sstep(0.74*PRES,0.31*PRES,a);
+  var cGV=-S.cote*Math.min(bordeGV(awa),a*0.86);
   S.bome=damp(S.bome,cGV,0.22,dt);
   /* foc : choqué dès que l'on entre dans le vent, bordé sur le nouveau bord une fois le lit du vent passé */
   var enManoeuvre=S.man!==null || S.mode!=='route';
-  if(a<26*RAD && enManoeuvre) S.ecoute=damp(S.ecoute,0,0.2,dt);
-  else if(a>29*RAD && S.mode==='route') S.ecoute=damp(S.ecoute,1,0.55,dt);
-  var libre=Math.min(a,70*RAD), regle=Math.min(bordeFoc(a),a*0.9);
+  if(a<0.62*PRES && enManoeuvre) S.ecoute=damp(S.ecoute,0,0.2,dt);
+  else if(a>0.69*PRES && S.mode==='route') S.ecoute=damp(S.ecoute,1,B.embraque||0.55,dt);
+  var libre=Math.min(a,70*RAD), regle=Math.min(bordeFoc(awa),a*0.9);
   var cFoc=-S.cote*lerp(libre,regle,S.ecoute);
   S.foc=damp(S.foc,cFoc,0.16,dt);
   S.fasGV=damp(S.fasGV,fas,0.15,dt);
@@ -197,20 +324,26 @@ function pas(dt){
 
   /* ---- vitesse : la polaire donne la cible, l'inertie fait le reste */
   var vc=S.mode==='route' ? polaire(a/RAD)*(0.55+0.45*S.ecoute) : 0;
-  S.v=damp(S.v,vc,vc>S.v?2.4:(S.mode==='route'?3.6:1.8),dt); /* un croiseur de cinq tonnes garde son erre dans le virement */
+  S.v=damp(S.v,vc,vc>S.v?B.relance:(S.mode==='route'?B.erre:B.erre*0.5),dt); /* l'erre : chaque bateau garde plus ou moins sa vitesse dans le virement */
   S.x+=Math.sin(S.psi)*S.v*KN*dt; S.z-=Math.cos(S.psi)*S.v*KN*dt;
 
   /* ---- gîte sous le vent, tangage et roulis sur la houle */
-  var gc=S.cote*GITE_MAX*RAD*sstep(16*RAD,40*RAD,a)*(1-0.92*sstep(62*RAD,170*RAD,a))*clamp(S.v/VPRES,0,1.1);
+  var gc=S.cote*GITE_MAX*RAD*sstep(0.38*PRES,0.95*PRES,a)*(1-0.92*sstep(62*RAD,170*RAD,a))*clamp(S.v/VPRES,0,1.1);
   S.gite=damp(S.gite,gc,0.55,dt);
   var ho=houle(S.x,S.z,S.t), fx=Math.sin(S.psi), fz=-Math.cos(S.psi);
-  S.pilonnement=ho[0]*0.55; S.tangage=(ho[1]*fx+ho[2]*fz)*0.9; S.roulis=(ho[1]*Math.cos(S.psi)+ho[2]*Math.sin(S.psi))*0.7;
+  /* vol : au-dessus de la vitesse de décollage, le bateau sort de l'eau et ne suit plus la houle */
+  S.vol=damp(S.vol, B.decollage ? sstep(B.decollage-1.5,B.decollage+1.5,S.v) : 0, 0.8, dt);
+  S.pilonnement=ho[0]*0.55*(1-S.vol)+S.vol*((B.hauteurVol||0)+0.06*Math.sin(S.t*1.9));
+  S.tangage=(ho[1]*fx+ho[2]*fz)*0.9*(1-0.85*S.vol)+S.vol*(B.assiette||0)*RAD; S.roulis=(ho[1]*Math.cos(S.psi)+ho[2]*Math.sin(S.psi))*0.7*(1-0.85*S.vol);
+  /* foils : celui sous le vent porte ; celui au vent est relevé, sauf pendant la manœuvre où les deux sont dans l'eau */
+  var lib=(S.man||S.mode!=='route'||S.vol<0.5)?1:0; S.foil['-1']=damp(S.foil['-1'],(S.cote===1||lib)?1:0,0.45,dt); S.foil['1']=damp(S.foil['1'],(S.cote===-1||lib)?1:0,0.45,dt);
+  S.moulin+=dt*(S.man?11:5);
 
   /* ---- étapes du virement, pour la légende */
   if(S.man){
     var m=S.man, nouveau=(sgn(twa)!==m.de);
-    if(!nouveau && a>20*RAD) m.etape=1;
-    else if(a<=20*RAD) m.etape=2;
+    if(!nouveau && a>0.48*PRES) m.etape=1;
+    else if(a<=0.48*PRES) m.etape=2;
     else if(S.ecoute<0.8 || a<PRES-7*RAD) m.etape=3;
     else m.etape=4;
     if(m.etape===4 && (S.v>VPRES*0.9 || S.t-m.t0>11)) S.man=null;
@@ -220,7 +353,7 @@ function pas(dt){
   /* ---- sillage : il suit la trajectoire réelle, point par point */
   if(S.t-S.dernierPoint>0.11){
     S.dernierPoint=S.t;
-    S.sillage.push({x:S.x,z:S.z,px:Math.cos(S.psi),pz:Math.sin(S.psi),n:S.t,f:clamp(S.v/VPRES,0,1)});
+    S.sillage.push({x:S.x,z:S.z,px:Math.cos(S.psi),pz:Math.sin(S.psi),n:S.t,f:clamp(S.v/VPRES,0,1)*(1-0.55*S.vol)});
     if(S.sillage.length>130) S.sillage.shift();
   }
 
@@ -230,51 +363,57 @@ function pas(dt){
   for(var i=0;i<stries.length;i++){var s=stries[i]; s.vie+=dt; s.x-=ux*17*dt; s.z-=uz*17*dt; if(s.vie>s.max) semer(s,false)}
 
   /* ---- caméra : elle suit avec du retard, d'où la parallaxe */
-  var portrait=vue.asp<0.95, c=S.cam, pl;
+  var portrait=vue.asp<0.95, c=S.cam, pl, E=B.echelle;
   if(S.mode!=='route') pl=PLANS.bouee; else if(S.t<PLANS.ouverture.duree) pl=PLANS.ouverture; else if(S.man) pl=PLANS.virement; else pl=PLANS.bord;
-  var tc=pl.lenteur, rec=(portrait?PLANS.portrait.recul:1)*RECUL;
-  c.d=damp(c.d,pl.d*rec,tc,dt); c.h=damp(c.h,pl.h*rec,tc,dt); c.av=damp(c.av,pl.av,tc,dt); c.y=damp(c.y,pl.y,tc,dt);
-  c.az=damp(c.az,(pl.tour+pl.travelling*S.cote)*RAD,tc*1.25,dt); c.fov=damp(c.fov,pl.focale,tc,dt); c.dec=damp(c.dec,pl.decal+DECAL,tc,dt);
-  S.foyer[0]=damp(S.foyer[0],S.x,0.8,dt); S.foyer[1]=damp(S.foyer[1],S.z,0.8,dt);
+  var tc=pl.lenteur, rec=portrait?PLANS.portrait.recul:1, zo=(B.zoom&&B.zoom[pl===PLANS.bouee?'bouee':pl===PLANS.ouverture?'ouverture':pl===PLANS.virement?'virement':'bord'])||1;
+  c.d=damp(c.d,pl.d*rec*E*ZS*RECUL,tc,dt); c.h=damp(c.h,pl.h*E*ZS*RECUL,tc,dt); c.av=damp(c.av,pl.av*E*zo,tc,dt); c.y=damp(c.y,pl.y*E*zo,tc,dt);
+  var vu2=B.vue||{}, tour=(pl===PLANS.ouverture&&vu2.ouverture!=null)?vu2.ouverture:pl.tour;
+  c.az=damp(c.az,(tour+pl.travelling*S.cote*(vu2.travelling||1))*RAD,tc*1.25,dt); c.fov=damp(c.fov,pl.focale*FOCS,tc,dt); c.dec=damp(c.dec,pl.decal*E*zo+DECAL,tc,dt);
+  /* le point visé suit le bateau avec un retard, compensé par sa vitesse : sur un bord droit il reste sur le bateau */
+  S.foyer[0]=damp(S.foyer[0],S.x+Math.sin(S.psi)*S.v*KN*0.8,0.8,dt); S.foyer[1]=damp(S.foyer[1],S.z-Math.cos(S.psi)*S.v*KN*0.8,0.8,dt);
   S.brume=BRUME_ENTREE>0 ? 1-sstep(0,BRUME_ENTREE,S.t) : 0;
 
-  /* ---- équipage : au rappel, du côté du vent. Au virement, chacun traverse le cockpit à son rythme. */
-  S.eq[0]=damp(S.eq[0],S.cote,0.45,dt); S.eq[1]=damp(S.eq[1],S.cote,0.75,dt); S.eq[2]=damp(S.eq[2],S.cote,0.6,dt);
+  /* ---- équipage : chacun a son poste du côté du vent. Au virement, chacun part après son délai et traverse à son rythme. */
+  for(i=0;i<S.eq.length;i++){ var eq=S.eq[i], de=B.equipage[i], vise=de.fixe||(S.mode==='route'?S.cote:eq.cible);
+    if(vise!==eq.cible){ eq.cible=vise; eq.attente=de.delai }
+    if(eq.attente>0) eq.attente-=dt;
+    else if(eq.c!==eq.cible){ var pc=2*dt/de.duree; eq.c=Math.abs(eq.cible-eq.c)<=pc ? eq.cible : eq.c+sgn(eq.cible-eq.c)*pc } }
+  majPoses(dt);
 
-  /* ---- embruns : l'étrave soulève une gerbe quand elle plonge dans la houle, emportée sous le vent */
+  /* ---- gerbes d'embruns : chaque bateau dit d'où elles partent (foils, étrave) */
   if(EMBRUNS){
-    var ex=S.x+fx*4.9, ez=S.z+fz*4.9, hb=houle(ex,ez,S.t), plonge=Math.max(0,-(hb[1]*fx+hb[2]*fz))*9;
-    S.reserve+=dt*sstep(0.45,1,S.v/VPRES)*(8+150*plonge);
-    while(S.reserve>=1 && S.gouttes.length<140){ S.reserve-=1; var co=(alea()<0.72?-S.cote:S.cote), la=co*(1.2+alea()*3.2);
-      S.gouttes.push({x:ex,y:0.25,z:ez, vx:fx*(1+alea()*2)+Math.cos(S.psi)*la-ux*1.5, vy:1.8+alea()*3.6, vz:fz*(1+alea()*2)+Math.sin(S.psi)*la-uz*1.5, vie:0, max:0.5+alea()*0.55}) }
-    if(S.reserve>3) S.reserve=3;
+    var em=B.gerbes(S,fx,fz), cps=Math.cos(S.psi), sps=Math.sin(S.psi), vb=S.v*KN;
+    for(i=0;i<em.length;i++){ var ge=em[i]; S.reserve[i]=Math.min((S.reserve[i]||0)+dt*ge.taux,4);
+      while(S.reserve[i]>=1 && S.gouttes.length<MAX_GOUTTES){ S.reserve[i]-=1;
+        var lx=ge.lat*(alea()-0.5)*2+(ge.biais||0)*-S.cote*alea(), lz=ge.arr*(0.35+alea()*0.65), sv=vb*ge.suit;
+        S.gouttes.push({x:S.x+cps*ge.p[0]-sps*ge.p[2], y:ge.p[1], z:S.z+sps*ge.p[0]+cps*ge.p[2],
+          vx:fx*sv+cps*lx-sps*lz-ux*1.2, vy:ge.haut*(0.45+alea()*0.8), vz:fz*sv+sps*lx+cps*lz-uz*1.2, vie:0, max:ge.vie*(0.6+alea()*0.8)}) } }
     for(i=S.gouttes.length-1;i>=0;i--){ var go=S.gouttes[i]; go.vie+=dt; go.vy-=11*dt; go.x+=go.vx*dt; go.y+=go.vy*dt; go.z+=go.vz*dt; if(go.vie>go.max||go.y<0) S.gouttes.splice(i,1) }
   }
 
   /* ---- fin : le bateau est arrêté bout au vent, la mer se pose, puis plus rien ne tourne */
-  if(S.mode==='arrivee' && S.v<0.45 && Math.abs(err)<8*RAD){ S.mode='pose'; S.fin=0 }
+  if(S.mode==='arrivee' && S.v<VPRES*0.08 && Math.abs(err)<8*RAD){ S.mode='pose'; S.fin=0 }
 }
 
 function decrire(){
-  var a=Math.abs(S.twa), deg=a/RAD, trib=S.twa>0, am=trib?'tribord amures':'bâbord amures';
-  var cote=trib?'Le vent vient de tribord, les voiles sont à bâbord':'Le vent vient de bâbord, les voiles sont à tribord';
-  if(S.mode==='repos') return {p:'Arrivé à la bouée au vent', d:'Le bateau est arrêté bout au vent, la mer se pose. Tournez le vent pour repartir.', e:0};
-  if(S.mode==='arrivee'||S.mode==='pose') return {p:'Bout au vent à la bouée', d:'On lofe face au vent. Les voiles faseyent, le bateau s’arrête sur son erre.', e:0};
+  var a=Math.abs(S.twa), deg=a/RAD, trib=S.twa>0, am=trib?'tribord amures':'bâbord amures', L=B.mots, pr=B.pres;
+  var cote=trib?'Le vent vient de tribord, '+L.voiles+' à bâbord':'Le vent vient de bâbord, '+L.voiles+' à tribord';
+  if(S.mode==='repos') return {p:'Arrivé à la bouée au vent', d:L.repos, e:0};
+  if(S.mode==='arrivee'||S.mode==='pose') return {p:'Bout au vent à la bouée', d:L.arrivee, e:0};
   if(S.man){
     var e=S.man.etape;
-    if(e===1) return {p:'Virement de bord', d:'On lofe : l’étrave monte vers le vent, le bateau garde son élan.', e:1};
-    if(e===2) return {p:'Virement de bord', d:'Bout au vent : l’étrave passe le lit du vent, les voiles faseyent, la vitesse tombe.', e:2};
-    if(e===3) return {p:'Virement de bord', d:'La bôme et la grand-voile ont changé de bord. Le foc, choqué, est bordé sous le vent.', e:3};
-    return {p:'Près '+am, d:'On relance : les voiles portent, le bateau gîte et reprend sa vitesse.', e:4};
+    if(e<4) return {p:L.titreVirement, d:L.virement[e-1], e:e};
+    return {p:'Près '+am, d:L.virement[3], e:4};
   }
-  if(S.t-S.empannage<2.2) return {p:'Empannage', d:'Le vent passe par l’arrière : la bôme change de bord.', e:0};
-  if(deg<34) return {p:'Trop près du vent', d:'Les voiles faseyent. On abat pour retrouver le près.', e:0};
-  if(deg<54) return {p:'Près '+am, d:cote+', bordées serré. Cap à '+Math.round(deg)+'° du vent.', e:0};
-  if(deg<76) return {p:'Bon plein '+am, d:cote+', un peu choquées.', e:0};
-  if(deg<106) return {p:'Travers '+am, d:cote+', ouvertes à mi-course.', e:0};
-  if(deg<152) return {p:'Largue '+am, d:cote+', largement choquées.', e:0};
-  if(deg<172) return {p:'Grand largue '+am, d:cote+', choquées en grand.', e:0};
-  return {p:'Vent arrière', d:'Le vent pousse par la poupe, la grand-voile est ouverte en grand.', e:0};
+  if(S.t-S.empannage<2.2) return {p:'Empannage', d:L.empannage, e:0};
+  if(deg<pr*0.8) return {p:'Trop près du vent', d:L.tropPres, e:0};
+  if(deg<pr+12) return {p:'Près '+am, d:cote+L.pres+' Cap à '+Math.round(deg)+'° du vent réel, vent apparent à '+Math.round(S.awa/RAD)+'°.', e:0};
+  var ap=' Vent apparent à '+Math.round(S.awa/RAD)+'°.';
+  if(deg<76) return {p:'Bon plein '+am, d:cote+', un peu ouvertes.'+ap, e:0};
+  if(deg<106) return {p:'Travers '+am, d:cote+'.'+ap, e:0};
+  if(deg<152) return {p:'Largue '+am, d:cote+'.'+ap, e:0};
+  if(deg<172) return {p:'Grand largue '+am, d:cote+'.'+ap, e:0};
+  return {p:'Vent arrière', d:'Le vent pousse par la poupe.'+ap, e:0};
 }
 
 /* ------------------------------------------------------------------ WebGL */
@@ -313,7 +452,7 @@ var GLSL_CIEL=[
 '  c+=uSol*(pow(s,5.)*.22+pow(s,40.)*.34+pow(s,260.)*.5);',
 '  return c;',
 '}',
-'vec3 brumer(vec3 c,float d){ return mix(c,uBrumeC,uBrume*(1.-exp(-d/26.))); }',
+'uniform float uBrumeD;','vec3 brumer(vec3 c,float d){ return mix(c,uBrumeC,uBrume*(1.-exp(-d/uBrumeD))); }',
 'vec3 tons(vec3 c){ vec3 h=max(c-.72,0.); return min(c,vec3(.72))+.28*(1.-exp(-h/.28)); }'].join('\n');
 var GLSL_BRUIT=[
 'float hach(vec2 p){vec3 q=fract(vec3(p.xyx)*.1031); q+=dot(q,q.yzx+33.33); return fract((q.x+q.y)*q.z);}',
@@ -344,38 +483,78 @@ ciel:{v:'attribute vec2 aP; varying vec2 vN; void main(){vN=aP; gl_Position=vec4
   ' c=mix(c,uBrumeC,uBrume*.93); gl_FragColor=vec4(tons(c),1.); }'},
 mer:{v:'attribute vec2 aP; uniform mat4 uVP; uniform vec3 uCam; varying vec3 vW; void main(){vW=vec3(aP.x*3600.+uCam.x,0.,aP.y*3600.+uCam.z); gl_Position=uVP*vec4(vW,1.);}',
   f:null},
-objet:{v:'attribute vec3 aP,aN,aC; uniform mat4 uVP,uM; varying vec3 vN,vC,vL,vW; void main(){vec4 w=uM*vec4(aP,1.); vW=w.xyz; vN=mat3(uM[0].xyz,uM[1].xyz,uM[2].xyz)*aN; vC=aC; vL=aP; gl_Position=uVP*w;}',
-  f:PREC+'varying vec3 vN,vC,vL,vW; uniform vec3 uSoleil,uLum,uAmbH,uAmbB,uCam,uMarine,uBrumeC; uniform float uBrume;\n'+
-  'void main(){ vec3 n=normalize(vN); vec3 V=normalize(uCam-vW); vec3 col=vC; float gl0=0.;\n'+
-  ' if(vC.r<0.){ float y=vL.y; col=mix(vec3(.50,.10,.085),vec3(.93,.94,.95),smoothstep(.035,.05,y)); col=mix(col,uMarine,smoothstep(.135,.15,y)); col=mix(col,vec3(.93,.94,.95),smoothstep(.80,.812,y)*(1.-smoothstep(.842,.854,y))); gl0=1.; }\n'+
-  ' float di=max(dot(n,uSoleil),0.); vec3 amb=mix(uAmbB,uAmbH,n.y*.5+.5);\n'+
-  ' vec3 c=col*(amb+uLum*di*.95);\n'+
-  ' c+=gl0*uLum*pow(max(dot(reflect(-V,n),uSoleil),0.),36.)*.38;\n'+
-  ' c+=uAmbH*pow(1.-max(dot(n,V),0.),3.)*.10;\n'+
-  ' c=mix(c,uBrumeC,uBrume*(1.-exp(-length(uCam-vW)/26.)));\n'+
-  ' gl_FragColor=vec4(c,1.); }'},
-voile:{v:'attribute vec2 aP; uniform mat4 uVP,uM; uniform vec3 uGuindant,uBordure; uniform float uE,uPuis,uRond,uCreux,uFas,uT,uVrille; varying vec3 vN,vW; varying vec2 vUV;\n'+
-  'vec3 f(float u,float v){ float ch=uE*(pow(max(1.-v,0.),uPuis)+uRond*sin(3.14159*v)*(1.-.4*v)); vec3 p=uGuindant*v+uBordure*(u*ch);\n'+
+objet:{v:'attribute vec3 aP,aN,aC; attribute float aM; uniform mat4 uVP,uM; uniform float uMatU; varying vec3 vN,vC,vL,vW; varying float vMat; void main(){vec4 w=uM*vec4(aP,1.); vW=w.xyz; vN=mat3(uM[0].xyz,uM[1].xyz,uM[2].xyz)*aN; vC=aC; vL=aP; vMat=aM+uMatU; gl_Position=uVP*w;}',
+  /* Les matières : 0 peinture mate, 1 gelcoat de coque (peint par hauteur), 2 carbone tissé, 3 antidérapant, 4 métal poli,
+     5 filet de trampoline, 6 tissu et peau, 7 film tendu sur nervures (aile rigide), 8 peinture brillante. */
+  f:PREC+'varying vec3 vN,vC,vL,vW; varying float vMat; uniform vec3 uLum,uAmbH,uAmbB,uCam,uMarine,uTeinte,uCarene,uBandeC,uMat,uMatD,uMatH; uniform vec4 uPeint; uniform float uOmb,uLargS;\n'+GLSL_CIEL+'\n'+GLSL_BRUIT+'\n'+
+  /* ombre portée du gréement : la même bande que pour la mer, vue depuis un point du bateau en regardant le soleil */
+  'float ombreG(vec3 P,vec3 R,float larg){ vec3 w0=P-uMat; float b=dot(R,uMatD), d0=dot(R,w0), e=dot(uMatD,w0); float den=max(1.-b*b,1e-4);\n'+
+  ' float sg=clamp((e-b*d0)/den,0.,uMatH.x); vec3 Q=uMat+uMatD*sg; float t=dot(Q-P,R); if(t<0.) return 0.; float di=length(P+R*t-Q);\n'+
+  ' float w=(.28+uMatH.y*(1.-sg/uMatH.x))*larg; return smoothstep(w,w*.55,di)*smoothstep(.2,1.6,sg)*smoothstep(.5,2.2,t); }\n'+
+  'void main(){ vec3 n=normalize(vN); vec3 V=uCam-vW; float d=length(V); V/=d; if(dot(n,V)<0.) n=-n;\n'+
+  ' float m=floor(vMat+.5); vec3 col=vC*uTeinte; float ks=.05,sh=16.,kr=0.,tr=0.,dou=0.; float pres=smoothstep(75.,14.,d);\n'+
+  ' if(vC.r<0.){ float y=vL.y; col=mix(uCarene,uBandeC,smoothstep(uPeint.x,uPeint.x+.012,y)); col=mix(col,uMarine,smoothstep(uPeint.y,uPeint.y+.012,y)); col=mix(col,uBandeC,smoothstep(uPeint.z,uPeint.z+.01,y)*(1.-smoothstep(uPeint.w,uPeint.w+.01,y))); ks=.8; sh=120.; kr=.45; }\n'+
+  ' else if(m==2.){ float w=sin((vL.x+vL.y)*140.)*sin((vL.z-vL.y)*140.); col*=1.+.16*w*pres; ks=.5; sh=38.; kr=.3; }\n'+
+  ' else if(m==3.){ col*=.93+.11*hach(floor(vL.xz*64.))*pres; }\n'+
+  ' else if(m==4.){ ks=1.; sh=80.; kr=.65; }\n'+
+  ' else if(m==5.){ vec2 q=fract(vL.xz*9.); col*=mix(1.,.45,step(.2,q.x)*step(.2,q.y)*pres); }\n'+
+  ' else if(m==6.){ dou=.4; }\n'+
+  ' else if(m==7.){ float rib=smoothstep(.455,.49,abs(fract(vL.y*.98)-.5)); col*=1.-.2*rib; tr=.5*(1.-rib); ks=.4; sh=50.; kr=.14; }\n'+
+  ' else if(m==8.){ ks=.6; sh=90.; kr=.3; }\n'+
+  ' float ndl=dot(n,uSoleil); float om=uOmb>0.?ombreG(vW,uSoleil,uLargS)*uOmb:0.;\n'+
+  ' float di=mix(max(ndl,0.),ndl*.5+.5,dou)*(1.-.78*om); vec3 amb=mix(uAmbB,uAmbH,n.y*.5+.5);\n'+
+  ' vec3 c=col*(amb+uLum*di*.95)+col*uLum*max(-ndl,0.)*tr;\n'+
+  ' vec3 R=reflect(-V,n); float F=.04+.96*pow(1.-max(dot(n,V),0.),5.);\n'+
+  ' vec3 env=ciel(normalize(vec3(R.x,abs(R.y)+.03,R.z)))*(R.y<0.?.45:1.);\n'+
+  ' c=mix(c,env,kr*F)+env*kr*.07;\n'+
+  ' c+=uLum*pow(max(dot(R,uSoleil),0.),sh)*ks*(1.-om);\n'+
+  ' c+=uAmbH*pow(1.-max(dot(n,V),0.),3.)*.08;\n'+
+  ' gl_FragColor=vec4(tons(brumer(c,d)),1.); }'},
+/* les membres des équipiers : une capsule effilée tendue entre deux points, arrondie aux deux bouts */
+corps:{v:'attribute vec3 aP; attribute float aK; uniform mat4 uVP,uM; uniform vec3 uTap; uniform float uMatU; varying vec3 vN,vC,vL,vW; varying float vMat;\n'+
+  'void main(){ float rr=mix(uTap.x,uTap.y,aP.y); vec3 p=vec3(aP.x*rr,aP.y+aK*rr*uTap.z,aP.z*rr); vec4 w=uM*vec4(p,1.); vW=w.xyz;\n'+
+  ' vN=normalize(uM[0].xyz)*aP.x+normalize(uM[1].xyz)*aK+normalize(uM[2].xyz)*aP.z; vC=vec3(1.); vL=p; vMat=uMatU; gl_Position=uVP*w; }',
+  f:null},
+voile:{v:'attribute vec2 aP; uniform mat4 uVP,uM; uniform vec3 uGuindant,uBordure; uniform float uE,uPuis,uRond,uCreux,uFas,uT,uVrille,uTete; varying vec3 vN,vW; varying vec2 vUV;\n'+
+  'vec3 f(float u,float v){ float ch=uE*(pow(max(1.-v,0.),uPuis)*(1.-uTete)+uTete*(1.-.5*v)+uRond*sin(3.14159*v)*(1.-.4*v)); vec3 p=uGuindant*v+uBordure*(u*ch);\n'+
   ' float ventre=sin(3.14159*pow(u,.78))*(1.-.3*v);\n'+
-  ' float x=uCreux*ch*(.118*ventre+uVrille*u*v);\n'+
+  ' float x=uCreux*ch*(.118*ventre*(1.+.05*sin(uT*1.3+v*3.))+uVrille*u*v);\n'+
   ' x+=uFas*ch*(.055*sin(u*12.-uT*23.+v*5.)+.03*sin(u*21.+uT*31.-v*9.))*sqrt(u);\n'+
+  ' x+=ch*.004*sin(v*46.-uT*15.)*u*u*u;\n'+     /* la chute vibre toujours un peu */
   ' p.x+=x; return p; }\n'+
   'void main(){ float u=aP.x,v=aP.y; vec3 p=f(u,v); float e=.02; vec3 du=f(u+e,v)-p, dv=f(u,min(v+e,1.))-p; if(v>.975) dv=p-f(u,v-e);\n'+
   ' vec3 n=cross(dv,du)+vec3(1e-6,0.,0.); vec4 w=uM*vec4(p,1.); vW=w.xyz; vN=mat3(uM[0].xyz,uM[1].xyz,uM[2].xyz)*n; vUV=aP; gl_Position=uVP*w; }',
-  f:PREC+'varying vec3 vN,vW; varying vec2 vUV; uniform vec3 uSoleil,uLum,uAmbH,uAmbB,uCam,uVoile,uBrumeC; uniform float uBrume;\n'+
-  'void main(){ vec3 n=normalize(vN); vec3 V=normalize(uCam-vW); if(dot(n,V)<0.) n=-n; float ndl=dot(n,uSoleil);\n'+
+  /* La toile : laizes cousues ou membrane à fibres, lattes, renforts aux trois points, bandes de visualisation du creux,
+     numéro de voile, penons. Tout est dessiné par le calcul, sans image. */
+  f:PREC+'varying vec3 vN,vW; varying vec2 vUV; uniform vec3 uSoleil,uLum,uAmbH,uAmbB,uCam,uVoile,uBrumeC,uTeinteV,uBandeV,uMarque,uFibC; uniform float uBrume,uBrumeD,uBandeH,uLattes,uFibres,uNum,uPenons,uTrans,uAsp,uFasF,uTF;\n'+
+  'float sH(vec2 p,float y){ return step(abs(p.y-y),.075)*step(.1,p.x)*step(p.x,.9); }\n'+
+  'float sV(vec2 p,float x,float y){ return step(abs(p.x-x),.1)*step(y,p.y)*step(p.y,y+.47); }\n'+
+  'float chiffre(vec2 p,float n){ if(p.x<0.||p.x>1.||p.y<0.||p.y>1.) return 0.; float m=n<.5?126.:n<1.5?48.:n<2.5?109.:n<3.5?121.:n<4.5?51.:n<5.5?91.:n<6.5?95.:n<7.5?112.:n<8.5?127.:123.; float r=0.;\n'+
+  ' r+=sH(p,.925)*step(64.,m); m=mod(m,64.); r+=sV(p,.9,.5)*step(32.,m); m=mod(m,32.); r+=sV(p,.9,.03)*step(16.,m); m=mod(m,16.); r+=sH(p,.075)*step(8.,m); m=mod(m,8.);\n'+
+  ' r+=sV(p,.1,.03)*step(4.,m); m=mod(m,4.); r+=sV(p,.1,.5)*step(2.,m); m=mod(m,2.); r+=sH(p,.5)*step(1.,m); return min(r,1.); }\n'+
+  'void main(){ vec3 n=normalize(vN); vec3 V=uCam-vW; float d=length(V); V/=d; if(dot(n,V)<0.) n=-n; float ndl=dot(n,uSoleil); float u=vUV.x,v=vUV.y; float pres=smoothstep(110.,20.,d);\n'+
+  ' vec3 tv=mix(uTeinteV,uBandeV,step(uBandeH,v)); float opa=0.;\n'+
+  ' vec2 q=vec2(u*uAsp*(1.-.75*v),v), a=q-vec2(uAsp,0.), b=q-vec2(0.,1.);\n'+
+  ' if(uFibres>0.){ float f1=smoothstep(.86,1.,abs(sin(atan(a.y,-a.x)*62.)))*exp(-length(a)*1.1); float f2=smoothstep(.86,1.,abs(sin(atan(-b.y,b.x)*96.)))*exp(-length(b)*1.3); float f3=smoothstep(.86,1.,abs(sin(atan(q.y,q.x)*48.)))*exp(-length(q)*2.4);\n'+
+  '  float fb=(f1+f2*.8+f3*.7)*uFibres*pres; tv=mix(tv,uFibC,min(fb,1.)*.3); opa+=min(fb,1.)*.3; }\n'+
+  ' else tv*=1.-.07*smoothstep(.035,.0,abs(fract(v*7.+u*.6)-.5))*step(v,.97);\n'+
+  ' float rf=min(smoothstep(.15,.12,length(a))+smoothstep(.13,.1,length(b))+smoothstep(.11,.08,length(q)),1.); tv*=1.-.14*rf; opa+=rf*.3;\n'+
+  ' if(uLattes>0.){ float la=smoothstep(.0052*uLattes,.0026*uLattes,abs(fract(v*uLattes)-.5))*step(.06,v)*step(v,.985); tv=mix(tv,tv*.55+.03,la); opa+=la*.6; }\n'+
+  ' float bv=(smoothstep(.0045,.0025,abs(v-.27))+smoothstep(.0045,.0025,abs(v-.5))+smoothstep(.0045,.0025,abs(v-.73)))*step(.07,u)*step(u,.93); tv=mix(tv,uMarque,bv*.85*pres);\n'+
+  ' if(uNum>0.){ vec2 pn=vec2((.74-u)/.4,(v-.585)/.07); float ch=chiffre(vec2(pn.x*2.3,pn.y),floor(uNum/10.))+chiffre(vec2(pn.x*2.3-1.3,pn.y),mod(uNum,10.)); tv=mix(tv,uMarque,min(ch,1.)); }\n'+
+  ' if(uPenons>0.){ float pe=0.; for(int k=0;k<3;k++){ float v0=.3+.2*float(k); float yy=v-v0-(.012*uFasF*sin(u*70.-uTF*19.+float(k))+.01*uFasF)*smoothstep(.1,.2,u); pe+=smoothstep(.0035,.002,abs(yy))*step(.1,u)*step(u,.2); } tv=mix(tv,vec3(.9,.12,.1),min(pe,1.)*pres); }\n'+
+  ' tv*=1.-.16*(smoothstep(.03,.0,u)+smoothstep(.975,1.,u)); tv*=uVoile;\n'+
   ' vec3 amb=mix(uAmbB,uAmbH,.72);\n'+
-  ' vec3 c=uVoile*(amb+uLum*max(ndl,0.)*.75)+uVoile*uLum*max(-ndl,0.)*.62;\n'+
-  ' float couture=1.-.07*smoothstep(.035,.0,abs(fract(vUV.y*7.+vUV.x*.6)-.5)-.0)*step(vUV.y,.97);\n'+
-  ' float ralingue=1.-.16*(smoothstep(.03,.0,vUV.x)+smoothstep(.975,1.,vUV.x));\n'+
-  ' c=mix(c*couture*ralingue,uBrumeC,uBrume*(1.-exp(-length(uCam-vW)/26.)));\n'+
+  ' vec3 c=tv*(amb+uLum*max(ndl,0.)*.75)+tv*uLum*max(-ndl,0.)*uTrans*(1.-min(opa,.8));\n'+
+  ' c+=uLum*pow(max(dot(reflect(-V,n),uSoleil),0.),26.)*.10*(1.-uTrans);\n'+
+  ' c=mix(c,uBrumeC,uBrume*(1.-exp(-d/uBrumeD)));\n'+
   ' gl_FragColor=vec4(c,1.); }'},
 trait:{v:'attribute vec4 aP; uniform mat4 uVP,uM; varying float vA; void main(){vA=aP.w; gl_Position=uVP*uM*vec4(aP.xyz,1.);}',
   f:PREC+'varying float vA; uniform vec4 uCol; void main(){gl_FragColor=vec4(uCol.rgb,uCol.a*vA);}'},
-sillage:{v:'attribute vec4 aA; attribute vec3 aB; uniform mat4 uVP; uniform float uT; varying vec3 vS; varying vec2 vP;\n'+
-  'void main(){ float age=max(uT-aB.y,0.); float demi=min(.75+.86*age,7.0); vec2 p=aA.xy+aA.zw*aB.x*demi; vS=vec3(aB.x,age,aB.z); vP=p; gl_Position=uVP*vec4(p.x,.03,p.y,1.); gl_Position.z-=.0006*gl_Position.w; }',
-  f:PREC+'varying vec3 vS; varying vec2 vP; uniform vec3 uEcume; uniform vec2 uDerive; uniform float uBrume;\n'+GLSL_BRUIT+'\n'+
-  'void main(){ float ax=abs(vS.x), age=vS.y; float demi=min(.75+.86*age,7.0); float lat=ax*demi;\n'+
+sillage:{v:'attribute vec4 aA; attribute vec3 aB; uniform mat4 uVP; uniform float uT,uSilL; varying vec3 vS; varying vec2 vP;\n'+
+  'void main(){ float age=max(uT-aB.y,0.); float demi=min(.75+.86*age,7.0)*uSilL; vec2 p=aA.xy+aA.zw*aB.x*demi; vS=vec3(aB.x,age,aB.z); vP=p; gl_Position=uVP*vec4(p.x,.03,p.y,1.); gl_Position.z-=.0006*gl_Position.w; }',
+  f:PREC+'varying vec3 vS; varying vec2 vP; uniform vec3 uEcume; uniform vec2 uDerive; uniform float uBrume,uSilL;\n'+GLSL_BRUIT+'\n'+
+  'void main(){ float ax=abs(vS.x), age=vS.y; float demi=min(.75+.86*age,7.0)*uSilL; float lat=ax*demi;\n'+
   ' float nz=bruitd(vP*2.3+uDerive*.3).x*.5+bruitd(vP*5.9+3.1).x*.32+bruitd(vP*13.).x*.18;\n'+
   ' float bord=smoothstep(.45,.82,ax)*smoothstep(1.,.80,ax)*exp(-age*.34)*smoothstep(.25,.9,nz+.1)*.34;\n'+
   ' float coeur=smoothstep(1.35,.1,lat)*exp(-age*.50)*smoothstep(.22,.85,nz+.25*exp(-age*.8));\n'+
@@ -385,12 +564,12 @@ sillage:{v:'attribute vec4 aA; attribute vec3 aB; uniform mat4 uVP; uniform floa
 embruns:{v:'attribute vec4 aP; uniform mat4 uVP; uniform float uEch; varying float vA; void main(){ vA=aP.w; gl_Position=uVP*vec4(aP.xyz,1.); gl_PointSize=max(uEch*(.5+.5*aP.w)/gl_Position.w,1.5); }',
   f:PREC+'varying float vA; uniform vec3 uEcume; void main(){ vec2 q=gl_PointCoord-.5; float r=dot(q,q)*4.; gl_FragColor=vec4(uEcume,smoothstep(1.,.1,r)*vA*.6); }'}
 };
-SRC.mer.f=PREC+'varying vec3 vW; uniform vec3 uCam,uFond,uClair,uLueur,uEcume,uPlat,uVoileR; uniform float uT,uQual; uniform vec2 uDerive,uRisee,uLarg; uniform vec4 uBateau; uniform vec3 uBateauS,uBouee,uMat,uMatD;\n'+GLSL_CIEL+'\n'+GLSL_BRUIT+'\n'+
-'float demiBau(float t){ return t<.62 ? 1.75*(1.-pow(max(1.-t/.62,0.),1.55)) : 1.75-.22*pow((t-.62)/.38,2.); }\n'+
+SRC.mer.f=PREC+'varying vec3 vW; uniform vec3 uCam,uFond,uClair,uLueur,uEcume,uPlat,uVoileR; uniform float uT,uQual; uniform vec2 uDerive,uRisee,uLarg; uniform vec4 uBateau,uCoque; uniform vec3 uBateauS,uBouee,uMat,uMatD,uMatH;\n'+GLSL_CIEL+'\n'+GLSL_BRUIT+'\n'+
+'float profil(float t){ return t<.62 ? 1.-pow(max(1.-t/.62,0.),1.55) : 1.-.126*pow((t-.62)/.38,2.); }\n'+
 /* le gréement vu depuis un point de l'eau, le long d'un rayon : sert au reflet des voiles et à leur ombre portée */
 'float greement(vec3 P,vec3 R,float larg){ vec3 w0=P-uMat; float b=dot(R,uMatD), d0=dot(R,w0), e=dot(uMatD,w0); float den=max(1.-b*b,1e-4);\n'+
-' float sg=clamp((e-b*d0)/den,0.,14.5); vec3 Q=uMat+uMatD*sg; float t=dot(Q-P,R); if(t<0.) return 0.; float di=length(P+R*t-Q);\n'+
-' float w=(.28+2.3*(1.-sg/14.5))*larg; return smoothstep(w,w*.3,di)*smoothstep(.2,1.6,sg)*exp(-t/90.); }\n'+
+' float sg=clamp((e-b*d0)/den,0.,uMatH.x); vec3 Q=uMat+uMatD*sg; float t=dot(Q-P,R); if(t<0.) return 0.; float di=length(P+R*t-Q);\n'+
+' float w=(.28+uMatH.y*(1.-sg/uMatH.x))*larg; return smoothstep(w,w*.3,di)*smoothstep(.2,1.6,sg)*exp(-t/90.); }\n'+
 'void main(){ vec2 p=vW.xz; vec3 V=uCam-vW; float d=length(V); V/=d; vec2 g=vec2(0.); float hh=0.,ph;\n'+
 glslHoule()+
 ' float ri=smoothstep(.40,.70,bruitd((p+uRisee)/44.).x*.62+bruitd((p+uRisee)/15.+7.3).x*.38);\n'+
@@ -417,8 +596,8 @@ glslHoule()+
 /* moutons : écume seuillée sur les crêtes, seulement dans les risées */
 ' col=mix(col,uEcume,smoothstep(.56,.62,hh*1.5+n2.x*.44+n3.x*.16+ri*.22-.30)*smoothstep(.35,.9,ri)*.55*rf);\n'+
 /* carène : ombre de contact, écume qui se déchire en s'éloignant de la coque, vaguelettes d'étrave en bandes */
-' vec2 qb=p-uBateau.xy; vec2 fw=uBateau.zw; float al=dot(qb,fw), sd=dot(qb,vec2(-fw.y,fw.x)); float t=.5-al/10.4;\n'+
-' if(t>-.3&&t<1.5&&abs(sd)<5.5){ float tt=clamp(t,0.,1.); float bw=demiBau(tt)*.84*smoothstep(-.02,.05,t); float di=abs(sd)-bw; float mk=smoothstep(-.06,.02,t)*smoothstep(1.1,1.0,t);\n'+
+' vec2 qb=p-uBateau.xy; vec2 fw=uBateau.zw; float al=dot(qb,fw), sd=dot(qb,vec2(-fw.y,fw.x)); float t=.5-al/uCoque.x;\n'+
+' if(t>-.3&&t<1.5&&abs(sd)<uCoque.z+uCoque.y+4.){ float tt=clamp(t,0.,1.); float bw=uCoque.y*profil(tt)*.84*smoothstep(-.02,.05,t); float di=abs(abs(sd)-uCoque.z)-bw; float mk=smoothstep(-.06,.02,t)*smoothstep(1.1,1.0,t)*uCoque.w;\n'+
 '  col*=1.-.42*mk*smoothstep(1.5,-.3,di);\n'+
 '  float bn=bruitd(p*2.6+uDerive).x*.6+bruitd(p*6.3-uDerive).x*.4; float vi=.22+.78*uBateauS.x;\n'+
 '  float ec=mk*smoothstep(bn-.16,bn+.16,(1.-di/1.0)*vi*mix(1.15,.42,tt))*step(-.5,di)*.82;\n'+
@@ -429,6 +608,7 @@ glslHoule()+
 ' col=brumer(col,d);\n'+
 ' gl_FragColor=vec4(tons(col),1.); }';
 SRC.mer.f=SRC.mer.f.replace('HDX',Math.sin(HOULE_AZ).toFixed(5)).replace('HDZ',(-Math.cos(HOULE_AZ)).toFixed(5));
+SRC.corps.f=SRC.objet.f;
 
 function programme(src){
   function sh(type,code){var s=gl.createShader(type); gl.shaderSource(s,code); gl.compileShader(s);
@@ -443,8 +623,10 @@ function U(pr,n,v){var l=pr.u[n]; if(l==null) return;
   if(typeof v==='number') gl.uniform1f(l,v); else if(v.length===2) gl.uniform2fv(l,v); else if(v.length===3) gl.uniform3fv(l,v); else if(v.length===4) gl.uniform4fv(l,v); else gl.uniformMatrix4fv(l,false,v)}
 
 /* ---- constructeur de maillages (position, normale, couleur) */
-function Maille(){this.p=[];this.c=[];this.i=[];this.n=null}
-Maille.prototype.s=function(x,y,z,c){this.p.push(x,y,z); this.c.push(c[0],c[1],c[2]); return this.p.length/3-1};
+/* this.m : la matière en cours (voir la liste dans le shader des objets), donnée à chaque sommet ajouté */
+var TRIANGLES=0;
+function Maille(){this.p=[];this.c=[];this.q=[];this.i=[];this.n=null;this.m=0}
+Maille.prototype.s=function(x,y,z,c){this.p.push(x,y,z); this.c.push(c[0],c[1],c[2]); this.q.push(this.m); return this.p.length/3-1};
 Maille.prototype.tri=function(a,b,c){this.i.push(a,b,c)};
 Maille.prototype.quad=function(A,B,C,D,col){var a=this.s(A[0],A[1],A[2],col),b=this.s(B[0],B[1],B[2],col),c=this.s(C[0],C[1],C[2],col),d=this.s(D[0],D[1],D[2],col); this.tri(a,b,c); this.tri(a,c,d)};
 /* oriente vers l'extérieur les faces ajoutées depuis l'indice i0, par rapport à un centre */
@@ -472,77 +654,541 @@ Maille.prototype.tube=function(A,B,r0,r1,col,seg){seg=seg||8; var i0=this.i.leng
   var ca=this.s(A[0],A[1],A[2],col), cb=this.s(B[0],B[1],B[2],col);
   for(k=0;k<seg;k++){j=(k+1)%seg; this.tri(ca,ra[k],ra[j]); this.tri(cb,rb[k],rb[j])}
   this.orienter(i0,[(A[0]+B[0])/2,(A[1]+B[1])/2,(A[2]+B[2])/2])};
-function televerser(m){ m.normales(); var nv=m.p.length/3, d=new Float32Array(nv*9), k;
-  for(k=0;k<nv;k++){d[k*9]=m.p[k*3]; d[k*9+1]=m.p[k*3+1]; d[k*9+2]=m.p[k*3+2]; d[k*9+3]=m.n[k*3]; d[k*9+4]=m.n[k*3+1]; d[k*9+5]=m.n[k*3+2]; d[k*9+6]=m.c[k*3]; d[k*9+7]=m.c[k*3+1]; d[k*9+8]=m.c[k*3+2]}
+function televerser(m){ m.normales(); var nv=m.p.length/3, d=new Float32Array(nv*10), k; if(nv>65535) throw new Error('maillage trop gros : '+nv+' sommets');
+  for(k=0;k<nv;k++){d[k*10]=m.p[k*3]; d[k*10+1]=m.p[k*3+1]; d[k*10+2]=m.p[k*3+2]; d[k*10+3]=m.n[k*3]; d[k*10+4]=m.n[k*3+1]; d[k*10+5]=m.n[k*3+2]; d[k*10+6]=m.c[k*3]; d[k*10+7]=m.c[k*3+1]; d[k*10+8]=m.c[k*3+2]; d[k*10+9]=m.q[k]}
   var vb=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,vb); gl.bufferData(gl.ARRAY_BUFFER,d,gl.STATIC_DRAW);
   var ib=gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(m.i),gl.STATIC_DRAW);
-  return {vb:vb,ib:ib,n:m.i.length}}
+  TRIANGLES+=m.i.length/3; return {vb:vb,ib:ib,n:m.i.length,tri:m.i.length/3}}
 
-var MAT=[0,2.3,-0.9];             /* vit-de-mulet : pied de la grand-voile */
-var POINT_AMURE=[0,1.15,-5.0];    /* point d'amure du foc, à l'étrave */
-var GUINDANT_FOC=[0,12.45,3.93], BORDURE_FOC=norm3([0,0.6,4.25]), AXE_ETAI=norm3(GUINDANT_FOC);
+/* ================================================================== LES OUTILS DU CHANTIER
+   Trois outils servent à tout : la coque par sections, le profil d'aile balayé, la pièce tournée. */
+var MARINE_C=[0.043,0.165,0.29], ROUGE_C=[0.886,0.137,0.18], BLANC_C=[0.95,0.96,0.97], CARBONE=[0.075,0.082,0.1], GRIS=[0.55,0.58,0.62], PEAU=[0.84,0.64,0.52], UN=[1,1,1];
+var INOX=[0.74,0.76,0.79], SHORT_C=[0.1,0.12,0.16], GANT=[0.12,0.13,0.15], BOTTE=[0.1,0.11,0.13], VISIERE=[0.06,0.07,0.09], ANTIDER=[0.8,0.82,0.84], FILET=[0.1,0.115,0.15];
+function v3(a,b,k){return [a[0]+b[0]*k,a[1]+b[1]*k,a[2]+b[2]*k]}
+function mix3(a,b,t){return [lerp(a[0],b[0],t),lerp(a[1],b[1],t),lerp(a[2],b[2],t)]}
+function dot3(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]}
+function echelleM(k){var m=ident(); m[0]=m[5]=m[10]=k; return m}
 
-function construire(){
-  var HULL=[-1,0,0], PONT=[0.84,0.85,0.85], ROUF=[0.93,0.94,0.94], ALU=[0.72,0.75,0.79], SOMBRE=[0.16,0.19,0.24], CARENE=[0.50,0.10,0.085], ROUGE=[0.85,0.2,0.15], BLANC=[0.95,0.95,0.94];
-  var m=new Maille(), NS=30, NR=9, i, j, rangs=[], i0;
-  /* coque : sections de l'étrave (t=0) à la poupe (t=1) */
-  for(i=0;i<=NS;i++){ var t=i/NS, z=-LONG/2+t*LONG, b=demiBau(t), ky=quilleY(t), sy=livetY(t), rg=[];
-    for(j=-NR;j<=NR;j++){ var ph=Math.abs(j)/NR*PI/2, x=sgn(j)*b*Math.pow(Math.sin(ph),0.65), y=ky+(sy-ky)*(1-Math.pow(Math.cos(ph),1.6)); if(j===0)x=0; rg.push(m.s(x,y,z,HULL)) }
+/* pièce tournée autour d'un axe : winchs, colonnes, bulbe, moyeux. profil : [[distance le long de l'axe, rayon], ...].
+   lisse=true pour une forme douce (bulbe), false pour des arêtes franches (winch). */
+Maille.prototype.rev=function(A,ax,prof,col,seg,lisse){
+  seg=seg||10; ax=norm3(ax); var t=Math.abs(ax[1])<0.9?[0,1,0]:[1,0,0], u=norm3(cross(ax,t)), v=cross(ax,u), self=this, i, k, prev=null, i0;
+  function anneau(s,r){ var a=[],k; for(k=0;k<seg;k++){ var an=k/seg*TAU, cx=Math.cos(an)*r, sx=Math.sin(an)*r; a.push(self.s(A[0]+ax[0]*s+u[0]*cx+v[0]*sx,A[1]+ax[1]*s+u[1]*cx+v[1]*sx,A[2]+ax[2]*s+u[2]*cx+v[2]*sx,col)) } return a }
+  for(i=0;i<prof.length;i++){ var cur=anneau(prof[i][0],prof[i][1]);
+    if(prev){ i0=this.i.length; for(k=0;k<seg;k++){ var j=(k+1)%seg; this.tri(prev[k],prev[j],cur[j]); this.tri(prev[k],cur[j],cur[k]) }
+      var sm=(prof[i][0]+prof[i-1][0])/2; this.orienter(i0,[A[0]+ax[0]*sm,A[1]+ax[1]*sm,A[2]+ax[2]*sm]) }
+    prev=lisse?cur:anneau(prof[i][0],prof[i][1]) }
+};
+/* anneau : jantes de barre à roue */
+Maille.prototype.tore=function(C,ax,R,r,col,n,k){
+  n=n||20; k=k||6; ax=norm3(ax); var t=Math.abs(ax[1])<0.9?[0,1,0]:[1,0,0], u=norm3(cross(ax,t)), v=cross(ax,u), i, j, rg=[], i0=this.i.length;
+  for(i=0;i<n;i++){ var a=i/n*TAU, d=[u[0]*Math.cos(a)+v[0]*Math.sin(a),u[1]*Math.cos(a)+v[1]*Math.sin(a),u[2]*Math.cos(a)+v[2]*Math.sin(a)], r1=[];
+    for(j=0;j<k;j++){ var b=j/k*TAU, w=R+r*Math.cos(b), h=r*Math.sin(b); r1.push(this.s(C[0]+d[0]*w+ax[0]*h,C[1]+d[1]*w+ax[1]*h,C[2]+d[2]*w+ax[2]*h,col)) } rg.push(r1) }
+  for(i=0;i<n;i++)for(j=0;j<k;j++){ var i2=(i+1)%n, j2=(j+1)%k; this.tri(rg[i][j],rg[i2][j],rg[i2][j2]); this.tri(rg[i][j],rg[i2][j2],rg[i][j2]) }
+};
+/* une barre à roue complète : jante, rayons, moyeu */
+Maille.prototype.roue=function(C,ax,R,rayons,col){ var k, a=norm3(ax), t=Math.abs(a[1])<0.9?[0,1,0]:[1,0,0], u=norm3(cross(a,t)), v=cross(a,u);
+  this.tore(C,a,R,R*0.045+0.006,col,22,5);
+  for(k=0;k<rayons;k++){ var an=k/rayons*TAU+0.3, d=[u[0]*Math.cos(an)+v[0]*Math.sin(an),u[1]*Math.cos(an)+v[1]*Math.sin(an),u[2]*Math.cos(an)+v[2]*Math.sin(an)]; this.tube(C,v3(C,d,R),R*0.03+0.004,R*0.025+0.004,col,4) }
+  this.rev(v3(C,a,-0.04),a,[[0,0],[0,R*0.16],[0.08,R*0.12],[0.08,0]],col,8) };
+/* un winch : embase, poupée cintrée, couronne */
+Maille.prototype.winch=function(P,r,h){ var m0=this.m; this.m=4;
+  this.rev(P,[0,1,0],[[0,0],[0,r*1.25],[h*0.16,r*1.25],[h*0.16,r*0.95],[h*0.3,r*0.8],[h*0.62,r*0.8],[h*0.78,r],[h*0.9,r],[h*0.9,r*0.55],[h,r*0.55],[h,0]],INOX,12);
+  this.m=2; this.rev(v3(P,[0,1,0],h*0.3),[0,1,0],[[0,r*0.82],[h*0.32,r*0.82]],CARBONE,12); this.m=m0 };
+/* une poulie : deux joues et un réa */
+Maille.prototype.poulie=function(P,r,ax){ var m0=this.m; this.m=4; this.rev(v3(P,norm3(ax||[1,0,0]),-r*0.35),ax||[1,0,0],[[0,0],[0,r],[r*0.7,r],[r*0.7,0]],INOX,8); this.m=m0 };
+
+/* un profil d'aile balayé le long d'une ligne : foils, safrans, quille, mât, bras, barres de flèche.
+   st : stations {p: point du profil, c: corde, e: épaisseur relative, d: direction de la corde, n: direction de l'épaisseur}. */
+var PROFIL=[0,0.03,0.1,0.25,0.45,0.7,1];
+function aileron(m,st,col,o){ o=o||{}; var av=o.av==null?0.3:o.av, prev=null, i, k, f=typeof col==='function';
+  for(i=0;i<st.length;i++){ var s=st[i], d=s.d||[0,0,1], n=s.n||[1,0,0], ring=[];
+    for(k=0;k<12;k++){ var q=PROFIL[k<7?k:12-k], sg=k<7?1:-1, ep=5*s.e*s.c*(0.2969*Math.sqrt(q)-0.126*q-0.3516*q*q+0.2843*q*q*q-0.1036*q*q*q*q)*sg, z=(q-av)*s.c;
+      if(o.matiere) m.m=o.matiere(i/(st.length-1),q);
+      ring.push(m.s(s.p[0]+d[0]*z+n[0]*ep,s.p[1]+d[1]*z+n[1]*ep,s.p[2]+d[2]*z+n[2]*ep,f?col(i/(st.length-1),q):col)) }
+    if(prev){ var i0=m.i.length; for(k=0;k<12;k++){ var k2=(k+1)%12; m.tri(prev[k],prev[k2],ring[k2]); m.tri(prev[k],ring[k2],ring[k]) }
+      var pp=st[i-1]; m.orienter(i0,[(s.p[0]+pp.p[0])/2+(d[0]*(0.4-av))*s.c,(s.p[1]+pp.p[1])/2+(d[1]*(0.4-av))*s.c,(s.p[2]+pp.p[2])/2+(d[2]*(0.4-av))*s.c]) }
+    if((i===0||i===st.length-1)&&!o.ouvert){ var ce=m.s(s.p[0]+d[0]*(0.4-av)*s.c,s.p[1]+d[1]*(0.4-av)*s.c,s.p[2]+d[2]*(0.4-av)*s.c,f?col(i/(st.length-1),0.4):col); for(k=0;k<12;k++) m.tri(ce,ring[k],ring[(k+1)%12]) }
+    prev=ring }
+}
+/* une ligne droite de stations pour aileron() */
+function ligne(a,b,n,c0,c1,e,d,nn){ var st=[],i; for(i=0;i<=n;i++){ var t=i/n; st.push({p:mix3(a,b,t),c:lerp(c0,c1,t),e:e,d:d,n:nn}) } return st }
+
+/* une coque : sections de l'étrave (t=0) à la poupe (t=1), bordé lisse, livet chanfreiné, pont et cockpit.
+   o.bau, o.quille, o.livet : demi-largeur, fond et hauteur du pont. o.e1, o.e2 : forme de la section (bouchain plus ou moins
+   marqué). o.evase : dévers des flancs. o.pont(t) : demi-section du pont, du centre vers le bord, [[x, y, couleur, matière], ...]. */
+function coque(m,o){
+  var ts=o.ts, NR=o.nr||8, i, j, k, z0=(o.zc||0)-o.L/2, x0=o.x0||0, PEINT=[-1,0,0], ch=o.chanfrein||0.04, rangs=[], i0;
+  var f=function(v,t,def){return v==null?def:(typeof v==='function'?v(t):v)};
+  if(!ts){ ts=[]; for(i=0;i<=(o.ns||30);i++) ts.push(i/(o.ns||30)) }
+  m.m=1; i0=m.i.length;
+  for(i=0;i<ts.length;i++){ var t=ts[i], z=z0+t*o.L, b=o.bau(t), ky=o.quille(t), sy=o.livet(t), e1=f(o.e1,t,0.6), e2=f(o.e2,t,1.8), ev=f(o.evase,t,0), rg=[], c=Math.min(ch,b*0.5);
+    for(j=-NR;j<=NR;j++){ var ph=Math.abs(j)/NR*PI/2, Y=1-Math.pow(Math.cos(ph),e2), x=sgn(j)*b*Math.pow(Math.sin(ph),e1)*(1-ev+ev*Y), y=ky+(sy-c-ky)*Y; if(j===0)x=0; rg.push(m.s(x0+x,y,z,PEINT)) }
+    rg.g=m.s(x0-(b-c),sy,z,PEINT); rg.d=m.s(x0+(b-c),sy,z,PEINT); rg.b=b-c; rg.sy=sy; rg.z=z; rg.t=t;
     rangs.push(rg) }
-  i0=m.i.length;
-  for(i=0;i<NS;i++)for(j=0;j<2*NR;j++){ var a=rangs[i][j], b2=rangs[i][j+1], c=rangs[i+1][j+1], d=rangs[i+1][j]; m.tri(a,b2,c); m.tri(a,c,d) }
-  m.orienter(i0,[0,0.45,0]);
-  /* tableau arrière */
-  i0=m.i.length; var ctr=m.s(0,livetY(1)+0.06,LONG/2,HULL), der=[]; for(j=0;j<=2*NR;j++){ var q=rangs[NS][j]*3; der.push(m.s(m.p[q],m.p[q+1],m.p[q+2],HULL)) }
-  for(j=0;j<2*NR;j++) m.tri(ctr,der[j],der[j+1]); m.orienter(i0,[0,0.5,0]);
-  /* pont, avec un léger bouge */
-  i0=m.i.length; var pr=null; for(i=0;i<=NS;i++){ var tt=i/NS, zz=-LONG/2+tt*LONG, bb=demiBau(tt), yy=livetY(tt);
-    var cur=[m.s(-bb,yy,zz,PONT),m.s(0,yy+0.06,zz,PONT),m.s(bb,yy,zz,PONT)];
-    if(pr){ m.tri(pr[0],pr[1],cur[1]); m.tri(pr[0],cur[1],cur[0]); m.tri(pr[1],pr[2],cur[2]); m.tri(pr[1],cur[2],cur[1]) } pr=cur }
-  m.orienter(i0,[0,-5,0]);
-  /* rouf, hublots, cockpit */
-  m.boite(-1.02,1.02,0.97,1.42,-3.1,1.75,ROUF,0.5);
-  m.boite(-1.035,-1.0,1.13,1.3,-1.9,1.2,SOMBRE); m.boite(1.0,1.035,1.13,1.3,-1.9,1.2,SOMBRE);
-  m.boite(-0.78,0.78,0.99,1.035,2.15,4.85,[0.33,0.36,0.40]);
-  m.boite(-0.9,0.9,1.0,1.2,1.75,2.1,ROUF);
-  /* quille et safran */
-  m.boite(-0.09,0.09,-1.95,-0.3,-1.25,0.35,CARENE); m.boite(-0.24,0.24,-2.05,-1.72,-1.5,0.7,CARENE); m.boite(-0.05,0.05,-1.5,-0.1,4.05,4.5,CARENE);
-  /* mât, barres de flèche */
-  m.tube([0,0.95,-0.9],[0,15.25,-0.9],0.095,0.06,ALU,8);
-  m.tube([-0.82,7.2,-0.78],[0.82,7.2,-0.78],0.03,0.03,ALU,5); m.tube([-0.62,11.0,-0.8],[0.62,11.0,-0.8],0.026,0.026,ALU,5);
-  G.coque=televerser(m);
+  for(i=0;i<ts.length-1;i++){ var A=rangs[i], Bq=rangs[i+1]; for(j=0;j<2*NR;j++){ m.tri(A[j],A[j+1],Bq[j+1]); m.tri(A[j],Bq[j+1],Bq[j]) }
+    m.tri(A.g,A[0],Bq[0]); m.tri(A.g,Bq[0],Bq.g); m.tri(A[2*NR],A.d,Bq.d); m.tri(A[2*NR],Bq.d,Bq[2*NR]) }
+  m.orienter(i0,[x0,(o.livet(0.5)+o.quille(0.5))/2,z0+o.L/2]);
+  if(o.tableau!==false){ var der=rangs[ts.length-1], ym=o.tableauY==null?99:o.tableauY, ids=[der.g]; for(j=0;j<=2*NR;j++) ids.push(der[j]); ids.push(der.d);
+    var ctr=m.s(x0,Math.min(der.sy,ym)-0.02,der.z,PEINT), cp=[]; for(j=0;j<ids.length;j++){ var q=ids[j]*3; cp.push(m.s(m.p[q],Math.min(m.p[q+1],ym),m.p[q+2],PEINT)) }
+    for(j=0;j<cp.length;j++) m.tri(ctr,cp[j],cp[(j+1)%cp.length]) }
+  if(o.pont){ var pr=null; for(i=0;i<ts.length;i++){ var R=rangs[i], sec=o.pont(R.t,R.b,R.sy), cur=[], n=sec.length;
+      for(k=n-1;k>=0;k--){ m.m=sec[k][3]==null?3:sec[k][3]; cur.push(m.s(x0-Math.min(sec[k][0],R.b),sec[k][1],R.z,sec[k][2])) }
+      for(k=(sec[0][0]===0?1:0);k<n;k++){ m.m=sec[k][3]==null?3:sec[k][3]; cur.push(m.s(x0+Math.min(sec[k][0],R.b),sec[k][1],R.z,sec[k][2])) }
+      if(pr) for(k=0;k<cur.length-1;k++){ m.tri(pr[k],cur[k],cur[k+1]); m.tri(pr[k],cur[k+1],pr[k+1]) }
+      pr=cur } }
+  m.m=0;
+}
+/* un élément d'aile rigide : profils empilés de y0 à y1. corde(u) et bord(u) donnent la corde et la position du bord d'attaque. */
+function elementAile(m,o){
+  var st=[], i; for(i=0;i<=o.n;i++){ var u=lerp(o.u0||0,o.u1==null?1:o.u1,i/o.n), c=o.corde(u); st.push({p:[0,lerp(o.y0,o.y1,u),o.bord(u)],c:c,e:o.ep,d:[0,0,1],n:[1,0,0],u:u}) }
+  aileron(m,st,function(t,q){return o.couleur(lerp(o.u0||0,o.u1==null?1:o.u1,t),q)},{av:0,matiere:o.matiere?function(t,q){return o.matiere(lerp(o.u0||0,o.u1==null?1:o.u1,t),q)}:null});
+}
 
-  var bm=new Maille(); bm.tube([0,0,0.02],[0,0.04,4.7],0.085,0.075,ALU,8); G.bome=televerser(bm);
+/* ================================================================== LES ÉQUIPIERS
+   Une silhouette : bassin, ventre, poitrine, épaules, cou, tête, casque ou casquette, bras, avant-bras, mains, cuisses,
+   jambes et pieds. Les membres se plient par cinématique inverse vers les points que donne la pose. */
+function membre(a,b,l1,l2,pli){ /* renvoie [coude ou genou, extrémité atteinte] */
+  var d=[b[0]-a[0],b[1]-a[1],b[2]-a[2]], L=Math.hypot(d[0],d[1],d[2])||1e-4, Lc=Math.min(L,(l1+l2)*0.995);
+  var n=[d[0]/L,d[1]/L,d[2]/L], x=(l1*l1-l2*l2+Lc*Lc)/(2*Lc), h=Math.sqrt(Math.max(l1*l1-x*x,0));
+  var k=pli[0]*n[0]+pli[1]*n[1]+pli[2]*n[2], q=norm3([pli[0]-n[0]*k,pli[1]-n[1]*k,pli[2]-n[2]*k]);
+  return [[a[0]+n[0]*x+q[0]*h,a[1]+n[1]*x+q[1]*h,a[2]+n[2]*x+q[2]*h],[a[0]+n[0]*Lc,a[1]+n[1]*Lc,a[2]+n[2]*Lc]] }
+/* pose : {bassin, haut (direction du buste), face (où regarde le buste), regard, mainG, mainD, piedG, piedD}, dans le repère du bateau */
+function dessinerPerso(c,po,t){
+  var T=po.haut, F=po.face, lat=norm3(cross(T,F)), b=po.bassin, st=B.tenue||{}, veste=t.veste||MARINE_C, bas=t.bas||SHORT_C, k, co, fin=c.fin;
+  function P(h,f,l){ f=f||0; l=l||0; return [b[0]+T[0]*h+F[0]*f+lat[0]*l,b[1]+T[1]*h+F[1]*f+lat[1]*l,b[2]+T[2]*h+F[2]*f+lat[2]*l] }
+  c.cap(P(0,0,-0.085),P(0,0,0.085),0.1,0.1,bas);                                              /* hanches */
+  c.cap(P(0.06),P(0.3),0.118,0.128,veste);                                                    /* ventre */
+  if(st.gilet) c.cap(P(0.27,0.012),P(0.47,0.012),0.165,0.146,t.gilet||ROUGE_C);               /* gilet d'impact */
+  else c.cap(P(0.28),P(0.47),0.14,0.126,veste);                                               /* poitrine */
+  c.cap(P(0.5,0,-0.165),P(0.5,0,0.165),0.066,0.066,veste);                                    /* épaules */
+  if(fin) c.cap(P(0.56),P(0.66),0.047,0.045,PEAU);                                            /* cou */
+  var R=po.regard||F, kk=dot3(R,T); R=norm3([R[0]-T[0]*kk,R[1]-T[1]*kk,R[2]-T[2]*kk]); var lr=cross(T,R);
+  function H(h,f,l){ f=f||0; l=l||0; return [b[0]+T[0]*h+R[0]*f+lr[0]*l,b[1]+T[1]*h+R[1]*f+lr[1]*l,b[2]+T[2]*h+R[2]*f+lr[2]*l] }
+  c.cap(H(0.715,0.008),H(0.79,0.008),0.088,0.093,PEAU);                                       /* tête */
+  if(st.casque){ c.cap(H(0.758,-0.014),H(0.812,-0.02),0.108,0.104,t.casque||BLANC_C,8);       /* casque */
+    if(fin) c.cap(H(0.768,0.072,-0.052),H(0.768,0.072,0.052),0.032,0.032,VISIERE,4) }         /* lunettes ou visière */
+  else{ c.cap(H(0.795,-0.004),H(0.822,-0.01),0.094,0.086,t.casque||BLANC_C);                  /* casquette */
+    c.cap(H(0.8,0.07),H(0.79,0.165),0.05,0.036,t.casque||BLANC_C);
+    if(fin) c.cap(H(0.764,0.078,-0.05),H(0.764,0.078,0.05),0.023,0.023,VISIERE,4) }
+  for(k=0;k<2;k++){ co=k?-1:1;
+    var epa=P(0.5,0,co*0.2), main=k?po.mainD:po.mainG, br=membre(epa,main,0.31,0.3,[-F[0]*0.4+lat[0]*co*0.16,-1,-F[2]*0.4+lat[2]*co*0.16]);
+    c.cap(epa,br[0],0.054,0.045,veste); c.cap(br[0],br[1],0.043,0.034,st.manches?PEAU:veste);
+    if(fin){ var da=norm3([br[1][0]-br[0][0],br[1][1]-br[0][1],br[1][2]-br[0][2]]); c.cap(br[1],v3(br[1],da,0.07),0.036,0.03,st.gants===false?PEAU:GANT) }
+    var han=P(0,0,co*0.1), pied=k?po.piedD:po.piedG, vh=norm3([han[0]-pied[0],han[1]-pied[1],han[2]-pied[2]]);
+    var ja=membre(han,v3(pied,vh,0.06),0.46,0.46,[F[0]+T[0]*0.4,F[1]+T[1]*0.4,F[2]+T[2]*0.4]);
+    c.cap(han,ja[0],0.088,0.064,bas); c.cap(ja[0],ja[1],0.06,0.044,st.short?PEAU:bas);
+    var sh=norm3([ja[1][0]-ja[0][0],ja[1][1]-ja[0][1],ja[1][2]-ja[0][2]]), kf=dot3(F,sh), fd=norm3([F[0]-sh[0]*kf,F[1]-sh[1]*kf,F[2]-sh[2]*kf]);
+    c.cap(v3(v3(ja[1],sh,0.02),fd,-0.05),v3(v3(ja[1],sh,0.025),fd,0.17),0.044,0.037,BOTTE) }
+}
+/* La vie : chacun respire, se balance un peu, suit du regard la route ou les voiles, et encaisse les mouvements du bateau. */
+function vivre(po,e,i){
+  var t=S.t, a=i*2.4, F=po.face;
+  po.haut=norm3([po.haut[0]+0.02*Math.sin(t*0.63+a*1.3)-S.roulis*0.5-S.om*0.12,po.haut[1],po.haut[2]+0.015*Math.sin(t*0.47+a)+S.tangage*0.4]);
+  po.bassin=[po.bassin[0],po.bassin[1]+0.004*Math.sin(t*1.7+a),po.bassin[2]];
+  if(!po.regard){ var g=0.5+0.5*Math.sin(t*0.29+a*1.7); po.regard=norm3([F[0]*0.55+0.25*Math.sin(t*0.41+a),0.12*g,F[2]*0.55-0.75]) }
+}
+/* L'inertie : chaque point du corps rejoint sa cible comme au bout d'un ressort amorti, un peu plus ou un peu moins nerveux
+   selon l'équipier. Les mains vont plus vite que le bassin, le buste suit avec un temps de retard. */
+var CLES=['bassin','mainG','mainD','piedG','piedD','haut','face','regard'], NERF={bassin:10,mainG:17,mainD:17,piedG:14,piedD:14,haut:8,face:9,regard:6};
+function majPoses(dt){
+  var i, j, n, k; if(!S.poses) S.poses=[];
+  for(i=0;i<B.equipage.length;i++){ var e=B.equipage[i], po=B.pose(e,S.eq[i],i), f=S.poses[i]; vivre(po,e,i);
+    if(!f||dt<=0){ if(!f){ f={v:{}}; for(k in po) f[k]=(po[k]&&po[k].slice)?po[k].slice():po[k]; for(j=0;j<CLES.length;j++) f.v[CLES[j]]=[0,0,0]; S.poses[i]=f } continue }
+    var nerf=0.82+0.36*((i*0.618)%1);
+    for(j=0;j<CLES.length;j++){ var c=CLES[j], w=NERF[c]*nerf, x=f[c], v=f.v[c], tg=po[c];
+      for(n=0;n<3;n++){ v[n]+=(w*w*(tg[n]-x[n])-1.3*w*v[n])*dt; x[n]+=v[n]*dt } }
+    f.haut=norm3(f.haut); k=dot3(f.face,f.haut); f.face=norm3([f.face[0]-f.haut[0]*k,f.face[1]-f.haut[1]*k,f.face[2]-f.haut[2]*k]);
+    for(k in po) if(CLES.indexOf(k)<0) f[k]=po[k];
+  }
+}
+/* un poste dans une coque de catamaran : calé dans le cockpit, ou en course sur le trampoline pendant la traversée */
+function posePoste(e,eq){
+  var c=eq.c, X=B.ecart, x=c*X, w=sstep(0.8,1,Math.abs(c)), dir=sgn(eq.cible-c), ph=x*2.7, z=e.z, mo=S.moulin, FL=B.fond;
+  var dos=e.dos?-1:1, zc=B.colonne, regard=null;
+  var bA=[x,1.02,z], bC=[x,2.08+0.05*Math.sin(ph*2),z], hA=[0,0.95,-0.31*dos];
+  var pG=[x-0.11,FL+0.02,z-0.46*dos], pD=[x+0.11,FL+0.02,z-0.46*dos], mG, mD;
+  if(e.type==='volant'){ mG=[x-0.17,1.5,z-0.5]; mD=[x+0.17,1.5,z-0.5]; regard=[0.2*-S.cote,0.1,-1] }
+  else if(e.type==='moulin'){ /* les deux grinders se font face de part et d'autre de la colonne et tournent les mêmes manivelles */
+    var hG=[x-0.2,1.34+0.16*Math.sin(mo),zc+0.16*Math.cos(mo)], hD=[x+0.2,1.34-0.16*Math.sin(mo),zc-0.16*Math.cos(mo)];
+    if(dos<0){ mG=hD; mD=hG } else { mG=hG; mD=hD }
+    bA=[x,1.06+0.03*Math.sin(mo*2),z+0.05*dos*Math.cos(mo)]; hA=[0,0.86,-0.5*dos]; regard=[0,-0.5,-dos] }
+  else if(e.type==='reglage'){ mG=[x-0.2,1.3,z-0.42]; mD=[x+0.2,1.3+0.03*Math.sin(S.t*2.3+z),z-0.42]; regard=[0.5*-S.cote,0.75,-0.6] }   /* il regarde l'aile */
+  else{ mG=[x-0.17,1.12,z-0.34]; mD=[x+0.17,1.12,z-0.34]; regard=[Math.sin(S.t*0.37)*0.8,0.1,-1] }                              /* le stratège balaie le plan d'eau */
+  var bassin=mix3(bC,bA,w), haut=norm3(mix3([dir*0.38,0.92,0],hA,w)), face=norm3(mix3([dir,0,0],[0,0,-dos],w)), lat=norm3(cross(haut,face));
+  var cG=[x+dir*0.4*Math.sin(ph),1.24+0.22*Math.max(0,Math.cos(ph)),z-0.1], cD=[x-dir*0.4*Math.sin(ph),1.24+0.22*Math.max(0,-Math.cos(ph)),z+0.1];
+  var ce=v3(bassin,haut,0.36);
+  var po={bassin:bassin,haut:haut,face:face,mainG:mix3(v3(v3(ce,face,0.32*Math.sin(-ph)),lat,0.26),mG,w),mainD:mix3(v3(v3(ce,face,0.32*Math.sin(ph)),lat,-0.26),mD,w),piedG:mix3(cG,pG,w),piedD:mix3(cD,pD,w)};
+  if(regard&&w>0.6) po.regard=norm3(regard);
+  return po;
+}
 
+/* ------------------------------------------------------------------ F50 */
+BATEAUX.f50.equipage=[
+  /* role, z : place le long de la coque (m, vers l'arrière), type de poste, delai et duree de la traversée au virement (s) */
+  {role:'Pilote',            z:5.0, type:'volant',  delai:1.0, duree:2.6, veste:MARINE_C, gilet:ROUGE_C, casque:BLANC_C},
+  {role:'Régleur d’aile', z:4.1, type:'reglage', delai:0.5, duree:2.6, veste:MARINE_C, gilet:MARINE_C, casque:BLANC_C},
+  {role:'Contrôleur de vol', z:3.2, type:'reglage', delai:1.4, duree:2.4, veste:MARINE_C, gilet:MARINE_C, casque:BLANC_C},
+  {role:'Stratège',          z:5.9, type:'assis',   delai:0.2, duree:2.8, veste:MARINE_C, gilet:BLANC_C,  casque:ROUGE_C},   /* tout à l'arrière */
+  {role:'Grinder',           z:1.3, type:'moulin',  delai:1.8, duree:2.2, veste:MARINE_C, gilet:MARINE_C, casque:BLANC_C, dos:true},   /* dos à la route */
+  {role:'Grinder',           z:2.34,type:'moulin',  delai:2.1, duree:2.2, veste:MARINE_C, gilet:MARINE_C, casque:BLANC_C}              /* face à la route, face au premier */
+];
+BATEAUX.f50.tenue={casque:true, gilet:true};   /* casque et gilet d'impact pour tout le monde */
+BATEAUX.f50.colonne=1.82;                      /* place de la colonne de moulin le long de la coque (m) */
+BATEAUX.f50.fond=0.7;                          /* hauteur du fond de cockpit (m) */
+BATEAUX.f50.pose=posePoste;
+BATEAUX.f50.construire=function(){
+  var g={}, X=this.ecart, m=new Maille(), c, k, i, PONT=[0.9,0.91,0.92], SOMBRE=[0.17,0.19,0.23], FL=this.fond, zc=this.colonne;
+  var bau=function(t){return 0.5*Math.pow(Math.sin(PI*clamp(0.03+t*0.97,0,1)),0.55)*(t>0.7?lerp(1,0.8,(t-0.7)/0.3):1)};
+  var livet=function(t){return 0.8+0.48*sstep(0,0.28,t)-0.06*sstep(0.8,1,t)};   /* étrave inversée : basse à l'avant */
+  var ts=[]; for(i=0;i<=32;i++) ts.push(i/32); ts.push(0.541,0.553,0.925,0.937); ts.sort(function(a,b){return a-b});
+  for(c=-1;c<=1;c+=2){ var x0=c*X;
+    coque(m,{L:15, x0:x0, ts:ts, nr:8, chanfrein:0.06, bau:bau, livet:livet,
+      e1:function(t){return lerp(0.8,0.45,sstep(0,0.3,t))}, e2:function(t){return lerp(1.45,2.3,sstep(0,0.35,t))},   /* en V à l'étrave, en U au milieu */
+      quille:function(t){return -0.3*Math.pow(Math.sin(PI*clamp(0.06+t*0.86,0,1)),0.6)},
+      pont:function(t,b,sy){ var w=sstep(0.541,0.553,t)*(1-sstep(0.925,0.937,t)), yf=lerp(sy+0.05,FL,w), cf=w>0.5?SOMBRE:PONT;   /* le cockpit est creusé dans la coque */
+        return [[0,yf,cf,3],[0.24,yf,cf,3],[0.3,sy+0.05+0.03*w,PONT,3],[b,sy,PONT,3]] }});
+    m.m=2;
+    m.tube([x0,FL,4.64],[x0,1.47,4.53],0.035,0.028,CARBONE,6); m.roue([x0,1.5,4.5],[0,0.35,1],0.2,3,CARBONE);         /* colonne et volant */
+    m.rev([x0,FL,zc],[0,1,0],[[0,0],[0,0.12],[0.05,0.12],[0.12,0.06],[0.54,0.05],[0.58,0.085],[0.72,0.085],[0.72,0]],CARBONE,8);   /* colonne de moulin */
+    m.boite(x0-0.11,x0+0.11,1.2,1.52,-0.98,-0.22,CARBONE);                                                                /* puits de foil */
+    m.boite(x0-0.16,x0+0.16,1.36,1.47,3.92,3.96,[0.05,0.06,0.08]); m.m=8; m.boite(x0-0.14,x0+0.14,1.375,1.455,3.955,3.965,[0.25,0.5,0.62]);   /* écran de navigation */
+    m.m=2;
+    aileron(m,ligne([x0,1.05,7.12],[x0,-2.25,7.12],6,0.36,0.24,0.12,[0,0,1],[1,0,0]),CARBONE);                         /* safran */
+    var el=[]; for(i=0;i<=6;i++){ var s=i/3-1; el.push({p:[x0+s*0.62,-2.25,7.14],c:0.3*(1-0.45*s*s),e:0.11,d:[0,0,1],n:[0,1,0]}) } aileron(m,el,CARBONE);   /* son plan porteur en T */
+    m.rev([x0,-2.25,6.9],[0,0,1],[[0,0],[0.08,0.045],[0.3,0.05],[0.5,0]],CARBONE,6,true);
+    m.boite(x0-0.07,x0+0.07,0.95,1.32,7.0,7.32,CARBONE);
+    m.m=8; m.rev([x0-c*0.3,1.16,-2.2],[0,0,1],[[0,0],[0.2,0.22],[0.8,0.3],[1.5,0.2],[1.8,0]],MARINE_C,8,true);          /* carénages de jonction des bras */
+    m.rev([x0-c*0.3,1.16,5.2],[0,0,1],[[0,0],[0.15,0.16],[0.5,0.22],[0.9,0.14],[1.05,0]],MARINE_C,8,true);
+  }
+  /* bras avant et arrière : des poutres carénées au profil d'aile, légèrement arquées */
+  m.m=8; var br=[], br2=[]; for(i=0;i<=12;i++){ var xx=lerp(-X+0.2,X-0.2,i/12), ar=0.16*(1-Math.pow(xx/X,2));
+    br.push({p:[xx,1.1+ar,-1.6],c:1.2,e:0.34,d:[0,0,1],n:[0,1,0]}); br2.push({p:[xx,1.12+ar*0.6,5.45],c:0.72,e:0.38,d:[0,0,1],n:[0,1,0]}) }
+  aileron(m,br,MARINE_C); aileron(m,br2,MARINE_C);
+  m.rev([0,1.3,-3.3],[0,0,1],[[0,0],[0.15,0.18],[0.6,0.36],[1.4,0.47],[2.5,0.45],[3.5,0.3],[4.3,0.12],[4.6,0]],MARINE_C,10,true);   /* nacelle sous le pied d'aile */
+  m.m=2; m.tube([0,1.25,-3.1],[0,1.05,-8.5],0.15,0.05,CARBONE,8);                                                       /* bout-dehors */
+  m.tube([0,1.14,1.2],[0,1.14,5.3],0.07,0.07,CARBONE,6);                                                                /* poutre centrale sous le trampoline */
+  m.m=4; m.rev([0,1.62,-1.4],[0,1,0],[[-0.14,0],[-0.1,0.1],[0,0.14],[0.1,0.1],[0.14,0]],INOX,8,true);                   /* rotule du pied d'aile */
+  m.m=5; for(c=-1;c<=1;c+=2) m.quad([c*0.12,1.2,-0.85],[c*(X-0.45),1.2,-0.85],[c*(X-0.45),1.2,5.2],[c*0.12,1.2,5.2],FILET);   /* trampolines */
+  m.m=0; for(c=-1;c<=1;c+=2){ m.tube([c*(X-0.45),1.21,-0.85],[c*(X-0.45),1.21,5.2],0.02,0.02,GRIS,4); m.tube([c*0.12,1.21,-0.85],[c*0.12,1.21,5.2],0.02,0.02,GRIS,4) }   /* ralingues des filets */
+  g.plateforme=televerser(m);
+  /* foils en L : un fût vertical, un coude, une aile porteuse tournée vers l'intérieur */
+  function foilL(sens){ var f=new Maille(), st=[], r=0.42, a, T, P0; f.m=2;
+    for(i=0;i<=5;i++) st.push({p:[0,lerp(1.8,-1.45,i/5),0],c:lerp(0.6,0.52,i/5),e:0.13,d:[0,0,1],n:[1,0,0]});
+    for(i=1;i<=6;i++){ a=i/6*78*RAD; st.push({p:[-sens*r*(1-Math.cos(a)),-1.45-r*Math.sin(a),0],c:0.52,e:0.13,d:[0,0,1],n:[Math.cos(a),-sens*Math.sin(a),0]}) }
+    a=78*RAD; T=[-sens*Math.sin(a),-Math.cos(a),0]; P0=st[st.length-1].p;
+    for(i=1;i<=4;i++) st.push({p:v3(P0,T,i/4*1.25),c:lerp(0.52,0.26,i/4),e:0.12,d:[0,0,1],n:[Math.cos(a),-sens*Math.sin(a),0]});
+    aileron(f,st,function(t){return (t<0.06||t>0.95)?ROUGE_C:CARBONE}); return televerser(f) }
+  g.foils={'1':foilL(1),'-1':foilL(-1)};
+  /* aile rigide en deux éléments. L'élément avant porte ; le volet, en quatre tronçons, pivote sur son bord de fuite et donne la
+     cambrure. Les tronçons du haut braquent moins que ceux du bas : c'est le vrillage. */
+  var c1=function(u){return lerp(2.9,1.05,Math.pow(u,1.25))}, fuite=function(u){return 0.75*c1(u)+0.04};
+  var teinte=function(u,q){return u>0.93?ROUGE_C:(q<0.12?MARINE_C:BLANC_C)};   /* bord d'attaque marine, film blanc, tête rouge */
+  var a2=new Maille(); elementAile(a2,{y0:0.5,y1:24,n:26,ep:0.17,corde:c1,bord:function(u){return -0.25*c1(u)},couleur:teinte,matiere:function(u,q){return q<0.12?8:7}});
+  a2.m=8; a2.rev([0,0.2,0.3],[0,1,0],[[0,0],[0.1,0.5],[0.3,0.62],[0.36,0]],MARINE_C,10,true);                         /* embase de l'aile */
+  g.aile=televerser(a2);
+  g.volets=[]; g.vrille=[1,0.97,0.93,0.88];
+  for(k=0;k<4;k++){ var v=new Maille(); elementAile(v,{y0:0,y1:23.5,u0:k*0.25+0.004,u1:k*0.25+0.246,n:6,ep:0.11,corde:function(u){return lerp(2.3,0.75,Math.pow(u,1.2))},bord:function(u){return fuite(u)-fuite(0)},
+      couleur:function(u,q){return u>0.93?ROUGE_C:BLANC_C},matiere:function(){return 7}}); g.volets.push(televerser(v)) }
+  g.charniere=[0,0.5,fuite(0)]; g.axe=norm3([0,23.5,fuite(1)-fuite(0)]);
+  g.axeFoc=norm3([0,15.3,6.2]);
+  return g;
+};
+BATEAUX.f50.dessiner=function(c){
+  var g=c.g, M=c.M, s, i, k, X=this.ecart, zc=this.colonne;
+  c.obj(g.plateforme,M);
+  for(s=-1;s<=1;s+=2) c.obj(g.foils[s],mul(M,trans(s*X,(1-S.foil[s])*1.9,-0.6)));
+  var Mw=mul(mul(M,trans(this.mat[0],this.mat[1],this.mat[2])),rotY(S.bome)), Mh=mul(Mw,trans(g.charniere[0],g.charniere[1],g.charniere[2]));
+  c.obj(g.aile,Mw,null,0);
+  for(k=0;k<4;k++) c.obj(g.volets[k],mul(Mh,rotAxe(g.axe,-S.creuxGV*this.volet*RAD*g.vrille[k])),null,0);
+  for(s=-1;s<=1;s+=2){ var x0=s*X, hy=0.16*Math.sin(S.moulin), hz=0.16*Math.cos(S.moulin);   /* manivelles des colonnes de moulin */
+    c.cap([x0-0.15,1.34,zc],[x0+0.15,1.34,zc],0.022,0.022,CARBONE,2);
+    c.cap([x0-0.15,1.34,zc],[x0-0.15,1.34+hy,zc+hz],0.017,0.017,CARBONE,2); c.cap([x0-0.14,1.34+hy,zc+hz],[x0-0.27,1.34+hy,zc+hz],0.02,0.02,INOX,4);
+    c.cap([x0+0.15,1.34,zc],[x0+0.15,1.34-hy,zc-hz],0.017,0.017,CARBONE,2); c.cap([x0+0.14,1.34-hy,zc-hz],[x0+0.27,1.34-hy,zc-hz],0.02,0.02,INOX,4) }
+  if(EQUIPAGE) for(i=0;i<this.equipage.length;i++) dessinerPerso(c,S.poses[i],this.equipage[i]);
+};
+BATEAUX.f50.voiles=function(c){
+  var g=c.g; /* le foc, seule voile souple : une membrane sombre à fibres claires, trois lattes */
+  return [{M:mul(mul(c.M,trans(0,1.4,-7.7)),rotAxe(g.axeFoc,S.foc)), guindant:[0,15.3,6.2], bordure:norm3([0,0.3,5.2]), E:5.2, puis:1, rond:0.04, tete:0.05, vrille:0.07,
+           creux:S.creuxFoc, fas:S.fasFoc*1.2, teinte:[0.17,0.19,0.23], bande:[0.17,0.19,0.23], bandeH:2, lattes:3, fibres:1, fibC:[0.6,0.56,0.46], marque:ROUGE_C, penons:1}];
+};
+BATEAUX.f50.traits=function(){ var X=this.ecart; /* étai, haubans, sous-barbes du bout-dehors */
+  return [0,1.4,-7.7, 0,16.9,-1.45,  -X,1.3,0.6, 0,17.5,-1.4,  X,1.3,0.6, 0,17.5,-1.4,  0,1.05,-8.5, -X,1.0,-6.6,  0,1.05,-8.5, X,1.0,-6.6,  0,1.05,-8.5, -X+0.3,1.2,-1.9,  0,1.05,-8.5, X-0.3,1.2,-1.9];
+};
+BATEAUX.f50.gerbes=function(S){
+  var X=this.ecart, sv=-S.cote*X, k=clamp(S.v/VPRES,0,1.2), vol=S.vol;
+  return [{p:[sv,0.2,-0.6],  taux:110*vol*k,                  lat:1.5, biais:1.6, arr:3.6, haut:3.4, suit:0.42, vie:0.75},   /* foil sous le vent */
+          {p:[-sv,0.2,-0.6], taux:60*vol*k*S.foil[S.cote],   lat:1.5, biais:0,   arr:3.6, haut:3.0, suit:0.42, vie:0.7},    /* foil au vent, quand il est dans l'eau */
+          {p:[-X,0.15,7.1],  taux:20*vol*k,                  lat:0.7, biais:0,   arr:3.0, haut:2.2, suit:0.5,  vie:0.55},   /* safrans */
+          {p:[X,0.15,7.1],   taux:20*vol*k,                  lat:0.7, biais:0,   arr:3.0, haut:2.2, suit:0.5,  vie:0.55},
+          {p:[-X,0.3,-6.4],  taux:60*(1-vol)*k,              lat:2.4, biais:0,   arr:1.5, haut:3.2, suit:0.7,  vie:0.7},    /* étraves, quand le bateau est posé */
+          {p:[X,0.3,-6.4],   taux:60*(1-vol)*k,              lat:2.4, biais:0,   arr:1.5, haut:3.2, suit:0.7,  vie:0.7}];
+};
+
+
+/* ------------------------------------------------------------------ 18 pieds */
+/* un poste au trapèze : pieds sur le bord de l'aile, corps tendu vers l'extérieur ; accroupi pour traverser sous la bôme */
+function poseTrapeze(e,eq,i){
+  var c=eq.c, s=Math.abs(c), sg=c<0?-1:1, z=e.z, W=B.demiAiles, t=S.t;
+  var px=sg*(s<0.5 ? s/0.5*0.85 : lerp(0.85,W,sstep(0.5,0.72,s))), py=lerp(0.37,0.7,sstep(0.5,0.72,s));
+  var o=sstep(0.72,1,s), acc=1-sstep(0.4,0.7,s);                                 /* o : sorti au trapèze ; acc : accroupi */
+  /* au trapèze, chacun règle sa hauteur : il se tend quand le bateau gîte, plie un peu les genoux quand il se redresse */
+  var ph=(lerp(8,76,o)+o*(3.2*Math.sin(t*0.83+z*2.1)-S.roulis*70+sg*S.gite*40))*RAD;
+  var dir=[sg*Math.sin(ph),Math.cos(ph),0], hj=lerp(0.5,0.86+0.05*Math.sin(t*1.13+z*3.3)*o,sstep(0.4,0.7,s));
+  var bassin=[px+dir[0]*hj,py+dir[1]*hj,z], haut=norm3(mix3(dir,[0,0.78,-0.62],acc)), face=mix3([0,0,-1],[0,-0.4,-0.9],acc);
+  var k=dot3(face,haut); face=norm3([face[0]-haut[0]*k,face[1]-haut[1]*k,face[2]-haut[2]*k]);
+  /* les mains tiennent l'écoute ou le stick, bras presque tendus vers le bateau */
+  var lat=norm3(cross(haut,face)), ep=v3(bassin,haut,0.46), vb=norm3([-ep[0],0.45-ep[1],z-0.5-ep[2]]), ce=mix3(v3(ep,vb,0.52+0.03*Math.sin(t*1.9+z*4)),v3(v3(bassin,haut,0.4),face,0.3),acc), mG=v3(ce,lat,0.09), mD=v3(ce,lat,-0.09);
+  /* en sortant et en rentrant, une main attrape la poignée du câble de trapèze, un peu au-dessus du crochet */
+  var cr=v3(bassin,haut,0.12), hd=B.capelage, vc=norm3([hd[0]-cr[0],hd[1]-cr[1],hd[2]-cr[2]]), poignee=v3(cr,vc,0.42), prise=sstep(0.5,0.64,s)*(1-sstep(0.86,0.98,s));
+  if(lat[0]*sg>0) mG=mix3(mG,poignee,prise); else mD=mix3(mD,poignee,prise);
+  return {bassin:bassin,haut:haut,face:face,sorti:o,crochet:cr,mainG:mG,mainD:mD,piedG:[px,py,z-0.17],piedD:[px,py,z+0.17],
+          regard:norm3([-sg*0.35*o+0.2*Math.sin(t*0.4+z),0.25+0.2*Math.sin(t*0.23+z*2),-1])};   /* ils surveillent les voiles et le plan d'eau */
+}
+BATEAUX.skiff.equipage=[
+  /* les trois sont au trapèze. Au virement : le barreur et l'avant rentrent les premiers, le milieu suit, le barreur ressort le dernier. */
+  {role:'Équipier d’avant',  z:0.25, delai:0.25, duree:2.3, veste:MARINE_C, gilet:BLANC_C,  casque:ROUGE_C},   /* foc */
+  {role:'Équipier du milieu',   z:1.15, delai:0.95, duree:2.2, veste:MARINE_C, gilet:ROUGE_C,  casque:BLANC_C},   /* écoute de grand-voile */
+  {role:'Barreur',              z:2.15, delai:0.3,  duree:3.5, veste:MARINE_C, gilet:MARINE_C, casque:BLANC_C}
+];
+BATEAUX.skiff.tenue={casque:true, gilet:true};   /* casque, gilet et combinaison */
+BATEAUX.skiff.capelage=[0,7.4,-0.84];            /* point du mât où s'accrochent les câbles de trapèze */
+BATEAUX.skiff.pose=poseTrapeze;
+BATEAUX.skiff.construire=function(){
+  var g={}, m=new Maille(), c, i, W=this.demiAiles, PONT=[0.9,0.91,0.92], FOND=[0.3,0.33,0.38], ts=[];
+  for(i=0;i<=30;i++) ts.push(i/30); ts.push(0.352,0.366); ts.sort(function(a,b){return a-b});
+  var bau=function(t){return 0.98*(1-Math.pow(1-Math.min(t/0.8,1),1.9))}, livet=function(t){return 0.5-0.13*sstep(0,0.6,t)};
+  /* coque à bouchain vif et fond plat, faite pour planer ; pont avant fermé, cockpit ouvert jusqu'au tableau */
+  coque(m,{L:5.49, ts:ts, nr:8, chanfrein:0.03, bau:bau, livet:livet, tableauY:0.33,
+    e1:function(t){return lerp(0.7,0.4,sstep(0,0.45,t))}, e2:function(t){return lerp(1.6,3.0,sstep(0,0.5,t))}, evase:function(t){return 0.24*sstep(0.1,0.5,t)},
+    quille:function(t){return -0.15*Math.pow(Math.sin(PI*clamp(0.1+t*0.75,0,1)),0.8)-0.02},
+    pont:function(t,b,sy){ var w=sstep(0.352,0.366,t), yf=lerp(sy+0.03,0.33,w), cf=w>0.5?FOND:PONT;
+      return [[0,yf,cf,3],[Math.max(b-0.2,0),yf,cf,3],[Math.max(b-0.13,0),sy+0.005,PONT,3],[b,sy,PONT,3]] }});
+  for(c=-1;c<=1;c+=2){                                                              /* ailes de rappel : cadre en tubes de carbone et filet */
+    m.m=2; m.tube([c*W,0.66,-0.75],[c*W,0.66,2.7],0.045,0.045,CARBONE,8);
+    m.tube([c*0.55,0.42,-1.0],[c*W,0.66,-0.75],0.04,0.04,CARBONE,6); m.tube([c*0.95,0.38,2.72],[c*W,0.66,2.7],0.04,0.04,CARBONE,6);
+    m.tube([c*0.9,0.4,0.9],[c*W,0.66,0.95],0.035,0.035,CARBONE,6); m.tube([c*0.8,0.41,-0.1],[c*W,0.66,0.1],0.03,0.03,CARBONE,6); m.tube([c*0.95,0.39,1.85],[c*W,0.66,1.85],0.03,0.03,CARBONE,6);
+    m.m=3; for(i=0;i<3;i++) m.tube([c*W,0.66,-0.1+i*0.95],[c*W,0.66,0.55+i*0.95],0.052,0.052,BLANC_C,8);    /* bandes antidérapantes là où ils posent les pieds */
+    m.m=4; m.rev([c*W,0.66,-0.82],[0,0,1],[[0,0],[0.04,0.05],[0.1,0.05],[0.14,0]],INOX,6,true); m.rev([c*W,0.66,2.62],[0,0,1],[[0,0],[0.04,0.05],[0.1,0.05],[0.14,0]],INOX,6,true);
+    m.m=5; m.quad([c*0.62,0.43,-0.9],[c*W,0.65,-0.72],[c*W,0.65,2.68],[c*0.96,0.4,2.68],FILET);
+  }
+  m.m=2;
+  aileron(m,ligne([0,0.42,-0.97],[0,10.5,-0.8],10,0.17,0.075,0.5,[0,0,1],[1,0,0]),CARBONE,{av:0.35});      /* mât profilé */
+  for(i=0;i<2;i++){ var ys=i?7.0:4.3, lb=i?0.42:0.55;                                                  /* deux étages de barres de flèche, poussantes */
+    for(c=-1;c<=1;c+=2) aileron(m,ligne([0,ys,-0.86+i*0.04],[c*lb,ys,-0.6+i*0.04],2,0.06,0.04,0.3,[0,0,1],[0,1,0]),CARBONE) }
+  m.tube([0,0.44,-2.7],[0,0.5,-6.45],0.045,0.022,CARBONE,8);                                            /* bout-dehors : 3,75 m devant l'étrave */
+  aileron(m,ligne([0,0.45,-0.42],[0,-1.38,-0.42],5,0.42,0.3,0.1,[0,0,1],[1,0,0]),CARBONE);              /* dérive sabre */
+  m.boite(-0.035,0.035,0.33,0.47,-0.6,-0.24,CARBONE);
+  m.tube([-0.5,0.36,2.75],[0,0.44,3.28],0.025,0.025,CARBONE,6); m.tube([0.5,0.36,2.75],[0,0.44,3.28],0.025,0.025,CARBONE,6);   /* potence de safran */
+  aileron(m,ligne([0,0.52,3.34],[0,-0.98,3.34],5,0.26,0.17,0.1,[0,0,1],[1,0,0]),CARBONE);               /* safran */
+  m.boite(-0.03,0.03,0.36,0.56,3.24,3.42,CARBONE); m.tube([0,0.52,3.28],[0,0.6,2.55],0.018,0.016,CARBONE,6);   /* tête de safran et barre */
+  m.m=4; for(i=0;i<=8;i++){ if(i<8){ var a0=(i/8-0.5)*1.5, a1=((i+1)/8-0.5)*1.5; m.tube([Math.sin(a0)*0.62,0.5,-0.55-Math.cos(a0)*0.18],[Math.sin(a1)*0.62,0.5,-0.55-Math.cos(a1)*0.18],0.012,0.012,INOX,4) } }   /* rail de foc autovireur */
+  m.poulie([0,0.4,1.55],0.05,[1,0,0]); m.poulie([-0.5,0.5,-0.55],0.035,[0,1,0]); m.poulie([0.5,0.5,-0.55],0.035,[0,1,0]);   /* poulie d'écoute, renvois de foc */
+  m.m=8; m.boite(-0.07,0.07,1.45,1.56,-1.06,-1.02,[0.05,0.06,0.08]);                                    /* compas sur le mât */
+  g.coque=televerser(m);
+  /* bôme, avec sa jambe de force au-dessus (le hale-bas travaille en poussant) et sa poulie d'écoute */
+  var bm=new Maille(); bm.m=2; bm.tube([0,0,0.02],[0,0.03,3.35],0.045,0.036,CARBONE,8); bm.tube([0,1.25,0.06],[0,0.06,1.25],0.022,0.022,CARBONE,6);
+  bm.m=4; bm.poulie([0,-0.07,2.1],0.045,[1,0,0]); bm.rev([0,0.03,3.3],[0,0,1],[[0,0],[0.02,0.045],[0.07,0.045],[0.09,0]],INOX,6,true); g.bome=televerser(bm);
+  g.axeFoc=norm3([0,7.25,1.75]);
+  return g;
+};
+BATEAUX.skiff.dessiner=function(c){
+  var g=c.g, i; c.obj(g.coque,c.M);
+  c.Mb=mul(mul(c.M,trans(0,1.05,-0.93)),rotY(S.bome)); c.obj(g.bome,c.Mb,null,0);
+  c.poses=S.poses; if(EQUIPAGE) for(i=0;i<3;i++){ dessinerPerso(c,S.poses[i],this.equipage[i]);
+    if(S.poses[i].sorti>0.2){ var cr=v3(S.poses[i].bassin,S.poses[i].haut,0.12); c.cap(v3(cr,S.poses[i].face,0.1),v3(cr,S.poses[i].face,0.17),0.03,0.02,INOX,4) } }   /* crochet du harnais */
+};
+BATEAUX.skiff.voiles=function(c){
+  var film=[0.93,0.94,0.95], fib=[0.42,0.45,0.5];   /* film clair à fibres grises, tête de grand-voile rouge */
+  return [{M:c.Mb, guindant:[0,9.3,0.14], bordure:[0,0.01,1], E:3.3, puis:0.9, rond:0.1, tete:0.42, vrille:0.13, creux:S.creuxGV, fas:S.fasGV, teinte:film, bande:ROUGE_C, bandeH:0.83,
+           lattes:7, fibres:0.5, fibC:fib, marque:MARINE_C, num:18},   /* grand-voile à corne, sept lattes forcées */
+          {M:mul(mul(c.M,trans(0,0.46,-2.62)),rotAxe(c.g.axeFoc,S.foc)), guindant:[0,7.25,1.75], bordure:norm3([0,0.22,1.9]), E:1.95, puis:1, rond:0.05, tete:0.04, vrille:0.09, creux:S.creuxFoc, fas:S.fasFoc*1.2,
+           teinte:film, bandeH:2, lattes:3, fibres:0.5, fibC:fib, marque:MARINE_C, penons:1}];
+};
+BATEAUX.skiff.traits=function(c){
+  /* étai, haubans, bas-haubans, losanges des barres de flèche, sous-barbe et haubans du bout-dehors */
+  var t=[0,0.46,-2.62, 0,7.75,-0.83,  -0.95,0.4,-0.6, 0,7.9,-0.83,  0.95,0.4,-0.6, 0,7.9,-0.83,  0,0.5,-6.45, 0,7.9,-0.83,
+         -0.95,0.4,-0.6, 0,4.3,-0.88,  0.95,0.4,-0.6, 0,4.3,-0.88,  0,0.5,-6.45, 0,-0.02,-2.72,  0,0.5,-6.45, -0.6,0.42,-1.0,  0,0.5,-6.45, 0.6,0.42,-1.0], i, k, po, cb=Math.cos(S.bome), sb=Math.sin(S.bome);
+  for(k=-1;k<=1;k+=2) t.push(0,1.6,-0.94, k*0.55,4.3,-0.6,  k*0.55,4.3,-0.6, k*0.42,7.0,-0.56,  k*0.42,7.0,-0.56, 0,9.4,-0.82);
+  var bomeMil=[sb*2.1,0.98,-0.93+cb*2.1], hd=this.capelage;
+  if(!EQUIPAGE) return t;
+  for(i=0;i<3;i++){ po=c.poses[i]; if(po.sorti>0.25){ var cr=v3(po.bassin,po.haut,0.12); t.push(hd[0],hd[1],hd[2],cr[0],cr[1],cr[2]) } }          /* câbles de trapèze */
+  po=c.poses[2]; t.push(0,0.6,2.55,po.mainD[0],po.mainD[1],po.mainD[2]);                                                              /* stick de barre */
+  po=c.poses[1]; t.push(bomeMil[0],bomeMil[1],bomeMil[2],0,0.42,1.55, 0,0.42,1.55,po.mainG[0],po.mainG[1],po.mainG[2]);                /* écoute de grand-voile, par la poulie du fond */
+  po=c.poses[0]; t.push(-S.cote*0.5,0.52,-0.55,po.mainG[0],po.mainG[1],po.mainG[2]);                                                   /* écoute de foc */
+  return t;
+};
+BATEAUX.skiff.gerbes=function(S){
+  var k=clamp(S.v/VPRES,0,1.3);
+  return [{p:[0,0.15,-1.5], taux:55*k*k, lat:2.6, biais:0.8, arr:2.2, haut:2.0, suit:0.55, vie:0.55},
+          {p:[0,0.1,2.9],   taux:22*k*k, lat:0.8, biais:0,   arr:2.6, haut:1.5, suit:0.4,  vie:0.45}];
+};
+
+
+/* ------------------------------------------------------------------ TP52 */
+var TP={L:15.85, creux:0.3, debut:2.6, demi:1.45,     /* longueur ; profondeur, début et demi-largeur du cockpit (m) */
+  bau:function(t){return 2.21*(1-Math.pow(1-Math.min(t/0.66,1),1.75))*(t>0.66?lerp(1,0.9,(t-0.66)/0.34):1)},
+  quille:function(t){return -0.5*Math.pow(Math.sin(PI*clamp(0.04+t*0.9,0,1)),0.7)},
+  livet:function(t){return 1.55-0.3*t},
+  pont:function(z){return TP.livet((z+TP.L/2)/TP.L)+0.05},
+  /* de combien un point descend quand il est dans le cockpit */
+  puits:function(p){return TP.creux*sstep(TP.debut-0.1,TP.debut+0.1,p[2])*(1-sstep(TP.demi-0.09,TP.demi+0.05,Math.abs(p[0])))}};
+/* un poste sur le pont : au rappel sur le livet, à la barre, à l'écoute, à la colonne ; accroupi pour traverser */
+function posePont(e,eq,i){
+  var c=eq.c, s=Math.abs(c), sg=c<0?-1:1, z=e.z, t=(z+TP.L/2)/TP.L, xr=TP.bau(t)-0.1, yd=TP.livet(t)+0.05, w=sstep(0.8,1,s), dir=sgn(eq.cible-c)||1, ph=c*xr*2.6;
+  var bA, hA, fA, mG, mD, pG, pD, mo=S.moulin*1.3+z, regard=null, T0=S.t, k, po;
+  if(e.type==='barre'){ xr=1.3; bA=[sg*xr,yd+0.96,z+0.5]; hA=[0,0.99,-0.12]; fA=[0,0,-1]; pG=[sg*xr-0.16,yd,z+0.52]; pD=[sg*xr+0.16,yd,z+0.52]; mG=[sg*xr-0.38,yd+1.18,z+0.02]; mD=[sg*xr+0.38,yd+1.18,z+0.02]; regard=[-sg*0.3,0.22,-1] }   /* il regarde les penons du foc */
+  else if(e.type==='debout'){ xr=0.95; bA=[sg*xr,yd+0.96,z]; hA=[0,1,0]; fA=[0,0,-1]; pG=[sg*xr-0.13,yd,z]; pD=[sg*xr+0.13,yd,z]; mG=[sg*xr-0.24,yd+0.95,z-0.12]; mD=[sg*xr+0.24,yd+0.95,z-0.12]; regard=[sg*0.8*Math.sin(T0*0.33),0.05,-0.7] }   /* le tacticien balaie le plan d'eau */
+  else if(e.type==='gv'){ xr=1.5; bA=[sg*xr,yd+0.22,z]; hA=norm3([-sg*0.2,0.96,-0.18]); fA=norm3([-sg*0.75,0,-0.66]); pG=[sg*(xr-0.7),yd,z-0.45]; pD=[sg*(xr-0.75),yd,z-0.15]; mG=[sg*(xr-0.5),yd+0.62+0.05*Math.sin(T0*2.1),z-0.42]; mD=[sg*(xr-0.42),yd+0.5,z-0.36]; regard=[-sg*0.5,0.8,-0.5] }   /* le régleur regarde sa voile */
+  else{ var pen=0.36+0.07*Math.sin(T0*0.7+z*1.9)+S.gite*sg*0.25;                                    /* au rappel : assis sur le livet, jambes dehors, buste penché vers l'extérieur */
+    bA=[sg*xr,yd+0.14,z]; hA=norm3([sg*pen,0.93,0]); fA=[sg,0,0]; pG=[sg*(xr+0.34),yd-0.52,z-0.15]; pD=[sg*(xr+0.34),yd-0.52,z+0.15]; mG=[sg*(xr+0.3),yd+0.34,z-0.1]; mD=[sg*(xr+0.3),yd+0.34,z+0.1] }   /* mains posées sur la filière basse */
+  k=dot3(fA,hA); fA=norm3([fA[0]-hA[0]*k,fA[1]-hA[1]*k,fA[2]-hA[2]*k]);
+  var x=c*xr, bC, hC, fC, cG, cD, nG, nD;
+  if(e.colonne!=null && s<0.62){                       /* grinder à la colonne : debout, penché, les mains tournent */
+    var xp=clamp(c/0.5,-1,1)*0.46, zc=e.colonne, yc=TP.pont(zc)-TP.creux, sx=sgn(xp)||1;
+    bC=[xp,yc+0.9+0.03*Math.sin(mo*2),zc]; hC=norm3([-sx*(0.42+0.06*Math.sin(mo)),0.9,0]); fC=[-sx,0,0];
+    cG=[xp-0.02,yc,zc-0.2]; cD=[xp+0.02,yc,zc+0.2];
+    nG=[0.16*Math.cos(mo)*sx,yc+1.0+0.16*Math.sin(mo),zc-0.2]; nD=[-0.16*Math.cos(mo)*sx,yc+1.0-0.16*Math.sin(mo),zc+0.2];
+    k=dot3(fC,hC); fC=norm3([fC[0]-hC[0]*k,fC[1]-hC[1]*k,fC[2]-hC[2]*k]);
+    if(fC[0]>0){ var tmp=nG; nG=nD; nD=tmp }
+    return {bassin:bC,haut:hC,face:fC,mainG:nG,mainD:nD,piedG:cG,piedD:cD,regard:[fC[0],-0.5,0]};
+  }
+  bC=[x,yd+0.78+0.04*Math.sin(ph*2),z]; hC=norm3([dir*0.5,0.86,0]); fC=norm3([dir*0.86,-0.5,0]);
+  cG=[x+dir*0.34*Math.sin(ph),yd+0.02+0.16*Math.max(0,Math.cos(ph)),z-0.12]; cD=[x-dir*0.34*Math.sin(ph),yd+0.02+0.16*Math.max(0,-Math.cos(ph)),z+0.12];
+  var ce=v3(bC,hC,0.34); nG=[ce[0]+dir*0.28*Math.sin(-ph),ce[1]-0.25,ce[2]-0.24]; nD=[ce[0]+dir*0.28*Math.sin(ph),ce[1]-0.25,ce[2]+0.24];
+  po={bassin:mix3(bC,bA,w),haut:norm3(mix3(hC,hA,w)),face:norm3(mix3(fC,fA,w)),mainG:mix3(nG,mG,w),mainD:mix3(nD,mD,w),piedG:mix3(cG,pG,w),piedD:mix3(cD,pD,w)};
+  /* dans le cockpit, tout descend de la profondeur du puits ; les pieds descendent chacun pour soi, d'où la marche qu'on enjambe */
+  var d=TP.puits(po.bassin); if(e.type==='rappel'||e.type==='gv') d*=(1-w); po.bassin[1]-=d; po.mainG[1]-=d; po.mainD[1]-=d; po.piedG[1]-=TP.puits(po.piedG)*(e.type==='rappel'?1-w:1); po.piedD[1]-=TP.puits(po.piedD)*(e.type==='rappel'?1-w:1);
+  if(regard&&w>0.6) po.regard=norm3(regard);
+  return po;
+}
+BATEAUX.tp52.equipage=[
+  /* z : place le long du pont (m, négatif vers l'avant). delai et duree règlent la chorégraphie du virement (s). */
+  {role:'Numéro 1',                 z:-2.6, type:'rappel', delai:2.7, duree:2.0, veste:MARINE_C, casque:BLANC_C},
+  {role:'Numéro 2',                 z:-1.9, type:'rappel', delai:2.5, duree:2.0, veste:MARINE_C, casque:BLANC_C},
+  {role:'Équipier volant',          z:-0.5, type:'rappel', delai:2.3, duree:2.0, veste:MARINE_C, casque:BLANC_C},
+  {role:'Piano',                    z:0.2,  type:'rappel', delai:2.1, duree:2.0, veste:MARINE_C, casque:ROUGE_C},
+  {role:'Régleur de foc',           z:0.9,  type:'rappel', delai:0.0, duree:2.2, veste:ROUGE_C,  casque:BLANC_C},   /* passe sous le vent le premier, pour larguer */
+  {role:'Régleur de voile d’avant', z:1.6, type:'rappel', delai:1.9, duree:2.0, veste:ROUGE_C, casque:BLANC_C},
+  {role:'Grinder',                  z:2.3,  type:'rappel', delai:0.3, duree:6.4, colonne:3.3, veste:MARINE_C, casque:BLANC_C},   /* rejoint la colonne, mouline, puis repart au rappel */
+  {role:'Grinder',                  z:3.0,  type:'rappel', delai:0.6, duree:6.8, colonne:4.7, veste:MARINE_C, casque:BLANC_C},
+  {role:'Navigateur',               z:3.7,  type:'rappel', delai:1.7, duree:2.0, veste:BLANC_C,  casque:MARINE_C},
+  {role:'Stratège',                 z:4.4,  type:'rappel', delai:1.5, duree:2.0, veste:BLANC_C,  casque:MARINE_C},
+  {role:'Régleur de grand-voile',   z:5.5,  type:'gv',     delai:1.9, duree:1.9, veste:ROUGE_C,  casque:BLANC_C},
+  {role:'Barreur',                  z:6.35, type:'barre',  delai:1.6, duree:2.3, veste:MARINE_C, casque:ROUGE_C},
+  {role:'Tacticien',                z:7.2,  type:'debout', delai:1.1, duree:2.1, veste:BLANC_C,  casque:ROUGE_C}
+];
+BATEAUX.tp52.tenue={casque:false, gilet:false, manches:true, short:true};   /* tenue de régate : casquette, lunettes, polo, short */
+BATEAUX.tp52.pose=posePont;
+BATEAUX.tp52.construire=function(){
+  var g={}, m=new Maille(), c, k, i, PONT=[0.86,0.87,0.89], FOND=[0.5,0.53,0.57], LISSE=[0.93,0.94,0.95], PLOMB=[0.3,0.32,0.35], yp=TP.pont, FD=TP.creux, ts=[];
+  for(i=0;i<=36;i++) ts.push(i/36); var tc=(TP.debut+TP.L/2)/TP.L; ts.push(tc-0.006,tc+0.006); ts.sort(function(a,b){return a-b});
+  /* coque : étrave droite, sections en V à l'avant puis en U large, bau maximum reculé, tableau ouvert sur le cockpit */
+  coque(m,{L:TP.L, ts:ts, nr:9, chanfrein:0.05, bau:TP.bau, quille:TP.quille, livet:TP.livet, tableauY:TP.livet(1)+0.05-FD,
+    e1:function(t){return lerp(0.85,0.5,sstep(0,0.4,t))}, e2:function(t){return lerp(1.45,2.3,sstep(0,0.45,t))},
+    pont:function(t,b,sy){ var w=sstep(tc-0.006,tc+0.006,t), yc=sy+0.07-w*(0.02+FD), cf=w>0.5?FOND:PONT;
+      return [[0,yc,cf,3],[TP.demi-0.05,yc-0.01*(1-w),cf,3],[TP.demi+0.02,sy+0.05,PONT,3],[b,sy,LISSE,3]] }});
+  m.m=8; m.boite(-0.85,0.85,yp(0)+0.02,yp(0)+0.24,-0.6,2.4,LISSE,0.6);                    /* rouf bas */
+  m.boite(-0.32,0.32,yp(2)+0.2,yp(2)+0.26,1.5,2.42,[0.12,0.14,0.17]);                     /* capot de descente */
+  m.boite(-0.33,0.33,yp(-4.2)+0.02,yp(-4.2)+0.06,-4.5,-3.85,[0.16,0.19,0.23]);            /* panneau de pont avant */
+  aileron(m,ligne([0,-0.42,-0.25],[0,-3.2,-0.1],5,1.35,0.95,0.1,[0,0,1],[1,0,0]),PLOMB);  /* voile de quille et bulbe : 3,50 m de tirant d'eau */
+  m.rev([0,-3.3,-2.3],[0,0,1],[[0,0],[0.15,0.15],[0.7,0.29],[1.5,0.33],[2.5,0.25],[3.25,0.1],[3.6,0]],PLOMB,10,true);
+  aileron(m,ligne([0,-0.12,6.45],[0,-2.3,6.55],5,0.52,0.3,0.11,[0,0,1],[1,0,0]),PLOMB);   /* safran */
+  m.m=2;
+  aileron(m,ligne([0,1.45,-1.0],[0,24.0,-0.7],12,0.36,0.19,0.48,[0,0,1],[1,0,0]),CARBONE,{av:0.35});   /* mât profilé */
+  g.fleches=[[6.2,1.5],[10.6,1.25],[15.0,1.0],[19.2,0.72]];                                /* quatre étages de barres de flèche poussantes */
+  for(k=0;k<4;k++){ var ys=g.fleches[k][0], lb=g.fleches[k][1], zm=-1.0+0.3*(ys-1.45)/22.55; for(c=-1;c<=1;c+=2) aileron(m,ligne([0,ys,zm],[c*lb,ys,zm+0.3],2,0.1,0.06,0.3,[0,0,1],[0,1,0]),CARBONE) }
+  m.rev([0,yp(-1),-0.98],[0,1,0],[[0,0.26],[0.05,0.26],[0.09,0.2]],CARBONE,10);            /* étambrai */
+  m.tube([0,1.52,-7.85],[0,1.5,-10.6],0.09,0.05,CARBONE,8);                                 /* bout-dehors */
+  m.m=8; m.boite(-0.24,0.24,2.05,2.72,-0.8,-0.78,[0.05,0.06,0.08]); for(k=0;k<3;k++) m.boite(-0.21,0.21,2.09+k*0.21,2.26+k*0.21,-0.778,-0.775,[0.2,0.42,0.52]);   /* répétiteurs sur le mât */
+  for(c=-1;c<=1;c+=2){
+    var yb=yp(6.35)-FD; m.m=2; m.tube([c*1.3,yb,6.38],[c*1.3,yb+1.0,6.38],0.05,0.04,CARBONE,6); m.roue([c*1.3,yb+1.0,6.35],[0,0,1],0.44,5,CARBONE);   /* deux barres à roue */
+    m.winch([c*1.74,yp(3.6),3.6],0.13,0.24); m.winch([c*1.74,yp(5.7),5.7],0.11,0.2); m.winch([c*1.72,yp(7.1),7.1],0.1,0.18); m.winch([c*0.6,yp(1.9)+0.24,1.9],0.1,0.19);   /* winchs d'écoute, de grand-voile, de bastaque, de piano */
+    m.m=4; m.boite(c*0.9,c*1.75,yp(-0.2),yp(-0.2)+0.03,-0.24,-0.16,INOX); m.poulie([c*1.3,yp(-0.2)+0.08,-0.2],0.05,[0,0,1]);   /* rail et chariot de foc */
+    m.m=2; m.boite(c*1.05-0.16,c*1.05+0.16,yp(2.9)-FD+0.5,yp(2.9)-FD+0.72,2.63,2.66,[0.05,0.06,0.08]);                             /* écrans de cockpit */
+    /* chandeliers et balcon avant */
+    m.m=4; for(i=3;i<=36;i+=3){ var t=i/36, zz=-TP.L/2+t*TP.L, xx=c*(TP.bau(t)-0.05); m.tube([xx,TP.livet(t),zz],[xx,TP.livet(t)+0.62,zz],0.014,0.012,INOX,4) }
+    m.tube([c*0.02,TP.livet(0)+0.02,-7.88],[c*(TP.bau(3/36)-0.05),TP.livet(3/36)+0.62,-TP.L/2+3/36*TP.L],0.014,0.014,INOX,4);
+  }
+  m.m=2; for(k=0;k<2;k++){ var zc=k?4.7:3.3, yf=yp(zc)-FD; m.rev([0,yf,zc],[0,1,0],[[0,0],[0,0.14],[0.05,0.14],[0.14,0.07],[0.86,0.06],[0.9,0.1],[1.08,0.1],[1.08,0]],CARBONE,8) }   /* colonnes de winch */
+  m.m=4; m.boite(-1.3,1.3,yp(5.9)-FD,yp(5.9)-FD+0.035,5.86,5.94,INOX); m.poulie([0,yp(5.9)-FD+0.1,5.9],0.07,[1,0,0]);                /* barre d'écoute et chariot de grand-voile */
+  g.coque=televerser(m);
+  /* bôme en V profond, hale-bas rigide, poulie d'écoute */
+  var bm=new Maille(); bm.m=2; aileron(bm,ligne([0,0.08,0.05],[0,0.1,7.5],4,0.42,0.2,0.45,[0,-1,0],[1,0,0]),CARBONE,{av:0.2});
+  bm.tube([0,-1.25,0.12],[0,-0.22,2.3],0.045,0.04,CARBONE,6); bm.m=4; bm.poulie([0,-0.3,6.0],0.07,[1,0,0]); g.bome=televerser(bm);
+  g.axeFoc=norm3([0,19.6,6.15]);
+  /* filières : deux lignes de chaque côté, sur les chandeliers */
+  var f=[]; for(c=-1;c<=1;c+=2){ var pr=null; for(i=3;i<=36;i+=3){ var t2=i/36, pt=[c*(TP.bau(t2)-0.05),TP.livet(t2)+0.62,-TP.L/2+t2*TP.L]; if(pr) f.push(pr[0],pr[1],pr[2],pt[0],pt[1],pt[2],pr[0],pr[1]-0.3,pr[2],pt[0],pt[1]-0.3,pt[2]); pr=pt } }
+  /* haubans : ils montent par les bouts des barres de flèche, avec une diagonale à chaque étage */
+  for(c=-1;c<=1;c+=2){ var bas=[c*2.05,1.42,-0.7], pv=bas; for(k=0;k<4;k++){ var ys2=g.fleches[k][0], zm2=-1.0+0.3*(ys2-1.45)/22.55, bout=[c*g.fleches[k][1],ys2,zm2+0.3];
+      f.push(pv[0],pv[1],pv[2],bout[0],bout[1],bout[2]); f.push(pv[0],pv[1],pv[2],0,ys2-0.2,zm2); pv=bout }
+    f.push(pv[0],pv[1],pv[2],0,22.6,-0.72) }
+  g.filieres=f;
+  return g;
+};
+BATEAUX.tp52.dessiner=function(c){
+  var g=c.g, i, k; c.obj(g.coque,c.M);
+  c.Mb=mul(mul(c.M,trans(0,2.95,-0.97)),rotY(S.bome)); c.obj(g.bome,c.Mb,null,0);
+  for(k=0;k<2;k++){ var e=this.equipage[6+k], zc=e.colonne, yc=TP.pont(zc)-TP.creux+1.0, sx=S.eq[6+k].c<0?-1:1, mo=S.moulin*1.3+e.z, hx=0.16*Math.cos(mo)*sx, hy=0.16*Math.sin(mo);   /* manivelles des colonnes */
+    c.cap([0,yc,zc-0.16],[0,yc,zc+0.16],0.024,0.024,CARBONE,2);
+    c.cap([0,yc,zc-0.16],[hx,yc+hy,zc-0.16],0.018,0.018,CARBONE,2); c.cap([hx,yc+hy,zc-0.15],[hx,yc+hy,zc-0.28],0.021,0.021,INOX,4);
+    c.cap([0,yc,zc+0.16],[-hx,yc-hy,zc+0.16],0.018,0.018,CARBONE,2); c.cap([-hx,yc-hy,zc+0.15],[-hx,yc-hy,zc+0.28],0.021,0.021,INOX,4) }
+  if(EQUIPAGE) for(i=0;i<this.equipage.length;i++) dessinerPerso(c,S.poses[i],this.equipage[i]);
+};
+BATEAUX.tp52.voiles=function(c){
+  var noir=[0.15,0.16,0.19], fib=[0.56,0.48,0.32], clair=[0.86,0.87,0.9];   /* membranes sombres à fibres dorées, comme sur les bateaux de la classe */
+  return [{M:c.Mb, guindant:[0,20.4,0.28], bordure:[0,0.01,1], E:7.2, puis:0.9, rond:0.08, tete:0.3, vrille:0.11, creux:S.creuxGV, fas:S.fasGV, teinte:noir, bande:ROUGE_C, bandeH:0.9,
+           lattes:6, fibres:1, fibC:fib, marque:clair, num:27},
+          {M:mul(mul(c.M,trans(0,1.58,-7.15)),rotAxe(c.g.axeFoc,S.foc)), guindant:[0,19.6,6.15], bordure:norm3([0,0.3,5.85]), E:5.85, puis:1, rond:0.04, tete:0.03, vrille:0.08, creux:S.creuxFoc, fas:S.fasFoc*1.2,
+           teinte:noir, bandeH:2, lattes:4, fibres:1, fibC:fib, marque:clair, penons:1}];
+};
+BATEAUX.tp52.traits=function(c){
+  /* étai, bastaques et pataras, filières, haubans ; écoute de foc du point d'écoute au chariot puis au winch ; écoute de grand-voile */
+  var t=[0,1.58,-7.15, 0,21.25,-0.98,  -1.7,1.3,7.6, 0,21.4,-0.75,  1.7,1.3,7.6, 0,21.4,-0.75,  0,1.25,7.9, 0,24.0,-0.7].concat(c.g.filieres);
+  var R=rotAxe(c.g.axeFoc,S.foc), b=norm3([0,0.3,5.85]), E=5.85, pe=[R[0]*b[0]*E+R[4]*b[1]*E+R[8]*b[2]*E, 1.58+R[1]*b[0]*E+R[5]*b[1]*E+R[9]*b[2]*E, -7.15+R[2]*b[0]*E+R[6]*b[1]*E+R[10]*b[2]*E];
+  var sv=pe[0]<0?-1:1, ch=[sv*1.3,TP.pont(-0.2)+0.08,-0.2]; t.push(pe[0],pe[1],pe[2],ch[0],ch[1],ch[2], ch[0],ch[1],ch[2],sv*1.74,TP.pont(3.6)+0.15,3.6);
+  var cb=Math.cos(S.bome), sb=Math.sin(S.bome); t.push(sb*6.0,2.62,-0.97+cb*6.0, 0,TP.pont(5.9)-TP.creux+0.1,5.9);
+  return t;
+};
+BATEAUX.tp52.gerbes=function(S){
+  var k=clamp(S.v/VPRES,0,1.2), sv=-S.cote;
+  return [{p:[sv*0.5,0.4,-6.9], taux:60*k*k, lat:2.6, biais:2.2, arr:2.4, haut:2.6, suit:0.6, vie:0.7},      /* étrave, côté sous le vent */
+          {p:[-sv*0.4,0.4,-7.1],taux:22*k*k, lat:1.8, biais:0,   arr:2.0, haut:2.2, suit:0.6, vie:0.6}];
+};
+
+/* ------------------------------------------------------------------ pièces communes */
+function construire(){
+  var ROUGE=[0.85,0.2,0.15], BLANC=[0.95,0.95,0.94], SOMBRE=[0.16,0.19,0.24], i, j, id;
   var bo=new Maille(); bo.tube([0,-0.5,0],[0,0.45,0],0.62,0.62,ROUGE,14); bo.tube([0,0.45,0],[0,0.62,0],0.62,0.5,BLANC,14); bo.tube([0,0.62,0],[0,2.1,0],0.5,0.09,ROUGE,14); bo.tube([0,2.1,0],[0,2.5,0],0.035,0.035,SOMBRE,5); bo.tube([0,2.5,0],[0,2.72,0],0.16,0.16,ROUGE,8);
   G.bouee=televerser(bo);
-
-  /* voiles : une grille (u du guindant à la chute, v du bas vers la tête), déformée dans le shader */
-  var NU=14, NV=24, uv=[], ix=[]; for(j=0;j<=NV;j++)for(i=0;i<=NU;i++) uv.push(i/NU,j/NV);
+  /* voiles souples : une grille (u du guindant à la chute, v du bas vers la tête), déformée dans le shader */
+  var NU=18, NV=34, uv=[], ix=[]; for(j=0;j<=NV;j++)for(i=0;i<=NU;i++) uv.push(i/NU,j/NV);
   for(j=0;j<NV;j++)for(i=0;i<NU;i++){ var a2=j*(NU+1)+i; ix.push(a2,a2+1,a2+NU+2,a2,a2+NU+2,a2+NU+1) }
   var vb=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,vb); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(uv),gl.STATIC_DRAW);
   var ib=gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(ix),gl.STATIC_DRAW);
   G.voile={vb:vb,ib:ib,n:ix.length};
-
-  /* gréement dormant : étai, pataras, haubans */
-  var gr=[0,1.15,-5.05, 0,14.05,-0.95,  0,15.25,-0.9, 0,0.95,5.15,
-          -1.55,1.0,-0.75, -0.82,7.2,-0.78,  -0.82,7.2,-0.78, -0.62,11.0,-0.8,  -0.62,11.0,-0.8, 0,14.6,-0.9,
-           1.55,1.0,-0.75,  0.82,7.2,-0.78,   0.82,7.2,-0.78,  0.62,11.0,-0.8,   0.62,11.0,-0.8, 0,14.6,-0.9];
-  var gd=[]; for(i=0;i<gr.length;i+=3) gd.push(gr[i],gr[i+1],gr[i+2],1);
-  G.greement={vb:gl.createBuffer(),n:gd.length/4}; gl.bindBuffer(gl.ARRAY_BUFFER,G.greement.vb); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(gd),gl.STATIC_DRAW);
-
-  /* girouette de tête de mât : un petit pavillon rouge qui s'aligne dans le vent */
+  /* girouette de tête de mât, segment et boule pour les silhouettes */
   var pv=new Maille(); pv.quad([0,0,0],[0,0.34,0],[0,0.2,1.15],[0,0.14,1.15],ROUGE); pv.quad([0.004,0,0],[0.004,0.14,1.15],[0.004,0.2,1.15],[0.004,0.34,0],ROUGE); G.pavillon=televerser(pv);
-
-  /* équipage stylisé : un buste et une tête, trois couleurs */
-  function silhouette(veste){ var e=new Maille(); e.tube([0,0,0],[0,0.56,0],0.21,0.17,veste,7); e.tube([0,0.6,0],[0,0.86,0],0.125,0.115,[0.86,0.68,0.55],7); return televerser(e) }
-  G.equipage=[silhouette([0.07,0.12,0.2]),silhouette([0.82,0.16,0.14]),silhouette([0.92,0.93,0.94])];
-  G.embruns={vb:gl.createBuffer(),d:new Float32Array(140*4)};
-
+  /* la capsule des membres : un cylindre de rayon 1 et de longueur 1, coiffé de deux demi-sphères que le shader met à l'échelle */
+  var NC=8, LAT=[[-1,0,0],[-0.87,0.5,0],[-0.5,0.87,0],[0,1,0],[0,1,1],[0.5,0.87,1],[0.87,0.5,1],[1,0,1]], cv=[], ci=[];
+  for(j=0;j<LAT.length;j++)for(i=0;i<NC;i++){ var an=i/NC*TAU; cv.push(Math.cos(an)*LAT[j][1],LAT[j][2],Math.sin(an)*LAT[j][1],LAT[j][0]) }
+  for(j=0;j<LAT.length-1;j++)for(i=0;i<NC;i++){ var i2=(i+1)%NC, q0=j*NC; ci.push(q0+i,q0+i2,q0+NC+i2,q0+i,q0+NC+i2,q0+NC+i) }
+  var cvb=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,cvb); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(cv),gl.STATIC_DRAW);
+  var cib=gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,cib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(ci),gl.STATIC_DRAW);
+  G.capsule={vb:cvb,ib:cib,n:ci.length};
+  G.b={}; etat.triangles={}; for(id in BATEAUX){ var t0=TRIANGLES; G.b[id]=BATEAUX[id].construire(); etat.triangles[id]=TRIANGLES-t0 }   /* mesure : triangles de chaque bateau, hors équipage et voiles */
+  G.traits={vb:gl.createBuffer()};
+  G.embruns={vb:gl.createBuffer(),d:new Float32Array(MAX_GOUTTES*4)};
   G.plein=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,G.plein); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
   G.stries={vb:gl.createBuffer(),d:new Float32Array(stries.length*8)};
   G.sillage={vb:gl.createBuffer(),d:new Float32Array(134*2*7)};
 }
+/* matrice d'un segment de p0 à p1, de rayon r, dans le repère M */
+function segMat(M,p0,p1,r){
+  var dx=p1[0]-p0[0], dy=p1[1]-p0[1], dz=p1[2]-p0[2], l=Math.hypot(dx,dy,dz)||1e-4, d=[dx/l,dy/l,dz/l];
+  var X=norm3(cross(d,Math.abs(d[1])<0.9?[0,1,0]:[1,0,0])), Z=cross(X,d), m=new Float32Array(16);
+  m[0]=X[0]*r; m[1]=X[1]*r; m[2]=X[2]*r; m[4]=dx; m[5]=dy; m[6]=dz; m[8]=Z[0]*r; m[9]=Z[1]*r; m[10]=Z[2]*r; m[12]=p0[0]; m[13]=p0[1]; m[14]=p0[2]; m[15]=1;
+  return mul(M,m) }
 
 function initGL(){
   var opt={antialias:true,alpha:false,depth:true,stencil:false,powerPreference:'high-performance',preserveDrawingBuffer:false};
@@ -556,15 +1202,23 @@ function initGL(){
 
 function dessiner(pr,mesh){
   gl.bindBuffer(gl.ARRAY_BUFFER,mesh.vb); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,mesh.ib);
-  var st=36; gl.enableVertexAttribArray(pr.a.aP); gl.vertexAttribPointer(pr.a.aP,3,gl.FLOAT,false,st,0);
+  var st=40; gl.enableVertexAttribArray(pr.a.aP); gl.vertexAttribPointer(pr.a.aP,3,gl.FLOAT,false,st,0);
   if(pr.a.aN>=0){gl.enableVertexAttribArray(pr.a.aN); gl.vertexAttribPointer(pr.a.aN,3,gl.FLOAT,false,st,12)}
   if(pr.a.aC>=0){gl.enableVertexAttribArray(pr.a.aC); gl.vertexAttribPointer(pr.a.aC,3,gl.FLOAT,false,st,24)}
+  if(pr.a.aM>=0){gl.enableVertexAttribArray(pr.a.aM); gl.vertexAttribPointer(pr.a.aM,1,gl.FLOAT,false,st,36)}
   gl.drawElements(gl.TRIANGLES,mesh.n,gl.UNSIGNED_SHORT,0);
 }
+/* repère d'une capsule tendue de a à b : l'axe porte la longueur, les deux autres restent unitaires */
+function capMat(M,a,b){
+  var dx=b[0]-a[0], dy=b[1]-a[1], dz=b[2]-a[2], l=Math.hypot(dx,dy,dz)||1e-4, d=[dx/l,dy/l,dz/l];
+  var X=norm3(cross(d,Math.abs(d[1])<0.9?[0,1,0]:[1,0,0])), Z=cross(X,d), m=new Float32Array(16);
+  m[0]=X[0]; m[1]=X[1]; m[2]=X[2]; m[4]=dx; m[5]=dy; m[6]=dz; m[8]=Z[0]; m[9]=Z[1]; m[10]=Z[2]; m[12]=a[0]; m[13]=a[1]; m[14]=a[2]; m[15]=1;
+  return {m:mul(M,m),l:l} }
 function couper(pr){for(var k in pr.a) if(pr.a[k]>=0) gl.disableVertexAttribArray(pr.a[k])}
 
 function rendre(){
   if(!gl) return;
+  if(!S.poses||S.poses.length!==B.equipage.length){ S.poses=null; majPoses(0) }
   var c=S.cam, az=S.camAz+c.az, fx=Math.sin(az), fz=-Math.cos(az);
   var dk=c.dec*clamp((vue.asp-1)/0.5,0,1), gx=-Math.cos(az)*dk, gz=-Math.sin(az)*dk; /* décalage vers la gauche de la caméra */
   var eye=[S.foyer[0]-fx*c.d+gx, c.h, S.foyer[1]-fz*c.d+gz], cib=[S.foyer[0]+fx*c.av+gx, c.y, S.foyer[1]+fz*c.av+gz];
@@ -578,7 +1232,7 @@ function rendre(){
   /* ciel */
   p=P.ciel; gl.useProgram(p.p); gl.disable(gl.DEPTH_TEST); gl.depthMask(false);
   U(p,'uF',V.f); U(p,'uR',[V.r[0]*th*vue.asp,V.r[1]*th*vue.asp,V.r[2]*th*vue.asp]); U(p,'uU',[V.u[0]*th,V.u[1]*th,V.u[2]*th]); U(p,'uBas',vue.bas);
-  U(p,'uSoleil',pal.soleil); U(p,'uSol',pal.sol); U(p,'uZen',pal.zen); U(p,'uHor',pal.hor); U(p,'uDisque',pal.disque); U(p,'uNuit',pal.nuit); U(p,'uBrume',S.brume); U(p,'uBrumeC',pal.brume);
+  U(p,'uSoleil',pal.soleil); U(p,'uSol',pal.sol); U(p,'uZen',pal.zen); U(p,'uHor',pal.hor); U(p,'uDisque',pal.disque); U(p,'uNuit',pal.nuit); U(p,'uBrumeD',26*B.echelle); U(p,'uBrume',S.brume); U(p,'uBrumeC',pal.brume);
   gl.bindBuffer(gl.ARRAY_BUFFER,G.plein); gl.enableVertexAttribArray(p.a.aP); gl.vertexAttribPointer(p.a.aP,2,gl.FLOAT,false,0,0); gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
   gl.enable(gl.DEPTH_TEST); gl.depthMask(true);
 
@@ -591,48 +1245,54 @@ function rendre(){
   var gi=S.gite+S.roulis, cg=Math.cos(S.psi), sg=Math.sin(S.psi), mdx=-Math.sin(gi)*cg, mdz=-Math.sin(gi)*sg, mdy=Math.cos(gi);
   var planV=S.psi+PI-(S.bome+S.foc)*0.5, vx=Math.sin(planV), vz=-Math.cos(planV); /* direction du plan des voiles */
   function largeur(dx,dz){ var l=Math.hypot(dx,dz)||1; return 0.2+0.8*Math.abs((dx*vz-dz*vx)/l) }
-  U(p,'uMat',[S.x+sg*0.9+mdx*1.0,1.0,S.z-cg*0.9+mdz*1.0]); U(p,'uMatD',[mdx,mdy,mdz]); U(p,'uLarg',[largeur(fx,fz),largeur(pal.plat[0],pal.plat[2])]);
-  U(p,'uBateau',[S.x,S.z,Math.sin(S.psi),-Math.cos(S.psi)]); U(p,'uBateauS',[clamp(S.v/VPRES,0,1.1),0,0]); U(p,'uBouee',[bouee.x,bouee.z,0.62]);
+  var hm=S.pilonnement+B.mat[1]; var matP=[S.x-sg*B.mat[2]+mdx*hm,hm,S.z+cg*B.mat[2]+mdz*hm]; U(p,'uMat',matP); U(p,'uMatD',[mdx,mdy,mdz]); U(p,'uMatH',[B.hauteurMat,B.largeurGreement,0]); U(p,'uBrumeD',26*B.echelle); U(p,'uLarg',[largeur(fx,fz),largeur(pal.plat[0],pal.plat[2])]);
+  U(p,'uBateau',[S.x,S.z,Math.sin(S.psi),-Math.cos(S.psi)]); U(p,'uBateauS',[clamp(S.v/VPRES,0,1.1),0,0]); U(p,'uCoque',[LONG,B.demiBau,B.ecart||0,1-0.94*S.vol]); U(p,'uBouee',[bouee.x,bouee.z,0.62*(B.bouee||1)]);
   gl.bindBuffer(gl.ARRAY_BUFFER,G.plein); gl.enableVertexAttribArray(p.a.aP); gl.vertexAttribPointer(p.a.aP,2,gl.FLOAT,false,0,0); gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
 
-  /* bateau : cap, tangage, gîte */
+  /* bateau : cap, assiette, gîte */
   var M=mul(mul(mul(trans(S.x,S.pilonnement-0.02,S.z),rotY(-S.psi)),rotX(S.tangage)),rotZ(S.gite+S.roulis));
-  var Mb=mul(mul(M,trans(MAT[0],MAT[1],MAT[2])),rotY(S.bome));
-  var Mf=mul(mul(M,trans(POINT_AMURE[0],POINT_AMURE[1],POINT_AMURE[2])),rotAxe(AXE_ETAI,S.foc));
-  var hb=houle(bouee.x,bouee.z,T), Mbo=mul(mul(trans(bouee.x,hb[0]*0.7,bouee.z),rotX(hb[2]*0.9+0.05*Math.sin(T*1.7))),rotZ(-hb[1]*0.9));
-  /* pavillon : il s'aligne sur le vent apparent (vent réel moins vitesse du bateau) */
-  var wx=-Math.sin(S.w)*14*0.5144, wz=Math.cos(S.w)*14*0.5144, bx=Math.sin(S.psi)*S.v*0.5144, bz=-Math.cos(S.psi)*S.v*0.5144;
+  var hb=houle(bouee.x,bouee.z,T), Mbo=mul(mul(mul(trans(bouee.x,hb[0]*0.7,bouee.z),rotX(hb[2]*0.9+0.05*Math.sin(T*1.7))),rotZ(-hb[1]*0.9)),echelleM(B.bouee||1));
+  /* girouette : elle s'aligne sur le vent apparent (vent réel moins vitesse du bateau) */
+  var wx=-Math.sin(S.w)*VENT, wz=Math.cos(S.w)*VENT, bx=Math.sin(S.psi)*S.v, bz=-Math.cos(S.psi)*S.v;
   var ax=wx-bx, azv=wz-bz, capFlux=Math.atan2(ax,-azv), rel=wrap(capFlux-S.psi);
-  var Mp=mul(mul(M,trans(0,15.3,-0.9)),rotY(PI-rel+0.12*Math.sin(T*9)*S.echelle));
+  var Mp=mul(mul(mul(M,trans(B.teteMat[0],B.teteMat[1],B.teteMat[2])),rotY(PI-rel+0.12*Math.sin(T*9)*S.echelle)),echelleM(B.echelle));
 
-  p=P.objet; gl.useProgram(p.p);
-  U(p,'uVP',VP); U(p,'uCam',eye); U(p,'uSoleil',pal.soleil); U(p,'uLum',pal.lum); U(p,'uAmbH',pal.ambH); U(p,'uAmbB',pal.ambB); U(p,'uMarine',pal.marine); U(p,'uBrume',S.brume); U(p,'uBrumeC',pal.brume);
-  U(p,'uM',M); dessiner(p,G.coque);
-  if(EQUIPAGE){ /* barreur à l'arrière, deux équipiers au rappel */
-    U(p,'uM',mul(M,trans(S.eq[0]*0.62,1.04,4.25))); dessiner(p,G.equipage[0]);
-    U(p,'uM',mul(M,trans(S.eq[1]*1.28,1.03,2.55))); dessiner(p,G.equipage[1]);
-    U(p,'uM',mul(M,trans(S.eq[2]*1.30,1.03,3.25))); dessiner(p,G.equipage[2]);
-  }
-  U(p,'uM',Mb); dessiner(p,G.bome);
-  U(p,'uM',Mbo); dessiner(p,G.bouee);
-  U(p,'uM',Mp); dessiner(p,G.pavillon);
+  /* la lumière, commune aux pièces du bateau et aux équipiers */
+  var ombre=vue.qualite>0.5?1:0, largS=largeur(pal.plat[0],pal.plat[2]);
+  function eclairer(q){ gl.useProgram(q.p);
+    U(q,'uVP',VP); U(q,'uCam',eye); U(q,'uSoleil',pal.soleil); U(q,'uSol',pal.sol); U(q,'uZen',pal.zen); U(q,'uHor',pal.hor); U(q,'uLum',pal.lum); U(q,'uAmbH',pal.ambH); U(q,'uAmbB',pal.ambB); U(q,'uMarine',pal.marine); U(q,'uBrume',S.brume); U(q,'uBrumeC',pal.brume); U(q,'uBrumeD',26*B.echelle);
+    U(q,'uPeint',B.peinture.seuils); U(q,'uCarene',B.peinture.carene); U(q,'uBandeC',B.peinture.bande); U(q,'uMat',matP); U(q,'uMatD',[mdx,mdy,mdz]); U(q,'uMatH',[B.hauteurMat,B.largeurGreement,0]); U(q,'uLargS',largS); U(q,'uOmb',ombre); U(q,'uMatU',0); U(q,'uTeinte',UN) }
+  p=P.objet; eclairer(p);
+  var po=p, caps=[], ctx={M:M, g:G.b[B.id], fin:vue.qualite>0.5,
+    obj:function(mesh,mat,teinte,omb){ U(po,'uM',mat); U(po,'uTeinte',teinte||UN); U(po,'uOmb',omb==null?ombre:omb*ombre); dessiner(po,mesh) },
+    cap:function(a,b,r0,r1,col,mat){ caps.push(a,b,r0,r1,col,mat==null?6:mat) }};
+  B.dessiner(ctx);
+  ctx.obj(G.bouee,Mbo,null,0); ctx.obj(G.pavillon,Mp,null,0);
   couper(p);
+  /* les capsules : membres des équipiers, manivelles, tout ce qui bouge entre deux points */
+  if(caps.length){ p=P.corps; eclairer(p); gl.bindBuffer(gl.ARRAY_BUFFER,G.capsule.vb); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,G.capsule.ib);
+    gl.enableVertexAttribArray(p.a.aP); gl.vertexAttribPointer(p.a.aP,3,gl.FLOAT,false,16,0); gl.enableVertexAttribArray(p.a.aK); gl.vertexAttribPointer(p.a.aK,1,gl.FLOAT,false,16,12);
+    for(var ic=0;ic<caps.length;ic+=6){ var cm=capMat(M,caps[ic],caps[ic+1]); U(p,'uM',cm.m); U(p,'uTap',[caps[ic+2],caps[ic+3],1/cm.l]); U(p,'uTeinte',caps[ic+4]); U(p,'uMatU',caps[ic+5]); gl.drawElements(gl.TRIANGLES,G.capsule.n,gl.UNSIGNED_SHORT,0) }
+    couper(p) }
+  etat.capsules=caps.length/6;
 
-  /* voiles */
+  /* voiles souples */
   p=P.voile; gl.useProgram(p.p);
-  U(p,'uVP',VP); U(p,'uCam',eye); U(p,'uSoleil',pal.soleil); U(p,'uLum',pal.lum); U(p,'uAmbH',pal.ambH); U(p,'uAmbB',pal.ambB); U(p,'uVoile',pal.voile); U(p,'uT',T); U(p,'uBrume',S.brume); U(p,'uBrumeC',pal.brume);
+  U(p,'uVP',VP); U(p,'uCam',eye); U(p,'uSoleil',pal.soleil); U(p,'uLum',pal.lum); U(p,'uAmbH',pal.ambH); U(p,'uAmbB',pal.ambB); U(p,'uVoile',pal.voile); U(p,'uT',T); U(p,'uBrume',S.brume); U(p,'uBrumeC',pal.brume); U(p,'uBrumeD',26*B.echelle);
   gl.bindBuffer(gl.ARRAY_BUFFER,G.voile.vb); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,G.voile.ib); gl.enableVertexAttribArray(p.a.aP); gl.vertexAttribPointer(p.a.aP,2,gl.FLOAT,false,0,0);
-  var calme=0.3+0.7*S.echelle;
-  U(p,'uM',Mb); U(p,'uGuindant',[0,12.3,0]); U(p,'uBordure',[0,0.01,1]); U(p,'uE',4.5); U(p,'uPuis',0.92); U(p,'uRond',0.09); U(p,'uCreux',S.creuxGV); U(p,'uFas',S.fasGV*calme); U(p,'uVrille',0.10);
-  gl.drawElements(gl.TRIANGLES,G.voile.n,gl.UNSIGNED_SHORT,0);
-  U(p,'uM',Mf); U(p,'uGuindant',GUINDANT_FOC); U(p,'uBordure',BORDURE_FOC); U(p,'uE',4.29); U(p,'uPuis',1.0); U(p,'uRond',0.0); U(p,'uCreux',S.creuxFoc); U(p,'uFas',S.fasFoc*1.25*calme); U(p,'uVrille',0.08);
-  gl.drawElements(gl.TRIANGLES,G.voile.n,gl.UNSIGNED_SHORT,0);
+  var calme=0.3+0.7*S.echelle, vs=B.voiles(ctx), iv, vo; U(p,'uTF',T);
+  for(iv=0;iv<vs.length;iv++){ vo=vs[iv]; var tt=vo.teinte||UN, gl2=Math.hypot(vo.guindant[0],vo.guindant[1],vo.guindant[2]);
+    U(p,'uM',vo.M); U(p,'uGuindant',vo.guindant); U(p,'uBordure',vo.bordure); U(p,'uE',vo.E); U(p,'uPuis',vo.puis); U(p,'uRond',vo.rond); U(p,'uTete',vo.tete||0); U(p,'uCreux',vo.creux); U(p,'uFas',vo.fas*calme); U(p,'uFasF',vo.fas*calme); U(p,'uVrille',vo.vrille);
+    U(p,'uTeinteV',tt); U(p,'uBandeV',vo.bande||UN); U(p,'uBandeH',vo.bandeH||2); U(p,'uLattes',vo.lattes||0); U(p,'uFibres',vo.fibres||0); U(p,'uFibC',vo.fibC||UN); U(p,'uMarque',vo.marque||ROUGE_C);
+    U(p,'uNum',vo.num||0); U(p,'uPenons',vo.penons||0); U(p,'uAsp',vo.E/gl2); U(p,'uTrans',vo.trans!=null?vo.trans:0.62*(0.35+0.65*(tt[0]+tt[1]+tt[2])/3));
+    gl.drawElements(gl.TRIANGLES,G.voile.n,gl.UNSIGNED_SHORT,0) }
   couper(p);
 
-  /* gréement */
+  /* gréement : des traits, recalculés à chaque image quand ils suivent l'équipage (trapèzes, écoutes) */
   gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(false);
   p=P.trait; gl.useProgram(p.p); U(p,'uVP',VP); U(p,'uM',M); U(p,'uCol',pal.nuit>0.5?[0.5,0.56,0.66,0.55]:[0.13,0.16,0.21,0.6]);
-  gl.bindBuffer(gl.ARRAY_BUFFER,G.greement.vb); gl.enableVertexAttribArray(p.a.aP); gl.vertexAttribPointer(p.a.aP,4,gl.FLOAT,false,0,0); gl.drawArrays(gl.LINES,0,G.greement.n);
+  var tr=B.traits(ctx), td=new Float32Array(tr.length/3*4), it; for(it=0;it<tr.length/3;it++){ td[it*4]=tr[it*3]; td[it*4+1]=tr[it*3+1]; td[it*4+2]=tr[it*3+2]; td[it*4+3]=1 }
+  gl.bindBuffer(gl.ARRAY_BUFFER,G.traits.vb); gl.bufferData(gl.ARRAY_BUFFER,td,gl.DYNAMIC_DRAW); gl.enableVertexAttribArray(p.a.aP); gl.vertexAttribPointer(p.a.aP,4,gl.FLOAT,false,0,0); gl.drawArrays(gl.LINES,0,td.length/4);
 
   /* stries de vent */
   var d=G.stries.d, ux=Math.sin(S.w), uz=-Math.cos(S.w), i, s, o;
@@ -646,15 +1306,15 @@ function rendre(){
   var pts=S.sillage, n=pts.length, sd=G.sillage.d, k=0;
   function pousser(q,birth){ for(var c2=-1;c2<=1;c2+=2){ sd[k++]=q.x; sd[k++]=q.z; sd[k++]=q.px; sd[k++]=q.pz; sd[k++]=c2; sd[k++]=birth; sd[k++]=q.f } }
   for(i=0;i<n;i++) pousser(pts[i],pts[i].n);
-  pousser({x:S.x,z:S.z,px:Math.cos(S.psi),pz:Math.sin(S.psi),f:clamp(S.v/VPRES,0,1)},T);
-  p=P.sillage; gl.useProgram(p.p); U(p,'uVP',VP); U(p,'uT',T); U(p,'uEcume',pal.ecume); U(p,'uDerive',S.derive); U(p,'uBrume',S.brume);
+  pousser({x:S.x,z:S.z,px:Math.cos(S.psi),pz:Math.sin(S.psi),f:clamp(S.v/VPRES,0,1)*(1-0.55*S.vol)},T);
+  p=P.sillage; gl.useProgram(p.p); U(p,'uVP',VP); U(p,'uT',T); U(p,'uEcume',pal.ecume); U(p,'uDerive',S.derive); U(p,'uBrume',S.brume); U(p,'uSilL',lerp(B.sillage,B.sillageVol||B.sillage,S.vol));
   gl.bindBuffer(gl.ARRAY_BUFFER,G.sillage.vb); gl.bufferData(gl.ARRAY_BUFFER,sd.subarray(0,k),gl.DYNAMIC_DRAW);
   gl.enableVertexAttribArray(p.a.aA); gl.vertexAttribPointer(p.a.aA,4,gl.FLOAT,false,28,0); gl.enableVertexAttribArray(p.a.aB); gl.vertexAttribPointer(p.a.aB,3,gl.FLOAT,false,28,16);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,k/7);
   couper(p);
   /* embruns */
-  var ng=S.gouttes.length; if(ng){ var ed=G.embruns.d; for(i=0;i<ng;i++){ var go=S.gouttes[i]; ed[i*4]=go.x; ed[i*4+1]=go.y; ed[i*4+2]=go.z; ed[i*4+3]=(1-go.vie/go.max)*(1-S.brume) }
-    p=P.embruns; gl.useProgram(p.p); U(p,'uVP',VP); U(p,'uEcume',pal.ecume); U(p,'uEch',canvas.height*0.2);
+  var ng=S.gouttes.length; if(ng){ var ed=G.embruns.d; if(ng>MAX_GOUTTES) ng=MAX_GOUTTES; for(i=0;i<ng;i++){ var go=S.gouttes[i]; ed[i*4]=go.x; ed[i*4+1]=go.y; ed[i*4+2]=go.z; ed[i*4+3]=(1-go.vie/go.max)*(1-S.brume) }
+    p=P.embruns; gl.useProgram(p.p); U(p,'uVP',VP); U(p,'uEcume',pal.ecume); U(p,'uEch',canvas.height*0.2*(B.goutte||1));
     gl.bindBuffer(gl.ARRAY_BUFFER,G.embruns.vb); gl.bufferData(gl.ARRAY_BUFFER,ed.subarray(0,ng*4),gl.DYNAMIC_DRAW); gl.enableVertexAttribArray(p.a.aP); gl.vertexAttribPointer(p.a.aP,4,gl.FLOAT,false,0,0); gl.drawArrays(gl.POINTS,0,ng); couper(p) }
   gl.disable(gl.BLEND); gl.depthMask(true);
 }
@@ -662,7 +1322,7 @@ function rendre(){
 /* ------------------------------------------------------------------ interface */
 var elPhase=document.getElementById('phase'), elDetail=document.getElementById('detail'), elV=document.getElementById('iV'), elA=document.getElementById('iA'), elG=document.getElementById('iG');
 var elFleche=document.getElementById('fleche'), elRose=document.getElementById('rose'), elVent=document.getElementById('ventValeur'), elCadran=document.getElementById('cadran'), elRejouer=document.getElementById('rejouer');
-var etapes=(document.getElementById('etapes')||{children:[]}).children, vu={p:'',d:'',e:-1,cap:-1,instr:0};
+var etapes=(document.getElementById('etapes')||MUET).children, vu={p:'',d:'',e:-1,cap:-1,instr:0};
 function fr(x){return x.toFixed(1).replace('.',',')}
 function afficher(force){
   var ds=decrire();
@@ -693,6 +1353,28 @@ function image(now){
 function lancer(){ if(etat.tourne||!gl) return; if(!etat.visible||!etat.aLecran) return; etat.tourne=true; etat.dernier=performance.now(); etat.raf=requestAnimationFrame(image) }
 function arreter(){ etat.tourne=false; if(etat.raf){cancelAnimationFrame(etat.raf); etat.raf=0} }
 function uneImage(){ if(gl&&!etat.tourne){ rendre(); afficher(true) } }
+/* ------------------------------------------------------------------ le choix du bateau */
+var elChoix=document.getElementById('choix');
+function installerChoix(){
+  var ids=Object.keys(BATEAUX); elChoix.hidden=ids.length<2;
+  ids.forEach(function(id){ var b=document.createElement('button'); b.type='button'; b.setAttribute('role','radio'); b.dataset.id=id; b.textContent=BATEAUX[id].nom;
+    b.setAttribute('aria-label',BATEAUX[id].nom+', '+BATEAUX[id].classe);
+    b.addEventListener('click',function(){ if(B.id!==id) changerBateau(id) }); elChoix.appendChild(b) });
+}
+function majTextes(){
+  var i, bs=elChoix.children; for(i=0;i<bs.length;i++) bs[i].setAttribute('aria-checked',bs[i].dataset.id===B.id?'true':'false');
+  (document.getElementById('tempsTitre')||MUET).textContent=B.mots.titreVirement+', en quatre temps';
+  for(i=0;i<etapes.length;i++){ etapes[i].textContent=''; var t=document.createElement('b'); t.textContent=B.temps[i][0]; etapes[i].appendChild(t); etapes[i].appendChild(document.createTextNode(B.temps[i][1])) }
+  (document.getElementById('note')||MUET).textContent=B.note;
+}
+function changerBateau(id){
+  elRejouer.hidden=true; arreter(); cadre.classList.add('fondu');
+  setTimeout(function(){ var vent=S.w; choisirBateau(id); majTextes(); nouveauDepart(vent); vu.e=-1; vu.p=''; vu.d='';
+    if(etat.reduit){ for(var i=0;i<Math.round(4.5*30);i++) pas(1/30); rendre(); afficher(true); elRejouer.hidden=false }
+    else{ etat.veut=true; rendre(); afficher(true); lancer() }
+    cadre.classList.remove('fondu') },230);
+}
+
 function repartir(){
   elRejouer.hidden=true; arreter(); cadre.classList.add('fondu');
   setTimeout(function(){ nouveauDepart(S.w); etat.veut=true; vu.e=-1; rendre(); afficher(true); cadre.classList.remove('fondu'); lancer() },230);
@@ -744,7 +1426,7 @@ elAuto.addEventListener('click',function(){ auto=!auto; if(auto) reglerHeure(heu
 
 /* ------------------------------------------------------------------ démarrage */
 function demarrer(){
-  vue.asp=1.6; reglerHeure(auto?heureAppareil():HEURE_DEPART,false);
+  vue.asp=1.6; reglerHeure(auto?heureAppareil():HEURE_DEPART,false); installerChoix(); majTextes();
   nouveauDepart(VENT_DEPART*RAD);
   var ok=false; try{ ok=initGL() }catch(err){ ok=false; if(window.console) console.error(err) }
   if(!ok){ var s=document.createElement('p'); s.className='secours'; s.textContent='Ce navigateur n’affiche pas la scène animée (WebGL indisponible). La légende ci-dessous décrit la manœuvre.'; cadre.appendChild(s); cadre.classList.add('pret'); return }
