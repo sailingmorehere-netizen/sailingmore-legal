@@ -137,6 +137,16 @@
   /* ---- les reels un peu plus petits : ils prenaient toute la largeur ---- */
   .reels .trois{max-width:36rem;margin:0 auto;gap:.7rem}
 
+  /* ---- la barre du MORE traverse la page, et les filets s'allègent (Nicolas, 19/11/2026) ----
+     « la barre rouge là qui est sur le MORE, tout le long entre ces lignes, mais en plus fin ».
+     Le soulignement du MORE quitte la boîte du texte : il prend toute la largeur, en 3 px. */
+  html{overflow-x:hidden}
+  h1 span{box-shadow:none;position:relative}
+  h1 span::after{content:"";position:absolute;left:50%;width:100vw;margin-left:-50vw;
+    height:3px;background:#e23a3e;bottom:-.1em}
+  /* les deux filets du cadre des chiffres étaient trop marqués : ils s'effacent presque */
+  .cadre{border-top-color:rgba(226,58,62,.22) !important;border-bottom-color:rgba(255,255,255,.09) !important}
+
 
   /* ---- le cordage respire : la tresse glisse d'une tuile pile, lentement, chaque ligne à son rythme ---- */
   @keyframes corde168{from{background-position-x:0}to{background-position-x:168px}}
