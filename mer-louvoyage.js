@@ -293,7 +293,7 @@ function pas(dt){
       }
     }
   }
-  if(S.mode==='route'){ S.allureLue=damp(S.allureLue,S.allure,2.2,dt); cible=wrap(w-S.amure*S.allureLue) }
+  if(S.mode==='route'){ S.allureLue=damp(S.allureLue,S.allure,0.45,dt); cible=wrap(w-S.amure*S.allureLue) }
   else cible=w; /* arrivée : bout au vent */
 
   /* ---- barre : le bateau tourne d'autant mieux qu'il a de la vitesse */
@@ -1455,19 +1455,26 @@ function demarrer(){
 }
 demarrer();
 var DEG=Math.PI/180;
-/* ---- la hauteur du pointeur tient la barre : travers au repos, près en haut, largue en bas */
+/* ---- la barre suit le sens du mouvement : on descend = largue, on monte = près,
+        on ne bouge plus = travers. Le défilement du site et le pointeur comptent pareil. */
 (function(){
-  var repos=null;
-  function allure(e){
-    var h=window.innerHeight||1, k=(e.clientY-h*0.12)/(h*0.72);
-    k=k<0?0:(k>1?1:k);
+  var repos=null, dernierY=null;
+  function pousse(dy){
+    if(!dy || Math.abs(dy)<0.5) return;
     var p=((B&&B.pres)||40)*DEG, trav=90*DEG, larg=150*DEG;
-    /* haut de l'écran : près ; milieu : travers ; bas : largue */
-    S.allure = k<0.5 ? p+(k/0.5)*(trav-p) : trav+((k-0.5)/0.5)*(larg-trav);
+    var v=S.allure + dy*0.25*DEG;   /* 4 px de geste = 1 degré d'allure */
+    S.allure = v<p ? p : (v>larg ? larg : v);
     if(repos) clearTimeout(repos);
-    repos=setTimeout(function(){ S.allure=90*DEG; repos=null },2600);
+    repos=setTimeout(function(){ S.allure=trav; repos=null },1600);
   }
-  window.addEventListener('pointermove',allure,{passive:true});
-  window.addEventListener('touchmove',function(e){ var t=e.touches&&e.touches[0]; if(t) allure({clientY:t.clientY}) },{passive:true});
+  window.addEventListener('pointermove',function(e){ if(dernierY!==null) pousse(e.clientY-dernierY); dernierY=e.clientY },{passive:true});
+  window.addEventListener('pointerdown',function(e){ dernierY=e.clientY },{passive:true});
+  var dernierDefile=null;
+  window.addEventListener('scroll',function(){
+    var y=window.pageYOffset||document.documentElement.scrollTop||0;
+    if(dernierDefile!==null) pousse(y-dernierDefile);
+    dernierDefile=y;
+  },{passive:true});
+  window.addEventListener('touchmove',function(e){ var t=e.touches&&e.touches[0]; if(!t) return; if(dernierY!==null) pousse(t.clientY-dernierY); dernierY=t.clientY },{passive:true});
 })();
 })();
