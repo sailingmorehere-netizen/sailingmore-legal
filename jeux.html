@@ -363,6 +363,8 @@ document.querySelectorAll('a.courriel').forEach(a => a.addEventListener('click',
 .mer-fond .choix button[aria-checked="true"]{background:var(--creme,#f4efe4);color:#08162a}
 .mer-fond .choix button:focus-visible{outline:3px solid var(--rouge,#e23a3e);outline-offset:2px}
 
+/* plus de girouette : le vent ne se règle plus à la main (Nicolas, 19/11/2026) */
+.mer-fond .vent{display:none!important}
 /* le cadran du vent, en bas à droite */
 .mer-fond .vent{position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:4;width:104px;
   display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--creme,#f4efe4);text-align:center;
