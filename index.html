@@ -287,10 +287,12 @@ document.querySelectorAll('a.courriel').forEach(a => a.addEventListener('click',
 (function () {
   const b = document.getElementById('cookies');
   if (!b) return;
-  if (!localStorage.getItem('sm-cookies')) b.hidden = false;
+  const lire = () => { try { return localStorage.getItem('sm-cookies'); } catch (e) { return null; } };
+  if (!lire()) b.hidden = false;
   document.getElementById('cookies-ok').addEventListener('click', () => {
-    localStorage.setItem('sm-cookies', '1');
-    b.hidden = true;
+    try { localStorage.setItem('sm-cookies', '1'); } catch (e) { /* navigation privée : on range quand même */ }
+    b.setAttribute('hidden', '');   // l'attribut, pas la propriété : aucun style ne peut le réafficher
+    b.style.display = 'none';
   });
 })();
 
