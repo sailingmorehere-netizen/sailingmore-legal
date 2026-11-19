@@ -799,5 +799,109 @@ fenetre.addEventListener("mouseleave", () => { if (!glisse) enMarche = true; });
 
 appliquer(choisir());
 </script>
+<div class="fl" aria-hidden="true"><div class="fl-bob"><svg class="fl-navire" data-navire="18 pieds" viewBox="0 0 120 120" aria-hidden="true">
+ <g stroke="#08131f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M56 34h1.7v62H56z" fill="#08131f"/>
+  <path class="fl-pres" d="M57.7 38 57.7 94 90 96z" fill="#dbe3ec"/>
+  <path class="fl-pres" d="M55 44 55 94 30 96z" fill="#c3cfdb"/>
+  <path class="fl-spi" d="M57 36c27 1 48 22 45 40-2 13-22 16-33 10l-12-50z" fill="#f2f5f8"/>
+  <path d="M14 94h92l-7 8H24z" fill="#e23a3e"/>
+  <path d="M106 94l12-4" stroke-width="2.4"/>
+  <path d="M70 88l-6-8M82 89l-5-9M94 88l-4-8" stroke-width=".9" opacity=".85"/>
+  <circle cx="70" cy="90" r="2.3" fill="#08131f"/>
+  <circle cx="83" cy="91" r="2.3" fill="#08131f"/>
+  <circle cx="95" cy="90" r="2.3" fill="#08131f"/>
+ </g></svg><svg class="fl-navire" data-navire="TP52" viewBox="0 0 120 120" aria-hidden="true">
+ <g stroke="#08131f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M58 8h1.6v86H58z" fill="#08131f"/>
+  <path class="fl-pres" d="M59.6 12 59.6 92 95 95z" fill="#dbe3ec"/>
+  <path class="fl-pres" d="M57 18 57 92 28 95z" fill="#c3cfdb"/>
+  <path class="fl-spi" d="M58 10c27 6 46 28 43 52-2 18-24 22-36 16l-7-68z" fill="#f2f5f8"/>
+  <path d="M42 40h22v9H42z" fill="#c3cfdb"/>
+  <path d="M12 91h96l-11 12H25z" fill="#e23a3e"/>
+  <path d="M60 91l-5 21h10z" fill="#08131f"/>
+ </g></svg><svg class="fl-navire" data-navire="F50" viewBox="0 0 120 120" aria-hidden="true">
+ <g stroke="#08131f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M53 6c6-4 10-2 12 3l-2 79h-10z" fill="#e6ebf1"/>   <!-- aile rigide, tête arrondie -->
+  <path d="M53 6c6-4 10-2 12 3" fill="none" opacity=".6"/>
+  <path class="fl-spi" d="M61 8c32 4 55 31 48 58-4 16-30 21-44 14l-4-72z" fill="#f2f5f8"/>
+  <path class="fl-pres" d="M51 28 51 90 27 92z" fill="#c3cfdb"/>
+  <path d="M22 80h78l-6 7H30z" fill="#e23a3e" opacity=".55"/>
+  <path d="M16 88h92l-8 9H25z" fill="#e23a3e"/>
+  <path d="M26 87h72" stroke="#08131f" stroke-width="1" opacity=".5"/>
+  <path d="M38 97l-9 15h6l8-15zM82 97l9 15h-6l-8-15z" fill="#08131f"/>
+  <path d="M16 76h88" stroke="#a8ecec" stroke-width="1.2" opacity=".45"/>
+ </g></svg></div><span class="fl-sillage"></span></div><style>
+.fl{position:fixed;right:18px;bottom:14px;width:92px;z-index:16;pointer-events:none;
+  filter:drop-shadow(0 12px 20px rgba(0,0,0,.5))}
+.fl svg{display:block;width:100%;height:auto;overflow:visible}
+.fl .fl-navire{display:none}          /* .fl svg gagne en spécificité : il faut .fl ici */
+.fl .fl-navire.fl-vu{display:block}
+.fl-bob{animation:fl-bob 6.5s ease-in-out infinite;transform-origin:50% 92%;
+  transition:transform .8s cubic-bezier(.22,.61,.36,1)}
+@keyframes fl-bob{0%,100%{transform:translateY(0) rotate(-.8deg)}50%{transform:translateY(-3px) rotate(.8deg)}}
+.fl .fl-spi{opacity:0;transform:scale(.2);transform-origin:62px 20px;
+  transition:opacity .4s ease,transform .6s cubic-bezier(.22,.61,.36,1)}
+.fl.spi .fl-spi{opacity:1;transform:scale(1)}
+.fl.spi .fl-pres{opacity:.55}                            /* le spi passe devant : le reste s'efface */
+.fl .fl-pres{transform-origin:60px 92px;opacity:1;
+  transition:transform .6s cubic-bezier(.22,.61,.36,1),opacity .45s ease}
+.fl.pres .fl-pres{transform:scaleX(.82) rotate(-7deg)}
+.fl-bord{transform-box:fill-box}
+.fl.bord-b svg{transform:scaleX(-1)}
+.fl-sillage{position:absolute;left:6%;bottom:1px;height:2px;width:0;border-radius:2px;
+  background:linear-gradient(90deg,rgba(168,236,236,.85),rgba(168,236,236,0));opacity:0;
+  transition:width .5s ease,opacity .4s ease}
+.fl.spi .fl-sillage{width:94%;opacity:.8}
+@media (max-width:640px){.fl{width:58px;right:10px;bottom:8px;opacity:.92}}
+@media (prefers-reduced-motion:reduce){
+  .fl-bob{animation:none}
+  .fl .fl-spi,.fl .fl-pres,.fl-sillage,.fl-bob{transition:none}
+}
+</style><script>
+(function(){
+  var fl=document.querySelector('.fl');
+  if(!fl) return;
+  // Un navire au hasard à chaque visite : ni stockage ni cookie, donc nouveau à chaque connexion.
+  var navires=fl.querySelectorAll('.fl-navire');
+  if(navires.length) navires[Math.floor(Math.random()*navires.length)].classList.add('fl-vu');
+  var dernier=window.scrollY, monte=null, bord=false;
+  fl.classList.add('spi');                    // on arrive en descendant : spi dehors
+  // Le bandeau de cookies occupe le bas de l'écran : le bateau monte au-dessus tant qu'il est là,
+  // sinon le canot passe sous le texte du bandeau.
+  // L'attribut hidden ne suffit pas : le site dessine le bandeau en position fixe, donc on mesure
+  // sa boîte. S'il occupe le bas de l'écran, le bateau monte au-dessus ; sinon il reste au ras.
+  function ecarter(){
+    var c=document.getElementById('cookies'), h=0;
+    if(c){
+      var r=c.getBoundingClientRect(), st=getComputedStyle(c);
+      if(st.display!=='none' && st.visibility!=='hidden' && r.height>0 && r.top<window.innerHeight) h=r.height;
+    }
+    fl.style.bottom=(h ? Math.round(h)+18 : 14)+'px';
+  }
+  ecarter(); setTimeout(ecarter,600); setTimeout(ecarter,2000);
+  var ck=document.getElementById('cookies');
+  if(ck) new MutationObserver(function(){ setTimeout(ecarter,0); })
+          .observe(ck,{attributes:true,attributeFilter:['hidden','style','class']});
+  var ok=document.getElementById('cookies-ok');
+  if(ok) ok.addEventListener('click',function(){ setTimeout(ecarter,150); });
+  window.addEventListener('resize',ecarter);
+  window.addEventListener('scroll', function(){
+    var y=window.scrollY, d=y-dernier;
+    dernier=y;
+    if(Math.abs(d)<3) return;
+    var versLeHaut=d<0;
+    // L'état se recalcule à chaque événement, jamais « une fois par changement de sens » :
+    // un événement perdu ou rejoué (inertie, onglet en arrière-plan) se répare tout seul.
+    fl.classList.toggle('spi',!versLeHaut);
+    fl.classList.toggle('pres',versLeHaut);
+    if(versLeHaut && monte===false){          // on remonte : on vire, un bord sur deux
+      bord=!bord;
+      fl.classList.toggle('bord-b',bord);
+    }
+    monte=versLeHaut;
+  },{passive:true});
+})();
+</script>
 </body>
 </html>
