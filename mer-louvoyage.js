@@ -56,10 +56,10 @@ var LUNE={azimutDebut:26, azimutFin:10, hauteur:25};
    vers le côté sous le vent (degrés). focale : angle de champ (degrés, petit = téléobjectif).
    lenteur : temps pour passer à ce cadrage (s). duree : durée du plan d'ouverture (s).
    decal : sur écran large, décale le bateau vers la droite pour dégager la légende (m). */
-var RECUL=1.0, DECAL=0, BORD_SECONDES=30, ZS=1, FOCS=2.2;
+var RECUL=1.0, DECAL=18, BORD_SECONDES=20, ZS=1, FOCS=2.2;
 var PLANS={
   ouverture:{d:31, h:3.2, av:1,  y:6.6, tour:46,  travelling:0,  focale:36, lenteur:1.0, duree:0, decal:7},
-  bord:     {d:31, h:11,  av:11, y:7.6, tour:0,   travelling:17, focale:40, lenteur:1.7, decal:3},
+  bord:     {d:31, h:11,  av:11, y:4.2, tour:0,   travelling:17, focale:40, lenteur:1.7, decal:3},
   virement: {d:24, h:6.5, av:4,  y:5.6, tour:0,   travelling:13, focale:40, lenteur:1.1, decal:4},
   bouee:    {d:32, h:6.5, av:5,  y:6.4, tour:24,  travelling:0,  focale:38, lenteur:2.0, decal:3},
   portrait: {recul:1.3, focale:1.16}    /* téléphone tenu debout : même distance, champ un peu plus large */
@@ -249,7 +249,7 @@ function nouveauDepart(vent){
      psi:wrap(vent-PRES), om:0, v:VPRES*0.9, cote:1, bome:-bordeGV(ventApparent(PRES,VPRES)), foc:-bordeFoc(ventApparent(PRES,VPRES)), ecoute:1, awa:ventApparent(PRES,VPRES),
      creuxGV:-1, creuxFoc:-1, fasGV:0, fasFoc:0, gite:GITE_MAX*RAD*0.9, tangage:0, roulis:0, pilonnement:0,
      fin:0, echelle:1, sillage:[], dernierPoint:-1, derive:[0,0], risee:[0,0], twa:PRES,
-     cam:{d:PLANS.bord.d*B.echelle*1.00,h:PLANS.bord.h*B.echelle*1.00,av:PLANS.bord.av*B.echelle,az:((B.vue&&B.vue.bord!=null)?B.vue.bord:PLANS.bord.tour)*RAD,y:PLANS.bord.y*B.echelle*1.00,fov:PLANS.bord.focale*2.20,dec:PLANS.bord.decal*B.echelle+0.0}, foyer:[0,0], phase:null,
+     cam:{d:PLANS.bord.d*B.echelle*1.00,h:PLANS.bord.h*B.echelle*1.00,av:PLANS.bord.av*B.echelle,az:((B.vue&&B.vue.bord!=null)?B.vue.bord:PLANS.bord.tour)*RAD,y:PLANS.bord.y*B.echelle*1.00,fov:PLANS.bord.focale*2.20,dec:PLANS.bord.decal*B.echelle+18.0}, foyer:[0,0], phase:null,
      brume:BRUME_ENTREE>0?1:0, eq:B.equipage.map(function(){return {c:1,cible:1,attente:0}}), gouttes:[], reserve:[],
      vol:(B.decollage&&VPRES>B.decollage)?1:0, foil:{'-1':1,'1':0}, moulin:0};
   var ux=Math.sin(vent), uz=-Math.cos(vent);
@@ -266,6 +266,7 @@ function semer(s,partout){
 }
 
 function pas(dt){
+  if(S.allure==null){ S.allure=90*DEG; S.allureLue=90*DEG; bouee.x=S.x+1e6; bouee.z=S.z+1e6 }
   var w=S.w, ux=Math.sin(w), uz=-Math.cos(w), rx=Math.cos(w), rz=Math.sin(w);
   var mx=bouee.x-S.x, mz=bouee.z-S.z;
   var loin=mx*ux+mz*uz, travers=mx*rx+mz*rz, dist=Math.hypot(mx,mz), theta=Math.atan2(travers,loin);
@@ -274,15 +275,15 @@ function pas(dt){
 
   /* ---- la route : directe si la bouée est hors de la zone morte, sinon au près en tirant des bords */
   if(S.mode==='route'){
-    if(dist<ARRIVEE){ S.bordBouee=-(S.bordBouee||1); bouee.x=S.x+ux*700+rx*S.bordBouee*260; bouee.z=S.z+uz*700+rz*S.bordBouee*260; }
+    if(false){ /* plus de bouée à atteindre */ }
     else{
-      var seuil=S.direct ? PRES-1*RAD : PRES+1.5*RAD, avant=S.amure; if(S.t-(S.dernierVirement||0)>BORD_SECONDES) S.amure=-S.amure;
-      if(Math.abs(theta)>=seuil){ S.direct=true; S.amure=-sgn(theta) }
+      var seuil=S.direct ? PRES-1*RAD : PRES+1.5*RAD, avant=S.amure; /* plus de bordées imposées : on tient l'allure que la souris donne */
+      if(false){ S.direct=true; S.amure=-sgn(theta) }
       else{
         S.direct=false;
         if(S.t-S.dernierVirement>(B.repos||2.5)){
-          if(S.amure>0 && travers>COULOIR) S.amure=-1;
-          else if(S.amure<0 && travers<-COULOIR) S.amure=1;
+          if(false) S.amure=-1;
+          else if(false) S.amure=1;
         }
       }
       if(S.amure!==avant){
@@ -292,7 +293,7 @@ function pas(dt){
       }
     }
   }
-  if(S.mode==='route') cible=S.direct ? wrap(w+theta) : wrap(w-S.amure*PRES);
+  if(S.mode==='route'){ S.allureLue=damp(S.allureLue,S.allure,2.2,dt); cible=wrap(w-S.amure*S.allureLue) }
   else cible=w; /* arrivée : bout au vent */
 
   /* ---- barre : le bateau tourne d'autant mieux qu'il a de la vitesse */
@@ -1404,7 +1405,7 @@ elCadran.addEventListener('keydown',function(e){ var d=0; if(e.key==='ArrowLeft'
 /* à la souris, on peut aussi faire glisser la scène */
 var x0=0;
 canvas.addEventListener('pointerdown',function(e){ if(e.pointerType!=='mouse') return; glisse='scene'; x0=e.clientX; try{canvas.setPointerCapture(e.pointerId)}catch(_){} });
-canvas.addEventListener('pointermove',function(e){ if(glisse!=='scene') return; tourner(S.w+(e.clientX-x0)*0.007); x0=e.clientX });
+/* le glissement de la scène est désactivé : la hauteur de la souris tient la barre */
 canvas.addEventListener('pointerup',lacher); canvas.addEventListener('pointercancel',lacher);
 elRejouer.addEventListener('click',repartir);
 
@@ -1453,4 +1454,20 @@ function demarrer(){
   if(etat.veut) lancer();
 }
 demarrer();
+var DEG=Math.PI/180;
+/* ---- la hauteur du pointeur tient la barre : travers au repos, près en haut, largue en bas */
+(function(){
+  var repos=null;
+  function allure(e){
+    var h=window.innerHeight||1, k=(e.clientY-h*0.12)/(h*0.72);
+    k=k<0?0:(k>1?1:k);
+    var p=((B&&B.pres)||40)*DEG, trav=90*DEG, larg=150*DEG;
+    /* haut de l'écran : près ; milieu : travers ; bas : largue */
+    S.allure = k<0.5 ? p+(k/0.5)*(trav-p) : trav+((k-0.5)/0.5)*(larg-trav);
+    if(repos) clearTimeout(repos);
+    repos=setTimeout(function(){ S.allure=90*DEG; repos=null },2600);
+  }
+  window.addEventListener('pointermove',allure,{passive:true});
+  window.addEventListener('touchmove',function(e){ var t=e.touches&&e.touches[0]; if(t) allure({clientY:t.clientY}) },{passive:true});
+})();
 })();
