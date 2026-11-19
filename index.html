@@ -240,11 +240,11 @@
     text-transform:uppercase;white-space:normal}
   .planisphere{border-radius:0;border-color:rgba(255,255,255,.14);background:#081521}
   .pt-v i{background:#e23a3e;box-shadow:none}
-  .carte-kit{border-radius:0;border:1px solid rgba(255,255,255,.16);
-    border-top:2px solid #e23a3e !important;background:transparent}
+  .carte-kit{border-radius:0;border:0;border-top:1px solid rgba(226,58,62,.22);
+    border-bottom:1px solid rgba(255,255,255,.09);background:transparent;box-shadow:none}
   .carte-kit .bouton{background:transparent;color:#e23a3e;border:1px solid #e23a3e;border-radius:0}
-  .carte-jeu{background:transparent;border-color:rgba(255,255,255,.16);border-radius:0;
-    border-top:2px solid #e23a3e !important}
+  .carte-jeu{background:transparent;border:0;border-top:1px solid rgba(226,58,62,.22);
+    border-bottom:1px solid rgba(255,255,255,.09);border-radius:0;box-shadow:none}
   .carte-jeu .bouton{background:#e23a3e;border-color:#e23a3e;color:#fff;border-radius:0}
   .reel{border-radius:0;border-color:rgba(255,255,255,.14)}
   footer{color:#9db2c6}
@@ -316,8 +316,8 @@
   section.concours,.kit-bloc{width:min(100% - 2.4rem,64rem) !important;margin:5.5rem auto !important;
     padding:0 !important;max-width:none !important}
   .kit-bloc .carte-kit,.carte-jeu{width:100%}
-  .carte-kit,.carte-jeu{border-radius:0;border:0;border-top:1px solid #e23a3e;
-    border-bottom:1px solid rgba(255,255,255,.16);background:transparent;box-shadow:none;
+  .carte-kit,.carte-jeu{border-radius:0;border:0;border-top:1px solid rgba(226,58,62,.22);
+    border-bottom:1px solid rgba(255,255,255,.09);background:transparent;box-shadow:none;
     padding:1.9rem 2rem;margin:0;width:auto}
   .kit-bloc{width:min(100% - 2.4rem,64rem) !important;margin:5.5rem auto !important;padding:0 !important;max-width:none !important}
   .kit-bloc .carte-kit{width:100%}
@@ -353,8 +353,8 @@
   .cookies{animation:corde220 143s linear infinite;animation-delay:-61s}
   /* socle commun aux déclinaisons : grille tenue, citations de même hauteur */
   .chiffres{max-width:64rem}
-  /* les blocs du site gardent leur géométrie mais perdent le bleu d'origine */
-  .carte-kit,.carte-jeu{background:rgba(255,255,255,.025);border-color:rgba(255,255,255,.16)}
+  /* les blocs du site gardent leur géométrie ; chaque direction dessine ses cartes elle-même,
+     sinon le socle repeint par-dessus et les cartes ne ressemblent plus au cadre des chiffres */
   .carte-kit p,.carte-jeu p{color:rgba(238,241,244,.72)}
   .planisphere{border-color:rgba(255,255,255,.14);background:rgba(15,36,56,.6)}
 
