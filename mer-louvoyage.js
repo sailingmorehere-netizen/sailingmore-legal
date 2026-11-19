@@ -44,7 +44,7 @@ var EQUIPAGE=true;        /* l'équipage à bord, animé (false pour le retirer)
 var EMBRUNS=true;         /* gerbes d'embruns : aux foils, à l'étrave */
 var BRUME_ENTREE=3.6;     /* durée de la sortie de brume à l'ouverture, en secondes (0 pour la retirer) */
 /* Heure du jour. La réglette en haut de la scène la règle de 0 à 24 h. */
-var AUTO_PAR_DEFAUT=false;  /* true : au chargement, la scène prend l'heure de l'horloge de l'appareil */
+var AUTO_PAR_DEFAUT=true;  /* true : au chargement, la scène prend l'heure de l'horloge de l'appareil */
 var HEURE_DEPART=19.25;    /* heure utilisée quand Auto est coupé au départ (19.25 = 19 h 15, l'heure dorée) */
 /* Course du soleil : heures de lever et de coucher, direction au lever et au coucher (degrés, 0 = droit devant
    au départ, positif = vers la droite), hauteur au plus haut (degrés). */
@@ -245,10 +245,10 @@ function houle(x,z,t){var y=0,gx=0,gz=0,i,h,ph; for(i=0;i<3;i++){h=HOULE[i]; ph=
 var S={};
 var bouee={x:0,z:0};
 function nouveauDepart(vent){
-  S={t:0, w:vent, camAz:vent, mode:'route', direct:false, amure:1, dernierVirement:-9, man:null, empannage:-9,
-     psi:wrap(vent-PRES), om:0, v:VPRES*0.9, cote:1, bome:-bordeGV(ventApparent(PRES,VPRES)), foc:-bordeFoc(ventApparent(PRES,VPRES)), ecoute:1, awa:ventApparent(PRES,VPRES),
+  S={t:0, w:vent, camAz:vent, mode:'route', direct:false, amure:-1, dernierVirement:-9, man:null, empannage:-9,
+     psi:wrap(vent+PRES), om:0, v:VPRES*0.9, cote:1, bome:-bordeGV(ventApparent(PRES,VPRES)), foc:-bordeFoc(ventApparent(PRES,VPRES)), ecoute:1, awa:ventApparent(PRES,VPRES),
      creuxGV:-1, creuxFoc:-1, fasGV:0, fasFoc:0, gite:GITE_MAX*RAD*0.9, tangage:0, roulis:0, pilonnement:0,
-     fin:0, echelle:1, sillage:[], dernierPoint:-1, derive:[0,0], risee:[0,0], twa:PRES,
+     fin:0, echelle:1, sillage:[], dernierPoint:-1, derive:[0,0], risee:[0,0], twa:-PRES,
      cam:{d:PLANS.bord.d*B.echelle*1.00,h:PLANS.bord.h*B.echelle*1.00,av:PLANS.bord.av*B.echelle,az:((B.vue&&B.vue.bord!=null)?B.vue.bord:PLANS.bord.tour)*RAD,y:PLANS.bord.y*B.echelle*1.00,fov:PLANS.bord.focale*2.20,dec:PLANS.bord.decal*B.echelle+18.0}, foyer:[0,0], phase:null,
      brume:BRUME_ENTREE>0?1:0, eq:B.equipage.map(function(){return {c:1,cible:1,attente:0}}), gouttes:[], reserve:[],
      vol:(B.decollage&&VPRES>B.decollage)?1:0, foil:{'-1':1,'1':0}, moulin:0};

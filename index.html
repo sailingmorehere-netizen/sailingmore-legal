@@ -461,8 +461,10 @@
 <body>
 
 <div class="mer-fond" id="cadre">
+
   <canvas id="mer" aria-hidden="true"></canvas>
   <div class="mer-ombre" aria-hidden="true"></div>
+  
   <div class="heure">
     <output class="lue" id="heureLue" for="heure">19 h 15</output>
     <input class="piste" id="heure" type="range" min="0" max="24" step="0.25" value="19.25"
@@ -471,6 +473,7 @@
       aria-label="Heure automatique, selon l'horloge de l'appareil"><span class="pastille" aria-hidden="true"></span>Auto</button>
   </div>
   <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
+
   <button class="rejouer" id="rejouer" type="button" hidden>Rejouer</button>
   <div class="vent">
     <div class="cadran" id="cadran" role="slider" tabindex="0" aria-label="Direction d'où vient le vent"
@@ -524,9 +527,14 @@
 .mer-fond.loin .heure,.mer-fond.loin .choix,.mer-fond.loin .vent,.mer-fond.loin .legende,
 .mer-fond.loin .rejouer{opacity:0;pointer-events:none;transform:translateY(-6px)}
 
+/* Le tableau de bord détaché des pages annexes : mêmes commandes, hors de la couche du fond
+   (z-index -1) qui les rendrait invisibles et incliquables. */
+.mer-fond.mer-fond-commandes{inset:auto;left:0;right:0;top:0;height:0;background:none;overflow:visible;
+  z-index:60;pointer-events:none}
+.mer-fond.mer-fond-commandes .heure,.mer-fond.mer-fond-commandes .choix{pointer-events:auto}
 .mer-fond .heure{position:absolute;left:14px;top:70px;z-index:4;height:46px;padding:0 8px 0 14px;
   display:flex;align-items:center;gap:10px;border-radius:999px;width:min(360px,calc(100% - 28px));
-  background:rgba(6,18,33,.66);color:var(--creme);
+  background:rgba(6,18,33,.66);color:var(--creme,#f4efe4);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto}
 .mer-fond .heure .lue{flex:none;min-width:4.6em;font-size:14px;font-weight:600;
   font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -535,15 +543,15 @@
 .mer-fond .heure .piste::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:linear-gradient(90deg,#0b1730 0%,#0b1730 21%,#d9879a 27%,#f2c48a 31%,#6fb1e6 42%,#3f97e6 56%,#7fb6e0 72%,#f5b56b 81%,#d9694f 85%,#3a2c55 89%,#0b1730 93%,#0b1730 100%)}
 .mer-fond .heure .piste::-moz-range-track{height:8px;border-radius:4px;background:linear-gradient(90deg,#0b1730 0%,#0b1730 21%,#d9879a 27%,#f2c48a 31%,#6fb1e6 42%,#3f97e6 56%,#7fb6e0 72%,#f5b56b 81%,#d9694f 85%,#3a2c55 89%,#0b1730 93%,#0b1730 100%)}
 .mer-fond .heure .piste::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;
-  margin-top:-7px;border-radius:50%;background:var(--creme);border:0;box-shadow:0 1px 5px rgba(0,0,0,.5)}
-.mer-fond .heure .piste::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--creme);
+  margin-top:-7px;border-radius:50%;background:var(--creme,#f4efe4);border:0;box-shadow:0 1px 5px rgba(0,0,0,.5)}
+.mer-fond .heure .piste::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--creme,#f4efe4);
   border:0;box-shadow:0 1px 5px rgba(0,0,0,.5)}
 .mer-fond .heure .auto{flex:none;display:flex;align-items:center;gap:6px;height:34px;padding:0 11px 0 9px;
-  border-radius:999px;font:600 12.5px/1 system-ui,sans-serif;color:var(--creme);
+  border-radius:999px;font:600 12.5px/1 system-ui,sans-serif;color:var(--creme,#f4efe4);
   background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);cursor:pointer}
 .mer-fond .heure .auto .pastille{width:8px;height:8px;border-radius:50%;background:#93a8bc}
-.mer-fond .heure .auto[aria-checked="true"]{background:var(--creme);color:#08162a;border-color:var(--creme)}
-.mer-fond .heure .auto[aria-checked="true"] .pastille{background:var(--rouge)}
+.mer-fond .heure .auto[aria-checked="true"]{background:var(--creme,#f4efe4);color:#08162a;border-color:var(--creme,#f4efe4)}
+.mer-fond .heure .auto[aria-checked="true"] .pastille{background:var(--rouge,#e23a3e)}
 
 /* le choix du bateau */
 .mer-fond .choix{position:absolute;left:14px;top:126px;z-index:4;display:flex;gap:4px;padding:4px;
@@ -552,12 +560,12 @@
 .mer-fond .choix button{font:600 13px/1 system-ui,sans-serif;color:#e8eff5;background:transparent;
   border:0;border-radius:999px;min-height:36px;padding:0 13px;cursor:pointer;white-space:nowrap;
   transition:background-color .15s ease,color .15s ease}
-.mer-fond .choix button[aria-checked="true"]{background:var(--creme);color:#08162a}
-.mer-fond .choix button:focus-visible{outline:3px solid var(--rouge);outline-offset:2px}
+.mer-fond .choix button[aria-checked="true"]{background:var(--creme,#f4efe4);color:#08162a}
+.mer-fond .choix button:focus-visible{outline:3px solid var(--rouge,#e23a3e);outline-offset:2px}
 
 /* le cadran du vent, en bas à droite */
 .mer-fond .vent{position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:4;width:104px;
-  display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--creme);text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--creme,#f4efe4);text-align:center;
   pointer-events:auto}
 .mer-fond .vent .cadran{width:96px;height:96px;border-radius:50%;background:rgba(6,18,33,.62);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);touch-action:none;cursor:grab;outline:none;
@@ -570,7 +578,7 @@
 
 /* la légende de la manœuvre, en bas à gauche */
 .mer-fond .legende{position:absolute;left:14px;bottom:14px;z-index:4;width:min(330px,calc(100% - 150px));
-  background:rgba(6,18,33,.66);color:var(--creme);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  background:rgba(6,18,33,.66);color:var(--creme,#f4efe4);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
   border-radius:12px;padding:12px 14px 10px;display:flex;flex-direction:column;gap:4px;text-align:left;
   pointer-events:auto}
 .mer-fond .legende .oeil{margin:0;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#a8bccc}
@@ -584,11 +592,11 @@
 .mer-fond .instruments dd small{font-size:10.5px;font-weight:500;color:#a8bccc;margin-left:2px}
 
 .mer-fond .rejouer{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:4;
-  font:600 13.5px/1 system-ui,sans-serif;color:#08162a;background:var(--creme);border:0;border-radius:999px;
+  font:600 13.5px/1 system-ui,sans-serif;color:#08162a;background:var(--creme,#f4efe4);border:0;border-radius:999px;
   padding:10px 17px;min-height:42px;cursor:pointer;pointer-events:auto}
 .mer-fond .rejouer:active{transform:translateX(-50%) scale(.97)}
 .mer-fond .secours{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  padding:24px;text-align:center;color:var(--creme);z-index:2}
+  padding:24px;text-align:center;color:var(--creme,#f4efe4);z-index:2}
 
 /* le héros : plus qu'un texte posé sur l'eau */
 .hero.hero-mer{position:relative;max-width:none;margin:0;padding:0;text-align:center;
@@ -613,7 +621,7 @@
   .mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{transition:none}
 }
 </style>
-<script src="mer-louvoyage.js?v=1795127671" defer></script>
+<script src="mer-louvoyage.js?v=1795127812" defer></script>
 <script>
 /* les commandes de la scène s'effacent dès qu'on a quitté le haut de la page */
 (function(){
