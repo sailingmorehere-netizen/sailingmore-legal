@@ -56,10 +56,10 @@ var LUNE={azimutDebut:26, azimutFin:10, hauteur:25};
    vers le côté sous le vent (degrés). focale : angle de champ (degrés, petit = téléobjectif).
    lenteur : temps pour passer à ce cadrage (s). duree : durée du plan d'ouverture (s).
    decal : sur écran large, décale le bateau vers la droite pour dégager la légende (m). */
-var RECUL=1.0, DECAL=0, ZS=1, FOCS=2.2;
+var RECUL=1.0, DECAL=0, BORD_SECONDES=30;
 var PLANS={
   ouverture:{d:31, h:3.2, av:1,  y:6.6, tour:46,  travelling:0,  focale:36, lenteur:1.0, duree:3.4, decal:7},
-  bord:     {d:31, h:11,  av:11, y:4.2, tour:0,   travelling:17, focale:40, lenteur:1.7, decal:3},
+  bord:     {d:31, h:11,  av:11, y:7.6, tour:0,   travelling:17, focale:40, lenteur:1.7, decal:3},
   virement: {d:24, h:6.5, av:4,  y:5.6, tour:0,   travelling:13, focale:40, lenteur:1.1, decal:4},
   bouee:    {d:32, h:6.5, av:5,  y:6.4, tour:24,  travelling:0,  focale:38, lenteur:2.0, decal:3},
   portrait: {recul:1.3, focale:1.16}    /* téléphone tenu debout : même distance, champ un peu plus large */
@@ -185,6 +185,7 @@ var BATEAUX={
     polaire:[[0,0],[22,0],[28,3],[33,7.4],[38,8.6],[45,9.3],[52,9.7],[70,10.6],[90,11.4],[110,12.0],[135,12.4],[146,11.3],[165,9.8],[180,9.2]],
     pres:38,            /* angle de remontée au vent réel, en degrés */
     accel:1.7,          /* temps accéléré 1,7 fois */
+    houle:0.40,          /* une coque lourde de 52 pieds suit moins la vague */
     depart:235,         /* distance du départ à la bouée, en mètres */
     couloir:36,         /* demi-largeur du couloir de louvoyage, en mètres */
     arrivee:42,
@@ -248,7 +249,7 @@ function nouveauDepart(vent){
      psi:wrap(vent-PRES), om:0, v:VPRES*0.9, cote:1, bome:-bordeGV(ventApparent(PRES,VPRES)), foc:-bordeFoc(ventApparent(PRES,VPRES)), ecoute:1, awa:ventApparent(PRES,VPRES),
      creuxGV:-1, creuxFoc:-1, fasGV:0, fasFoc:0, gite:GITE_MAX*RAD*0.9, tangage:0, roulis:0, pilonnement:0,
      fin:0, echelle:1, sillage:[], dernierPoint:-1, derive:[0,0], risee:[0,0], twa:PRES,
-     cam:{d:PLANS.bord.d*B.echelle*RECUL,h:PLANS.bord.h*B.echelle*RECUL,av:PLANS.bord.av*B.echelle,az:((B.vue&&B.vue.bord!=null)?B.vue.bord:PLANS.bord.tour)*RAD,y:PLANS.bord.y*B.echelle*RECUL,fov:PLANS.bord.focale*FOCS,dec:PLANS.bord.decal*B.echelle+DECAL}, foyer:[0,0], phase:null,
+     cam:{d:PLANS.bord.d*B.echelle*1.00,h:PLANS.bord.h*B.echelle*1.00,av:PLANS.bord.av*B.echelle,az:((B.vue&&B.vue.bord!=null)?B.vue.bord:PLANS.bord.tour)*RAD,y:PLANS.bord.y*B.echelle*1.00,fov:PLANS.bord.focale*2.20,dec:PLANS.bord.decal*B.echelle+0.0}, foyer:[0,0], phase:null,
      brume:BRUME_ENTREE>0?1:0, eq:B.equipage.map(function(){return {c:1,cible:1,attente:0}}), gouttes:[], reserve:[],
      vol:(B.decollage&&VPRES>B.decollage)?1:0, foil:{'-1':1,'1':0}, moulin:0};
   var ux=Math.sin(vent), uz=-Math.cos(vent);
@@ -273,9 +274,9 @@ function pas(dt){
 
   /* ---- la route : directe si la bouée est hors de la zone morte, sinon au près en tirant des bords */
   if(S.mode==='route'){
-    if(dist<ARRIVEE){ bouee.x=S.x+ux*700; bouee.z=S.z+uz*700; }
+    if(dist<ARRIVEE){ S.bordBouee=-(S.bordBouee||1); bouee.x=S.x+ux*700+rx*S.bordBouee*260; bouee.z=S.z+uz*700+rz*S.bordBouee*260; }
     else{
-      var seuil=S.direct ? PRES-1*RAD : PRES+1.5*RAD, avant=S.amure;
+      var seuil=S.direct ? PRES-1*RAD : PRES+1.5*RAD, avant=S.amure; if(S.t-(S.dernierVirement||0)>BORD_SECONDES) S.amure=-S.amure;
       if(Math.abs(theta)>=seuil){ S.direct=true; S.amure=-sgn(theta) }
       else{
         S.direct=false;
@@ -333,8 +334,8 @@ function pas(dt){
   var ho=houle(S.x,S.z,S.t), fx=Math.sin(S.psi), fz=-Math.cos(S.psi);
   /* vol : au-dessus de la vitesse de décollage, le bateau sort de l'eau et ne suit plus la houle */
   S.vol=damp(S.vol, B.decollage ? sstep(B.decollage-1.5,B.decollage+1.5,S.v) : 0, 0.8, dt);
-  S.pilonnement=ho[0]*0.55*(1-S.vol)+S.vol*((B.hauteurVol||0)+0.06*Math.sin(S.t*1.9));
-  S.tangage=(ho[1]*fx+ho[2]*fz)*0.9*(1-0.85*S.vol)+S.vol*(B.assiette||0)*RAD; S.roulis=(ho[1]*Math.cos(S.psi)+ho[2]*Math.sin(S.psi))*0.7*(1-0.85*S.vol);
+  S.pilonnement=ho[0]*0.55*(B.houle||1)*(1-S.vol)+S.vol*((B.hauteurVol||0)+0.06*Math.sin(S.t*1.9));
+  S.tangage=(ho[1]*fx+ho[2]*fz)*0.9*(B.houle||1)*(1-0.85*S.vol)+S.vol*(B.assiette||0)*RAD; S.roulis=(ho[1]*Math.cos(S.psi)+ho[2]*Math.sin(S.psi))*0.7*(B.houle||1)*(1-0.85*S.vol);
   /* foils : celui sous le vent porte ; celui au vent est relevé, sauf pendant la manœuvre où les deux sont dans l'eau */
   var lib=(S.man||S.mode!=='route'||S.vol<0.5)?1:0; S.foil['-1']=damp(S.foil['-1'],(S.cote===1||lib)?1:0,0.45,dt); S.foil['1']=damp(S.foil['1'],(S.cote===-1||lib)?1:0,0.45,dt);
   S.moulin+=dt*(S.man?11:5);
