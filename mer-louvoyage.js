@@ -44,7 +44,7 @@ var EQUIPAGE=true;        /* l'équipage à bord, animé (false pour le retirer)
 var EMBRUNS=true;         /* gerbes d'embruns : aux foils, à l'étrave */
 var BRUME_ENTREE=3.6;     /* durée de la sortie de brume à l'ouverture, en secondes (0 pour la retirer) */
 /* Heure du jour. La réglette en haut de la scène la règle de 0 à 24 h. */
-var AUTO_PAR_DEFAUT=true;  /* true : au chargement, la scène prend l'heure de l'horloge de l'appareil */
+var AUTO_PAR_DEFAUT=false;  /* true : au chargement, la scène prend l'heure de l'horloge de l'appareil */
 var HEURE_DEPART=19.25;    /* heure utilisée quand Auto est coupé au départ (19.25 = 19 h 15, l'heure dorée) */
 /* Course du soleil : heures de lever et de coucher, direction au lever et au coucher (degrés, 0 = droit devant
    au départ, positif = vers la droite), hauteur au plus haut (degrés). */
