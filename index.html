@@ -17,17 +17,17 @@
 <meta property="og:image:alt" content="Sailing More — la voile et la course au large, en images">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://sailingmore.fr/og-image.jpg">
-<meta name="theme-color" content="#08162a">
+<meta name="theme-color" content="#0a1a2b">
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="icon-512.png" sizes="512x512" type="image/png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>
-  :root{--nuit:#08162a;--nuit2:#0d2440;--eau:#8ad4d0;--creme:#f4efe4;--gris:#c3d6e6;--rouge:#e23a3e;
-    --ambre:#e8b04b;--toile:#f2f7fb}
+  :root{--nuit:#0a1a2b;--nuit2:#0f2438;--eau:#e23a3e;--creme:#eef3f7;--gris:#9db2c6;--rouge:#e23a3e;
+    --ambre:#eef3f7;--toile:#ffffff}
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{margin:0;background:radial-gradient(120% 90% at 50% 0%,var(--nuit2) 0%,var(--nuit) 55%,#050f1c 100%);
-    color:var(--creme);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    color:var(--creme);font-family:system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
     -webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit;text-decoration:none}
   .entete{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
@@ -210,6 +210,225 @@
     .legende{font-size:.68rem}
   }
 
+
+  body{background:#0a1a2b}
+  .entete{background:rgba(10,26,43,.94);border-bottom:1px solid rgba(226,58,62,.5)}
+  h1{font-weight:300;letter-spacing:-.01em;line-height:.94;color:#fff}
+  h1 span{font-weight:300;color:#fff;letter-spacing:-.05em}
+  .filet{background:linear-gradient(90deg,#e23a3e 0 34%,rgba(255,255,255,.18) 34% 100%);
+    width:100%;max-width:16rem;height:1px}
+  .surtitre{font-weight:300;letter-spacing:-.01em;color:#dbe6ef}
+  h2{color:#9db2c6;font-weight:500;letter-spacing:.22em;font-size:.64rem}
+  .cadre{border-radius:0;border:0;border-top:1px solid rgba(226,58,62,.45);border-bottom:1px solid rgba(255,255,255,.16);
+    background:transparent;box-shadow:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:0;padding:1.6rem 0}
+  .grand{padding:0 1.1rem;border-left:1px solid rgba(255,255,255,.1)}
+  .grand:first-child{border-left:0;padding-left:0}
+  .grand b{color:#fff;font-weight:300;letter-spacing:-.02em;text-shadow:none}
+  .grand:first-child b{color:#fff;font-weight:300}
+  .grand span{color:#9db2c6;letter-spacing:.14em;font-size:.58rem}
+  .titre-cit{color:#9db2c6;letter-spacing:.22em;font-size:.64rem}
+  .citation{--acc:#e23a3e;border-left:0;border-top:1px solid rgba(255,255,255,.14);
+    background:transparent;width:min(26rem,86vw)}
+  .citation blockquote{color:#dbe6ef}
+  .ep22{}
+  .ep21 blockquote{color:#fff;font-weight:700}
+  .citation figcaption strong{color:#fff} .citation figcaption span{color:#9db2c6}
+  .siecle{color:#e23a3e;letter-spacing:.2em;font-size:.55rem}
+  .stories h2,.reels h2,.monde h2{color:#fff;font-weight:300;letter-spacing:.02em;
+    text-transform:uppercase;white-space:normal}
+  .planisphere{border-radius:0;border-color:rgba(255,255,255,.14);background:#081521}
+  .pt-v i{background:#e23a3e;box-shadow:none}
+  .carte-kit{border-radius:0;border:0;border-top:1px solid rgba(226,58,62,.22);
+    border-bottom:1px solid rgba(255,255,255,.09);background:transparent;box-shadow:none}
+  .carte-kit .bouton{background:transparent;color:#e23a3e;border:1px solid #e23a3e;border-radius:0}
+  .carte-jeu{background:transparent;border:0;border-top:1px solid rgba(226,58,62,.22);
+    border-bottom:1px solid rgba(255,255,255,.09);border-radius:0;box-shadow:none}
+  .carte-jeu .bouton{background:#e23a3e;border-color:#e23a3e;color:#fff;border-radius:0}
+  /* ---- les boutons deviennent des filets : un mot, un trait rouge dessous (Nicolas, 19/11/2026) ----
+     « les boutons en dessous, essaye qu'ils soient un peu comme tes barres » */
+  .carte-kit .bouton,.carte-jeu .bouton{background:none;border:0;border-bottom:1px solid #e23a3e;
+    border-radius:0;color:#fff;padding:.15rem 0 .25rem;font-size:.78rem;font-weight:400;
+    letter-spacing:.12em;text-transform:uppercase;transition:border-color .2s}
+  .carte-kit .bouton:hover,.carte-jeu .bouton:hover{background:none;border-bottom-color:#fff}
+  .reel{border-radius:0;border-color:rgba(255,255,255,.14);background:#0a1a2b}
+  .reel img{background:#0a1a2b}
+  .carte-reel{background:transparent}
+  footer{color:#9db2c6}
+  .cookies{background:rgba(8,21,33,.98);border:1px solid rgba(255,255,255,.18);border-radius:0}
+  .cookies button{background:#e23a3e;color:#fff;border-radius:0}
+
+  /* ---- en-tête sur téléphone : le nom tient sur une ligne, les langues respirent ---- */
+  @media(max-width:600px){
+    .entete{padding:.55rem .7rem;gap:.4rem}
+    .entete .nom{font-size:.6rem;letter-spacing:.1em;white-space:nowrap}
+    .langues{gap:0}
+    .langues button{font-size:.56rem;padding:.15rem .26rem;letter-spacing:0}
+    .langues button[aria-pressed="true"]{padding:.15rem .34rem}
+  }
+
+  /* ---- les traits droits : ni vague ni cordage (19/11/2026) ----
+     Les douze lignes décoratives ont été retirées à la demande de Nicolas. Ce qui reste : les filets
+     du cadre CAP d'origine — rouge au-dessus des chiffres, blanc cassé en dessous, un trait plein. */
+  .hero h1{margin-bottom:2.6rem}
+  .hero .filet{display:none}
+  .cadre{margin-top:3.2rem}
+  .citation{padding-top:1.4rem}
+  /* le filet fin de l'époque, hérité : on le retire, il est remplacé par la teinte du siècle */
+  .ep20 blockquote{border-left:0}
+  .ep20 blockquote::before{content:none}
+  .citation blockquote{padding-bottom:.9rem}
+  /* le fond suit le siècle : le bleu s'installe et se réchauffe au fil des années (19/11/2026).
+     En 1771 presque rien, en 1840 un filet de brume, en 1906 le panneau, en 2026 le bleu de la nuit. */
+  .citation:has(> blockquote){} 
+  .citation>blockquote{padding:1.1rem 1.3rem}
+
+  /* ---- chaque siècle a son fond ET sa typographie (Nicolas, 19/11/2026) : quatre matières, pas
+     quatre teintes du même bleu. On doit reconnaître l'époque sans lire la date. ---- */
+  .citation>blockquote{padding:1.1rem 1.3rem;border:0}
+
+  /* XVIIIe — la page d'un livre ancien : papier verge, encre sépia, italique centrée, double filet */
+  .citation.ep-t18>blockquote{
+    background:
+      repeating-linear-gradient(90deg,rgba(120,97,60,.05) 0 1px,transparent 1px 8px),
+      linear-gradient(180deg,#e9dfc6,#e0d2b2);
+    color:#3b2d17;font-family:"Iowan Old Style","Palatino Linotype",Palatino,Garamond,Georgia,serif;
+    font-style:italic;font-size:1.02rem;line-height:1.82;letter-spacing:.01em;text-align:center;
+    box-shadow:inset 0 0 0 1px rgba(92,71,38,.42),inset 0 0 0 4px #e9dfc6,inset 0 0 0 5px rgba(92,71,38,.26)}
+  .citation.ep-t18>blockquote::before{content:"❧";display:block;color:#8f3a2c;font-style:normal;
+    font-size:1.15rem;line-height:1;margin:0 0 .55rem}
+  .citation.ep-t18 figcaption strong{color:#e8d6b0}
+
+  /* XIXe — le livre relié du XIXe : papier ivoire, encre noire, lettrine rouge, filets d'encre */
+  .citation.ep-t19>blockquote{
+    background:linear-gradient(180deg,#f4eddc,#ece2cb);
+    color:#1b1b17;font-family:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+    font-size:1.06rem;line-height:1.72;text-align:left;
+    border-top:1px solid rgba(27,27,23,.6);border-bottom:1px solid rgba(27,27,23,.6);
+    box-shadow:inset 0 4px 0 -3px rgba(27,27,23,.45),inset 0 -4px 0 -3px rgba(27,27,23,.45)}
+  .citation.ep-t19>blockquote::first-letter{font-size:3.2rem;line-height:.78;float:left;
+    color:#8c2b22;font-weight:700;margin:.12rem .5rem 0 0}
+  .citation.ep-t19 figcaption strong{color:#e6dcc0}
+
+  /* XXe — la feuille dactylographiée : papier bistre, encre bleu-noir, marge rouge, monospace */
+  .citation.ep-t20>blockquote{
+    background:
+      linear-gradient(90deg,transparent 24px,rgba(168,58,48,.45) 24px 25px,transparent 25px),
+      linear-gradient(180deg,#f0ebdf,#e4ddcd);
+    color:#202a3a;font-family:ui-monospace,"Courier New",Courier,monospace;
+    font-size:.9rem;line-height:1.75;letter-spacing:-.005em;text-align:left;padding-left:2.5rem;
+    box-shadow:inset 0 0 0 1px rgba(60,58,48,.22),0 1px 0 rgba(0,0,0,.18)}
+  .citation.ep-t20 figcaption{font-family:ui-monospace,"Courier New",monospace;color:#93a3ad}
+  .citation.ep-t20 figcaption strong{color:#e2e8ec}
+
+  /* XXIe — l'enseigne : aplat rouge plein, capitales serrées, blanc pur */
+  .citation.ep-t21>blockquote{
+    background:#e23a3e;color:#fff;
+    font-family:ui-sans-serif,system-ui,"Helvetica Neue",Arial,sans-serif;
+    font-size:1rem;font-weight:800;letter-spacing:.005em;text-transform:uppercase;
+    line-height:1.34;text-align:left;padding:1.25rem 1.35rem;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+  .citation.ep-t21 figcaption strong{color:#fff}
+
+  /* ---- le filet au-dessus de chaque citation : plus fin, et la citation posée dessous (19/11/2026) ----
+     Nicolas : « mettre un peu moins gras, et mettre une barre rouge, la barre rouge là qui est sur le MORE
+     tout le long entre ces lignes, mais en plus fin ». La barre rouge du MORE court donc sur toute la
+     largeur de l'écran, en 1 px, et chaque citation s'ouvre sur un filet fin qui reprend la teinte de son siècle. */
+  .fenetre{padding-left:calc(max(1.2rem,(100vw - 64rem)/2))}
+  .fenetre::before,.fenetre::after{content:"";position:absolute;left:0;right:0;height:1px;z-index:2;pointer-events:none}
+  .fenetre::before{top:0;background:#e23a3e}
+  .fenetre::after{bottom:0;background:rgba(255,255,255,.16)}
+  .citation{border-top:1px solid rgba(255,255,255,.16);position:relative}
+  .citation::after{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;
+    background:var(--teinte,rgba(255,255,255,.3))}
+
+  /* ---- le fond change avec le siècle de la citation ---- */
+  .ep-t18{--teinte:#5f7f9c}
+  .ep-t19{--teinte:#9db2c6}
+  .ep-t20{--teinte:#e23a3e}
+  .ep-t21{--teinte:#8fd3e8}
+  .titre-cit{
+    color:#9db2c6;font-size:.64rem;letter-spacing:.22em;font-weight:500;text-transform:uppercase;
+    max-width:64rem;margin:0 auto 1.5rem;padding:0 1.2rem;display:flex;align-items:center;gap:.9rem}
+  .titre-cit::after{content:"";flex:1 1 auto;height:1px;
+    background:linear-gradient(90deg,rgba(226,58,62,.75),rgba(226,58,62,0))}
+
+  /* ---- les chiffres : le rouge sur les vues, le blanc sur les abonnés ---- */
+  .grand b{font-weight:300;color:#fff}
+  .grand.rouge b{color:#e23a3e;font-weight:500}
+
+  /* ---- annonceurs et jeu concours prennent le cadre des chiffres ---- */
+  /* le cadre des chiffres, repris tel quel : filet rouge en haut, filet blanc en bas, et l'échelle de la
+     grille au lieu de la largeur que le bloc avait */
+  section.concours{width:min(100% - 2.4rem,64rem) !important;margin:5.5rem auto}
+  /* le cadre des chiffres : filet rouge franc en haut, filet clair en bas, la même colonne que la grille */
+  section.concours,.kit-bloc{width:min(100% - 2.4rem,64rem) !important;margin:5.5rem auto !important;
+    padding:0 !important;max-width:none !important}
+  .kit-bloc .carte-kit,.carte-jeu{width:100%}
+  .carte-kit,.carte-jeu{border-radius:0;border:0;border-top:1px solid rgba(226,58,62,.22);
+    border-bottom:1px solid rgba(255,255,255,.09);background:transparent;box-shadow:none;
+    padding:1.9rem 2rem;margin:0;width:auto}
+  .kit-bloc{width:min(100% - 2.4rem,64rem) !important;margin:5.5rem auto !important;padding:0 !important;max-width:none !important}
+  .kit-bloc .carte-kit{width:100%}
+  .carte-kit h3,.carte-jeu h3{font-weight:300;letter-spacing:-.015em;font-size:clamp(1.5rem,3.4vw,2rem)}
+  .titre-idee{display:flex;align-items:center;gap:.9rem;margin:0 0 1.5rem;padding:0 .2rem;
+    color:#9db2c6;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase}
+  .titre-idee::after{content:"";flex:1 1 auto;height:1px;
+    background:linear-gradient(90deg,rgba(226,58,62,.6),rgba(226,58,62,0))}
+
+  /* ---- les reels un peu plus petits : ils prenaient toute la largeur ---- */
+  .reels .trois{max-width:36rem;margin:0 auto;gap:.7rem}
+
+  /* ---- la barre rouge passe entre SAILING et MORE, à la largeur du mot MORE (Nicolas, 19/11/2026) ----
+     Le trait ne traverse plus la page : c'est la main courante du bloc, elle s'arrête au bord du MORE.
+     Réglé sur .hero seulement : ailleurs (page du jeu, pages légales) un h1 porte un mot, pas un titre
+     en deux lignes, et la barre y tombait au milieu du texte. */
+  html{overflow-x:hidden}
+  .hero h1{margin-bottom:2.6rem}
+  .hero h1 span{box-shadow:none;position:relative;display:block;width:max-content;max-width:100%;
+    margin-inline:auto}
+  .hero h1 span::before{content:"";position:absolute;left:0;width:calc(100% - .05em);height:3px;top:.018em;
+    background:#e23a3e}
+  .hero h1 span::after{content:none}
+  /* les deux filets du cadre des chiffres étaient trop marqués : ils s'effacent presque */
+  .cadre{border-top-color:rgba(226,58,62,.22) !important;border-bottom-color:rgba(255,255,255,.09) !important}
+
+
+  /* ---- le cordage respire : la tresse glisse d'une tuile pile, lentement, chaque ligne à son rythme ---- */
+  @keyframes corde168{from{background-position-x:0}to{background-position-x:168px}}
+  @keyframes corde126{from{background-position-x:0}to{background-position-x:126px}}
+  @keyframes corde220{from{background-position-x:0}to{background-position-x:220px}}
+  @keyframes corde240{from{background-position-x:0}to{background-position-x:240px}}
+  .entete{animation:corde168 110s linear infinite}
+  .citation blockquote{animation:corde126 132s linear infinite}
+  
+  footer{animation:corde168 121s linear infinite;animation-delay:-23s}
+  .cookies{animation:corde220 143s linear infinite;animation-delay:-61s}
+  /* socle commun aux déclinaisons : grille tenue, citations de même hauteur */
+  .chiffres{max-width:64rem}
+  /* les blocs du site gardent leur géométrie ; chaque direction dessine ses cartes elle-même,
+     sinon le socle repeint par-dessus et les cartes ne ressemblent plus au cadre des chiffres */
+  .carte-kit p,.carte-jeu p{color:rgba(238,241,244,.72)}
+  .planisphere{border-color:rgba(255,255,255,.14);background:rgba(15,36,56,.6)}
+
+  .reel{border-color:rgba(255,255,255,.14);background:#0b0c0e}
+  .pt-v i{box-shadow:none}
+  .cadre{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;padding:1.4rem 0}
+  .grand{min-width:0}
+  .grand b{font-size:clamp(1.05rem,1.72vw,2.05rem);letter-spacing:-.03em;white-space:nowrap}
+  .chiffres{margin-bottom:3.2rem}
+  .citation{display:flex;flex-direction:column;min-height:15rem;overflow:hidden}
+  .citation blockquote{overflow-wrap:break-word;hyphens:none;text-align:left}
+  .ep19 blockquote::first-letter{font-size:inherit;float:none;margin:0;color:inherit;
+    line-height:inherit;font-weight:inherit}
+  .citation blockquote{flex:1 1 auto}
+  .citation::before{content:none}
+  .ep18 blockquote::before{content:none}
+  @media(max-width:820px){
+    .cadre{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:1.4rem}
+    .citation{min-height:0}
+  }
+
 </style>
 </head>
 <body>
@@ -294,6 +513,8 @@
 .planisphere .pt-b.bas.bord-g:hover .bulle,.planisphere .pt-b.bas.bord-g:focus-visible .bulle{transform:translate(0,0)}
 .planisphere .pt-b.bas.bord-d .bulle{transform:translate(0,-5px)}
 .planisphere .pt-b.bas.bord-d:hover .bulle,.planisphere .pt-b.bas.bord-d:focus-visible .bulle{transform:translate(0,0)}
+.planisphere .pt-b.errant{transition:left 8s cubic-bezier(.45,.05,.55,.95),
+  top 8s cubic-bezier(.45,.05,.55,.95),transform .18s ease}
 .legende-carte{display:flex;align-items:center;gap:9px;margin:16px 0 0;font-size:12px;
   letter-spacing:.04em;color:rgba(238,243,247,.62)}
 .legende-carte .mini{flex:0 0 auto;line-height:0}
@@ -308,7 +529,7 @@
 .etiquette-v .nb{display:none}
 @media(max-width:600px){.etiquette-v{font-size:11px;padding:5px 9px 5px 7px}}
 </style>
-<div class="planisphere"><img src="carte-monde.png" alt="Carte du monde"><button class="pt-v" type="button" aria-pressed="false" aria-label="Istanbul, Turquie — 1 260 abonnés" data-n="Istanbul" data-d="TUR" data-c="1 260" style="left:58.05%;top:27.22%"><i style="width:3.4px;height:3.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="São Paulo, Brésil — 827 abonnés" data-n="São Paulo" data-d="BRA" data-c="827" style="left:37.05%;top:63.08%"><i style="width:3.0px;height:3.0px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Warsaw, Pologne — 808 abonnés" data-n="Warsaw" data-d="POL" data-c="808" style="left:55.85%;top:20.98%"><i style="width:3.0px;height:3.0px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Moscow, Russie — 771 abonnés" data-n="Moscow" data-d="RUS" data-c="771" style="left:60.45%;top:19.10%"><i style="width:2.9px;height:2.9px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Sydney, Australie — 735 abonnés" data-n="Sydney" data-d="AUS" data-c="735" style="left:92.00%;top:68.82%"><i style="width:2.9px;height:2.9px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Rio de Janeiro, Brésil — 659 abonnés" data-n="Rio de Janeiro" data-d="BRA" data-c="659" style="left:38.00%;top:62.73%"><i style="width:2.8px;height:2.8px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Rome, Italie — 651 abonnés" data-n="Rome" data-d="ITA" data-c="651" style="left:53.47%;top:26.73%"><i style="width:2.8px;height:2.8px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Buenos Aires, Argentine — 651 abonnés" data-n="Buenos Aires" data-d="ARG" data-c="651" style="left:33.78%;top:69.23%"><i style="width:2.8px;height:2.8px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Paris, France — 590 abonnés" data-n="Paris" data-d="FRA" data-c="590" style="left:50.64%;top:22.86%"><i style="width:2.7px;height:2.7px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Melbourne, Australie — 545 abonnés" data-n="Melbourne" data-d="AUS" data-c="545" style="left:90.27%;top:71.01%"><i style="width:2.6px;height:2.6px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Hong Kong, Hong Kong — 522 abonnés" data-n="Hong Kong" data-d="HKG" data-c="522" style="left:81.71%;top:37.62%"><i style="width:2.6px;height:2.6px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Izmir, Turquie — 517 abonnés" data-n="Izmir" data-d="TUR" data-c="517" style="left:57.54%;top:28.66%"><i style="width:2.6px;height:2.6px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Budapest, Hongrie — 510 abonnés" data-n="Budapest" data-d="HUN" data-c="510" style="left:55.32%;top:23.62%"><i style="width:2.6px;height:2.6px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="London, Royaume-Uni — 497 abonnés" data-n="London" data-d="GBR" data-c="497" style="left:49.96%;top:21.38%"><i style="width:2.6px;height:2.6px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Athens, Grèce — 466 abonnés" data-n="Athens" data-d="GRE" data-c="466" style="left:56.59%;top:28.90%"><i style="width:2.5px;height:2.5px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Barcelona, Espagne — 401 abonnés" data-n="Barcelona" data-d="ESP" data-c="401" style="left:50.60%;top:27.01%"><i style="width:2.4px;height:2.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Bangkok, Thaïlande — 395 abonnés" data-n="Bangkok" data-d="THA" data-c="395" style="left:77.91%;top:42.36%"><i style="width:2.4px;height:2.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Auckland, Nouvelle-Zélande — 392 abonnés" data-n="Auckland" data-d="NZL" data-c="392" style="left:98.55%;top:70.47%"><i style="width:2.4px;height:2.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Madrid, Espagne — 386 abonnés" data-n="Madrid" data-d="ESP" data-c="386" style="left:48.97%;top:27.55%"><i style="width:2.4px;height:2.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Milan, Italie — 373 abonnés" data-n="Milan" data-d="ITA" data-c="373" style="left:52.55%;top:24.74%"><i style="width:2.4px;height:2.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Santiago, Chili — 358 abonnés" data-n="Santiago" data-d="CHI" data-c="358" style="left:30.37%;top:68.58%"><i style="width:2.4px;height:2.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Perth, Australie — 353 abonnés" data-n="Perth" data-d="AUS" data-c="353" style="left:82.18%;top:67.75%"><i style="width:2.4px;height:2.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="New York, États-Unis — 338 abonnés" data-n="New York" data-d="US" data-c="338" style="left:29.44%;top:27.38%"><i style="width:2.3px;height:2.3px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Kyiv, Ukraine — 318 abonnés" data-n="Kyiv" data-d="UKR" data-c="318" style="left:58.48%;top:21.97%"><i style="width:2.3px;height:2.3px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Lisbon, Portugal — 306 abonnés" data-n="Lisbon" data-d="POR" data-c="306" style="left:47.46%;top:28.50%"><i style="width:2.3px;height:2.3px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Brisbane, Australie — 298 abonnés" data-n="Brisbane" data-d="AUS" data-c="298" style="left:92.51%;top:65.26%"><i style="width:2.3px;height:2.3px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Sofia, Bulgarie — 297 abonnés" data-n="Sofia" data-d="BUL" data-c="297" style="left:56.48%;top:26.28%"><i style="width:2.3px;height:2.3px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Bucharest, Roumanie — 285 abonnés" data-n="Bucharest" data-d="ROM" data-c="285" style="left:57.25%;top:25.31%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Marseille, France — 283 abonnés" data-n="Marseille" data-d="FRA" data-c="283" style="left:51.49%;top:25.95%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Hamburg, Allemagne — 265 abonnés" data-n="Hamburg" data-d="GER" data-c="265" style="left:52.78%;top:20.25%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Dublin, Irlande — 262 abonnés" data-n="Dublin" data-d="IRL" data-c="262" style="left:48.26%;top:20.36%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Palma de Mallorca, Espagne — 261 abonnés" data-n="Palma de Mallorca" data-d="ESP" data-c="261" style="left:50.74%;top:28.02%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Wien, Autriche — 252 abonnés" data-n="Wien" data-d="AUT" data-c="252" style="left:54.55%;top:23.22%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Montreal, Canada — 239 abonnés" data-n="Montreal" data-d="CAN" data-c="239" style="left:29.56%;top:24.72%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Stockholm, Suède — 238 abonnés" data-n="Stockholm" data-d="SWE" data-c="238" style="left:55.02%;top:17.04%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Berlin, Allemagne — 237 abonnés" data-n="Berlin" data-d="GER" data-c="237" style="left:53.72%;top:20.82%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Cape Town, Afrique du Sud — 233 abonnés" data-n="Cape Town" data-d="RSA" data-c="233" style="left:55.12%;top:68.85%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Lima, Pérou — 228 abonnés" data-n="Lima" data-d="PER" data-c="228" style="left:28.60%;top:56.69%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Mexico City, Mexique — 217 abonnés" data-n="Mexico City" data-d="MEX" data-c="217" style="left:22.46%;top:39.27%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Porto Alegre, Brésil — 214 abonnés" data-n="Porto Alegre" data-d="BRA" data-c="214" style="left:35.77%;top:66.68%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Prague, Tchéquie — 210 abonnés" data-n="Prague" data-d="CZE" data-c="210" style="left:54.01%;top:22.17%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Genova, Italie — 208 abonnés" data-n="Genova" data-d="ITA" data-c="208" style="left:52.48%;top:25.33%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Cairo, Égypte — 207 abonnés" data-n="Cairo" data-d="EGY" data-c="207" style="left:58.68%;top:33.31%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Gdansk, Pologne — 204 abonnés" data-n="Gdansk" data-d="POL" data-c="204" style="left:55.18%;top:19.81%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Toronto, Canada — 204 abonnés" data-n="Toronto" data-d="CAN" data-c="204" style="left:27.95%;top:25.75%"><i style="width:2.1px;height:2.1px"></i></button><svg class="liens-bourses" viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true"><path class="lien-fond" d="M518.2 121.0L518.2 81.0"/><path class="lien-trait" d="M518.2 121.0L518.2 81.0"/><circle cx="518.2" cy="121.0" r="3.4"/></svg><a class="pt-b bas" href="https://www.facebook.com/groups/BourseEquipierVoile/" target="_blank" rel="noopener" title="Bourse aux équipiers France — ≈ 138 000 participants" aria-label="Bourse aux équipiers France — ≈ 138 000 participants, bourse aux équipiers" style="left:50.67%;top:24.11%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers France</b><i>≈ 138 000 <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b bas" href="https://www.facebook.com/groups/BourseEquipierVoileLeman/" target="_blank" rel="noopener" title="Bourse aux équipiers Léman — ≈ 2 800 participants" aria-label="Bourse aux équipiers Léman — ≈ 2 800 participants, bourse aux équipiers" style="left:51.82%;top:16.19%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers Léman</b><i>≈ 2 800 <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b bord-g" href="https://www.facebook.com/groups/sailingcrewfinderpacific/" target="_blank" rel="noopener" title="Bourse aux équipiers Pacifique — ≈ 1 200 participants" aria-label="Bourse aux équipiers Pacifique — ≈ 1 200 participants, bourse aux équipiers" style="left:5.56%;top:50.00%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers Pacifique</b><i>≈ 1 200 <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b icone" href="https://www.facebook.com/groups/virtualregattainshore/" target="_blank" rel="noopener" title="Virtual Regatta Inshore" aria-label="Virtual Regatta Inshore, bourse aux équipiers" style="left:72.22%;top:61.11%"><img src="img/vr-inshore.png" alt="Virtual Regatta Inshore" width="20" height="20" loading="lazy"><span class="bulle"><b>Virtual Regatta Inshore</b></span></a><div class="etiquette-v" hidden aria-live="polite"><img class="drapeau" alt="" width="22" height="15"><span class="nom"></span><span class="nb"></span></div></div><p class="legende-carte" data-t="legende_bourses"><span class="mini"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg></span><span>Bourses aux équipiers — un bateau par groupe Facebook, cliquez pour l'ouvrir.</span></p></section>
+<div class="planisphere"><img src="carte-monde.png" alt="Carte du monde"><button class="pt-v" type="button" aria-pressed="false" aria-label="Istanbul, Turquie — 1 260 abonnés" data-n="Istanbul" data-d="TUR" data-c="1 260" style="left:58.05%;top:27.22%"><i style="width:3.4px;height:3.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="São Paulo, Brésil — 827 abonnés" data-n="São Paulo" data-d="BRA" data-c="827" style="left:37.05%;top:63.08%"><i style="width:3.0px;height:3.0px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Warsaw, Pologne — 808 abonnés" data-n="Warsaw" data-d="POL" data-c="808" style="left:55.85%;top:20.98%"><i style="width:3.0px;height:3.0px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Moscow, Russie — 771 abonnés" data-n="Moscow" data-d="RUS" data-c="771" style="left:60.45%;top:19.10%"><i style="width:2.9px;height:2.9px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Sydney, Australie — 735 abonnés" data-n="Sydney" data-d="AUS" data-c="735" style="left:92.00%;top:68.82%"><i style="width:2.9px;height:2.9px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Rio de Janeiro, Brésil — 659 abonnés" data-n="Rio de Janeiro" data-d="BRA" data-c="659" style="left:38.00%;top:62.73%"><i style="width:2.8px;height:2.8px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Rome, Italie — 651 abonnés" data-n="Rome" data-d="ITA" data-c="651" style="left:53.47%;top:26.73%"><i style="width:2.8px;height:2.8px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Buenos Aires, Argentine — 651 abonnés" data-n="Buenos Aires" data-d="ARG" data-c="651" style="left:33.78%;top:69.23%"><i style="width:2.8px;height:2.8px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Paris, France — 590 abonnés" data-n="Paris" data-d="FRA" data-c="590" style="left:50.64%;top:22.86%"><i style="width:2.7px;height:2.7px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Melbourne, Australie — 545 abonnés" data-n="Melbourne" data-d="AUS" data-c="545" style="left:90.27%;top:71.01%"><i style="width:2.6px;height:2.6px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Hong Kong, Hong Kong — 522 abonnés" data-n="Hong Kong" data-d="HKG" data-c="522" style="left:81.71%;top:37.62%"><i style="width:2.6px;height:2.6px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Izmir, Turquie — 517 abonnés" data-n="Izmir" data-d="TUR" data-c="517" style="left:57.54%;top:28.66%"><i style="width:2.6px;height:2.6px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Budapest, Hongrie — 510 abonnés" data-n="Budapest" data-d="HUN" data-c="510" style="left:55.32%;top:23.62%"><i style="width:2.6px;height:2.6px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="London, Royaume-Uni — 497 abonnés" data-n="London" data-d="GBR" data-c="497" style="left:49.96%;top:21.38%"><i style="width:2.6px;height:2.6px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Athens, Grèce — 466 abonnés" data-n="Athens" data-d="GRE" data-c="466" style="left:56.59%;top:28.90%"><i style="width:2.5px;height:2.5px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Barcelona, Espagne — 401 abonnés" data-n="Barcelona" data-d="ESP" data-c="401" style="left:50.60%;top:27.01%"><i style="width:2.4px;height:2.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Bangkok, Thaïlande — 395 abonnés" data-n="Bangkok" data-d="THA" data-c="395" style="left:77.91%;top:42.36%"><i style="width:2.4px;height:2.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Auckland, Nouvelle-Zélande — 392 abonnés" data-n="Auckland" data-d="NZL" data-c="392" style="left:98.55%;top:70.47%"><i style="width:2.4px;height:2.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Madrid, Espagne — 386 abonnés" data-n="Madrid" data-d="ESP" data-c="386" style="left:48.97%;top:27.55%"><i style="width:2.4px;height:2.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Milan, Italie — 373 abonnés" data-n="Milan" data-d="ITA" data-c="373" style="left:52.55%;top:24.74%"><i style="width:2.4px;height:2.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Santiago, Chili — 358 abonnés" data-n="Santiago" data-d="CHI" data-c="358" style="left:30.37%;top:68.58%"><i style="width:2.4px;height:2.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Perth, Australie — 353 abonnés" data-n="Perth" data-d="AUS" data-c="353" style="left:82.18%;top:67.75%"><i style="width:2.4px;height:2.4px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="New York, États-Unis — 338 abonnés" data-n="New York" data-d="US" data-c="338" style="left:29.44%;top:27.38%"><i style="width:2.3px;height:2.3px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Kyiv, Ukraine — 318 abonnés" data-n="Kyiv" data-d="UKR" data-c="318" style="left:58.48%;top:21.97%"><i style="width:2.3px;height:2.3px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Lisbon, Portugal — 306 abonnés" data-n="Lisbon" data-d="POR" data-c="306" style="left:47.46%;top:28.50%"><i style="width:2.3px;height:2.3px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Brisbane, Australie — 298 abonnés" data-n="Brisbane" data-d="AUS" data-c="298" style="left:92.51%;top:65.26%"><i style="width:2.3px;height:2.3px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Sofia, Bulgarie — 297 abonnés" data-n="Sofia" data-d="BUL" data-c="297" style="left:56.48%;top:26.28%"><i style="width:2.3px;height:2.3px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Bucharest, Roumanie — 285 abonnés" data-n="Bucharest" data-d="ROM" data-c="285" style="left:57.25%;top:25.31%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Marseille, France — 283 abonnés" data-n="Marseille" data-d="FRA" data-c="283" style="left:51.49%;top:25.95%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Hamburg, Allemagne — 265 abonnés" data-n="Hamburg" data-d="GER" data-c="265" style="left:52.78%;top:20.25%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Dublin, Irlande — 262 abonnés" data-n="Dublin" data-d="IRL" data-c="262" style="left:48.26%;top:20.36%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Palma de Mallorca, Espagne — 261 abonnés" data-n="Palma de Mallorca" data-d="ESP" data-c="261" style="left:50.74%;top:28.02%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Wien, Autriche — 252 abonnés" data-n="Wien" data-d="AUT" data-c="252" style="left:54.55%;top:23.22%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Montreal, Canada — 239 abonnés" data-n="Montreal" data-d="CAN" data-c="239" style="left:29.56%;top:24.72%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Stockholm, Suède — 238 abonnés" data-n="Stockholm" data-d="SWE" data-c="238" style="left:55.02%;top:17.04%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Berlin, Allemagne — 237 abonnés" data-n="Berlin" data-d="GER" data-c="237" style="left:53.72%;top:20.82%"><i style="width:2.2px;height:2.2px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Cape Town, Afrique du Sud — 233 abonnés" data-n="Cape Town" data-d="RSA" data-c="233" style="left:55.12%;top:68.85%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Lima, Pérou — 228 abonnés" data-n="Lima" data-d="PER" data-c="228" style="left:28.60%;top:56.69%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Mexico City, Mexique — 217 abonnés" data-n="Mexico City" data-d="MEX" data-c="217" style="left:22.46%;top:39.27%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Porto Alegre, Brésil — 214 abonnés" data-n="Porto Alegre" data-d="BRA" data-c="214" style="left:35.77%;top:66.68%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Prague, Tchéquie — 210 abonnés" data-n="Prague" data-d="CZE" data-c="210" style="left:54.01%;top:22.17%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Genova, Italie — 208 abonnés" data-n="Genova" data-d="ITA" data-c="208" style="left:52.48%;top:25.33%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Cairo, Égypte — 207 abonnés" data-n="Cairo" data-d="EGY" data-c="207" style="left:58.68%;top:33.31%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Gdansk, Pologne — 204 abonnés" data-n="Gdansk" data-d="POL" data-c="204" style="left:55.18%;top:19.81%"><i style="width:2.1px;height:2.1px"></i></button><button class="pt-v" type="button" aria-pressed="false" aria-label="Toronto, Canada — 204 abonnés" data-n="Toronto" data-d="CAN" data-c="204" style="left:27.95%;top:25.75%"><i style="width:2.1px;height:2.1px"></i></button><svg class="liens-bourses" viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true"><path class="lien-fond" d="M518.2 121.0L518.2 81.0"/><path class="lien-trait" d="M518.2 121.0L518.2 81.0"/><circle cx="518.2" cy="121.0" r="3.4"/><path class="lien-fond" d="M514.9 129.8L514.9 169.8"/><path class="lien-trait" d="M514.9 129.8L514.9 169.8"/><circle cx="514.9" cy="129.8" r="3.4"/></svg><a class="pt-b bas" href="https://www.facebook.com/groups/BourseEquipierVoile/" target="_blank" rel="noopener" title="Bourse aux équipiers France — ≈ 138 000 participants" aria-label="Bourse aux équipiers France — ≈ 138 000 participants, bourse aux équipiers" style="left:50.67%;top:24.11%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers France</b><i>≈ 138 000 <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b bas" href="https://www.facebook.com/groups/BourseEquipierVoileLeman/" target="_blank" rel="noopener" title="Bourse aux équipiers Léman — ≈ 2 800 participants" aria-label="Bourse aux équipiers Léman — ≈ 2 800 participants, bourse aux équipiers" style="left:51.82%;top:16.19%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers Léman</b><i>≈ 2 800 <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b bord-g" href="https://www.facebook.com/groups/sailingcrewfinderpacific/" target="_blank" rel="noopener" title="Bourse aux équipiers Pacifique — ≈ 1 200 participants" aria-label="Bourse aux équipiers Pacifique — ≈ 1 200 participants, bourse aux équipiers" style="left:5.56%;top:50.00%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers Pacifique</b><i>≈ 1 200 <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b icone" href="https://www.facebook.com/groups/virtualregattainshore/" target="_blank" rel="noopener" title="Virtual Regatta Inshore" aria-label="Virtual Regatta Inshore, bourse aux équipiers" style="left:72.22%;top:61.11%"><img src="img/vr-inshore.png" alt="Virtual Regatta Inshore" width="20" height="20" loading="lazy"><span class="bulle"><b>Virtual Regatta Inshore</b></span></a><a class="pt-b bas" href="https://www.facebook.com/groups/BourseEquipierMarseille/" target="_blank" rel="noopener" title="Bourse aux équipiers Marseille — ≈ 5 800 participants" aria-label="Bourse aux équipiers Marseille — ≈ 5 800 participants, bourse aux équipiers" style="left:51.49%;top:33.95%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers Marseille</b><i>≈ 5 800 <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b errant" data-errant="1" href="https://www.facebook.com/groups/SailingCrewFinderWholeWorld/" target="_blank" rel="noopener" title="Bourse aux équipiers monde entier — ≈ 181 000 participants" aria-label="Bourse aux équipiers monde entier — ≈ 181 000 participants, bourse aux équipiers" style="left:58.93%;top:49.70%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers monde entier</b><i>≈ 181 000 <span data-t="bulle_participants">participants</span></i></span></a><div class="etiquette-v" hidden aria-live="polite"><img class="drapeau" alt="" width="22" height="15"><span class="nom"></span><span class="nb"></span></div></div><p class="legende-carte" data-t="legende_bourses"><span class="mini"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg></span><span>Bourses aux équipiers — un bateau par groupe Facebook, cliquez pour l'ouvrir.</span></p></section>
 <script>
 (function(){
   document.querySelectorAll('.planisphere').forEach(function(carte){
@@ -363,6 +584,31 @@
     });
     carte.addEventListener('keydown', function(e){ if(e.key === 'Escape') fermer(); });
   });
+  /* La bourse mondiale se promène : « c'est partout dans le monde, tu pourrais le faire bouger
+     aléatoirement dans le monde ? » (Nicolas, 19/11/2026). Elle s'immobilise sous le curseur, sinon
+     on ne peut ni la lire ni cliquer dessus, et elle ne bouge pas du tout si le visiteur a demandé
+     moins d'animation. */
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    document.querySelectorAll('.planisphere .pt-b[data-errant]').forEach(function(a){
+      var min = 6, maxX = 94, minY = 13, maxY = 87;
+      function ailleurs(){
+        a.style.left = (min + Math.random() * (maxX - min)).toFixed(2) + '%';
+        a.style.top = (minY + Math.random() * (maxY - minY)).toFixed(2) + '%';
+      }
+      var t = setInterval(ailleurs, 9000 + Math.random() * 5000);
+      a.addEventListener('mouseenter', function(){
+        clearInterval(t);
+        /* on la fige là où elle est : sans ça elle finit son glissement pendant qu'on la vise */
+        var r = a.getBoundingClientRect(), m = a.parentElement.getBoundingClientRect();
+        a.style.transition = 'none';
+        a.style.left = ((r.left - m.left + r.width / 2) / m.width * 100).toFixed(2) + '%';
+        a.style.top = ((r.top - m.top + r.height / 2) / m.height * 100).toFixed(2) + '%';
+        requestAnimationFrame(function(){ a.style.transition = ''; });
+      });
+      a.addEventListener('mouseleave', function(){ clearInterval(t); t = setInterval(ailleurs, 12000); });
+      a.addEventListener('focus', function(){ clearInterval(t); });
+    });
+  }
   document.addEventListener('click', function(e){
     if(!e.target.closest('.planisphere')){
       document.querySelectorAll('.planisphere .etiquette-v').forEach(function(b){ b.hidden = true; });
