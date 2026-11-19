@@ -56,9 +56,9 @@ var LUNE={azimutDebut:26, azimutFin:10, hauteur:25};
    vers le côté sous le vent (degrés). focale : angle de champ (degrés, petit = téléobjectif).
    lenteur : temps pour passer à ce cadrage (s). duree : durée du plan d'ouverture (s).
    decal : sur écran large, décale le bateau vers la droite pour dégager la légende (m). */
-var RECUL=1.0, DECAL=0, BORD_SECONDES=30;
+var RECUL=1.0, DECAL=0, BORD_SECONDES=30, ZS=1, FOCS=2.2;
 var PLANS={
-  ouverture:{d:31, h:3.2, av:1,  y:6.6, tour:46,  travelling:0,  focale:36, lenteur:1.0, duree:3.4, decal:7},
+  ouverture:{d:31, h:3.2, av:1,  y:6.6, tour:46,  travelling:0,  focale:36, lenteur:1.0, duree:0, decal:7},
   bord:     {d:31, h:11,  av:11, y:7.6, tour:0,   travelling:17, focale:40, lenteur:1.7, decal:3},
   virement: {d:24, h:6.5, av:4,  y:5.6, tour:0,   travelling:13, focale:40, lenteur:1.1, decal:4},
   bouee:    {d:32, h:6.5, av:5,  y:6.4, tour:24,  travelling:0,  focale:38, lenteur:2.0, decal:3},
