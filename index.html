@@ -214,7 +214,7 @@
   body{background:#0a1a2b}
   .entete{background:rgba(10,26,43,.94);border-bottom:1px solid rgba(226,58,62,.5)}
   h1{font-weight:300;letter-spacing:-.01em;line-height:.94;color:#fff}
-  h1 span{font-weight:900;color:#fff;letter-spacing:-.05em;
+  h1 span{font-weight:300;color:#fff;letter-spacing:-.05em;
     box-shadow:inset 0 -.16em 0 #e23a3e}
   .filet{background:linear-gradient(90deg,#e23a3e 0 34%,rgba(255,255,255,.18) 34% 100%);
     width:100%;max-width:16rem;height:1px}
@@ -226,7 +226,7 @@
   .grand{padding:0 1.1rem;border-left:1px solid rgba(255,255,255,.1)}
   .grand:first-child{border-left:0;padding-left:0}
   .grand b{color:#fff;font-weight:300;letter-spacing:-.02em;text-shadow:none}
-  .grand:first-child b{color:#e23a3e;font-weight:800}
+  .grand:first-child b{color:#fff;font-weight:300}
   .grand span{color:#9db2c6;letter-spacing:.14em;font-size:.58rem}
   .titre-cit{color:#9db2c6;letter-spacing:.22em;font-size:.64rem}
   .citation{--acc:#e23a3e;border-left:0;border-top:1px solid rgba(255,255,255,.14);
@@ -246,7 +246,9 @@
   .carte-jeu{background:transparent;border:0;border-top:1px solid rgba(226,58,62,.22);
     border-bottom:1px solid rgba(255,255,255,.09);border-radius:0;box-shadow:none}
   .carte-jeu .bouton{background:#e23a3e;border-color:#e23a3e;color:#fff;border-radius:0}
-  .reel{border-radius:0;border-color:rgba(255,255,255,.14)}
+  .reel{border-radius:0;border-color:rgba(255,255,255,.14);background:#0a1a2b}
+  .reel img{background:#0a1a2b}
+  .carte-reel{background:transparent}
   footer{color:#9db2c6}
   .cookies{background:rgba(8,21,33,.98);border:1px solid rgba(255,255,255,.18);border-radius:0}
   .cookies button{background:#e23a3e;color:#fff;border-radius:0}
@@ -263,7 +265,7 @@
   /* ---- les traits droits : ni vague ni cordage (19/11/2026) ----
      Les douze lignes décoratives ont été retirées à la demande de Nicolas. Ce qui reste : les filets
      du cadre CAP d'origine — rouge au-dessus des chiffres, blanc cassé en dessous, un trait plein. */
-  .hero h1{margin-bottom:2.1rem}
+  .hero h1{margin-bottom:2.6rem}
   .filet{display:none}
   .cadre{margin-top:3.2rem}
   .citation{padding-top:1.4rem}
@@ -274,11 +276,21 @@
   /* le fond suit le siècle : le bleu s'installe et se réchauffe au fil des années (19/11/2026).
      En 1771 presque rien, en 1840 un filet de brume, en 1906 le panneau, en 2026 le bleu de la nuit. */
   .citation:has(> blockquote){} 
-  .citation.ep-t18>blockquote{padding:1.1rem 1.3rem;background:rgba(95,127,156,.055)}
-  .citation.ep-t19>blockquote{padding:1.1rem 1.3rem;background:rgba(157,178,198,.075)}
-  .citation.ep-t20>blockquote{padding:1.1rem 1.3rem;background:rgba(226,58,62,.085)}
-  .citation.ep-t21>blockquote{padding:1.1rem 1.3rem;background:rgba(143,211,232,.1)}
-  .citation>blockquote{box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+  .citation>blockquote{padding:1.1rem 1.3rem}
+
+  /* ---- chaque siècle a son fond, pas un dégradé de bleu (Nicolas, 19/11/2026 ---- */
+  /* XVIIIe — le papier de la lettre de bord : sable chaud, aucune part de bleu */
+  .citation.ep-t18>blockquote{background:linear-gradient(175deg,rgba(214,196,158,.13),rgba(214,196,158,.055));
+    box-shadow:inset 0 0 0 1px rgba(214,196,158,.16)}
+  /* XIXe — l'encrage du livre relié : vert-de-gris profond */
+  .citation.ep-t19>blockquote{background:linear-gradient(175deg,rgba(96,146,136,.16),rgba(96,146,136,.06));
+    box-shadow:inset 0 0 0 1px rgba(96,146,136,.18)}
+  /* XXe — le carnet à la lampe de bord : rouge sourd, comme la trame du papier millimétré */
+  .citation.ep-t20>blockquote{background:linear-gradient(175deg,rgba(150,52,44,.2),rgba(150,52,44,.07));
+    box-shadow:inset 0 0 0 1px rgba(190,78,66,.2)}
+  /* XXIe — la vitre de passerelle : bleu d'écran franc, le seul froid */
+  .citation.ep-t21>blockquote{background:linear-gradient(175deg,rgba(72,132,196,.2),rgba(72,132,196,.07));
+    box-shadow:inset 0 0 0 1px rgba(110,164,220,.22)}
 
   /* ---- le filet au-dessus de chaque citation : plus fin, et la citation posée dessous (19/11/2026) ----
      Nicolas : « mettre un peu moins gras, et mettre une barre rouge, la barre rouge là qui est sur le MORE
@@ -306,7 +318,6 @@
   /* ---- les chiffres : le rouge sur les vues, le blanc sur les abonnés ---- */
   .grand b{font-weight:300;color:#fff}
   .grand.rouge b{color:#e23a3e;font-weight:500}
-  .grand:first-child b{color:#fff;font-weight:300}
 
   /* ---- annonceurs et jeu concours prennent le cadre des chiffres ---- */
   /* le cadre des chiffres, repris tel quel : filet rouge en haut, filet blanc en bas, et l'échelle de la
@@ -330,13 +341,14 @@
   /* ---- les reels un peu plus petits : ils prenaient toute la largeur ---- */
   .reels .trois{max-width:36rem;margin:0 auto;gap:.7rem}
 
-  /* ---- la barre du MORE traverse la page, et les filets s'allègent (Nicolas, 19/11/2026) ----
-     « la barre rouge là qui est sur le MORE, tout le long entre ces lignes, mais en plus fin ».
-     Le soulignement du MORE quitte la boîte du texte : il prend toute la largeur, en 3 px. */
+  /* ---- la barre rouge passe entre SAILING et MORE, à la largeur du mot MORE (Nicolas, 19/11/2026) ----
+     Le trait ne traverse plus la page : c'est la main courante du bloc, elle s'arrête au bord du MORE. */
   html{overflow-x:hidden}
+  h1{margin-bottom:2.6rem}
   h1 span{box-shadow:none;position:relative}
-  h1 span::after{content:"";position:absolute;left:50%;width:100vw;margin-left:-50vw;
-    height:3px;background:#e23a3e;bottom:-.1em}
+  h1 span::before{content:"";position:absolute;left:0;width:100%;height:3px;top:29%;
+    background:#e23a3e}
+  h1 span::after{content:none}
   /* les deux filets du cadre des chiffres étaient trop marqués : ils s'effacent presque */
   .cadre{border-top-color:rgba(226,58,62,.22) !important;border-bottom-color:rgba(255,255,255,.09) !important}
 
@@ -397,7 +409,7 @@
 
 <section class="chiffres">
   <h2 data-t="chiffres">Sailing More en chiffres</h2>
-  <div class="cadre"><div class="grand"><b>141 739</b><span data-t="abonnes">abonnes</span></div><div class="grand rouge"><b>≈ 46 366 562</b><span data-t="vues">vues</span></div><div class="grand rouge"><b>963</b><span data-t="contenus">contenus</span></div><div class="grand rouge"><b>≈ 791 475</b><span data-t="vues28">vues28</span></div><div class="grand rouge"><b>347 287</b><span data-t="bourse">bourse</span></div></div>
+  <div class="cadre"><div class="grand"><b>141 739</b><span data-t="abonnes">abonnes</span></div><div class="grand rouge"><b>≈ 46 366 562</b><span data-t="vues">vues</span></div><div class="grand"><b>963</b><span data-t="contenus">contenus</span></div><div class="grand rouge"><b>≈ 791 475</b><span data-t="vues28">vues28</span></div><div class="grand"><b>347 287</b><span data-t="bourse">bourse</span></div></div>
 </section>
 
 <section class="citations">
@@ -415,7 +427,7 @@
 .planisphere .pt-v i{display:block;border-radius:50%;background:#e23a3e;transition:transform .18s}
 .planisphere .pt-v:hover i,.planisphere .pt-v:focus-visible i{transform:scale(1.55)}
 .planisphere .pt-v:focus-visible{outline:1px solid rgba(238,243,247,.7);outline-offset:4px}
-.planisphere .pt-v[aria-pressed="true"] i{transform:scale(2.6);box-shadow:0 0 0 3px rgba(238,243,247,.28)}
+.planisphere .pt-v[aria-pressed="true"] i{transform:scale(3.4);box-shadow:0 0 0 3px rgba(238,243,247,.3)}
 .etiquette-v{position:absolute;z-index:4;display:flex;align-items:center;gap:7px;
   padding:5px 9px 5px 7px;background:#0b1c2c;border:1px solid rgba(238,243,247,.22);
   color:#eef3f7;font-size:13px;letter-spacing:.01em;white-space:nowrap;
@@ -443,7 +455,7 @@
       var dr = bulle.querySelector('.drapeau');
       if(b.dataset.d){ dr.src = 'drapeaux/' + b.dataset.d + '.png'; dr.hidden = false; } else { dr.hidden = true; }
       bulle.querySelector('.nom').textContent = b.dataset.n || '';
-      bulle.querySelector('.nb').textContent = b.dataset.c ? b.dataset.c + ' abonnés' : '';
+      bulle.querySelector('.nb').textContent = '';   /* le nombre d'abonnés ne s'affiche pas (Nicolas, 19/11/2026) */
       bulle.hidden = false;
       var bas = y < 44;                      /* pastille trop haut : la bulle passe dessous */
       bulle.style.left = Math.min(Math.max(x, 56), d.width - 56) + 'px';
