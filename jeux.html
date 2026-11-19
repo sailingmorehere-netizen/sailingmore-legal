@@ -32,7 +32,13 @@
     <li>Le gagnant est annoncé le dimanche à 18&nbsp;h, en story.</li>
     <li>La participation est gratuite et sans obligation d'achat.</li>
   </ul>
-  <p>Écrire à <a href="mailto:hello.sailingmore@gmail.com">hello.sailingmore@gmail.com</a>.</p>
+  <p>Écrire à <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">l'adresse du blog</a>.</p>
 </div>
+<script>
+document.querySelectorAll('a.courriel').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault();
+  window.location.href = 'mailto:' + a.dataset.a + '@' + a.dataset.b;
+}));
+</script>
 </body>
 </html>
