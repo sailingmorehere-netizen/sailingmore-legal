@@ -56,7 +56,7 @@ var LUNE={azimutDebut:26, azimutFin:10, hauteur:25};
    vers le côté sous le vent (degrés). focale : angle de champ (degrés, petit = téléobjectif).
    lenteur : temps pour passer à ce cadrage (s). duree : durée du plan d'ouverture (s).
    decal : sur écran large, décale le bateau vers la droite pour dégager la légende (m). */
-var RECUL=1.0, DECAL=18, ZS=1, FOCS=2.2;
+var RECUL=1.0, DECAL=0, ZS=1, FOCS=2.2;
 var PLANS={
   ouverture:{d:31, h:3.2, av:1,  y:6.6, tour:46,  travelling:0,  focale:36, lenteur:1.0, duree:3.4, decal:7},
   bord:     {d:31, h:11,  av:11, y:4.2, tour:0,   travelling:17, focale:40, lenteur:1.7, decal:3},
@@ -273,7 +273,7 @@ function pas(dt){
 
   /* ---- la route : directe si la bouée est hors de la zone morte, sinon au près en tirant des bords */
   if(S.mode==='route'){
-    if(dist<ARRIVEE || S.t>80){ S.mode='arrivee'; S.man=null }
+    if(dist<ARRIVEE){ bouee.x=S.x+ux*700; bouee.z=S.z+uz*700; }
     else{
       var seuil=S.direct ? PRES-1*RAD : PRES+1.5*RAD, avant=S.amure;
       if(Math.abs(theta)>=seuil){ S.direct=true; S.amure=-sgn(theta) }
@@ -1347,7 +1347,7 @@ function image(now){
   if(etat.mesure && etat.images>25){ etat.mesure.push(dt); if(etat.mesure.length===50){ var m=0; etat.mesure.forEach(function(x){m+=x}); m/=50; var lent=m>0.024; if(lent){ if(vue.pr>1.05){ vue.plafond=Math.max(1,vue.pr*0.72); tailler() } else if(vue.qualite>0){ vue.qualite=0 } else lent=false } etat.mesure=lent?[]:null; etat.ms=m*1000 } }
   if(S.mode==='pose'){ S.fin+=dt; S.echelle=1-sstep(0,2.6,S.fin); if(S.fin>=2.6) S.mode='repos' }
   pas(dt*S.echelle); rendre(); afficher(false);
-  if(S.mode==='repos'){ arreter(); etat.veut=false; elRejouer.hidden=false; afficher(true); return }
+  if(S.mode==='repos'){ arreter(); afficher(true); etat.veut=false; clearTimeout(etat.reprise); etat.reprise=setTimeout(function(){ etat.veut=true; repartir() },900); return }
   etat.raf=requestAnimationFrame(image);
 }
 function lancer(){ if(etat.tourne||!gl) return; if(!etat.visible||!etat.aLecran) return; etat.tourne=true; etat.dernier=performance.now(); etat.raf=requestAnimationFrame(image) }
@@ -1430,7 +1430,7 @@ function demarrer(){
   nouveauDepart(VENT_DEPART*RAD);
   var ok=false; try{ ok=initGL() }catch(err){ ok=false; if(window.console) console.error(err) }
   if(!ok){ var s=document.createElement('p'); s.className='secours'; s.textContent='Ce navigateur n’affiche pas la scène animée (WebGL indisponible). La légende ci-dessous décrit la manœuvre.'; cadre.appendChild(s); cadre.classList.add('pret'); return }
-  etat.reduit=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  etat.reduit=false;
   tailler();
   if(etat.reduit){
     /* image fixe soignée : on avance la simulation sans l'afficher, puis on pose une seule image */
