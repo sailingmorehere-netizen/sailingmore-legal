@@ -74,7 +74,68 @@
   .filet{display:none}
   .cadre{margin-top:3.2rem}
   .citation{padding-top:1.4rem}
+  /* le filet fin de l'époque, hérité : on le retire, il est remplacé par la teinte du siècle */
+  .ep20 blockquote{border-left:0}
+  .ep20 blockquote::before{content:none}
   .citation blockquote{padding-bottom:.9rem}
+  /* le fond suit le siècle : le bleu s'installe et se réchauffe au fil des années (19/11/2026).
+     En 1771 presque rien, en 1840 un filet de brume, en 1906 le panneau, en 2026 le bleu de la nuit. */
+  .citation:has(> blockquote){} 
+  .citation.ep-t18>blockquote{padding:1.1rem 1.3rem;background:rgba(95,127,156,.055)}
+  .citation.ep-t19>blockquote{padding:1.1rem 1.3rem;background:rgba(157,178,198,.075)}
+  .citation.ep-t20>blockquote{padding:1.1rem 1.3rem;background:rgba(226,58,62,.085)}
+  .citation.ep-t21>blockquote{padding:1.1rem 1.3rem;background:rgba(143,211,232,.1)}
+  .citation>blockquote{box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+
+  /* ---- le filet au-dessus de chaque citation : plus fin, et la citation posée dessous (19/11/2026) ----
+     Nicolas : « mettre un peu moins gras, et mettre une barre rouge, la barre rouge là qui est sur le MORE
+     tout le long entre ces lignes, mais en plus fin ». La barre rouge du MORE court donc sur toute la
+     largeur de l'écran, en 1 px, et chaque citation s'ouvre sur un filet fin qui reprend la teinte de son siècle. */
+  .fenetre{padding-left:calc(max(1.2rem,(100vw - 64rem)/2))}
+  .fenetre::before,.fenetre::after{content:"";position:absolute;left:0;right:0;height:1px;z-index:2;pointer-events:none}
+  .fenetre::before{top:0;background:#e23a3e}
+  .fenetre::after{bottom:0;background:rgba(255,255,255,.16)}
+  .citation{border-top:1px solid rgba(255,255,255,.16);position:relative}
+  .citation::after{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;
+    background:var(--teinte,rgba(255,255,255,.3))}
+
+  /* ---- le fond change avec le siècle de la citation ---- */
+  .ep-t18{--teinte:#5f7f9c}
+  .ep-t19{--teinte:#9db2c6}
+  .ep-t20{--teinte:#e23a3e}
+  .ep-t21{--teinte:#8fd3e8}
+  .titre-cit{
+    color:#9db2c6;font-size:.64rem;letter-spacing:.22em;font-weight:500;text-transform:uppercase;
+    max-width:64rem;margin:0 auto 1.5rem;padding:0 1.2rem;display:flex;align-items:center;gap:.9rem}
+  .titre-cit::after{content:"";flex:1 1 auto;height:1px;
+    background:linear-gradient(90deg,rgba(226,58,62,.75),rgba(226,58,62,0))}
+
+  /* ---- les chiffres : le rouge sur les vues, le blanc sur les abonnés ---- */
+  .grand b{font-weight:300;color:#fff}
+  .grand.rouge b{color:#e23a3e;font-weight:500}
+  .grand:first-child b{color:#fff;font-weight:300}
+
+  /* ---- annonceurs et jeu concours prennent le cadre des chiffres ---- */
+  /* le cadre des chiffres, repris tel quel : filet rouge en haut, filet blanc en bas, et l'échelle de la
+     grille au lieu de la largeur que le bloc avait */
+  section.concours{width:min(100% - 2.4rem,64rem) !important;margin:5.5rem auto}
+  /* le cadre des chiffres : filet rouge franc en haut, filet clair en bas, la même colonne que la grille */
+  section.concours,.kit-bloc{width:min(100% - 2.4rem,64rem) !important;margin:5.5rem auto !important;
+    padding:0 !important;max-width:none !important}
+  .kit-bloc .carte-kit,.carte-jeu{width:100%}
+  .carte-kit,.carte-jeu{border-radius:0;border:0;border-top:1px solid #e23a3e;
+    border-bottom:1px solid rgba(255,255,255,.16);background:transparent;box-shadow:none;
+    padding:1.9rem 2rem;margin:0;width:auto}
+  .kit-bloc{width:min(100% - 2.4rem,64rem) !important;margin:5.5rem auto !important;padding:0 !important;max-width:none !important}
+  .kit-bloc .carte-kit{width:100%}
+  .carte-kit h3,.carte-jeu h3{font-weight:300;letter-spacing:-.015em;font-size:clamp(1.5rem,3.4vw,2rem)}
+  .titre-idee{display:flex;align-items:center;gap:.9rem;margin:0 0 1.5rem;padding:0 .2rem;
+    color:#9db2c6;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase}
+  .titre-idee::after{content:"";flex:1 1 auto;height:1px;
+    background:linear-gradient(90deg,rgba(226,58,62,.6),rgba(226,58,62,0))}
+
+  /* ---- les reels un peu plus petits : ils prenaient toute la largeur ---- */
+  .reels .trois{max-width:36rem;margin:0 auto;gap:.7rem}
 
 
   /* ---- le cordage respire : la tresse glisse d'une tuile pile, lentement, chaque ligne à son rythme ---- */
@@ -84,7 +145,7 @@
   @keyframes corde240{from{background-position-x:0}to{background-position-x:240px}}
   .entete{animation:corde168 110s linear infinite}
   .citation blockquote{animation:corde126 132s linear infinite}
-  .carte-kit::after,.carte-jeu::after{animation:corde240 158s linear infinite;animation-delay:-52s}
+  
   footer{animation:corde168 121s linear infinite;animation-delay:-23s}
   .cookies{animation:corde220 143s linear infinite;animation-delay:-61s}
   /* socle commun aux déclinaisons : grille tenue, citations de même hauteur */
