@@ -214,8 +214,7 @@
   body{background:#0a1a2b}
   .entete{background:rgba(10,26,43,.94);border-bottom:1px solid rgba(226,58,62,.5)}
   h1{font-weight:300;letter-spacing:-.01em;line-height:.94;color:#fff}
-  h1 span{font-weight:300;color:#fff;letter-spacing:-.05em;
-    box-shadow:inset 0 -.16em 0 #e23a3e}
+  h1 span{font-weight:300;color:#fff;letter-spacing:-.05em}
   .filet{background:linear-gradient(90deg,#e23a3e 0 34%,rgba(255,255,255,.18) 34% 100%);
     width:100%;max-width:16rem;height:1px}
   .surtitre{font-weight:300;letter-spacing:-.01em;color:#dbe6ef}
@@ -272,7 +271,7 @@
      Les douze lignes décoratives ont été retirées à la demande de Nicolas. Ce qui reste : les filets
      du cadre CAP d'origine — rouge au-dessus des chiffres, blanc cassé en dessous, un trait plein. */
   .hero h1{margin-bottom:2.6rem}
-  .filet{display:none}
+  .hero .filet{display:none}
   .cadre{margin-top:3.2rem}
   .citation{padding-top:1.4rem}
   /* le filet fin de l'époque, hérité : on le retire, il est remplacé par la teinte du siècle */
@@ -381,14 +380,16 @@
   .reels .trois{max-width:36rem;margin:0 auto;gap:.7rem}
 
   /* ---- la barre rouge passe entre SAILING et MORE, à la largeur du mot MORE (Nicolas, 19/11/2026) ----
-     Le trait ne traverse plus la page : c'est la main courante du bloc, elle s'arrête au bord du MORE. */
+     Le trait ne traverse plus la page : c'est la main courante du bloc, elle s'arrête au bord du MORE.
+     Réglé sur .hero seulement : ailleurs (page du jeu, pages légales) un h1 porte un mot, pas un titre
+     en deux lignes, et la barre y tombait au milieu du texte. */
   html{overflow-x:hidden}
-  h1{margin-bottom:2.6rem}
-  h1 span{box-shadow:none;position:relative;display:block;width:max-content;max-width:100%;
+  .hero h1{margin-bottom:2.6rem}
+  .hero h1 span{box-shadow:none;position:relative;display:block;width:max-content;max-width:100%;
     margin-inline:auto}
-  h1 span::before{content:"";position:absolute;left:0;width:calc(100% - .05em);height:3px;top:.018em;
+  .hero h1 span::before{content:"";position:absolute;left:0;width:calc(100% - .05em);height:3px;top:.018em;
     background:#e23a3e}
-  h1 span::after{content:none}
+  .hero h1 span::after{content:none}
   /* les deux filets du cadre des chiffres étaient trop marqués : ils s'effacent presque */
   .cadre{border-top-color:rgba(226,58,62,.22) !important;border-bottom-color:rgba(255,255,255,.09) !important}
 

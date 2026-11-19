@@ -6,23 +6,31 @@
 <title>Le jeu concours — Sailing More</title>
 <meta name="description" content="Le jeu concours Sailing More : six jours de stories, un tirage le dimanche.">
 <style>
-  body{margin:0;background:#0a1a2b;color:#eef3f7;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
-    line-height:1.6}
-  .page{max-width:40rem;margin:0 auto;padding:3.5rem 1.4rem 4rem}
-  a.retour{color:#9db2c6;text-decoration:none;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase}
-  h1{font-size:clamp(2rem,7vw,3rem);line-height:1.05;margin:1.6rem 0 .4rem;letter-spacing:-.02em}
+  body{margin:0;background:radial-gradient(120% 90% at 50% 0%,#0f2438 0%,#0a1a2b 55%,#050f1c 100%);
+    color:#eef3f7;font-family:system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  .page{max-width:40rem;margin:0 auto;padding:3.6rem 1.4rem 4rem}
+  a.retour{color:#9db2c6;text-decoration:none;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+    font-weight:500}
+  h1{font-size:clamp(2rem,7vw,3rem);line-height:1.04;margin:1.6rem 0 .4rem;letter-spacing:-.01em;
+    font-weight:300}
   h1 span{color:#ffffff}
-  .filet{width:4rem;height:3px;background:#e23a3e;margin:1.2rem 0 1.8rem}
-  p{color:#cfe0ee}
-  .date{font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:#e23a3e;margin-top:2.6rem}
-  ul{color:#cfe0ee;padding-left:1.1rem}
-  li{margin:.4rem 0}
+  .filet{width:3.4rem;height:3px;background:#e23a3e;margin:1.2rem 0 1.8rem}
+  .page .filet{width:3.4rem;height:3px;background:#e23a3e;margin:1.2rem 0 1.8rem}
+  p{color:#eef3f7}
+  .date{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:#e23a3e;margin-top:2.8rem;
+    font-weight:500}
+  ul{color:#eef3f7;padding-left:1.1rem}
+  li{margin:.5rem 0;color:#eef3f7}
+  a{color:#fff;text-decoration:none}
+  a.courriel{text-decoration:underline;text-decoration-color:rgba(226,58,62,.7);
+    text-decoration-thickness:1px;text-underline-offset:3px}
+  a.courriel:hover{text-decoration-color:#e23a3e}
 
   body{background:#0a1a2b}
   .entete{background:rgba(10,26,43,.94);border-bottom:1px solid rgba(226,58,62,.5)}
   h1{font-weight:300;letter-spacing:-.01em;line-height:.94;color:#fff}
-  h1 span{font-weight:900;color:#fff;letter-spacing:-.05em;
-    box-shadow:inset 0 -.16em 0 #e23a3e}
+  h1 span{font-weight:300;color:#fff;letter-spacing:-.05em}
   .filet{background:linear-gradient(90deg,#e23a3e 0 34%,rgba(255,255,255,.18) 34% 100%);
     width:100%;max-width:16rem;height:1px}
   .surtitre{font-weight:300;letter-spacing:-.01em;color:#dbe6ef}
@@ -33,7 +41,7 @@
   .grand{padding:0 1.1rem;border-left:1px solid rgba(255,255,255,.1)}
   .grand:first-child{border-left:0;padding-left:0}
   .grand b{color:#fff;font-weight:300;letter-spacing:-.02em;text-shadow:none}
-  .grand:first-child b{color:#e23a3e;font-weight:800}
+  .grand:first-child b{color:#fff;font-weight:300}
   .grand span{color:#9db2c6;letter-spacing:.14em;font-size:.58rem}
   .titre-cit{color:#9db2c6;letter-spacing:.22em;font-size:.64rem}
   .citation{--acc:#e23a3e;border-left:0;border-top:1px solid rgba(255,255,255,.14);
@@ -47,13 +55,21 @@
     text-transform:uppercase;white-space:normal}
   .planisphere{border-radius:0;border-color:rgba(255,255,255,.14);background:#081521}
   .pt-v i{background:#e23a3e;box-shadow:none}
-  .carte-kit{border-radius:0;border:1px solid rgba(255,255,255,.16);
-    border-top:2px solid #e23a3e !important;background:transparent}
+  .carte-kit{border-radius:0;border:0;border-top:1px solid rgba(226,58,62,.22);
+    border-bottom:1px solid rgba(255,255,255,.09);background:transparent;box-shadow:none}
   .carte-kit .bouton{background:transparent;color:#e23a3e;border:1px solid #e23a3e;border-radius:0}
-  .carte-jeu{background:transparent;border-color:rgba(255,255,255,.16);border-radius:0;
-    border-top:2px solid #e23a3e !important}
+  .carte-jeu{background:transparent;border:0;border-top:1px solid rgba(226,58,62,.22);
+    border-bottom:1px solid rgba(255,255,255,.09);border-radius:0;box-shadow:none}
   .carte-jeu .bouton{background:#e23a3e;border-color:#e23a3e;color:#fff;border-radius:0}
-  .reel{border-radius:0;border-color:rgba(255,255,255,.14)}
+  /* ---- les boutons deviennent des filets : un mot, un trait rouge dessous (Nicolas, 19/11/2026) ----
+     « les boutons en dessous, essaye qu'ils soient un peu comme tes barres » */
+  .carte-kit .bouton,.carte-jeu .bouton{background:none;border:0;border-bottom:1px solid #e23a3e;
+    border-radius:0;color:#fff;padding:.15rem 0 .25rem;font-size:.78rem;font-weight:400;
+    letter-spacing:.12em;text-transform:uppercase;transition:border-color .2s}
+  .carte-kit .bouton:hover,.carte-jeu .bouton:hover{background:none;border-bottom-color:#fff}
+  .reel{border-radius:0;border-color:rgba(255,255,255,.14);background:#0a1a2b}
+  .reel img{background:#0a1a2b}
+  .carte-reel{background:transparent}
   footer{color:#9db2c6}
   .cookies{background:rgba(8,21,33,.98);border:1px solid rgba(255,255,255,.18);border-radius:0}
   .cookies button{background:#e23a3e;color:#fff;border-radius:0}
@@ -70,8 +86,8 @@
   /* ---- les traits droits : ni vague ni cordage (19/11/2026) ----
      Les douze lignes décoratives ont été retirées à la demande de Nicolas. Ce qui reste : les filets
      du cadre CAP d'origine — rouge au-dessus des chiffres, blanc cassé en dessous, un trait plein. */
-  .hero h1{margin-bottom:2.1rem}
-  .filet{display:none}
+  .hero h1{margin-bottom:2.6rem}
+  .hero .filet{display:none}
   .cadre{margin-top:3.2rem}
   .citation{padding-top:1.4rem}
   /* le filet fin de l'époque, hérité : on le retire, il est remplacé par la teinte du siècle */
@@ -81,11 +97,54 @@
   /* le fond suit le siècle : le bleu s'installe et se réchauffe au fil des années (19/11/2026).
      En 1771 presque rien, en 1840 un filet de brume, en 1906 le panneau, en 2026 le bleu de la nuit. */
   .citation:has(> blockquote){} 
-  .citation.ep-t18>blockquote{padding:1.1rem 1.3rem;background:rgba(95,127,156,.055)}
-  .citation.ep-t19>blockquote{padding:1.1rem 1.3rem;background:rgba(157,178,198,.075)}
-  .citation.ep-t20>blockquote{padding:1.1rem 1.3rem;background:rgba(226,58,62,.085)}
-  .citation.ep-t21>blockquote{padding:1.1rem 1.3rem;background:rgba(143,211,232,.1)}
-  .citation>blockquote{box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+  .citation>blockquote{padding:1.1rem 1.3rem}
+
+  /* ---- chaque siècle a son fond ET sa typographie (Nicolas, 19/11/2026) : quatre matières, pas
+     quatre teintes du même bleu. On doit reconnaître l'époque sans lire la date. ---- */
+  .citation>blockquote{padding:1.1rem 1.3rem;border:0}
+
+  /* XVIIIe — la page d'un livre ancien : papier verge, encre sépia, italique centrée, double filet */
+  .citation.ep-t18>blockquote{
+    background:
+      repeating-linear-gradient(90deg,rgba(120,97,60,.05) 0 1px,transparent 1px 8px),
+      linear-gradient(180deg,#e9dfc6,#e0d2b2);
+    color:#3b2d17;font-family:"Iowan Old Style","Palatino Linotype",Palatino,Garamond,Georgia,serif;
+    font-style:italic;font-size:1.02rem;line-height:1.82;letter-spacing:.01em;text-align:center;
+    box-shadow:inset 0 0 0 1px rgba(92,71,38,.42),inset 0 0 0 4px #e9dfc6,inset 0 0 0 5px rgba(92,71,38,.26)}
+  .citation.ep-t18>blockquote::before{content:"❧";display:block;color:#8f3a2c;font-style:normal;
+    font-size:1.15rem;line-height:1;margin:0 0 .55rem}
+  .citation.ep-t18 figcaption strong{color:#e8d6b0}
+
+  /* XIXe — le livre relié du XIXe : papier ivoire, encre noire, lettrine rouge, filets d'encre */
+  .citation.ep-t19>blockquote{
+    background:linear-gradient(180deg,#f4eddc,#ece2cb);
+    color:#1b1b17;font-family:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+    font-size:1.06rem;line-height:1.72;text-align:left;
+    border-top:1px solid rgba(27,27,23,.6);border-bottom:1px solid rgba(27,27,23,.6);
+    box-shadow:inset 0 4px 0 -3px rgba(27,27,23,.45),inset 0 -4px 0 -3px rgba(27,27,23,.45)}
+  .citation.ep-t19>blockquote::first-letter{font-size:3.2rem;line-height:.78;float:left;
+    color:#8c2b22;font-weight:700;margin:.12rem .5rem 0 0}
+  .citation.ep-t19 figcaption strong{color:#e6dcc0}
+
+  /* XXe — la feuille dactylographiée : papier bistre, encre bleu-noir, marge rouge, monospace */
+  .citation.ep-t20>blockquote{
+    background:
+      linear-gradient(90deg,transparent 24px,rgba(168,58,48,.45) 24px 25px,transparent 25px),
+      linear-gradient(180deg,#f0ebdf,#e4ddcd);
+    color:#202a3a;font-family:ui-monospace,"Courier New",Courier,monospace;
+    font-size:.9rem;line-height:1.75;letter-spacing:-.005em;text-align:left;padding-left:2.5rem;
+    box-shadow:inset 0 0 0 1px rgba(60,58,48,.22),0 1px 0 rgba(0,0,0,.18)}
+  .citation.ep-t20 figcaption{font-family:ui-monospace,"Courier New",monospace;color:#93a3ad}
+  .citation.ep-t20 figcaption strong{color:#e2e8ec}
+
+  /* XXIe — l'enseigne : aplat rouge plein, capitales serrées, blanc pur */
+  .citation.ep-t21>blockquote{
+    background:#e23a3e;color:#fff;
+    font-family:ui-sans-serif,system-ui,"Helvetica Neue",Arial,sans-serif;
+    font-size:1rem;font-weight:800;letter-spacing:.005em;text-transform:uppercase;
+    line-height:1.34;text-align:left;padding:1.25rem 1.35rem;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+  .citation.ep-t21 figcaption strong{color:#fff}
 
   /* ---- le filet au-dessus de chaque citation : plus fin, et la citation posée dessous (19/11/2026) ----
      Nicolas : « mettre un peu moins gras, et mettre une barre rouge, la barre rouge là qui est sur le MORE
@@ -113,7 +172,6 @@
   /* ---- les chiffres : le rouge sur les vues, le blanc sur les abonnés ---- */
   .grand b{font-weight:300;color:#fff}
   .grand.rouge b{color:#e23a3e;font-weight:500}
-  .grand:first-child b{color:#fff;font-weight:300}
 
   /* ---- annonceurs et jeu concours prennent le cadre des chiffres ---- */
   /* le cadre des chiffres, repris tel quel : filet rouge en haut, filet blanc en bas, et l'échelle de la
@@ -123,8 +181,8 @@
   section.concours,.kit-bloc{width:min(100% - 2.4rem,64rem) !important;margin:5.5rem auto !important;
     padding:0 !important;max-width:none !important}
   .kit-bloc .carte-kit,.carte-jeu{width:100%}
-  .carte-kit,.carte-jeu{border-radius:0;border:0;border-top:1px solid #e23a3e;
-    border-bottom:1px solid rgba(255,255,255,.16);background:transparent;box-shadow:none;
+  .carte-kit,.carte-jeu{border-radius:0;border:0;border-top:1px solid rgba(226,58,62,.22);
+    border-bottom:1px solid rgba(255,255,255,.09);background:transparent;box-shadow:none;
     padding:1.9rem 2rem;margin:0;width:auto}
   .kit-bloc{width:min(100% - 2.4rem,64rem) !important;margin:5.5rem auto !important;padding:0 !important;max-width:none !important}
   .kit-bloc .carte-kit{width:100%}
@@ -137,13 +195,17 @@
   /* ---- les reels un peu plus petits : ils prenaient toute la largeur ---- */
   .reels .trois{max-width:36rem;margin:0 auto;gap:.7rem}
 
-  /* ---- la barre du MORE traverse la page, et les filets s'allègent (Nicolas, 19/11/2026) ----
-     « la barre rouge là qui est sur le MORE, tout le long entre ces lignes, mais en plus fin ».
-     Le soulignement du MORE quitte la boîte du texte : il prend toute la largeur, en 3 px. */
+  /* ---- la barre rouge passe entre SAILING et MORE, à la largeur du mot MORE (Nicolas, 19/11/2026) ----
+     Le trait ne traverse plus la page : c'est la main courante du bloc, elle s'arrête au bord du MORE.
+     Réglé sur .hero seulement : ailleurs (page du jeu, pages légales) un h1 porte un mot, pas un titre
+     en deux lignes, et la barre y tombait au milieu du texte. */
   html{overflow-x:hidden}
-  h1 span{box-shadow:none;position:relative}
-  h1 span::after{content:"";position:absolute;left:50%;width:100vw;margin-left:-50vw;
-    height:3px;background:#e23a3e;bottom:-.1em}
+  .hero h1{margin-bottom:2.6rem}
+  .hero h1 span{box-shadow:none;position:relative;display:block;width:max-content;max-width:100%;
+    margin-inline:auto}
+  .hero h1 span::before{content:"";position:absolute;left:0;width:calc(100% - .05em);height:3px;top:.018em;
+    background:#e23a3e}
+  .hero h1 span::after{content:none}
   /* les deux filets du cadre des chiffres étaient trop marqués : ils s'effacent presque */
   .cadre{border-top-color:rgba(226,58,62,.22) !important;border-bottom-color:rgba(255,255,255,.09) !important}
 
@@ -160,8 +222,8 @@
   .cookies{animation:corde220 143s linear infinite;animation-delay:-61s}
   /* socle commun aux déclinaisons : grille tenue, citations de même hauteur */
   .chiffres{max-width:64rem}
-  /* les blocs du site gardent leur géométrie mais perdent le bleu d'origine */
-  .carte-kit,.carte-jeu{background:rgba(255,255,255,.025);border-color:rgba(255,255,255,.16)}
+  /* les blocs du site gardent leur géométrie ; chaque direction dessine ses cartes elle-même,
+     sinon le socle repeint par-dessus et les cartes ne ressemblent plus au cadre des chiffres */
   .carte-kit p,.carte-jeu p{color:rgba(238,241,244,.72)}
   .planisphere{border-color:rgba(255,255,255,.14);background:rgba(15,36,56,.6)}
 
