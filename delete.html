@@ -7,7 +7,7 @@
 <p><small>Last updated: 5 November 2026</small></p>
 
 <h2>How to ask</h2>
-<p>Write to <a href="mailto:sailingmorehere@gmail.com?subject=Data%20deletion%20request">sailingmorehere@gmail.com</a>
+<p>Write to <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com" data-sujet="Data deletion request">demander la suppression</a>
 with the subject “Data deletion request”, from the account or address you used, and say what you want
 removed: a message, a conversation, a photograph, or everything we hold about you.</p>
 
@@ -33,7 +33,7 @@ with the platform's own tools.</p>
 <hr>
 <h1>Suppression de vos données</h1>
 <p><strong>Comment demander</strong> : écrivez à
-<a href="mailto:sailingmorehere@gmail.com?subject=Demande%20de%20suppression">sailingmorehere@gmail.com</a>
+<a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com" data-sujet="Demande de suppression">demander la suppression</a>
 avec l'objet « Demande de suppression », depuis le compte ou l'adresse que vous avez utilisés, et
 précisez ce que vous voulez retirer : un message, une conversation, une photo, ou tout ce que nous
 détenons.</p>
@@ -46,5 +46,14 @@ aussi, dans le même délai.</p>
 <p><strong>Délai</strong> : nous confirmons sous 30 jours, et nous vous écrivons quand c'est fait.</p>
 <p><strong>Si votre message est sur Facebook ou Instagram</strong> : ces plateformes en gardent leur propre
 copie, que nous ne pouvons pas supprimer. Son effacement se fait depuis votre compte, avec leurs outils.</p>
+
+<script>
+document.querySelectorAll('a.courriel').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault();
+  let lien = 'mailto:' + a.dataset.a + '@' + a.dataset.b;
+  if (a.dataset.sujet) lien += '?subject=' + encodeURIComponent(a.dataset.sujet);
+  window.location.href = lien;
+}));
+</script>
 </body></html>
 

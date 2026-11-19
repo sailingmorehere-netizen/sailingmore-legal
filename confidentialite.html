@@ -31,7 +31,7 @@ it is being answered, then delete it.</p>
 
 <h2>Your rights</h2>
 <p>You may ask what we hold about you, ask us to correct it, or ask us to delete it: write to
-<a href="mailto:sailingmorehere@gmail.com">sailingmorehere@gmail.com</a>. We answer within 30 days.
+<a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">l'adresse du blog</a>. We answer within 30 days.
 How deletion works is described on <a href="delete.html">this page</a>.</p>
 
 <h2>Cookies</h2>
@@ -52,7 +52,16 @@ l'ait lu au préalable.</p>
 <p><strong>Où c'est conservé</strong> : sur notre propre serveur, sous notre contrôle, et dans notre
 boîte mail. Une conversation est conservée le temps d'y répondre, puis supprimée.</p>
 <p><strong>Vos droits</strong> : demander ce que nous détenons, le faire corriger, le faire supprimer —
-écrivez à <a href="mailto:sailingmorehere@gmail.com">sailingmorehere@gmail.com</a>. Réponse sous 30 jours.
+écrivez à <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">l'adresse du blog</a>. Réponse sous 30 jours.
 La suppression est décrite sur <a href="delete.html">cette page</a>.</p>
 <p><strong>Cookies</strong> : cette page n'en pose aucun et ne mesure aucune audience.</p>
+
+<script>
+document.querySelectorAll('a.courriel').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault();
+  let lien = 'mailto:' + a.dataset.a + '@' + a.dataset.b;
+  if (a.dataset.sujet) lien += '?subject=' + encodeURIComponent(a.dataset.sujet);
+  window.location.href = lien;
+}));
+</script>
 </body></html>
