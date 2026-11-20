@@ -182,16 +182,27 @@
   .stories h2,.reels h2,.monde h2{white-space:nowrap;font-size:clamp(.98rem,3.05vw,1.62rem);
     letter-spacing:-.012em;margin:0 0 1.5rem;line-height:1.15;color:var(--toile);
     font-weight:700}
-  .pelli{display:flex;gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;
-    padding:.35rem .2rem 1.1rem;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .pelli{position:relative;height:clamp(20rem,50vw,27rem);
+    display:flex;align-items:flex-start;justify-content:center;overflow:hidden;
+    padding:1.2rem .2rem 0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .pelli::-webkit-scrollbar{display:none}
-  .vignette{flex:none;width:9.8rem;scroll-snap-align:start;text-decoration:none;
-    transition:transform .18s ease}
+  /* Les stories tenues en éventail, comme un jeu de cartes (Nicolas, 20/11/2026). C'est la présentation
+     de la bande sur le site, rien d'autre : ni les fiches publiées, ni leur ordre ne changent. Chaque
+     vignette est inclinée depuis son bas (transform-origin) et décalée par son rang. */
+  .pelli .vignette:nth-child(1){transform:rotate(-8deg) translate(-30%,7%)}
+  .pelli .vignette:nth-child(2){transform:rotate(-4deg) translate(-15%,2%)}
+  .pelli .vignette:nth-child(3){transform:rotate(0deg) translate(0,-2%)}
+  .pelli .vignette:nth-child(4){transform:rotate(4deg) translate(15%,2%)}
+  .pelli .vignette:nth-child(5){transform:rotate(8deg) translate(30%,7%)}
+  .pelli .vignette:nth-child(n+6){display:none}
+  .vignette{flex:none;width:clamp(8.8rem,30vw,13.5rem);
+    transform-origin:50% 100%;position:relative;text-decoration:none;
+    transition:transform .22s ease}
   .vignette .jour{display:block;margin-top:.4rem;text-align:center;font-size:.72rem;letter-spacing:.06em;
     color:var(--gris);font-variant-numeric:tabular-nums}
   .vignette .anneau{display:block;padding:3px;border-radius:1.15rem;
     background:linear-gradient(150deg,#f9ce34,#ee2a7b 46%,#6228d7)}
-  .vignette:hover{transform:translateY(-5px)}
+  .vignette:hover{transform:rotate(0deg) translate(0,-6%);z-index:9}
   .vignette img{display:block;width:100%;height:auto;aspect-ratio:9/16;object-fit:cover;
     border-radius:.95rem;border:3px solid var(--nuit)}
   .trois{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
@@ -228,7 +239,12 @@
      rouge qui monte au survol. Ne garder ici que la pose. */
   .carte-kit .bouton{padding:1rem 1.7rem;text-decoration:none}
   @media (max-width:900px){
-    .vignette{width:8.4rem}
+    .vignette{width:clamp(6.6rem,24vw,8.6rem)}
+    .pelli{height:clamp(16rem,56vw,19rem)}
+    .pelli .vignette:nth-child(1){transform:rotate(-7deg) translate(-24%,7%)}
+    .pelli .vignette:nth-child(2){transform:rotate(-3.5deg) translate(-12%,2%)}
+    .pelli .vignette:nth-child(4){transform:rotate(3.5deg) translate(12%,2%)}
+    .pelli .vignette:nth-child(5){transform:rotate(7deg) translate(24%,7%)}
     .trois{grid-template-columns:repeat(3,1fr);gap:.6rem}
     .legende{font-size:.68rem}
   }
