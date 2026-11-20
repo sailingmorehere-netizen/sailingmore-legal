@@ -28,6 +28,9 @@
   strong{color:#fff;font-weight:500}
 
   .stories,.reels,.monde{max-width:62rem;margin:0 auto 6.5rem;padding:0 1.4rem}
+  /* Nicolas, 20/11/2026 : « d'un coup il y a un grand espace, d'un coup moins ». Un seul rythme entre
+     deux sections : 6,5 rem. Les vieilles surcharges de maquette (104 px → 5,5 rem, 88 px) sont
+     neutralisées plus bas, pas ici, pour ne pas casser les peaux qui suivent. */
   .stories h2,.reels h2,.monde h2{white-space:nowrap;font-size:clamp(.98rem,3.05vw,1.62rem);
     letter-spacing:-.012em;margin:0 0 1.5rem;line-height:1.15;color:var(--toile);
     font-weight:700}
@@ -192,7 +195,7 @@
   /* ---- les traits droits : ni vague ni cordage (19/11/2026) ----
      Les douze lignes décoratives ont été retirées à la demande de Nicolas. Ce qui reste : les filets
      du cadre CAP d'origine — rouge au-dessus des chiffres, blanc cassé en dessous, un trait plein. */
-  .hero h1{margin-bottom:2.6rem}
+  .hero h1{margin-bottom:2.6rem;line-height:1.30;letter-spacing:-.035em}
   .hero .filet{display:none}
   .cadre{margin-top:3.2rem}
   .citation{padding-top:1.4rem}
@@ -284,7 +287,8 @@
      grille au lieu de la largeur que le bloc avait */
   section.concours{width:min(100% - 2.4rem,64rem) !important;margin:5.5rem auto}
   /* le cadre des chiffres : filet rouge franc en haut, filet clair en bas, la même colonne que la grille */
-  section.concours,.kit-bloc{width:min(100% - 2.4rem,64rem) !important;margin:5.5rem auto !important;
+  section.concours,.kit-bloc{width:min(100% - 2.4rem,64rem) !important;margin:6.5rem auto !important;
+    /* le même rythme que l'accueil vaut aussi pour le jeu et les pages légales */
     padding:0 !important;max-width:none !important}
   .kit-bloc .carte-kit,.carte-jeu{width:100%}
   .carte-kit,.carte-jeu{border-radius:0;border:0;border-top:1px solid rgba(226,58,62,.22);
@@ -306,11 +310,15 @@
      Réglé sur .hero seulement : ailleurs (page du jeu, pages légales) un h1 porte un mot, pas un titre
      en deux lignes, et la barre y tombait au milieu du texte. */
   html{overflow-x:hidden}
-  .hero h1{margin-bottom:2.6rem}
+  .hero h1{margin-bottom:2.6rem;line-height:1.30;letter-spacing:-.035em}
   .hero h1 span{box-shadow:none;position:relative;display:block;width:max-content;max-width:100%;
     margin-inline:auto}
-  .hero h1 span::before{content:"";position:absolute;left:0;width:calc(100% - .05em);height:3px;top:.018em;
-    background:#e23a3e}
+  /* Nicolas, 20/11/2026 : « laisse un peu plus de place entre les deux et que la barre rouge soit bien
+     centrée entre les deux ». La barre était collée au bas du A et du I, décalée à gauche. Elle est
+     maintenant un trait de 2 px, posé sur l'axe horizontal, à mi-chemin entre la ligne du haut et
+     celle du bas (top:50% avec un demi-trait de retrait). */
+  .hero h1 span::before{content:"";position:absolute;left:0;width:calc(100% - .05em);height:2px;top:50%;
+    margin-top:-1px;background:#e23a3e}
   .hero h1 span::after{content:none}
   /* les deux filets du cadre des chiffres étaient trop marqués : ils s'effacent presque */
   .cadre{border-top-color:rgba(226,58,62,.22) !important;border-bottom-color:rgba(255,255,255,.09) !important}
@@ -351,7 +359,7 @@
     .citation{min-height:0}
   }
 
-</style><style>.page.page-annonceurs{max-width:64rem}.ann-carte{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:#9db2c6;margin:3.4rem 0 1rem}</style></head><body><div class="mer-fond mer-fond-commandes">
+</style><style>.page.page-annonceurs{max-width:64rem}.page.page-annonceurs>*+*{margin-top:1.6rem}.page.page-annonceurs>.ann-carte{margin-top:3.2rem}.ann-carte{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:#9db2c6;margin:3.4rem 0 1rem}</style></head><body><div class="mer-fond mer-fond-commandes">
   <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
 </div><div class="page page-annonceurs"><a class="retour" href="index.html">← Sailing More</a><h1 data-t="kit_titre">Annonceurs</h1><p data-t="ann_intro">Sailing More parle aux voileux chaque soir. Un bloc de lancement, un mois, moitié jeu concours et moitié publications : 500 €.</p><p class="kit-preuve" data-t="kit_preuve">Ces chiffres viennent de Meta, relevés ce mois-ci.</p><div class="carte-kit"><div class="tarifs"><div class="tarif-ligne"><span class="tarif-nom" data-t="bloc_nom">Le bloc de lancement</span><span class="tarif-ce" data-t="bloc_ce">un mois, moitié jeu concours et moitié publications</span><span class="tarif-prix">500 €</span></div><div class="tarif-ligne tarif-long"><span class="tarif-nom" data-t="bloc_detail_titre">Ce que le bloc contient</span><span class="tarif-ce" data-t="bloc_detail">1 jeu concours de 7 jours · sa feuille d'annonce · 1 story · 2 publications dédiées · le rapport de portée sous 72 h</span></div></div><p class="tarif-notes" data-t="tarif_notes">Prix en euros HT. Rapport de portée et d'interactions sous 72 h, chiffres de Meta à l'appui. Mention « Partenariat rémunéré » et contrat écrit. Aucune portée garantie : on la mesure, et on l'écrit avant la signature.</p><form class="kit-form" method="POST" action="https://formsubmit.co/hello.sailingmore@gmail.com" data-a="hello.sailingmore" data-b="gmail.com"><input type="hidden" name="_subject" value="Demande de grille — Sailing More"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_next" value="https://sailingmore.fr/merci.html"><input class="miel" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true"><label><span data-t="kit_nom">Votre nom</span><input name="nom" required autocomplete="name"></label><label><span data-t="kit_marque">Marque ou activité</span><input name="marque" required autocomplete="organization"></label><label><span data-t="kit_email">Email</span><input name="email" type="email" required autocomplete="email" inputmode="email"></label><button class="bouton" type="submit"><span data-t="kit_bouton">Recevoir la grille</span> →</button></form><p class="kit-note" data-t="kit_note">Vos données servent seulement à vous répondre. Suppression sur demande.</p><p class="kit-ou"><span data-t="kit_ou">Ou écrivez à</span> <a class="courriel" href="mailto:hello.sailingmore@gmail.com" data-a="hello.sailingmore" data-b="gmail.com" data-t="kit_lien">l'adresse du blog</a>.</p><noscript><p class="kit-ou">Sans JavaScript, écrivez à <a href="mailto:hello.sailingmore@gmail.com">hello.sailingmore@gmail.com</a> — la grille part le jour même.</p></noscript><script>(function(){document.querySelectorAll('form.kit-form').forEach(function(f){if(f.dataset.a&&f.dataset.b)f.action='https://formsubmit.co/'+f.dataset.a+'@'+f.dataset.b;});document.querySelectorAll('a.courriel').forEach(function(a){if(a.dataset.a&&a.dataset.b){var ad=a.dataset.a+'@'+a.dataset.b;a.href='mailto:'+ad;a.textContent=ad;a.removeAttribute('data-t');}});})();</script></div><p class="ann-carte" data-t="ann_carte">Où sont les lecteurs</p><section class="monde"><h2 data-t="carte_titre">Nos concentrations de voileux</h2>
 <style>
