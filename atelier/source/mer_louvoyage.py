@@ -443,3 +443,12 @@ def hero(interieur: str) -> str:
   <div class="hero-texte">{interieur}</div>
 </section>
 """
+
+
+if __name__ == "__main__":
+    # `python3 mer_louvoyage.py` : régénère le moteur (mer-louvoyage.js) dans le dossier du site.
+    # C'est ce qu'appelle la publication de l'atelier avant de reconstruire les pages : sans lui,
+    # les pages pointeraient un `?v=1` sur un fichier absent.
+    JS.parent.mkdir(parents=True, exist_ok=True)
+    n = ecrire_js()
+    print(f"moteur écrit : {JS} · {n} octets")
