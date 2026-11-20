@@ -1,0 +1,22 @@
+{
+ "releve": "2026-11-19",
+ "reseau": "instagram",
+ "abonnes_comptes": 14939,
+ "pays": 45,
+ "france_pct": 11.2,
+ "hors_france_pct": 88.8,
+ "francophone_pct": 17.4,
+ "top": {
+  "US": 1997,
+  "FR": 1679,
+  "IT": 1496,
+  "ES": 968,
+  "BR": 896,
+  "DE": 676,
+  "GB": 666,
+  "TR": 568,
+  "AR": 560,
+  "AU": 452,
+  "CH": 421
+ }
+}

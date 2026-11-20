@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Le jeu concours — Sailing More</title>
+<meta name="description" content="Le jeu concours Sailing More : six jours de stories, un tirage le dimanche.">
+<style>
+  body{margin:0;background:#071c31;
+    color:#f4efe4;font-family:system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  .page{max-width:40rem;margin:0 auto;padding:3.6rem 1.4rem 4rem}
+  a.retour{color:#c3d6e6;text-decoration:none;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+    font-weight:500}
+  h1{font-size:clamp(2rem,7vw,3rem);line-height:1.04;margin:1.6rem 0 .4rem;letter-spacing:-.01em;
+    font-weight:300}
+  h1 span{color:#f2f7fb}
+  .filet{width:3.4rem;height:3px;background:#e23a3e;margin:1.2rem 0 1.8rem}
+  .page .filet{width:3.4rem;height:3px;background:#e23a3e;margin:1.2rem 0 1.8rem}
+  p{color:#f4efe4}
+  .date{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:#e23a3e;margin-top:2.8rem;
+    font-weight:500}
+  ul{color:#f4efe4;padding-left:1.1rem}
+  li{margin:.5rem 0;color:#f4efe4}
+  a{color:#fff;text-decoration:none}
+  a.courriel{text-decoration:underline;text-decoration-color:rgba(226,58,62,.7);
+    text-decoration-thickness:1px;text-underline-offset:3px}
+  a.courriel:hover{text-decoration-color:#e23a3e}
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="retour" href="index.html" target="_blank" rel="noopener">← Sailing More</a>
+  <h1>Le jeu <span>concours</span></h1>
+  <div class="filet"></div>
+  <p>Un jeu par mois, offert à un annonceur : une place dans nos stories du soir pendant six jours,
+  du mardi au samedi, puis un tirage le dimanche à 18&nbsp;h.</p>
+  <p class="date">Prochain départ : mardi 8 décembre 2026</p>
+  <ul>
+    <li>Le tirage se fait au sort, parmi les participations reçues avant la clôture du samedi, 23&nbsp;h&nbsp;59.</li>
+    <li>Le gagnant est annoncé le dimanche à 18&nbsp;h, en story.</li>
+    <li>La participation est gratuite et sans obligation d'achat.</li>
+  </ul>
+  <p>Écrire à <a class="courriel" href="mailto:hello.sailingmore@gmail.com" data-a="hello.sailingmore" data-b="gmail.com" target="_blank" rel="noopener">hello.sailingmore@gmail.com</a>.</p>
+</div>
+<script>
+document.querySelectorAll('a.courriel').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault();
+  window.location.href = 'mailto:' + a.dataset.a + '@' + a.dataset.b;
+}));
+</script>
+</body>
+</html>

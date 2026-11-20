@@ -1,0 +1,103 @@
+{
+ "maj": "2026-11-17",
+ "chiffres": [
+  {
+   "cle": "abonnes",
+   "valeur": 141739,
+   "suffixe": "",
+   "libelle": "followers, all networks",
+   "detail": "Facebook 123757 · Instagram 17042 · YouTube 874 · Telegram 66",
+   "estime": false
+  },
+  {
+   "cle": "vues",
+   "valeur": 46366562,
+   "suffixe": "≈",
+   "libelle": "views, all networks",
+   "detail": "Facebook + YouTube measured · Instagram estimated",
+   "estime": true
+  },
+  {
+   "cle": "vues_mesurees",
+   "valeur": 31279753,
+   "suffixe": "",
+   "libelle": "views, measured",
+   "detail": "Facebook and YouTube, since the beginning",
+   "estime": false
+  },
+  {
+   "cle": "contenus",
+   "valeur": 963,
+   "suffixe": "",
+   "libelle": "posts published",
+   "detail": "Instagram publications and YouTube videos",
+   "estime": false
+  },
+  {
+   "cle": "vues_facebook",
+   "valeur": 30173619,
+   "suffixe": "",
+   "libelle": "views on Facebook",
+   "detail": "every post on the page, since 2012",
+   "estime": false
+  },
+  {
+   "cle": "vues_youtube",
+   "valeur": 1106134,
+   "suffixe": "",
+   "libelle": "views on YouTube",
+   "detail": "every video, since the first",
+   "estime": false
+  },
+  {
+   "cle": "abonnes_facebook",
+   "valeur": 123757,
+   "suffixe": "",
+   "libelle": "followers on Facebook",
+   "detail": "the page",
+   "estime": false
+  },
+  {
+   "cle": "abonnes_instagram",
+   "valeur": 17042,
+   "suffixe": "",
+   "libelle": "followers on Instagram",
+   "detail": "the account",
+   "estime": false
+  },
+  {
+   "cle": "abonnes_youtube",
+   "valeur": 874,
+   "suffixe": "",
+   "libelle": "subscribers on YouTube",
+   "detail": "the channel",
+   "estime": false
+  },
+  {
+   "cle": "abonnes_telegram",
+   "valeur": 66,
+   "suffixe": "",
+   "libelle": "members on Telegram",
+   "detail": "the channel",
+   "estime": false
+  },
+  {
+   "cle": "vues_28j",
+   "valeur": 791475,
+   "suffixe": "≈",
+   "libelle": "views, last 28 days",
+   "detail": "measured 527 650",
+   "estime": true
+  }
+ ],
+ "abonnes": {
+  "facebook": 123757,
+  "instagram": 17042,
+  "youtube": 874,
+  "telegram": 66,
+  "total": 141739,
+  "youtube_vues": 1106134
+ },
+ "vues_facebook": 30173619,
+ "part_instagram": 0.5
+}
