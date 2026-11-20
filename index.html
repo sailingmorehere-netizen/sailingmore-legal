@@ -184,23 +184,26 @@
     letter-spacing:-.012em;margin:0 0 1.5rem;line-height:1.15;color:var(--toile);
     font-weight:700}
   .pelli{position:relative;height:clamp(22rem,52vw,30rem);
-    display:flex;align-items:flex-start;justify-content:center;overflow:hidden;
-    padding:1.2rem .2rem 0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+    display:flex;align-items:center;justify-content:center;overflow-x:auto;overflow-y:hidden;
+    user-select:none;-webkit-user-select:none;
+    padding:1.2rem .2rem 0;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+    scroll-snap-type:x proximity;cursor:grab}
+  .pelli.saisie{cursor:grabbing;scroll-snap-type:none}
   .pelli::-webkit-scrollbar{display:none}
+  .pelli>*{scroll-snap-align:center}
   /* Les stories tenues en éventail, comme un jeu de cartes (Nicolas, 20/11/2026). C'est la présentation
      de la bande sur le site, rien d'autre : ni les fiches publiées, ni leur ordre ne changent. Chaque
      vignette est inclinée depuis son bas (transform-origin) et décalée par son rang. */
+  /* L'inclinaison n'est plus fixée par le rang : elle suit la main, calculée par ESQUIF ci-dessous.
+     La règle de secours ci-dessous vaut quand le script ne tourne pas (JS coupé). */
   .pelli .vignette:nth-child(1){transform:rotate(-8deg) translate(-30%,7%)}
   .pelli .vignette:nth-child(2){transform:rotate(-4deg) translate(-15%,2%)}
-  .pelli .vignette:nth-child(3){transform:rotate(0deg) translate(0,-2%)}
   .pelli .vignette:nth-child(4){transform:rotate(4deg) translate(15%,2%)}
   .pelli .vignette:nth-child(5){transform:rotate(8deg) translate(30%,7%)}
   .pelli .vignette:nth-child(n+6){display:none}
   .vignette{flex:none;width:clamp(7.4rem,25vw,12rem);
     transform-origin:50% 100%;position:relative;text-decoration:none;
     transition:transform .22s ease}
-  .vignette .jour{display:block;margin-top:.4rem;text-align:center;font-size:.72rem;letter-spacing:.06em;
-    color:var(--gris);font-variant-numeric:tabular-nums}
   .vignette .anneau{display:block;padding:3px;border-radius:1.15rem;
     background:linear-gradient(150deg,#f9ce34,#ee2a7b 46%,#6228d7)}
   .vignette:hover{transform:rotate(0deg) translate(0,-6%);z-index:9}
@@ -246,6 +249,7 @@
     .pelli .vignette:nth-child(2){transform:rotate(-3.5deg) translate(-12%,2%)}
     .pelli .vignette:nth-child(4){transform:rotate(3.5deg) translate(12%,2%)}
     .pelli .vignette:nth-child(5){transform:rotate(7deg) translate(24%,7%)}
+    .pelli{justify-content:flex-start}
     .trois{grid-template-columns:repeat(3,1fr);gap:.6rem}
     .legende{font-size:.68rem}
   }
@@ -944,7 +948,65 @@
   </div>
 </section>
 
-<section class="stories"><h2 data-t="stories_titre">Nos informations quotidiennes</h2><div class="pelli"><a class="vignette" href="stories/2026-11-19.html" target="_blank" rel="noopener" aria-label="Story du 2026-11-19 — ouvrir la story"><span class="anneau"><img src="stories/d-2026-11-19.jpg" alt="Story du 2026-11-19"></span><span class="jour">19.11</span></a><a class="vignette" href="https://www.instagram.com/sailingmorehere/" target="_blank" rel="noopener" aria-label="Story du 2026-11-15 — voir sur notre Instagram"><span class="anneau"><img src="stories/s5.jpg" alt="Story du 2026-11-15"></span><span class="jour">15.11</span></a><a class="vignette" href="https://www.instagram.com/sailingmorehere/" target="_blank" rel="noopener" aria-label="Story du 2026-11-16 — voir sur notre Instagram"><span class="anneau"><img src="stories/s4.jpg" alt="Story du 2026-11-16"></span><span class="jour">16.11</span></a><a class="vignette" href="https://www.instagram.com/sailingmorehere/" target="_blank" rel="noopener" aria-label="Story du 2026-11-17 — voir sur notre Instagram"><span class="anneau"><img src="stories/s3.jpg" alt="Story du 2026-11-17"></span><span class="jour">17.11</span></a><a class="vignette" href="https://www.instagram.com/sailingmorehere/" target="_blank" rel="noopener" aria-label="Story du 2026-11-18 — voir sur notre Instagram"><span class="anneau"><img src="stories/s2.jpg" alt="Story du 2026-11-18"></span><span class="jour">18.11</span></a></div></section>
+<section class="stories"><h2 data-t="stories_titre">Nos informations quotidiennes</h2><div class="pelli"><a class="vignette" href="stories/2026-11-19.html" target="_blank" rel="noopener" aria-label="Story du 2026-11-19 — ouvrir la story"><span class="anneau"><img src="stories/d-2026-11-19.jpg" alt="Story du 2026-11-19"></span></a><a class="vignette" href="https://www.instagram.com/sailingmorehere/" target="_blank" rel="noopener" aria-label="Story du 2026-11-15 — voir sur notre Instagram"><span class="anneau"><img src="stories/s5.jpg" alt="Story du 2026-11-15"></span></a><a class="vignette" href="https://www.instagram.com/sailingmorehere/" target="_blank" rel="noopener" aria-label="Story du 2026-11-16 — voir sur notre Instagram"><span class="anneau"><img src="stories/s4.jpg" alt="Story du 2026-11-16"></span></a><a class="vignette" href="https://www.instagram.com/sailingmorehere/" target="_blank" rel="noopener" aria-label="Story du 2026-11-17 — voir sur notre Instagram"><span class="anneau"><img src="stories/s3.jpg" alt="Story du 2026-11-17"></span></a><a class="vignette" href="https://www.instagram.com/sailingmorehere/" target="_blank" rel="noopener" aria-label="Story du 2026-11-18 — voir sur notre Instagram"><span class="anneau"><img src="stories/s2.jpg" alt="Story du 2026-11-18"></span></a></div></section>
+<script>
+(() => {
+  const bande = document.querySelector('.pelli');
+  if (!bande) return;
+  const cartes = [...bande.querySelectorAll('.vignette')];
+  const doit = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (doit) return;
+  let glisse = null, dernier = 0, vise = 0;
+  const dessiner = () => {
+    const milieu = bande.getBoundingClientRect();
+    const axe = milieu.left + milieu.width / 2;
+    const portee = Math.max(1, milieu.width / 2);
+    cartes.forEach((c) => {
+      const r = c.getBoundingClientRect();
+      // position au repos : on retire l'inclinaison en cours pour ne pas la cumuler d'une image à l'autre
+      const x = r.left + r.width / 2;
+      const part = Math.max(-1, Math.min(1, (x - axe) / portee));
+      c.style.transform = 'rotate(' + (part * 10).toFixed(2) + 'deg) translateY('
+        + (Math.abs(part) * 7).toFixed(2) + '%)';
+    });
+  };
+  bande.style.justifyContent = 'center';
+  dessiner();
+  addEventListener('resize', dessiner);
+  bande.addEventListener('scroll', () => requestAnimationFrame(dessiner), {passive: true});
+  // molette horizontale, et verticale quand la bande est déjà en vue
+  bande.addEventListener('wheel', (e) => {
+    const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (!d) return;
+    e.preventDefault();
+    bande.scrollLeft += d;
+  }, {passive: false});
+  // glisser-saisir à la souris (au doigt, le navigateur le fait seul)
+  bande.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'touch') return;
+    glisse = {x: e.clientX, g: bande.scrollLeft};
+    dernier = e.clientX; vise = 0;
+    bande.classList.add('saisie');
+    bande.setPointerCapture(e.pointerId);
+  });
+  bande.addEventListener('pointermove', (e) => {
+    if (!glisse) return;
+    const d = e.clientX - glisse.x;
+    vise = (e.clientX - dernier) * 1.6;
+    dernier = e.clientX;
+    bande.scrollLeft = glisse.g - d;
+    requestAnimationFrame(dessiner);
+  });
+  const lacher = () => { glisse = null; bande.classList.remove('saisie'); dessiner(); };
+  bande.addEventListener('pointerup', lacher);
+  bande.addEventListener('pointercancel', lacher);
+  // les liens ne se déclenchent pas après un glissement
+  bande.addEventListener('click', (e) => {
+    if (Math.abs(vise) > 6) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+})();
+</script>
+
 
 <section class="concours">
   <style>/* même dessin que le bouton du formulaire : carré, rouge, capitales espacées */
