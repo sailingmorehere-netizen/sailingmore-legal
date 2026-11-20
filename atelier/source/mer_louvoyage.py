@@ -393,9 +393,15 @@ COMMANDES = """
 
 
 def html_fond(commandes: bool = True) -> str:
-    # l'adresse du script porte la date du fichier : un visiteur qui revient ne garde pas
-    # l'ancien moteur dans son cache quand on le change
-    version = str(int(JS.stat().st_mtime)) if JS.exists() else "1"
+    # L'adresse du script porte l'empreinte du fichier : un visiteur qui revient ne garde pas
+    # l'ancien moteur dans son cache quand on le change — et deux constructions identiques donnent
+    # la même adresse, donc un `diff` propre (la date de modification, elle, changeait à chaque
+    # construction et salissait les sept pages d'un `?v=` différent, 20/11/2026).
+    if JS.exists():
+        import hashlib
+        version = hashlib.sha1(JS.read_bytes()).hexdigest()[:8]
+    else:
+        version = "1"
     """La couche fixe : le canvas, les commandes, la légende. Elle passe derrière tout le contenu."""
     return f"""
 <div class="mer-fond" id="cadre">
