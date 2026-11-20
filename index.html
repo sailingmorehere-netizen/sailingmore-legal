@@ -17,17 +17,17 @@
 <meta property="og:image:alt" content="Sailing More — la voile et la course au large, en images">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://sailingmore.fr/og-image.jpg">
-<meta name="theme-color" content="#08162a">
+<meta name="theme-color" content="#0a1a2b">
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="icon-512.png" sizes="512x512" type="image/png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>
-  :root{--nuit:#08162a;--nuit2:#0d2440;--eau:#8ad4d0;--creme:#f4efe4;--gris:#c3d6e6;--rouge:#e23a3e;
-    --ambre:#e8b04b;--toile:#f2f7fb}
+  :root{--nuit:#0a1a2b;--nuit2:#0f2438;--eau:#e23a3e;--creme:#eef3f7;--gris:#9db2c6;--rouge:#e23a3e;
+    --ambre:#eef3f7;--toile:#ffffff}
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{margin:0;background:#071c31;
-    color:var(--creme);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    color:var(--creme);font-family:system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
     -webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit;text-decoration:none}
   .entete{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
@@ -304,9 +304,401 @@
 .hero .bouton-hero{margin:5rem 0 0;text-decoration:none;pointer-events:auto}
 @media(max-width:640px){.hero .bouton-hero{margin-top:2.6rem}}
 
+
+  body{background:#0a1a2b}
+  .entete{background:rgba(10,26,43,.94);border-bottom:1px solid rgba(226,58,62,.5)}
+  h1{font-weight:300;letter-spacing:-.01em;line-height:.94;color:#fff}
+  h1 span{font-weight:300;color:#fff;letter-spacing:-.05em}
+  .filet{background:linear-gradient(90deg,#e23a3e 0 34%,rgba(255,255,255,.18) 34% 100%);
+    width:100%;max-width:16rem;height:1px}
+  .surtitre{font-weight:300;letter-spacing:-.01em;color:#dbe6ef}
+  h2{color:#9db2c6;font-weight:500;letter-spacing:.22em;font-size:.64rem}
+  .cadre{border-radius:0;border:0;border-top:1px solid rgba(226,58,62,.45);border-bottom:1px solid rgba(255,255,255,.16);
+    background:transparent;box-shadow:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:0;padding:1.6rem 0}
+  .grand{padding:0 1.1rem;border-left:1px solid rgba(255,255,255,.1)}
+  .grand:first-child{border-left:0;padding-left:0}
+  .grand b{color:#fff;font-weight:300;letter-spacing:-.02em;text-shadow:none}
+  .grand:first-child b{color:#fff;font-weight:300}
+  .grand span{color:#9db2c6;letter-spacing:.14em;font-size:.58rem}
+  .titre-cit{color:#9db2c6;letter-spacing:.22em;font-size:.64rem}
+  .citation{--acc:#e23a3e;border-left:0;border-top:1px solid rgba(255,255,255,.14);
+    background:transparent;width:min(26rem,86vw)}
+  .citation blockquote{color:#dbe6ef}
+  .ep22{}
+  .ep21 blockquote{color:#fff;font-weight:700}
+  .citation figcaption strong{color:#fff} .citation figcaption span{color:#9db2c6}
+  .siecle{color:#e23a3e;letter-spacing:.2em;font-size:.55rem}
+  .stories h2,.reels h2,.monde h2{color:#fff;font-weight:300;letter-spacing:.02em;
+    text-transform:uppercase;white-space:normal}
+  .planisphere{border-radius:0;border-color:rgba(255,255,255,.14);background:#081521}
+  .pt-v i{background:#e23a3e;box-shadow:none}
+  .carte-kit{border-radius:0;border:0;border-top:1px solid rgba(226,58,62,.22);
+    border-bottom:1px solid rgba(255,255,255,.09);background:transparent;box-shadow:none}
+  .carte-jeu{background:transparent;border:0;border-top:1px solid rgba(226,58,62,.22);
+    border-bottom:1px solid rgba(255,255,255,.09);border-radius:0;box-shadow:none}
+  /* ---- les boutons deviennent des filets : un mot, un trait rouge dessous (Nicolas, 19/11/2026) ----
+     « les boutons en dessous, essaye qu'ils soient un peu comme tes barres » */
+  .reel{border-radius:0;border-color:rgba(255,255,255,.14);background:#0a1a2b}
+  .reel img{background:#0a1a2b}
+  .carte-reel{background:transparent}
+  footer{color:#9db2c6}
+  .cookies{background:rgba(8,21,33,.98);border:1px solid rgba(255,255,255,.18);border-radius:0}
+  .cookies button{background:#e23a3e;color:#fff;border-radius:0}
+
+  /* ---- en-tête sur téléphone : le nom tient sur une ligne, les langues respirent ---- */
+  @media(max-width:600px){
+    .entete{padding:.55rem .7rem;gap:.4rem}
+    .entete .nom{font-size:.6rem;letter-spacing:.1em;white-space:nowrap}
+    .langues{gap:0}
+    .langues button{font-size:.56rem;padding:.15rem .26rem;letter-spacing:0}
+    .langues button[aria-pressed="true"]{padding:.15rem .34rem}
+  }
+
+  /* ---- les traits droits : ni vague ni cordage (19/11/2026) ----
+     Les douze lignes décoratives ont été retirées à la demande de Nicolas. Ce qui reste : les filets
+     du cadre CAP d'origine — rouge au-dessus des chiffres, blanc cassé en dessous, un trait plein. */
+  /* Nicolas, 20/11/2026 : « la barre doit être pile entre les deux, à la même distance ». Un interligne
+     ne se mesure pas à l'œil : le titre est une colonne (`flex-direction:column`) avec un écart fixe de
+     `.72rem`, et la barre se pose au milieu exact de cet écart (`top:calc(-.72rem / 2 - 1.5px)`, 1,5 px
+     étant la moitié de ses 3 px). Distance égale par construction, quelle que soit la taille de police. */
+  .hero h1{display:flex;flex-direction:column;align-items:center;row-gap:.72rem;
+    margin-bottom:5rem;line-height:1.16;letter-spacing:-.035em}
+  .hero .filet{display:none}
+  .cadre{margin-top:3.2rem}
+  .citation{padding-top:1.4rem}
+  /* le filet fin de l'époque, hérité : on le retire, il est remplacé par la teinte du siècle */
+  .ep20 blockquote{border-left:0}
+  .ep20 blockquote::before{content:none}
+  .citation blockquote{padding-bottom:.9rem}
+  /* le fond suit le siècle : le bleu s'installe et se réchauffe au fil des années (19/11/2026).
+     En 1771 presque rien, en 1840 un filet de brume, en 1906 le panneau, en 2026 le bleu de la nuit. */
+  .citation:has(> blockquote){} 
+  .citation>blockquote{padding:1.1rem 1.3rem}
+
+  /* ---- chaque siècle a son fond ET sa typographie (Nicolas, 19/11/2026) : quatre matières, pas
+     quatre teintes du même bleu. On doit reconnaître l'époque sans lire la date. ---- */
+  .citation>blockquote{padding:1.1rem 1.3rem;border:0}
+
+  /* XVIIIe — la page d'un livre ancien : papier verge, encre sépia, italique centrée, double filet */
+  .citation.ep-t18>blockquote{
+    background:
+      repeating-linear-gradient(90deg,rgba(120,97,60,.05) 0 1px,transparent 1px 8px),
+      linear-gradient(180deg,#e9dfc6,#e0d2b2);
+    color:#3b2d17;font-family:"Iowan Old Style","Palatino Linotype",Palatino,Garamond,Georgia,serif;
+    font-style:italic;font-size:1.02rem;line-height:1.82;letter-spacing:.01em;text-align:center;
+    box-shadow:inset 0 0 0 1px rgba(92,71,38,.42),inset 0 0 0 4px #e9dfc6,inset 0 0 0 5px rgba(92,71,38,.26)}
+  .citation.ep-t18>blockquote::before{content:"❧";display:block;color:#8f3a2c;font-style:normal;
+    font-size:1.15rem;line-height:1;margin:0 0 .55rem}
+  .citation.ep-t18 figcaption strong{color:#e8d6b0}
+
+  /* XIXe — le livre relié du XIXe : papier ivoire, encre noire, lettrine rouge, filets d'encre */
+  .citation.ep-t19>blockquote{
+    background:linear-gradient(180deg,#f4eddc,#ece2cb);
+    color:#1b1b17;font-family:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+    font-size:1.06rem;line-height:1.72;text-align:left;
+    border-top:1px solid rgba(27,27,23,.6);border-bottom:1px solid rgba(27,27,23,.6);
+    box-shadow:inset 0 4px 0 -3px rgba(27,27,23,.45),inset 0 -4px 0 -3px rgba(27,27,23,.45)}
+  .citation.ep-t19>blockquote::first-letter{font-size:3.2rem;line-height:.78;float:left;
+    color:#8c2b22;font-weight:700;margin:.12rem .5rem 0 0}
+  .citation.ep-t19 figcaption strong{color:#e6dcc0}
+
+  /* XXe — la feuille dactylographiée : papier bistre, encre bleu-noir, marge rouge, monospace */
+  .citation.ep-t20>blockquote{
+    background:
+      linear-gradient(90deg,transparent 24px,rgba(168,58,48,.45) 24px 25px,transparent 25px),
+      linear-gradient(180deg,#f0ebdf,#e4ddcd);
+    color:#202a3a;font-family:ui-monospace,"Courier New",Courier,monospace;
+    font-size:.9rem;line-height:1.75;letter-spacing:-.005em;text-align:left;padding-left:2.5rem;
+    box-shadow:inset 0 0 0 1px rgba(60,58,48,.22),0 1px 0 rgba(0,0,0,.18)}
+  .citation.ep-t20 figcaption{font-family:ui-monospace,"Courier New",monospace;color:#93a3ad}
+  .citation.ep-t20 figcaption strong{color:#e2e8ec}
+
+  /* XXIe — l'enseigne : aplat rouge plein, capitales serrées, blanc pur */
+  .citation.ep-t21>blockquote{
+    background:#e23a3e;color:#fff;
+    font-family:ui-sans-serif,system-ui,"Helvetica Neue",Arial,sans-serif;
+    font-size:1rem;font-weight:800;letter-spacing:.005em;text-transform:uppercase;
+    line-height:1.34;text-align:left;padding:1.25rem 1.35rem;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+  .citation.ep-t21 figcaption strong{color:#fff}
+
+  /* ---- le filet au-dessus de chaque citation : plus fin, et la citation posée dessous (19/11/2026) ----
+     Nicolas : « mettre un peu moins gras, et mettre une barre rouge, la barre rouge là qui est sur le MORE
+     tout le long entre ces lignes, mais en plus fin ». La barre rouge du MORE court donc sur toute la
+     largeur de l'écran, en 1 px, et chaque citation s'ouvre sur un filet fin qui reprend la teinte de son siècle. */
+  .fenetre{padding-left:calc(max(1.2rem,(100vw - 64rem)/2))}
+  .fenetre::before,.fenetre::after{content:"";position:absolute;left:0;right:0;height:1px;z-index:2;pointer-events:none}
+  .fenetre::before{top:0;background:#e23a3e}
+  .fenetre::after{bottom:0;background:rgba(255,255,255,.16)}
+  .citation{border-top:1px solid rgba(255,255,255,.16);position:relative}
+  .citation::after{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;
+    background:var(--teinte,rgba(255,255,255,.3))}
+
+  /* ---- le fond change avec le siècle de la citation ---- */
+  .ep-t18{--teinte:#5f7f9c}
+  .ep-t19{--teinte:#9db2c6}
+  .ep-t20{--teinte:#e23a3e}
+  .ep-t21{--teinte:#8fd3e8}
+  .titre-cit{
+    color:#9db2c6;font-size:.64rem;letter-spacing:.22em;font-weight:500;text-transform:uppercase;
+    max-width:64rem;margin:0 auto 1.5rem;padding:0 1.2rem;display:flex;align-items:center;gap:.9rem}
+  .titre-cit::after{content:"";flex:1 1 auto;height:1px;
+    background:linear-gradient(90deg,rgba(226,58,62,.75),rgba(226,58,62,0))}
+
+  /* ---- les chiffres : le rouge sur les vues, le blanc sur les abonnés ---- */
+  .grand b{font-weight:300;color:#fff}
+  .grand.rouge b{color:#e23a3e;font-weight:500}
+
+  /* ---- annonceurs et jeu concours prennent le cadre des chiffres ---- */
+  /* le cadre des chiffres, repris tel quel : filet rouge en haut, filet blanc en bas, et l'échelle de la
+     grille au lieu de la largeur que le bloc avait */
+  section.concours{width:min(100% - 2.4rem,64rem) !important;margin:5.5rem auto}
+  /* le cadre des chiffres : filet rouge franc en haut, filet clair en bas, la même colonne que la grille */
+  section.concours,.kit-bloc{width:min(100% - 2.4rem,64rem) !important;margin:6.5rem auto !important;
+    /* le même rythme que l'accueil vaut aussi pour le jeu et les pages légales */
+    padding:0 !important;max-width:none !important}
+  .kit-bloc .carte-kit,.carte-jeu{width:100%}
+  .carte-kit,.carte-jeu{border-radius:0;border:0;border-top:1px solid rgba(226,58,62,.22);
+    border-bottom:1px solid rgba(255,255,255,.09);background:transparent;box-shadow:none;
+    padding:1.9rem 2rem;margin:0;width:auto}
+  .kit-bloc{width:min(100% - 2.4rem,64rem) !important;margin:5.5rem auto !important;padding:0 !important;max-width:none !important}
+  .kit-bloc .carte-kit{width:100%}
+  .carte-kit h3,.carte-jeu h3{font-weight:300;letter-spacing:-.015em;font-size:clamp(1.5rem,3.4vw,2rem)}
+  .titre-idee{display:flex;align-items:center;gap:.9rem;margin:0 0 1.5rem;padding:0 .2rem;
+    color:#9db2c6;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase}
+  .titre-idee::after{content:"";flex:1 1 auto;height:1px;
+    background:linear-gradient(90deg,rgba(226,58,62,.6),rgba(226,58,62,0))}
+
+  /* ---- les reels un peu plus petits : ils prenaient toute la largeur ---- */
+  .reels .trois{max-width:36rem;margin:0 auto;gap:.7rem}
+
+  /* ---- la barre rouge passe entre SAILING et MORE, à la largeur du mot MORE (Nicolas, 19/11/2026) ----
+     Le trait ne traverse plus la page : c'est la main courante du bloc, elle s'arrête au bord du MORE.
+     Réglé sur .hero seulement : ailleurs (page du jeu, pages légales) un h1 porte un mot, pas un titre
+     en deux lignes, et la barre y tombait au milieu du texte. */
+  html{overflow-x:hidden}
+  /* Nicolas, 20/11/2026 : « la barre doit être pile entre les deux, à la même distance ». Un interligne
+     ne se mesure pas à l'œil : le titre est une colonne (`flex-direction:column`) avec un écart fixe de
+     `.72rem`, et la barre se pose au milieu exact de cet écart (`top:calc(-.72rem / 2 - 1.5px)`, 1,5 px
+     étant la moitié de ses 3 px). Distance égale par construction, quelle que soit la taille de police. */
+  .hero h1{display:flex;flex-direction:column;align-items:center;row-gap:.72rem;
+    margin-bottom:5rem;line-height:1.16;letter-spacing:-.035em}
+  .hero h1 span{box-shadow:none;position:relative;display:block;width:max-content;max-width:100%;
+    margin-inline:auto}
+  /* Nicolas, 20/11/2026 (deux fois) : « la ligne rouge doit être entre sailing et more ». Ni un
+     soulignement du mot, ni un trait dans les lettres : un séparateur court, centré, posé dans le blanc
+     qui sépare les deux lignes. `top:-.30em` le met dans l'interligne, `left:50%` + `translateX(-50%)` le
+     centre sur le titre — MORE étant centré lui aussi, le trait tombe juste entre les deux mots. */
+  /* Le trait est centré sur l'écart de `.72rem` : moitié de l'écart, moins la moitié de ses 3 px, plus
+     `0,95 px` de compensation — l'espace au-dessus d'une capitale n'est pas l'espace sous elle, et la
+     mesure à l'écran donne 4,1 px de chaque côté à 48 px de corps, 4,1 et 4,2 à 102 px. Sans ce
+     correctif, la barre penche vers MORE (5,2 au-dessus, 3,0 en dessous). */
+  .hero h1 span::before{content:"";position:absolute;left:50%;transform:translateX(-50%);
+    top:calc(-.72rem / 2 - 2.45px);width:5rem;height:3px;background:#e23a3e}
+  .hero h1 span::after{content:none}
+  /* les deux filets du cadre des chiffres étaient trop marqués : ils s'effacent presque */
+  .cadre{border-top-color:rgba(226,58,62,.22) !important;border-bottom-color:rgba(255,255,255,.09) !important}
+
+
+  /* ---- le cordage respire : la tresse glisse d'une tuile pile, lentement, chaque ligne à son rythme ---- */
+  @keyframes corde168{from{background-position-x:0}to{background-position-x:168px}}
+  @keyframes corde126{from{background-position-x:0}to{background-position-x:126px}}
+  @keyframes corde220{from{background-position-x:0}to{background-position-x:220px}}
+  @keyframes corde240{from{background-position-x:0}to{background-position-x:240px}}
+  .entete{animation:corde168 110s linear infinite}
+  .citation blockquote{animation:corde126 132s linear infinite}
+  
+  footer{animation:corde168 121s linear infinite;animation-delay:-23s}
+  .cookies{animation:corde220 143s linear infinite;animation-delay:-61s}
+  /* socle commun aux déclinaisons : grille tenue, citations de même hauteur */
+  .chiffres{max-width:64rem}
+  /* les blocs du site gardent leur géométrie ; chaque direction dessine ses cartes elle-même,
+     sinon le socle repeint par-dessus et les cartes ne ressemblent plus au cadre des chiffres */
+  .carte-kit p,.carte-jeu p{color:rgba(238,241,244,.72)}
+  .planisphere{border-color:rgba(255,255,255,.14);background:rgba(15,36,56,.6)}
+
+  .reel{border-color:rgba(255,255,255,.14);background:#0b0c0e}
+  .pt-v i{box-shadow:none}
+  .cadre{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;padding:1.4rem 0}
+  .grand{min-width:0}
+  .grand b{font-size:clamp(1.05rem,1.72vw,2.05rem);letter-spacing:-.03em;white-space:nowrap}
+  .chiffres{margin-bottom:3.2rem}
+  .citation{display:flex;flex-direction:column;min-height:15rem;overflow:hidden}
+  .citation blockquote{overflow-wrap:break-word;hyphens:none;text-align:left}
+  .ep19 blockquote::first-letter{font-size:inherit;float:none;margin:0;color:inherit;
+    line-height:inherit;font-weight:inherit}
+  .citation blockquote{flex:1 1 auto}
+  .citation::before{content:none}
+  .ep18 blockquote::before{content:none}
+  @media(max-width:820px){
+    .cadre{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:1.4rem}
+    .citation{min-height:0}
+  }
+
 </style>
 </head>
 <body>
+
+<div class="mer-fond" id="cadre">
+
+  <canvas id="mer" aria-hidden="true"></canvas>
+  <div class="mer-ombre" aria-hidden="true"></div>
+  
+  <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
+
+  <button class="rejouer" id="rejouer" type="button" hidden>Rejouer</button>
+  <div class="vent">
+    <div class="cadran" id="cadran" role="slider" tabindex="0" aria-label="Direction d'où vient le vent"
+      aria-valuemin="0" aria-valuemax="359" aria-valuenow="0" aria-valuetext="Vent du 000 degrés">
+      <svg viewBox="0 0 104 104" aria-hidden="true">
+        <circle cx="52" cy="52" r="44" fill="none" stroke="#f4f7fa" stroke-opacity=".28" stroke-width="1"/>
+        <g id="rose" stroke="#f4f7fa" stroke-opacity=".5" stroke-width="1">
+          <line x1="52" y1="8" x2="52" y2="15"/><line x1="96" y1="52" x2="89" y2="52"/>
+          <line x1="52" y1="96" x2="52" y2="89"/><line x1="8" y1="52" x2="15" y2="52"/>
+        </g>
+        <g id="fleche">
+          <line x1="52" y1="10" x2="52" y2="66" stroke="#f4f7fa" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M52 76 L44.5 61 L52 65 L59.5 61 Z" fill="#f4f7fa"/>
+          <circle cx="52" cy="10" r="4.2" fill="#E2232E"/>
+        </g>
+      </svg>
+    </div>
+    <span class="valeur" id="ventValeur">Vent du 000°</span>
+    <span class="geste">Faites-le tourner</span>
+  </div>
+</div>
+<style>
+/* ---- la mer en fond : fixe, derrière tout le contenu (Nicolas, 19/11/2026) ---- */
+.mer-fond{position:fixed;inset:0;z-index:0;overflow:hidden;background:#071c31;
+  isolation:isolate;pointer-events:none}
+.mer-fond canvas{position:absolute;inset:0;width:100%;height:100%;display:block;
+  opacity:0;transition:opacity 1.1s cubic-bezier(.23,1,.32,1);cursor:grab;pointer-events:auto}
+.mer-fond.pret canvas{opacity:1}
+.mer-fond.fondu canvas{opacity:0;transition-duration:.22s}
+/* voile : l'eau reste visible comme fond, le texte reste lisible par-dessus */
+.mer-fond .mer-ombre{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(120% 85% at 50% 28%,rgba(5,16,30,.20) 0%,rgba(5,16,30,.34) 55%,rgba(5,16,30,.52) 100%),
+             linear-gradient(180deg,rgba(6,18,33,.30) 0%,rgba(6,18,33,.12) 30%,rgba(6,18,33,.40) 78%,rgba(5,15,28,.62) 100%)}
+.contenu{position:relative;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,18,33,0) 0,rgba(6,18,33,0) 62vh,
+    rgba(6,18,33,.55) 96vh,rgba(6,18,33,.55) 100%)}
+
+/* les commandes de la scène : posées sur la mer, elles s'effacent dès qu'on descend */
+.mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{
+  transition:opacity .45s ease,transform .45s ease}
+.mer-fond.loin .heure,.mer-fond.loin .choix,.mer-fond.loin .vent,.mer-fond.loin .legende,
+.mer-fond.loin .rejouer{opacity:0;pointer-events:none;transform:translateY(-6px)}
+
+/* Le tableau de bord détaché des pages annexes : mêmes commandes, hors de la couche du fond
+   (z-index -1) qui les rendrait invisibles et incliquables. */
+.mer-fond.mer-fond-commandes{position:relative;inset:auto;height:auto;width:100%;max-width:100%;
+  background:none;overflow:visible;z-index:60;pointer-events:none;display:flex;flex-direction:column;
+  align-items:flex-start;gap:.55rem;padding:1rem 1.1rem .2rem}
+.mer-fond.mer-fond-commandes .heure,.mer-fond.mer-fond-commandes .choix{position:relative!important;
+  left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
+  margin:0!important;pointer-events:auto}
+.mer-fond .heure{position:absolute;left:14px;top:80px;z-index:4;height:46px;padding:0 8px 0 14px;
+  display:flex;align-items:center;gap:10px;border-radius:999px;width:min(360px,calc(100% - 28px));
+  background:rgba(6,18,33,.66);color:var(--creme,#f4efe4);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto}
+.mer-fond .heure .lue{flex:none;min-width:4.6em;font-size:14px;font-weight:600;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.mer-fond .heure .piste{flex:1 1 auto;min-width:0;height:42px;margin:0;background:transparent;
+  cursor:pointer;-webkit-appearance:none;appearance:none;touch-action:none;outline:none}
+.mer-fond .heure .piste::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:linear-gradient(90deg,#0b1730 0%,#0b1730 21%,#d9879a 27%,#f2c48a 31%,#6fb1e6 42%,#3f97e6 56%,#7fb6e0 72%,#f5b56b 81%,#d9694f 85%,#3a2c55 89%,#0b1730 93%,#0b1730 100%)}
+.mer-fond .heure .piste::-moz-range-track{height:8px;border-radius:4px;background:linear-gradient(90deg,#0b1730 0%,#0b1730 21%,#d9879a 27%,#f2c48a 31%,#6fb1e6 42%,#3f97e6 56%,#7fb6e0 72%,#f5b56b 81%,#d9694f 85%,#3a2c55 89%,#0b1730 93%,#0b1730 100%)}
+.mer-fond .heure .piste::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;
+  margin-top:-7px;border-radius:50%;background:var(--creme,#f4efe4);border:0;box-shadow:0 1px 5px rgba(0,0,0,.5)}
+.mer-fond .heure .piste::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--creme,#f4efe4);
+  border:0;box-shadow:0 1px 5px rgba(0,0,0,.5)}
+.mer-fond .heure .auto{flex:none;display:flex;align-items:center;gap:6px;height:34px;padding:0 11px 0 9px;
+  border-radius:999px;font:600 12.5px/1 system-ui,sans-serif;color:var(--creme,#f4efe4);
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);cursor:pointer}
+.mer-fond .heure .auto .pastille{width:8px;height:8px;border-radius:50%;background:#93a8bc}
+.mer-fond .heure .auto[aria-checked="true"]{background:var(--creme,#f4efe4);color:#08162a;border-color:var(--creme,#f4efe4)}
+.mer-fond .heure .auto[aria-checked="true"] .pastille{background:var(--rouge,#e23a3e)}
+
+/* le choix du bateau */
+.mer-fond .choix{position:absolute;left:14px;top:80px;z-index:4;display:flex;flex-direction:column;
+  align-items:stretch;gap:4px;padding:4px;border-radius:22px;background:rgba(6,18,33,.66);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto;width:max-content}
+.mer-fond .choix button{font:600 13px/1 system-ui,sans-serif;color:#e8eff5;background:transparent;
+  border:0;border-radius:18px;min-height:36px;padding:0 14px;cursor:pointer;white-space:nowrap;
+  text-align:left;transition:background-color .15s ease,color .15s ease}
+.mer-fond .choix button[aria-checked="true"]{background:var(--creme,#f4efe4);color:#08162a}
+.mer-fond .choix button:focus-visible{outline:3px solid var(--rouge,#e23a3e);outline-offset:2px}
+
+/* plus de girouette : le vent ne se règle plus à la main (Nicolas, 19/11/2026) */
+.mer-fond .vent{display:none!important}
+/* le cadran du vent, en bas à droite */
+.mer-fond .vent{position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:4;width:104px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--creme,#f4efe4);text-align:center;
+  pointer-events:auto}
+.mer-fond .vent .cadran{width:96px;height:96px;border-radius:50%;background:rgba(6,18,33,.62);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);touch-action:none;cursor:grab;outline:none;
+  -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.mer-fond .vent .cadran:active{cursor:grabbing}
+.mer-fond .vent svg{display:block;width:100%;height:100%}
+.mer-fond .vent .valeur{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;
+  text-shadow:0 1px 4px rgba(0,0,0,.85)}
+.mer-fond .vent .geste{font-size:10.5px;color:#c3d2e0;text-shadow:0 1px 4px rgba(0,0,0,.85)}
+
+/* la légende de la manœuvre, en bas à gauche */
+.mer-fond .legende{position:absolute;left:14px;bottom:14px;z-index:4;width:min(330px,calc(100% - 150px));
+  background:rgba(6,18,33,.66);color:var(--creme,#f4efe4);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-radius:12px;padding:12px 14px 10px;display:flex;flex-direction:column;gap:4px;text-align:left;
+  pointer-events:auto}
+.mer-fond .legende .oeil{margin:0;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#a8bccc}
+.mer-fond .legende .phase{margin:0;font-weight:700;font-size:17px;line-height:1.2;min-height:1.2em}
+.mer-fond .legende .detail{margin:0;font-size:12.5px;line-height:1.35;color:#b9cbdc;min-height:2.7em}
+.mer-fond .instruments{display:flex;gap:16px;margin:5px 0 0;padding:7px 0 0;
+  border-top:1px solid rgba(255,255,255,.16)}
+.mer-fond .instruments div{display:flex;flex-direction:column;min-width:0}
+.mer-fond .instruments dt{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#a8bccc}
+.mer-fond .instruments dd{margin:0;font-variant-numeric:tabular-nums;font-size:16px;font-weight:600;white-space:nowrap}
+.mer-fond .instruments dd small{font-size:10.5px;font-weight:500;color:#a8bccc;margin-left:2px}
+
+.mer-fond .rejouer{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:4;
+  font:600 13.5px/1 system-ui,sans-serif;color:#08162a;background:var(--creme,#f4efe4);border:0;border-radius:999px;
+  padding:10px 17px;min-height:42px;cursor:pointer;pointer-events:auto}
+.mer-fond .rejouer:active{transform:translateX(-50%) scale(.97)}
+.mer-fond .secours{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:24px;text-align:center;color:var(--creme,#f4efe4);z-index:2}
+
+/* le héros : plus qu'un texte posé sur l'eau */
+.hero.hero-mer{position:relative;max-width:none;margin:0;padding:0;text-align:center;
+  min-height:100svh;display:flex;align-items:center;justify-content:center;background:transparent;pointer-events:none}
+.hero-mer .hero-texte{position:relative;z-index:3;padding:2rem 1.4rem 7.75rem;pointer-events:none}
+.contenu a,.contenu button,.contenu input,.contenu select,.contenu textarea,
+.contenu summary,.contenu [tabindex],.contenu video,.contenu audio{pointer-events:auto}
+
+@media (max-width:820px){
+  .mer-fond .choix{left:10px;top:64px}
+  .mer-fond .legende{display:none}
+  .mer-fond .vent{top:auto;bottom:150px;left:8px;right:auto;transform:none;width:84px}
+  .mer-fond .vent .cadran{width:78px;height:78px}
+  .mer-fond .rejouer{bottom:12px}
+  .hero.hero-mer{align-items:flex-start}
+  .hero-mer .hero-texte{padding:13.2rem 1.2rem .5rem}
+  .hero-mer .reseaux-barre{gap:1.3rem;flex-wrap:wrap;margin-top:2.2rem}
+}
+@media (prefers-reduced-motion: reduce){
+  .mer-fond canvas{transition-duration:.2s}
+  .mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{transition:none}
+}
+</style>
+<script src="mer-louvoyage.js?v=1795162313" defer></script>
+<script>
+/* les commandes de la scène s'effacent dès qu'on a quitté le haut de la page */
+(function(){
+  var m=document.getElementById('cadre'); if(!m) return;
+  function maj(){ var s=window.scrollY||window.pageYOffset||0;
+    m.classList.toggle('loin', s > window.innerHeight*0.72); }
+  window.addEventListener('scroll', maj, {passive:true});
+  window.addEventListener('resize', maj); maj();
+})();
+</script>
 
 <div class="contenu">
 <header class="entete">
@@ -336,7 +728,7 @@
   <div class="reseaux-barre"><a class="reseau" href="https://t.me/sailingmorehere" target="_blank" rel="noopener" aria-label="telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#29a9eb" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.6 6.6-1.6 7.6c-.1.5-.4.6-.8.4l-2.3-1.7-1.1 1.1c-.1.1-.2.2-.4.2l.2-2.5 4.6-4.1c.2-.2 0-.3-.3-.1l-5.7 3.6-2.4-.8c-.5-.2-.5-.5.1-.7l9.4-3.6c.4-.2.8 0 .6.6z"/></svg></a><a class="reseau" href="https://www.facebook.com/SailingMore" target="_blank" rel="noopener" aria-label="facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#1877f2" d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.7-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg></a><a class="reseau" href="https://www.youtube.com/@SailingMore" target="_blank" rel="noopener" aria-label="youtube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#ff0000" d="M23 7.5a3 3 0 0 0-2.1-2.1C19 4.9 12 4.9 12 4.9s-7 0-8.9.5A3 3 0 0 0 1 7.5 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.5a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 23.5 12 31 31 0 0 0 23 7.5zM9.8 15.4V8.6L15.7 12z"/></svg></a><a class="reseau" href="https://www.instagram.com/sailingmorehere/" target="_blank" rel="noopener" aria-label="instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="ig" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#feda75"/><stop offset=".35" stop-color="#fa7e1e"/><stop offset=".65" stop-color="#d62976"/><stop offset="1" stop-color="#962fbf"/></linearGradient></defs><path fill="url(#ig)" fill-rule="evenodd" d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.9.3 2.4.5.6.2 1 .5 1.5 1 .5.5.8.9 1 1.5.2.5.4 1.2.5 2.4.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.9-.5 2.4-.2.6-.5 1-1 1.5-.5.5-.9.8-1.5 1-.5.2-1.2.4-2.4.5-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.9-.3-2.4-.5-.6-.2-1-.5-1.5-1-.5-.5-.8-.9-1-1.5-.2-.5-.4-1.2-.5-2.4C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.9.5-2.4.2-.6.5-1 1-1.5.5-.5.9-.8 1.5-1 .5-.2 1.2-.4 2.4-.5 1.3-.1 1.7-.1 4.9-.1zm0 3.2c-3.1 0-3.5 0-4.7.1-1 .1-1.4.2-1.7.4-.4.2-.7.4-1 .7-.3.3-.5.6-.7 1-.2.3-.3.7-.4 1.7-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 1 .2 1.4.4 1.7.2.4.4.7.7 1 .3.3.6.5 1 .7.3.2.7.3 1.7.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1-.1 1.4-.2 1.7-.4.4-.2.7-.4 1-.7.3-.3.5-.6.7-1 .2-.3.3-.7.4-1.7.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1-.2-1.4-.4-1.7-.2-.4-.4-.7-.7-1-.3-.3-.6-.5-1-.7-.3-.2-.7-.3-1.7-.4-1.2-.1-1.6-.1-4.7-.1zm0 3.1a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 3.2a2.3 2.3 0 1 0 0 4.6 2.3 2.3 0 0 0 0-4.6zm5.7-3.5a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6z"/></svg></a><a class="reseau" href="https://x.com/SailingMore" target="_blank" rel="noopener" aria-label="x"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#ffffff" d="M18.9 2H22l-6.8 7.8L23 22h-6.3l-4.9-6.4L6.2 22H3l7.3-8.3L2.4 2h6.4l4.5 5.9L18.9 2zm-1.1 18h1.7L7.4 3.7H5.6L17.8 20z"/></svg></a></div>
 </section>
 
-<section class="kit-bloc" id="annonceurs"><div class="carte-kit"><h3 data-t="kit_titre">Annonceurs</h3><p data-t="kit_texte">Un seul bloc pour commencer : un mois, moitié jeu concours et moitié publications, 500 €.</p><p class="kit-preuve" data-t="kit_preuve">Ces chiffres viennent de Meta, relevés ce mois-ci.</p><div class="tarifs"><div class="tarif-ligne"><span class="tarif-nom" data-t="bloc_nom">Le bloc de lancement</span><span class="tarif-ce" data-t="bloc_ce">un mois, moitié jeu concours et moitié publications</span><span class="tarif-prix">500 €</span></div><div class="tarif-ligne tarif-long"><span class="tarif-nom" data-t="bloc_detail_titre">Ce que le bloc contient</span><span class="tarif-ce" data-t="bloc_detail">1 jeu concours de 7 jours · sa feuille d'annonce · 1 story · 2 publications dédiées · le rapport de portée sous 72 h</span></div></div><p class="tarif-notes" data-t="tarif_notes">Prix en euros HT. Rapport de portée et d'interactions sous 72 h, chiffres de Meta à l'appui. Mention « Partenariat rémunéré » et contrat écrit. Aucune portée garantie : on la mesure, et on l'écrit avant la signature.</p><form class="kit-form" method="POST" action="https://formsubmit.co/hello.sailingmore@gmail.com" data-a="hello.sailingmore" data-b="gmail.com"><input type="hidden" name="_subject" value="Demande de grille — Sailing More"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_next" value="https://sailingmore.fr/merci.html"><input class="miel" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true"><label><span data-t="kit_nom">Votre nom</span><input name="nom" required autocomplete="name"></label><label><span data-t="kit_marque">Marque ou activité</span><input name="marque" required autocomplete="organization"></label><label><span data-t="kit_email">Email</span><input name="email" type="email" required autocomplete="email" inputmode="email"></label><button class="bouton" type="submit"><span data-t="kit_bouton">Recevoir la grille</span> <span class="fleche" aria-hidden="true">→</span></button></form><p class="kit-note" data-t="kit_note">Vos données servent seulement à vous répondre. Suppression sur demande.</p><p class="kit-ou"><span data-t="kit_ou">Ou écrivez à</span> <a class="courriel" href="mailto:hello.sailingmore@gmail.com" data-a="hello.sailingmore" data-b="gmail.com" data-t="kit_lien" target="_blank" rel="noopener">l'adresse du blog</a>.</p><noscript><p class="kit-ou">Sans JavaScript, écrivez à <a href="mailto:hello.sailingmore@gmail.com" target="_blank" rel="noopener">hello.sailingmore@gmail.com</a> — la grille part le jour même.</p></noscript><script>(function(){document.querySelectorAll('form.kit-form').forEach(function(f){if(f.dataset.a&&f.dataset.b)f.action='https://formsubmit.co/'+f.dataset.a+'@'+f.dataset.b;});document.querySelectorAll('a.courriel').forEach(function(a){if(a.dataset.a&&a.dataset.b){var ad=a.dataset.a+'@'+a.dataset.b;a.href='mailto:'+ad;a.textContent=ad;a.removeAttribute('data-t');}});})();</script></div></section>
+
 
 <section class="monde"><h2 data-t="carte_titre">Nos concentrations de voileux</h2>
 <style>

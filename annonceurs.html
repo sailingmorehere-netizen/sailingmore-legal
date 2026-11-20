@@ -34,16 +34,30 @@
   .stories h2,.reels h2,.monde h2{white-space:nowrap;font-size:clamp(.98rem,3.05vw,1.62rem);
     letter-spacing:-.012em;margin:0 0 1.5rem;line-height:1.15;color:var(--toile);
     font-weight:700}
-  .pelli{display:flex;gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;
-    padding:.35rem .2rem 1.1rem;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .pelli{position:relative;height:clamp(22rem,52vw,30rem);
+    display:flex;align-items:center;justify-content:center;overflow-x:auto;overflow-y:hidden;
+    user-select:none;-webkit-user-select:none;
+    padding:1.2rem .2rem 0;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+    scroll-snap-type:x proximity;cursor:grab}
+  .pelli.saisie{cursor:grabbing;scroll-snap-type:none}
   .pelli::-webkit-scrollbar{display:none}
-  .vignette{flex:none;width:9.8rem;scroll-snap-align:start;text-decoration:none;
-    transition:transform .18s ease}
-  .vignette .jour{display:block;margin-top:.4rem;text-align:center;font-size:.72rem;letter-spacing:.06em;
-    color:var(--gris);font-variant-numeric:tabular-nums}
+  .pelli>*{scroll-snap-align:center}
+  /* Les stories tenues en éventail, comme un jeu de cartes (Nicolas, 20/11/2026). C'est la présentation
+     de la bande sur le site, rien d'autre : ni les fiches publiées, ni leur ordre ne changent. Chaque
+     vignette est inclinée depuis son bas (transform-origin) et décalée par son rang. */
+  /* L'inclinaison n'est plus fixée par le rang : elle suit la main, calculée par ESQUIF ci-dessous.
+     La règle de secours ci-dessous vaut quand le script ne tourne pas (JS coupé). */
+  .pelli .vignette:nth-child(1){transform:rotate(-8deg) translate(-30%,7%)}
+  .pelli .vignette:nth-child(2){transform:rotate(-4deg) translate(-15%,2%)}
+  .pelli .vignette:nth-child(4){transform:rotate(4deg) translate(15%,2%)}
+  .pelli .vignette:nth-child(5){transform:rotate(8deg) translate(30%,7%)}
+  .pelli .vignette:nth-child(n+6){display:none}
+  .vignette{flex:none;width:clamp(7.4rem,25vw,12rem);
+    transform-origin:50% 100%;position:relative;text-decoration:none;
+    transition:transform .22s ease}
   .vignette .anneau{display:block;padding:3px;border-radius:1.15rem;
     background:linear-gradient(150deg,#f9ce34,#ee2a7b 46%,#6228d7)}
-  .vignette:hover{transform:translateY(-5px)}
+  .vignette:hover{transform:rotate(0deg) translate(0,-6%);z-index:9}
   .vignette img{display:block;width:100%;height:auto;aspect-ratio:9/16;object-fit:cover;
     border-radius:.95rem;border:3px solid var(--nuit)}
   .trois{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
@@ -80,7 +94,13 @@
      rouge qui monte au survol. Ne garder ici que la pose. */
   .carte-kit .bouton{padding:1rem 1.7rem;text-decoration:none}
   @media (max-width:900px){
-    .vignette{width:8.4rem}
+    .vignette{width:clamp(6.6rem,24vw,8.6rem)}
+    .pelli{height:clamp(15rem,54vw,18rem)}
+    .pelli .vignette:nth-child(1){transform:rotate(-7deg) translate(-24%,7%)}
+    .pelli .vignette:nth-child(2){transform:rotate(-3.5deg) translate(-12%,2%)}
+    .pelli .vignette:nth-child(4){transform:rotate(3.5deg) translate(12%,2%)}
+    .pelli .vignette:nth-child(5){transform:rotate(7deg) translate(24%,7%)}
+    .pelli{justify-content:flex-start}
     .trois{grid-template-columns:repeat(3,1fr);gap:.6rem}
     .legende{font-size:.68rem}
   }
@@ -132,8 +152,8 @@
 /* Nicolas, 20/11/2026 : les boutons passent au rectangle à filet — plus d'aplat plein, un trait rouge,
    un mot en capitales espacées, et le rouge qui monte du bas au survol. Cette règle ne garde que la
    pose du bouton dans le héros : couleur, bordure et rayon viennent de `.bouton` (accueil_site.py). */
-.hero .bouton-hero{margin:2.2rem 0 0;text-decoration:none;pointer-events:auto}
-@media(max-width:640px){.hero .bouton-hero{margin-top:1.7rem}}
+.hero .bouton-hero{margin:5rem 0 0;text-decoration:none;pointer-events:auto}
+@media(max-width:640px){.hero .bouton-hero{margin-top:2.6rem}}
 
   .bouton{display:inline-flex;align-items:center;gap:.8rem;padding:1rem 1.7rem;border-radius:3px;
     font-weight:600;font-size:.74rem;line-height:1.1;letter-spacing:.17em;text-transform:uppercase;
@@ -206,7 +226,7 @@
      `.72rem`, et la barre se pose au milieu exact de cet écart (`top:calc(-.72rem / 2 - 1.5px)`, 1,5 px
      étant la moitié de ses 3 px). Distance égale par construction, quelle que soit la taille de police. */
   .hero h1{display:flex;flex-direction:column;align-items:center;row-gap:.72rem;
-    margin-bottom:2.6rem;line-height:1.16;letter-spacing:-.035em}
+    margin-bottom:5rem;line-height:1.16;letter-spacing:-.035em}
   .hero .filet{display:none}
   .cadre{margin-top:3.2rem}
   .citation{padding-top:1.4rem}
@@ -326,7 +346,7 @@
      `.72rem`, et la barre se pose au milieu exact de cet écart (`top:calc(-.72rem / 2 - 1.5px)`, 1,5 px
      étant la moitié de ses 3 px). Distance égale par construction, quelle que soit la taille de police. */
   .hero h1{display:flex;flex-direction:column;align-items:center;row-gap:.72rem;
-    margin-bottom:2.6rem;line-height:1.16;letter-spacing:-.035em}
+    margin-bottom:5rem;line-height:1.16;letter-spacing:-.035em}
   .hero h1 span{box-shadow:none;position:relative;display:block;width:max-content;max-width:100%;
     margin-inline:auto}
   /* Nicolas, 20/11/2026 (deux fois) : « la ligne rouge doit être entre sailing et more ». Ni un
@@ -718,7 +738,7 @@
 /* le héros : plus qu'un texte posé sur l'eau */
 .hero.hero-mer{position:relative;max-width:none;margin:0;padding:0;text-align:center;
   min-height:100svh;display:flex;align-items:center;justify-content:center;background:transparent;pointer-events:none}
-.hero-mer .hero-texte{position:relative;z-index:3;padding:6rem 1.4rem 7rem;pointer-events:none}
+.hero-mer .hero-texte{position:relative;z-index:3;padding:2rem 1.4rem 7.75rem;pointer-events:none}
 .contenu a,.contenu button,.contenu input,.contenu select,.contenu textarea,
 .contenu summary,.contenu [tabindex],.contenu video,.contenu audio{pointer-events:auto}
 
@@ -729,7 +749,7 @@
   .mer-fond .vent .cadran{width:78px;height:78px}
   .mer-fond .rejouer{bottom:12px}
   .hero.hero-mer{align-items:flex-start}
-  .hero-mer .hero-texte{padding:10.4rem 1.2rem .5rem}
+  .hero-mer .hero-texte{padding:13.2rem 1.2rem .5rem}
   .hero-mer .reseaux-barre{gap:1.3rem;flex-wrap:wrap;margin-top:2.2rem}
 }
 @media (prefers-reduced-motion: reduce){
