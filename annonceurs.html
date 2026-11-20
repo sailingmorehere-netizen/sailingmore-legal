@@ -76,8 +76,9 @@
     box-shadow:0 18px 40px -28px rgba(0,0,0,.9)}
   .carte-kit h3{margin:0 0 .5rem;font-size:clamp(1.25rem,2.6vw,1.7rem);letter-spacing:-.01em}
   .carte-kit p{margin:0 0 1.3rem;color:#cfe0ee;max-width:34rem}
-  .carte-kit .bouton{display:inline-block;padding:.72rem 1.25rem;border-radius:.55rem;
-    background:var(--eau);color:#04202b;font-weight:700;text-decoration:none;letter-spacing:.01em}
+  /* Le bouton du formulaire suit le style commun (`.bouton`) : filet rouge, capitales espacées, et le
+     rouge qui monte au survol. Ne garder ici que la pose. */
+  .carte-kit .bouton{padding:1rem 1.7rem;text-decoration:none}
   @media (max-width:900px){
     .vignette{width:8.4rem}
     .trois{grid-template-columns:repeat(3,1fr);gap:.6rem}
@@ -93,10 +94,9 @@
   padding:.72rem .8rem;font:inherit;font-size:.9rem;border-radius:0;outline:none;width:100%}
 .kit-form input:focus{border-color:#e23a3e;background:rgba(7,28,49,.85)}
 .kit-form input.miel{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
-.carte-kit .kit-form button{justify-self:start;margin-top:.5rem;background:#e23a3e;color:#fff;
-  border:1px solid #e23a3e;padding:.85rem 1.5rem;font:inherit;font-size:.7rem;font-weight:600;
-  letter-spacing:.16em;text-transform:uppercase;cursor:pointer;border-radius:0;transition:background .2s}
-.carte-kit .kit-form button:hover{background:#c22f33;border-color:#c22f33}
+/* Le bouton du formulaire ne redéfinit rien : il hérite de `.bouton` (rectangle à filet, rouge qui monte
+   au survol). Seule la pose reste — c'est ici que le bouton était encore un aplat plein carré. */
+.carte-kit .kit-form button{justify-self:start;margin-top:.5rem;cursor:pointer}
 /* La bande des prix (Nicolas, 19/11/2026) : une bande, filet rouge dessus, filet blanc dessous. */
 .tarifs{margin:1.6rem 0 .4rem;border-top:3px solid #e23a3e;border-bottom:1px solid rgba(255,255,255,.30)}
 .tarif-ligne{display:grid;grid-template-columns:1fr auto;gap:.15rem 1.1rem;padding:.85rem 0;
@@ -129,12 +129,24 @@
 .kit-rappel .bouton{margin:0}
 
 /* Le bouton du héros : le seul pas vers le formulaire depuis le haut de page (Nicolas, 19/11/2026). */
-.hero .bouton-hero{display:inline-flex;align-items:center;gap:.55rem;margin:2.1rem 0 0;
-  background:#e23a3e;color:#fff;border:1px solid #e23a3e;padding:.85rem 1.5rem;border-radius:0;
-  font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;
-  pointer-events:auto;transition:background .2s,border-color .2s}
-.hero .bouton-hero:hover{background:#c22f33;border-color:#c22f33}
-@media(max-width:640px){.hero .bouton-hero{margin-top:1.6rem;padding:.78rem 1.2rem}}
+/* Nicolas, 20/11/2026 : les boutons passent au rectangle à filet — plus d'aplat plein, un trait rouge,
+   un mot en capitales espacées, et le rouge qui monte du bas au survol. Cette règle ne garde que la
+   pose du bouton dans le héros : couleur, bordure et rayon viennent de `.bouton` (accueil_site.py). */
+.hero .bouton-hero{margin:2.2rem 0 0;text-decoration:none;pointer-events:auto}
+@media(max-width:640px){.hero .bouton-hero{margin-top:1.7rem}}
+
+  .bouton{display:inline-flex;align-items:center;gap:.8rem;padding:1rem 1.7rem;border-radius:3px;
+    font-weight:600;font-size:.74rem;line-height:1.1;letter-spacing:.17em;text-transform:uppercase;
+    font-family:inherit;cursor:pointer;text-decoration:none;
+    color:#fff;background:transparent;border:1px solid rgba(226,58,62,.85);
+    position:relative;overflow:hidden;isolation:isolate;transition:color .22s ease,border-color .22s ease}
+  .bouton::before{content:"";position:absolute;inset:0;z-index:-1;background:#e23a3e;
+    transform:translateY(101%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  .bouton:hover{color:#fff;border-color:#e23a3e}
+  .bouton:hover::before{transform:translateY(0)}
+  .bouton:focus-visible{outline:2px solid #a8ecec;outline-offset:4px}
+  .bouton .fleche{display:inline-block;transition:transform .22s ease}
+  .bouton:hover .fleche{transform:translateX(4px)}
 
   body{background:#0a1a2b}
   .entete{background:rgba(10,26,43,.94);border-bottom:1px solid rgba(226,58,62,.5)}
@@ -166,16 +178,10 @@
   .pt-v i{background:#e23a3e;box-shadow:none}
   .carte-kit{border-radius:0;border:0;border-top:1px solid rgba(226,58,62,.22);
     border-bottom:1px solid rgba(255,255,255,.09);background:transparent;box-shadow:none}
-  .carte-kit .bouton{background:transparent;color:#e23a3e;border:1px solid #e23a3e;border-radius:0}
   .carte-jeu{background:transparent;border:0;border-top:1px solid rgba(226,58,62,.22);
     border-bottom:1px solid rgba(255,255,255,.09);border-radius:0;box-shadow:none}
-  .carte-jeu .bouton{background:#e23a3e;border-color:#e23a3e;color:#fff;border-radius:0}
   /* ---- les boutons deviennent des filets : un mot, un trait rouge dessous (Nicolas, 19/11/2026) ----
      « les boutons en dessous, essaye qu'ils soient un peu comme tes barres » */
-  .carte-kit .bouton,.carte-jeu .bouton{background:none;border:0;border-bottom:1px solid #e23a3e;
-    border-radius:0;color:#fff;padding:.15rem 0 .25rem;font-size:.78rem;font-weight:400;
-    letter-spacing:.12em;text-transform:uppercase;transition:border-color .2s}
-  .carte-kit .bouton:hover,.carte-jeu .bouton:hover{background:none;border-bottom-color:#fff}
   .reel{border-radius:0;border-color:rgba(255,255,255,.14);background:#0a1a2b}
   .reel img{background:#0a1a2b}
   .carte-reel{background:transparent}
@@ -375,7 +381,7 @@
 
 </style><style>.page.page-annonceurs{max-width:64rem}.page.page-annonceurs>*+*{margin-top:1.6rem}.page.page-annonceurs>.ann-carte{margin-top:3.2rem}.ann-carte{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:#9db2c6;margin:3.4rem 0 1rem}</style></head><body><div class="mer-fond mer-fond-commandes">
   <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
-</div><div class="page page-annonceurs"><a class="retour" href="index.html">← Sailing More</a><h1 data-t="kit_titre">Annonceurs</h1><p data-t="ann_intro">Sailing More parle aux voileux chaque soir. Un bloc de lancement, un mois, moitié jeu concours et moitié publications : 500 €.</p><p class="kit-preuve" data-t="kit_preuve">Ces chiffres viennent de Meta, relevés ce mois-ci.</p><div class="carte-kit"><div class="tarifs"><div class="tarif-ligne"><span class="tarif-nom" data-t="bloc_nom">Le bloc de lancement</span><span class="tarif-ce" data-t="bloc_ce">un mois, moitié jeu concours et moitié publications</span><span class="tarif-prix">500 €</span></div><div class="tarif-ligne tarif-long"><span class="tarif-nom" data-t="bloc_detail_titre">Ce que le bloc contient</span><span class="tarif-ce" data-t="bloc_detail">1 jeu concours de 7 jours · sa feuille d'annonce · 1 story · 2 publications dédiées · le rapport de portée sous 72 h</span></div></div><p class="tarif-notes" data-t="tarif_notes">Prix en euros HT. Rapport de portée et d'interactions sous 72 h, chiffres de Meta à l'appui. Mention « Partenariat rémunéré » et contrat écrit. Aucune portée garantie : on la mesure, et on l'écrit avant la signature.</p><form class="kit-form" method="POST" action="https://formsubmit.co/hello.sailingmore@gmail.com" data-a="hello.sailingmore" data-b="gmail.com"><input type="hidden" name="_subject" value="Demande de grille — Sailing More"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_next" value="https://sailingmore.fr/merci.html"><input class="miel" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true"><label><span data-t="kit_nom">Votre nom</span><input name="nom" required autocomplete="name"></label><label><span data-t="kit_marque">Marque ou activité</span><input name="marque" required autocomplete="organization"></label><label><span data-t="kit_email">Email</span><input name="email" type="email" required autocomplete="email" inputmode="email"></label><button class="bouton" type="submit"><span data-t="kit_bouton">Recevoir la grille</span> →</button></form><p class="kit-note" data-t="kit_note">Vos données servent seulement à vous répondre. Suppression sur demande.</p><p class="kit-ou"><span data-t="kit_ou">Ou écrivez à</span> <a class="courriel" href="mailto:hello.sailingmore@gmail.com" data-a="hello.sailingmore" data-b="gmail.com" data-t="kit_lien">l'adresse du blog</a>.</p><noscript><p class="kit-ou">Sans JavaScript, écrivez à <a href="mailto:hello.sailingmore@gmail.com">hello.sailingmore@gmail.com</a> — la grille part le jour même.</p></noscript><script>(function(){document.querySelectorAll('form.kit-form').forEach(function(f){if(f.dataset.a&&f.dataset.b)f.action='https://formsubmit.co/'+f.dataset.a+'@'+f.dataset.b;});document.querySelectorAll('a.courriel').forEach(function(a){if(a.dataset.a&&a.dataset.b){var ad=a.dataset.a+'@'+a.dataset.b;a.href='mailto:'+ad;a.textContent=ad;a.removeAttribute('data-t');}});})();</script></div><p class="ann-carte" data-t="ann_carte">Où sont les lecteurs</p><section class="monde"><h2 data-t="carte_titre">Nos concentrations de voileux</h2>
+</div><div class="page page-annonceurs"><a class="retour" href="index.html">← Sailing More</a><h1 data-t="kit_titre">Annonceurs</h1><p data-t="ann_intro">Sailing More parle aux voileux chaque soir. Un bloc de lancement, un mois, moitié jeu concours et moitié publications : 500 €.</p><p class="kit-preuve" data-t="kit_preuve">Ces chiffres viennent de Meta, relevés ce mois-ci.</p><div class="carte-kit"><div class="tarifs"><div class="tarif-ligne"><span class="tarif-nom" data-t="bloc_nom">Le bloc de lancement</span><span class="tarif-ce" data-t="bloc_ce">un mois, moitié jeu concours et moitié publications</span><span class="tarif-prix">500 €</span></div><div class="tarif-ligne tarif-long"><span class="tarif-nom" data-t="bloc_detail_titre">Ce que le bloc contient</span><span class="tarif-ce" data-t="bloc_detail">1 jeu concours de 7 jours · sa feuille d'annonce · 1 story · 2 publications dédiées · le rapport de portée sous 72 h</span></div></div><p class="tarif-notes" data-t="tarif_notes">Prix en euros HT. Rapport de portée et d'interactions sous 72 h, chiffres de Meta à l'appui. Mention « Partenariat rémunéré » et contrat écrit. Aucune portée garantie : on la mesure, et on l'écrit avant la signature.</p><form class="kit-form" method="POST" action="https://formsubmit.co/hello.sailingmore@gmail.com" data-a="hello.sailingmore" data-b="gmail.com"><input type="hidden" name="_subject" value="Demande de grille — Sailing More"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_next" value="https://sailingmore.fr/merci.html"><input class="miel" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true"><label><span data-t="kit_nom">Votre nom</span><input name="nom" required autocomplete="name"></label><label><span data-t="kit_marque">Marque ou activité</span><input name="marque" required autocomplete="organization"></label><label><span data-t="kit_email">Email</span><input name="email" type="email" required autocomplete="email" inputmode="email"></label><button class="bouton" type="submit"><span data-t="kit_bouton">Recevoir la grille</span> <span class="fleche" aria-hidden="true">→</span></button></form><p class="kit-note" data-t="kit_note">Vos données servent seulement à vous répondre. Suppression sur demande.</p><p class="kit-ou"><span data-t="kit_ou">Ou écrivez à</span> <a class="courriel" href="mailto:hello.sailingmore@gmail.com" data-a="hello.sailingmore" data-b="gmail.com" data-t="kit_lien">l'adresse du blog</a>.</p><noscript><p class="kit-ou">Sans JavaScript, écrivez à <a href="mailto:hello.sailingmore@gmail.com">hello.sailingmore@gmail.com</a> — la grille part le jour même.</p></noscript><script>(function(){document.querySelectorAll('form.kit-form').forEach(function(f){if(f.dataset.a&&f.dataset.b)f.action='https://formsubmit.co/'+f.dataset.a+'@'+f.dataset.b;});document.querySelectorAll('a.courriel').forEach(function(a){if(a.dataset.a&&a.dataset.b){var ad=a.dataset.a+'@'+a.dataset.b;a.href='mailto:'+ad;a.textContent=ad;a.removeAttribute('data-t');}});})();</script></div><p class="ann-carte" data-t="ann_carte">Où sont les lecteurs</p><section class="monde"><h2 data-t="carte_titre">Nos concentrations de voileux</h2>
 <style>
 .planisphere .pt-v{position:absolute;transform:translate(-50%,-50%);background:none;border:0;
   padding:0;margin:0;width:26px;height:26px;display:flex;align-items:center;justify-content:center;
