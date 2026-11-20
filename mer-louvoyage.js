@@ -56,10 +56,10 @@ var LUNE={azimutDebut:26, azimutFin:10, hauteur:25};
    vers le côté sous le vent (degrés). focale : angle de champ (degrés, petit = téléobjectif).
    lenteur : temps pour passer à ce cadrage (s). duree : durée du plan d'ouverture (s).
    decal : sur écran large, décale le bateau vers la droite pour dégager la légende (m). */
-var RECUL=1.0, DECAL=18, BORD_SECONDES=20, ZS=1, FOCS=2.2;
+var RECUL=1.0, DECAL=18, BORD_SECONDES=20, ALLURE=2.0, RAYON=520, ZS=1, FOCS=2.2;
 var PLANS={
   ouverture:{d:31, h:3.2, av:1,  y:6.6, tour:46,  travelling:0,  focale:36, lenteur:1.0, duree:0, decal:7},
-  bord:     {d:31, h:11,  av:11, y:4.2, tour:0,   travelling:17, focale:40, lenteur:1.7, decal:3},
+  bord:     {d:31, h:11,  av:-11, y:4.2, tour:0,   travelling:17, focale:40, lenteur:1.7, decal:3},
   virement: {d:24, h:6.5, av:4,  y:5.6, tour:0,   travelling:13, focale:40, lenteur:1.1, decal:4},
   bouee:    {d:32, h:6.5, av:5,  y:6.4, tour:24,  travelling:0,  focale:38, lenteur:2.0, decal:3},
   portrait: {recul:1.3, focale:1.16}    /* téléphone tenu debout : même distance, champ un peu plus large */
@@ -245,15 +245,15 @@ function houle(x,z,t){var y=0,gx=0,gz=0,i,h,ph; for(i=0;i<3;i++){h=HOULE[i]; ph=
 var S={};
 var bouee={x:0,z:0};
 function nouveauDepart(vent){
-  S={t:0, w:vent, camAz:vent, mode:'route', direct:false, amure:-1, dernierVirement:-9, man:null, empannage:-9,
-     psi:wrap(vent+PRES), om:0, v:VPRES*0.9, cote:1, bome:-bordeGV(ventApparent(PRES,VPRES)), foc:-bordeFoc(ventApparent(PRES,VPRES)), ecoute:1, awa:ventApparent(PRES,VPRES),
+  S={t:0, w:vent, camAz:vent, mode:'route', direct:false, amure:(Math.random()<0.5?-1:1), dernierVirement:-9, man:null, empannage:-9,
+     psi:wrap(vent+PRES*(Math.random()<0.5?-1:1)), om:0, v:VPRES*0.9, cote:1, bome:-bordeGV(ventApparent(PRES,VPRES)), foc:-bordeFoc(ventApparent(PRES,VPRES)), ecoute:1, awa:ventApparent(PRES,VPRES),
      creuxGV:-1, creuxFoc:-1, fasGV:0, fasFoc:0, gite:GITE_MAX*RAD*0.9, tangage:0, roulis:0, pilonnement:0,
      fin:0, echelle:1, sillage:[], dernierPoint:-1, derive:[0,0], risee:[0,0], twa:-PRES,
      cam:{d:PLANS.bord.d*B.echelle*1.00,h:PLANS.bord.h*B.echelle*1.00,av:PLANS.bord.av*B.echelle,az:((B.vue&&B.vue.bord!=null)?B.vue.bord:PLANS.bord.tour)*RAD,y:PLANS.bord.y*B.echelle*1.00,fov:PLANS.bord.focale*2.20,dec:PLANS.bord.decal*B.echelle+18.0}, foyer:[0,0], phase:null,
      brume:BRUME_ENTREE>0?1:0, eq:B.equipage.map(function(){return {c:1,cible:1,attente:0}}), gouttes:[], reserve:[],
      vol:(B.decollage&&VPRES>B.decollage)?1:0, foil:{'-1':1,'1':0}, moulin:0};
   var ux=Math.sin(vent), uz=-Math.cos(vent);
-  bouee.x=0; bouee.z=0;
+  bouee.x=(Math.random()-0.5)*2*RAYON; bouee.z=(Math.random()-0.5)*2*RAYON;
   S.x=bouee.x-ux*DEPART+Math.cos(vent)*6; S.z=bouee.z-uz*DEPART+Math.sin(vent)*6;
   S.foyer=[S.x,S.z];
   stries.forEach(function(s){semer(s,true)});
@@ -327,7 +327,7 @@ function pas(dt){
   /* ---- vitesse : la polaire donne la cible, l'inertie fait le reste */
   var vc=S.mode==='route' ? polaire(a/RAD)*(0.55+0.45*S.ecoute) : 0;
   S.v=damp(S.v,vc,vc>S.v?B.relance:(S.mode==='route'?B.erre:B.erre*0.5),dt); /* l'erre : chaque bateau garde plus ou moins sa vitesse dans le virement */
-  S.x+=Math.sin(S.psi)*S.v*KN*dt; S.z-=Math.cos(S.psi)*S.v*KN*dt;
+  S.x+=Math.sin(S.psi)*S.v*KN*ALLURE*dt; S.z-=Math.cos(S.psi)*S.v*KN*ALLURE*dt;
 
   /* ---- gîte sous le vent, tangage et roulis sur la houle */
   var gc=S.cote*GITE_MAX*RAD*sstep(0.38*PRES,0.95*PRES,a)*(1-0.92*sstep(62*RAD,170*RAD,a))*clamp(S.v/VPRES,0,1.1);
@@ -1322,7 +1322,7 @@ function rendre(){
 }
 
 /* ------------------------------------------------------------------ interface */
-var elPhase=document.getElementById('phase'), elDetail=document.getElementById('detail'), elV=document.getElementById('iV'), elA=document.getElementById('iA'), elG=document.getElementById('iG');
+var elPhase=(document.getElementById('phase')||MUET), elDetail=(document.getElementById('detail')||MUET), elV=(document.getElementById('iV')||MUET), elA=(document.getElementById('iA')||MUET), elG=(document.getElementById('iG')||MUET);
 var elFleche=document.getElementById('fleche'), elRose=document.getElementById('rose'), elVent=document.getElementById('ventValeur'), elCadran=document.getElementById('cadran'), elRejouer=document.getElementById('rejouer');
 var etapes=(document.getElementById('etapes')||MUET).children, vu={p:'',d:'',e:-1,cap:-1,instr:0};
 function fr(x){return x.toFixed(1).replace('.',',')}
@@ -1410,21 +1410,25 @@ canvas.addEventListener('pointerup',lacher); canvas.addEventListener('pointercan
 elRejouer.addEventListener('click',repartir);
 
 /* ------------------------------------------------------------------ l'heure du jour */
+/* Nicolas, 20/11/2026 : l'heure ne se règle plus, elle suit toujours l'appareil. Les trois éléments de
+   la réglette (piste, valeur lue, bouton Auto) ne sont plus dans la page : le moteur se contente de
+   les remplir quand ils existent, et fonctionne seul quand ils n'existent pas. */
 var elHeure=document.getElementById('heure'), elHeureLue=document.getElementById('heureLue'), elAuto=document.getElementById('auto');
-var heure=HEURE_DEPART, auto=AUTO_PAR_DEFAUT;
+var heure=HEURE_DEPART, auto=true;
 function heureAppareil(){ var d=new Date(); return d.getHours()+d.getMinutes()/60 }
-/* Aucune horloge ne tourne : on ne recalcule qu'au geste, au chargement et au retour sur l'onglet. */
+/* Aucune horloge ne tourne : on ne recalcule qu'au chargement et au retour sur l'onglet. */
 function reglerHeure(h,depuisReglette){
   heure=clamp(h,0,24); pal=ambiance(heure);
   var txt=lireHeure(heure);
-  elHeureLue.textContent=txt; elHeure.setAttribute('aria-valuetext',txt+', '+nomHeure(heure%24));
-  if(!depuisReglette) elHeure.value=String(Math.round(heure*4)/4);
-  elAuto.setAttribute('aria-checked',auto?'true':'false');
+  if(elHeureLue) elHeureLue.textContent=txt;
+  if(elHeure) elHeure.setAttribute('aria-valuetext',txt+', '+nomHeure(heure%24));
+  if(elHeure && !depuisReglette) elHeure.value=String(Math.round(heure*4)/4);
+  if(elAuto) elAuto.setAttribute('aria-checked',auto?'true':'false');
   if(gl && !etat.tourne) uneImage();
 }
 function synchroniser(){ if(auto) reglerHeure(heureAppareil(),false) }
-elHeure.addEventListener('input',function(){ auto=false; reglerHeure(parseFloat(elHeure.value),true) });
-elAuto.addEventListener('click',function(){ auto=!auto; if(auto) reglerHeure(heureAppareil(),false); else reglerHeure(heure,false) });
+if(elHeure) elHeure.addEventListener('input',function(){ auto=false; reglerHeure(parseFloat(elHeure.value),true) });
+if(elAuto) elAuto.addEventListener('click',function(){ auto=!auto; if(auto) reglerHeure(heureAppareil(),false); else reglerHeure(heure,false) });
 
 /* ------------------------------------------------------------------ démarrage */
 function demarrer(){

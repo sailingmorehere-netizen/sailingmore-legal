@@ -491,13 +491,6 @@
   <canvas id="mer" aria-hidden="true"></canvas>
   <div class="mer-ombre" aria-hidden="true"></div>
   
-  <div class="heure">
-    <output class="lue" id="heureLue" for="heure">19 h 15</output>
-    <input class="piste" id="heure" type="range" min="0" max="24" step="0.25" value="19.25"
-      aria-label="Heure du jour" aria-valuetext="19 h 15, heure dorée">
-    <button class="auto" id="auto" type="button" role="switch" aria-checked="true"
-      aria-label="Heure automatique, selon l'horloge de l'appareil"><span class="pastille" aria-hidden="true"></span>Auto</button>
-  </div>
   <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
 
   <button class="rejouer" id="rejouer" type="button" hidden>Rejouer</button>
@@ -573,12 +566,12 @@
 .mer-fond .heure .auto[aria-checked="true"] .pastille{background:var(--rouge,#e23a3e)}
 
 /* le choix du bateau */
-.mer-fond .choix{position:absolute;left:14px;top:158px;z-index:4;display:flex;gap:4px;padding:4px;
-  border-radius:999px;background:rgba(6,18,33,.66);-webkit-backdrop-filter:blur(10px);
-  backdrop-filter:blur(10px);pointer-events:auto}
+.mer-fond .choix{position:absolute;left:14px;top:80px;z-index:4;display:flex;flex-direction:column;
+  align-items:stretch;gap:4px;padding:4px;border-radius:22px;background:rgba(6,18,33,.66);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto;width:max-content}
 .mer-fond .choix button{font:600 13px/1 system-ui,sans-serif;color:#e8eff5;background:transparent;
-  border:0;border-radius:999px;min-height:36px;padding:0 13px;cursor:pointer;white-space:nowrap;
-  transition:background-color .15s ease,color .15s ease}
+  border:0;border-radius:18px;min-height:36px;padding:0 14px;cursor:pointer;white-space:nowrap;
+  text-align:left;transition:background-color .15s ease,color .15s ease}
 .mer-fond .choix button[aria-checked="true"]{background:var(--creme,#f4efe4);color:#08162a}
 .mer-fond .choix button:focus-visible{outline:3px solid var(--rouge,#e23a3e);outline-offset:2px}
 
@@ -627,8 +620,7 @@
 .contenu summary,.contenu [tabindex],.contenu video,.contenu audio{pointer-events:auto}
 
 @media (max-width:820px){
-  .mer-fond .heure{top:64px;left:10px;right:10px;width:auto}
-  .mer-fond .choix{left:10px;top:118px}
+  .mer-fond .choix{left:10px;top:64px}
   .mer-fond .legende{display:none}
   .mer-fond .vent{top:auto;bottom:150px;left:8px;right:auto;transform:none;width:84px}
   .mer-fond .vent .cadran{width:78px;height:78px}
@@ -642,7 +634,7 @@
   .mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{transition:none}
 }
 </style>
-<script src="mer-louvoyage.js?v=1795129861" defer></script>
+<script src="mer-louvoyage.js?v=1795162313" defer></script>
 <script>
 /* les commandes de la scène s'effacent dès qu'on a quitté le haut de la page */
 (function(){
