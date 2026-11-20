@@ -1037,5 +1037,3 @@ CSS = """
 .hero .bouton-hero{margin:5rem 0 0;text-decoration:none;pointer-events:auto}
 @media(max-width:640px){.hero .bouton-hero{margin-top:2.6rem}}
 """
-
-cette ligne ne compile pas =(
