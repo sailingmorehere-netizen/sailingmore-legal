@@ -195,7 +195,12 @@
   /* ---- les traits droits : ni vague ni cordage (19/11/2026) ----
      Les douze lignes décoratives ont été retirées à la demande de Nicolas. Ce qui reste : les filets
      du cadre CAP d'origine — rouge au-dessus des chiffres, blanc cassé en dessous, un trait plein. */
-  .hero h1{margin-bottom:2.6rem;line-height:1.38;letter-spacing:-.035em}
+  /* Nicolas, 20/11/2026 : « la barre doit être pile entre les deux, à la même distance ». Un interligne
+     ne se mesure pas à l'œil : le titre est une colonne (`flex-direction:column`) avec un écart fixe de
+     `.72rem`, et la barre se pose au milieu exact de cet écart (`top:calc(-.72rem / 2 - 1.5px)`, 1,5 px
+     étant la moitié de ses 3 px). Distance égale par construction, quelle que soit la taille de police. */
+  .hero h1{display:flex;flex-direction:column;align-items:center;row-gap:.72rem;
+    margin-bottom:2.6rem;line-height:1.16;letter-spacing:-.035em}
   .hero .filet{display:none}
   .cadre{margin-top:3.2rem}
   .citation{padding-top:1.4rem}
@@ -310,15 +315,24 @@
      Réglé sur .hero seulement : ailleurs (page du jeu, pages légales) un h1 porte un mot, pas un titre
      en deux lignes, et la barre y tombait au milieu du texte. */
   html{overflow-x:hidden}
-  .hero h1{margin-bottom:2.6rem;line-height:1.38;letter-spacing:-.035em}
+  /* Nicolas, 20/11/2026 : « la barre doit être pile entre les deux, à la même distance ». Un interligne
+     ne se mesure pas à l'œil : le titre est une colonne (`flex-direction:column`) avec un écart fixe de
+     `.72rem`, et la barre se pose au milieu exact de cet écart (`top:calc(-.72rem / 2 - 1.5px)`, 1,5 px
+     étant la moitié de ses 3 px). Distance égale par construction, quelle que soit la taille de police. */
+  .hero h1{display:flex;flex-direction:column;align-items:center;row-gap:.72rem;
+    margin-bottom:2.6rem;line-height:1.16;letter-spacing:-.035em}
   .hero h1 span{box-shadow:none;position:relative;display:block;width:max-content;max-width:100%;
     margin-inline:auto}
   /* Nicolas, 20/11/2026 (deux fois) : « la ligne rouge doit être entre sailing et more ». Ni un
      soulignement du mot, ni un trait dans les lettres : un séparateur court, centré, posé dans le blanc
      qui sépare les deux lignes. `top:-.30em` le met dans l'interligne, `left:50%` + `translateX(-50%)` le
      centre sur le titre — MORE étant centré lui aussi, le trait tombe juste entre les deux mots. */
+  /* Le trait est centré sur l'écart de `.72rem` : moitié de l'écart, moins la moitié de ses 3 px, plus
+     `0,95 px` de compensation — l'espace au-dessus d'une capitale n'est pas l'espace sous elle, et la
+     mesure à l'écran donne 4,1 px de chaque côté à 48 px de corps, 4,1 et 4,2 à 102 px. Sans ce
+     correctif, la barre penche vers MORE (5,2 au-dessus, 3,0 en dessous). */
   .hero h1 span::before{content:"";position:absolute;left:50%;transform:translateX(-50%);
-    top:-.32em;width:4.8rem;height:3px;background:#e23a3e}
+    top:calc(-.72rem / 2 - 2.45px);width:5rem;height:3px;background:#e23a3e}
   .hero h1 span::after{content:none}
   /* les deux filets du cadre des chiffres étaient trop marqués : ils s'effacent presque */
   .cadre{border-top-color:rgba(226,58,62,.22) !important;border-bottom-color:rgba(255,255,255,.09) !important}
