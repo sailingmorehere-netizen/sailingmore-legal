@@ -280,16 +280,6 @@
     <span class="valeur" id="ventValeur">Vent du 000°</span>
     <span class="geste">Faites-le tourner</span>
   </div>
-  <div class="legende" aria-live="polite">
-    <p class="oeil">Ce que vous voyez</p>
-    <p class="phase" id="phase">Près tribord amures</p>
-    <p class="detail" id="detail">Le vent vient de tribord, les voiles sont à bâbord, bordées serré.</p>
-    <dl class="instruments">
-      <div><dt>Vitesse</dt><dd><span id="iV">0,0</span><small>nds</small></dd></div>
-      <div><dt>Angle au vent</dt><dd><span id="iA">0</span><small>°</small></dd></div>
-      <div><dt>VMG</dt><dd><span id="iG">0,0</span><small>nds</small></dd></div>
-    </dl>
-  </div>
 </div>
 <style>
 /* ---- la mer en fond : fixe, derrière tout le contenu (Nicolas, 19/11/2026) ---- */
@@ -321,7 +311,7 @@
 .mer-fond.mer-fond-commandes .heure,.mer-fond.mer-fond-commandes .choix{position:relative!important;
   left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
   margin:0!important;pointer-events:auto}
-.mer-fond .heure{position:absolute;left:14px;top:70px;z-index:4;height:46px;padding:0 8px 0 14px;
+.mer-fond .heure{position:absolute;left:14px;top:80px;z-index:4;height:46px;padding:0 8px 0 14px;
   display:flex;align-items:center;gap:10px;border-radius:999px;width:min(360px,calc(100% - 28px));
   background:rgba(6,18,33,.66);color:var(--creme,#f4efe4);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto}
@@ -343,7 +333,7 @@
 .mer-fond .heure .auto[aria-checked="true"] .pastille{background:var(--rouge,#e23a3e)}
 
 /* le choix du bateau */
-.mer-fond .choix{position:absolute;left:14px;top:126px;z-index:4;display:flex;gap:4px;padding:4px;
+.mer-fond .choix{position:absolute;left:14px;top:158px;z-index:4;display:flex;gap:4px;padding:4px;
   border-radius:999px;background:rgba(6,18,33,.66);-webkit-backdrop-filter:blur(10px);
   backdrop-filter:blur(10px);pointer-events:auto}
 .mer-fond .choix button{font:600 13px/1 system-ui,sans-serif;color:#e8eff5;background:transparent;
@@ -412,7 +402,7 @@
   .mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{transition:none}
 }
 </style>
-<script src="mer-louvoyage.js?v=1795127812" defer></script>
+<script src="mer-louvoyage.js?v=1795129861" defer></script>
 <script>
 /* les commandes de la scène s'effacent dès qu'on a quitté le haut de la page */
 (function(){
