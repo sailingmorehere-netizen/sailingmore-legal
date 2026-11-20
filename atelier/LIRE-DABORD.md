@@ -1,59 +1,62 @@
-# sailingmore.fr — dossier de travail pour Claude Code
+# L'atelier du site sailingmore.fr
 
-Fait le 20/11/2026 pour Nicolas. Ce dossier est **autonome** : le site se régénère avec la commande
-plus bas, sans rien d'autre que Python 3 et Pillow. Il a été testé ici : il produit un `index.html`
-identique **au caractère près** à celui qui est en ligne.
+Tu travailles sur `sailingmore.fr` (site statique, GitHub Pages). La branche `claude` est
+**l'atelier** : on y écrit la source, jamais le site publié.
 
-## 1. Ce qu'est ce site
+## La règle en une phrase
 
-Site **statique** (HTML + un fichier JS + des images), publié sur GitHub Pages, dépôt public
-`https://github.com/sailingmorehere-netizen/sailingmore-legal`, branche `main`, servi sur
-`sailingmore.fr`. Une publication = un commit unique ; GitHub Pages reconstruit en une à deux minutes.
-Pas de CMS, pas de base de données, pas de PHP.
+**Tu pousses sur `claude`, jamais sur `main`.** Le serveur reconstruit le site avec la même commande
+que le travail à la main, le contrôle, puis publie sur `main`. Rien de ce que tu pousses ne va en
+ligne tel quel.
 
-**La source n'est pas dans le dépôt** : le HTML publié est un produit, généré par les scripts de
-`source/`. C'est le piège numéro un.
-
-## 2. Le piège : modifier le HTML publié ne tient pas
-
-`index.html`, `jeux.html`, `annonceurs.html` sont **régénérés** à chaque publication. Une retouche
-faite directement dans le HTML du dépôt est **écrasée** au passage suivant. Il faut modifier la
-source Python, régénérer, puis publier.
-
-## 3. Régénérer
+## Travailler
 
 ```bash
-cd site-claude
-SITE_ROOT="$PWD/donnees" PYTHONPATH="$PWD/source" python3 source/accueil_site.py --site
+git clone https://github.com/sailingmorehere-netizen/sailingmore-legal
+cd sailingmore-legal && git checkout claude
+# éditer atelier/source/accueil_site.py, site_blocks.py, mer_louvoyage.py, carte_site.py
 ```
 
-Résultat dans `donnees/cache/rhum/site/` : `index.html`, `jeux.html`, `concours.html`, les pages
-légales, `robots.txt`, `sitemap.xml`, `404.html`, et les images déjà en place. Ouvrir
-`donnees/cache/rhum/site/index.html` dans un navigateur pour voir le rendu.
+Tester le rendu, sans rien publier :
 
-Référence de comparaison : `reference/index.html` est exactement ce que sert le site au 20/11/2026.
-Un écart de 25 Ko n'est pas une retouche, c'est un retour en arrière (le 19/11, un envoi portait
-encore l'ancien design à 113 Ko).
+```bash
+cd atelier
+SITE_ROOT="$PWD/donnees" PYTHONPATH="$PWD/source" python3 source/mer_louvoyage.py
+SITE_ROOT="$PWD/donnees" PYTHONPATH="$PWD/source" python3 source/accueil_site.py --site
+# résultat : donnees/projets/sailingmore/site/index.html
+```
 
-## 4. Ce qui ne se touche pas sans Nicolas
+Puis :
 
-- **Charte** : marine `#0a1a2b`, panneaux `#0f2438`, rouge `#e23a3e` — le rouge souligne, il n'écrit pas.
-  Filets droits, rien de franchement arrondi.
-- **Les vagues, la houle et le cordage** ont été retirés le 19/11/2026 : ne pas les remettre.
-- **Six langues** : FR, EN, IT, ES, PT, DE. Toute chaîne visible passe par une clé de traduction dans
-  les six, sinon les pages étrangères affichent du français.
-- **Aucun chiffre inventé.** Les bourses viennent de `donnees/projets/sailingmore/bourses.json` ; le
-  nombre de participants est précédé de « ≈ » et n'apparaît que si Nicolas l'a fourni.
-- **Un seul écart vertical entre sections : 6,5 rem.** Corrigé le 20/11, ne doit pas revenir.
-- **La publication reste une décision de Nicolas.** Claude livre un patch ou les fichiers modifiés,
-  avec la commande de régénération et une capture du rendu — pas un commit direct sur `main`.
+```bash
+git add -A atelier && git commit -m "ce que tu as changé, en clair" && git push origin claude
+```
 
-## 5. Contenu du dossier
+Dans les quinze minutes, la reconstruction tourne, contrôle la charte et la taille de page, et
+publie. Tu reçois le résultat dans le fil Telegram de Nicolas (« ATELIER PUBLIÉ · sha · message »
+ou « ATELIER NON PUBLIÉ » avec la raison). Si c'est refusé, corrige et repousse sur `claude`.
 
-- `source/` : `accueil_site.py` (le générateur), `site_blocks.py` (les blocs), `mer_louvoyage.py`
-  (la scène WebGL en fond), `carte_site.py` (la carte du monde).
-- `donnees/cache/rhum/` : les chiffres, les citations, la file de vidéos, la géographie des villes,
-  l'audience par pays, et le site déjà généré.
-- `donnees/cache/documents/demo-v3-detaillee.html` : le moteur WebGL d'origine.
-- `donnees/projets/sailingmore/bourses.json` : les bourses aux équipiers (groupes Facebook, zones).
-- `reference/index.html` : la copie de ce qui est en ligne.
+## Ce qui est interdit
+
+- **Pousser sur `main`** : c'est le site en production, un commit y va en ligne en deux minutes,
+  sans contrôle.
+- **Modifier les `.html` à la racine du dépôt** : ils sont régénérés à chaque publication, tes
+  retouches seraient écrasées. La forme se change dans `atelier/source/`, jamais dans le HTML produit.
+- **Ajouter un second chemin de publication** (un script qui écrit le site ailleurs). C'est ce qui a
+  causé le bug du 20/11/2026 : un cron publiait un vieux gabarit et effaçait les correctifs du jour.
+
+## Ce qui ne se touche pas sans Nicolas
+
+- Charte : marine `#0a1a2b`, panneaux `#0f2438`, rouge `#e23a3e` (il souligne, il n'écrit pas).
+- Les vagues, la houle et le cordage ont été retirés le 19/11/2026 : ne pas les remettre.
+- Six langues (FR, EN, IT, ES, PT, DE) : toute chaîne visible passe par une clé de traduction dans
+  les six.
+- Aucun chiffre inventé : les bourses viennent de `atelier/donnees/projets/sailingmore/bourses.json`.
+- Un seul écart vertical entre sections : 6,5 rem.
+- Les pages de la racine ne portent pas de données de travail : `donnees/` est la seule source.
+
+## Si la reconstruction échoue
+
+Le message dit pourquoi (trace Python, charte absente, page trop petite de 10 %). Corrige dans
+`atelier/source/`, repousse sur `claude`. Ne touche pas à `main` pour « réparer » : la version en
+ligne est la dernière qui a passé le contrôle.
