@@ -516,6 +516,14 @@ def menu_site(actuelle: str = "index.html") -> str:
             f'<nav aria-label="Toutes les pages du site">{"".join(liens)}</nav></details>')
 
 
+def liens_pages(actuelle: str) -> str:
+    """Une ligne de liens vers les pages de contenu, pour les pages qui n'ont pas encore la barre
+    complète (cours, régates). Sans dépendance de style : fonctionne dans n'importe quelle feuille."""
+    liens = " · ".join(f'<a href="{f}" style="color:inherit">{t}</a>'
+                       for f, t, g in MENU_PAGES if not g and f != actuelle)
+    return f'<nav aria-label="Pages du site" style="font-size:.85rem;opacity:.85;margin:.6rem 0">{liens}</nav>'
+
+
 _MENU_JS = """<script>
 (function(){
   var d = document.querySelector('.entete .menu-d');

@@ -883,6 +883,11 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
 </div>
 
 <footer>
+  <a href="regates.html">Régates · Regattas</a>
+  <a href="regles-de-course.html">Règles · Rules</a>
+  <a href="stages.html">Stages · Courses</a>
+  <a href="cours.html">Cours · Lessons</a>
+  <a href="lexique.html">Lexique · Glossary</a>
   <a href="mentions-legales.html">Mentions légales · Legal notice</a>
   <a href="confidentialite.html">Confidentialité · Privacy</a>
   <a href="delete.html">Suppression de données · Data deletion</a>
@@ -940,6 +945,16 @@ function choisir() {{
 function appliquer(l) {{
   const d = T[l];
   document.documentElement.lang = l;
+  // Titre et description suivent la langue, à partir des chaînes déjà dans T (surtitre, accroche).
+  const md = document.querySelector('meta[name="description"]');
+  window.__fr = window.__fr || {{ t: document.title, d: md ? md.getAttribute("content") : "" }};
+  if (l === "fr") {{
+    document.title = window.__fr.t;
+    if (md) md.setAttribute("content", window.__fr.d);
+  }} else if (d.surtitre) {{
+    document.title = "Sailing More — " + d.surtitre;
+    if (md && d.accroche) md.setAttribute("content", "Sailing More — " + d.accroche.replace(/<[^>]+>/g, ""));
+  }}
   document.querySelectorAll("[data-t]").forEach(el => {{
     const cle = el.dataset.t;
     if (!d[cle]) return;

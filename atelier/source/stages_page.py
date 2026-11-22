@@ -168,10 +168,7 @@ def affichable(o: dict, aujourdhui: date | None = None) -> bool:
 def construire(d: dict | None = None) -> str:
     d = d if d is not None else charger()
     offres = [o for o in d.get("offres", []) if affichable(o)]
-    # Les offres qui publient un prix passent devant : une ligne sans prix reste utile, mais elle ne
-    # doit pas remplir la première page.
-    offres.sort(key=lambda o: (o.get("prix") is None, o.get("debut") or "9999-12-31",
-                               o.get("prix_eur") or 0))
+    offres.sort(key=lambda o: (o.get("debut") or "9999-12-31", o.get("prix_eur") or 0))
     donnees = {
         "ui": UI, "offres": offres, "langues": LANGUES,
         "pays": sorted({(o["pays"], o["pays_nom"]) for o in offres if o.get("pays")}),
@@ -259,16 +256,6 @@ function remplir(){
   if(fl.value===''){fl.value=mem('langue', D.langues_presentes.indexOf(navLang)>=0?navLang:'');if(fl.value==='')fl.value='';}
   var fp=document.getElementById('f-pays');
   if(fp.value===''){var d=mem('pays',D.pays.some(function(p){return p[0]===defPays})?defPays:'');fp.value=d;}
-  /* Un filtre par défaut qui ne montre rien n'aide personne : si le couple langue+pays du visiteur
-     ne laisse aucune offre, on relâche le pays, puis la langue. */
-  var pose=false;try{pose=localStorage.getItem('st_pose')==='1'}catch(e){}
-  if(!pose){
-    var rien=D.offres.filter(function(o){
-      return (!fl.value||o.langue===fl.value)&&(!fp.value||o.pays===fp.value)}).length;
-    if(!rien){fp.value='';rien=D.offres.filter(function(o){return !fl.value||o.langue===fl.value}).length;}
-    if(!rien){fl.value='';}
-    try{localStorage.setItem('st_pose','1')}catch(e){}
-  }
   var l=document.getElementById('langues');
   l.innerHTML=Object.keys(U).map(function(c){return '<button data-l="'+c+'" style="background:none;border:0;color:'+(c===L?'#5fd3c4':'#9db2c7')+';font:inherit;font-size:.8rem;cursor:pointer;padding:.1rem .25rem">'+c.toUpperCase()+'</button>'}).join('');
   [].forEach.call(l.querySelectorAll('button'),function(b){b.onclick=function(){L=b.dataset.l;try{localStorage.setItem('lang',L)}catch(e){}remplir();dessiner()}});
@@ -300,7 +287,7 @@ function dessiner(){
     var dates=!o.debut?t('dates_ecole'):(o.fin&&o.fin!==o.debut?t('du')+' '+dt(o.debut)+' '+t('au')+' '+dt(o.fin):dt(o.debut));
     var ou=o.lieu?(o.lieu===o.pays_nom?o.lieu:o.lieu+' · '+o.pays_nom):(o.region||o.pays_nom);
     var lng=o.langue?(D.langues[o.langue]||o.langue.toUpperCase()):'—';
-    var marque='';
+    var marque=o.langue&&o.langue_src==='pays'?' <span class="marque" title="'+esc(t('langue_supposee'))+'">?</span>':'';
     return '<article class="offre"><div><h2>'+esc(o.titre)+'</h2>'
       +'<div class="ecole">'+esc(o.ecole)+(o.ecole_pays_nom?' · '+esc(o.ecole_pays_nom):'')+'</div></div>'
       +'<div class="prix">'+(o.prix!=null?o.prix.toLocaleString(L)+' '+sym(o.devise):'<span style="font-weight:400;font-size:.85rem">'+t('prix_vide')+'</span>')+'</div>' 
@@ -313,9 +300,7 @@ function dessiner(){
       +'</article>';
   }).join('');
   document.getElementById('liste').innerHTML=html||('<p class="vide">'+(D.offres.length?t('aucune'):t('vide'))+'</p>');
-  var ne=new Set(vus.map(function(o){return o.ecole_slug})).size;
-  document.getElementById('compte').textContent=t('compte').replace('{n}',vus.length).replace('{e}',ne)
-    .replace('offers · 1 schools','offer · 1 school').replace('offres · 1 écoles','offre · 1 école');
+  document.getElementById('compte').textContent=t('compte').replace('{n}',vus.length).replace('{e}',new Set(vus.map(function(o){return o.ecole_slug})).size);
 }
 ['f-q','f-langue','f-pays','f-pays-ecole','f-ecole','f-type','f-niveau','f-quand','f-prix'].forEach(function(i){
   var e=document.getElementById(i);if(e){e.addEventListener('input',dessiner);e.addEventListener('change',dessiner)}});

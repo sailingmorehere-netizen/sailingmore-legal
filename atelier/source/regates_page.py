@@ -944,6 +944,7 @@ def construire(d: dict) -> str:
         "<style>" + CSS + "</style></head><body>" + sprite +
         '<div class="page">'
         '<a class="retour" href="index.html">← Sailing More</a>'
+        + __import__("site_blocks").liens_pages("regates.html") +
         "<h1>Calendrier des régates</h1>"
         f'<p class="chapo">Toutes les régates de voile, du Léman au large : '
         # Le compteur de la page compte les cartes affichées, y compris les épreuves en cours
