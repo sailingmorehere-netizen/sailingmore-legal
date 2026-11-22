@@ -89,31 +89,27 @@ def _zone(cx: float = 205, cy: float = 74, r: float = 40) -> str:
 
 
 def etapes_10() -> list[str]:
-    """Règle 10 — amures opposées : B, bâbord amures, s'écarte."""
-    fleches = {"A": COQUE_A, "B": COQUE_B}
-    avant = (
-        _fleche("M300,66 L220,66", COQUE_A, "A", True)
-        + _fleche("M36,96 L140,96", COQUE_B, "B", True)
-        + _bateau(266, 66, COQUE_A, GV_A, FOC_A) + _badge(294, 46, "A", COQUE_A)
-        + _bateau(48, 96, COQUE_B, GV_B, FOC_B) + _badge(24, 116, "B", COQUE_B, "#fff")
+    """Règle 10 — amures opposées. Un seul dessin suffit : la trace de B montre l'écart.
+
+    C'est la grammaire du Case Book de World Sailing : une image, les traces, et le bateau qui
+    n'a pas la priorité dessiné en pointillé à l'endroit où il serait allé s'il avait tenu son cap.
+    """
+    corps = (
+        # trace de A, franche, vers la gauche
+        _fleche("M292,54 L40,54", COQUE_A, "A", True)
+        # ce que B aurait fait sans s'écarter : fin pointillé qui coupe la route de A
+        + '<path d="M52,116 L268,104" fill="none" stroke="#5b7c96" stroke-width="1.2" '
+        'stroke-dasharray="2 6" opacity=".75"/>'
+        # trace réelle de B, qui s'écarte et passe derrière A
+        + _fleche("M52,116 C 130,132 210,132 296,126", COQUE_B, "B")
+        + _bateau(252, 54, COQUE_A, GV_A, FOC_A) + _badge(280, 34, "A", COQUE_A)
+        + _bateau(64, 116, COQUE_B, GV_B, FOC_B) + _badge(40, 136, "B", COQUE_B, "#fff")
     )
-    pendant = (
-        _fleche("M112,106 C 158,124 202,120 226,108", COQUE_B, "B")
-        + _fleche("M300,52 L215,52", COQUE_A, "A", True)
-        + _bateau(266, 52, COQUE_A, GV_A, FOC_A) + _badge(294, 32, "A", COQUE_A)
-        + _bateau(96, 102, COQUE_B, GV_B, FOC_B) + _badge(72, 122, "B", COQUE_B, "#fff")
-    )
-    apres = (
-        _fleche("M96,64 L16,64", COQUE_A, "A", True)
-        + _bateau(112, 64, COQUE_A, GV_A, FOC_A) + _badge(140, 44, "A", COQUE_A)
-        + _fleche("M196,112 L300,112", COQUE_B, "B", True)
-        + _bateau(178, 112, COQUE_B, GV_B, FOC_B) + _badge(154, 130, "B", COQUE_B, "#fff")
-    )
-    return [_panneau(x, fleches) for x in (avant, pendant, apres)]
+    return [_panneau(corps, {"A": COQUE_A, "B": COQUE_B})]
 
 
 def etapes_18() -> list[str]:
-    """Règle 18 — place à la marque : A à l'intérieur a droit à la place, B à l'extérieur s'écarte."""
+    """Règle 18 — place à la marque. Deux temps : les positions, puis le contournement."""
     fleches = {"A": COQUE_A, "G": GRIS}
     avant = (_zone()
              + _fleche("M40,104 L120,96", GRIS, "G", True)
@@ -124,11 +120,7 @@ def etapes_18() -> list[str]:
                + _bateau(222, 36, COQUE_A, GV_A, FOC_A) + _badge(198, 18, "A", COQUE_A)
                + _bateau(58, 62, COQUE_G, GV_G, FOC_G) + _badge(34, 82, "B", GRIS)
                + _fleche("M82,70 L104,74", GRIS, "G"))
-    apres = (_zone()
-             + _bateau(272, 100, COQUE_A, GV_A, FOC_A) + _badge(296, 80, "A", COQUE_A)
-             + _fleche("M118,118 L186,118", GRIS, "G", True)
-             + _bateau(196, 114, COQUE_G, GV_G, FOC_G) + _badge(172, 132, "B", GRIS))
-    return [_panneau(x, fleches) for x in (avant, pendant, apres)]
+    return [_panneau(x, fleches) for x in (avant, pendant)]
 
 
 def etapes_44() -> list[str]:
@@ -153,7 +145,11 @@ SEQUENCES = {"10": etapes_10(), "18": etapes_18(), "44": etapes_44()}
 CSS = """
 .regle .seq{margin:.9rem 0 .2rem;display:grid;gap:.1rem}
 .regle .seq-etape{display:grid;grid-template-columns:4.4rem minmax(0,1fr);align-items:center;gap:.6rem}
-.regle .seq-etape span{font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:#8aa0b4}
+.regle .seq-etape span{font-size:.66rem;font-variant-numeric:tabular-nums;color:#8aa0b4;
+ text-align:right;padding-right:.15rem}
+.regle .seq-seul .seq-etape{grid-template-columns:1fr}
+.regle .seq-seul .seq-etape span{display:none}
+.regle .seq-seul .seq-svg{max-width:360px}
 .regle .seq-svg{width:100%;max-width:320px;height:auto;display:block;border-radius:10px}
 .regle .seq-fleche{color:#3d5a75;font-size:.75rem;line-height:1;padding-left:5rem}
 .regle .video{margin:.85rem 0 0}
@@ -171,13 +167,15 @@ CSS = """
 JS = """
 (function(){
   var SEQ = window.__SEQ || {}, VIDEO = window.__VIDEO || {};
+  // Les étapes sont numérotées, jamais nommées : un nombre va pour un, deux ou cinq temps, et il
+  // ne demande aucune traduction. Seul le bouton de lecture parle.
   var UI = {
-    fr:{a:"avant",p:"pendant",r:"après",l:"Voir la vidéo",c:"Vidéo d'un tiers, lue chez YouTube. Rien n'est chargé avant votre clic."},
-    en:{a:"before",p:"during",r:"after",l:"Watch the video",c:"Third-party video, played on YouTube. Nothing loads before you click."},
-    it:{a:"prima",p:"durante",r:"dopo",l:"Guarda il video",c:"Video di terzi, letta su YouTube. Nulla si carica prima del clic."},
-    es:{a:"antes",p:"durante",r:"después",l:"Ver el vídeo",c:"Vídeo de un tercero, leído en YouTube. Nada se carga antes del clic."},
-    pt:{a:"antes",p:"durante",r:"depois",l:"Ver o vídeo",c:"Vídeo de terceiros, lido no YouTube. Nada carrega antes do clique."},
-    de:{a:"vorher",p:"während",r:"nachher",l:"Video ansehen",c:"Video eines Dritten, auf YouTube. Vor dem Klick wird nichts geladen."}
+    fr:{l:"Voir la vidéo",c:"Vidéo d'un tiers, lue chez YouTube. Rien n'est chargé avant votre clic."},
+    en:{l:"Watch the video",c:"Third-party video, played on YouTube. Nothing loads before you click."},
+    it:{l:"Guarda il video",c:"Video di terzi, letta su YouTube. Nulla si carica prima del clic."},
+    es:{l:"Ver el vídeo",c:"Vídeo de un tercero, leído en YouTube. Nada se carga antes del clic."},
+    pt:{l:"Ver o vídeo",c:"Vídeo de terceiros, lido no YouTube. Nada carrega antes do clique."},
+    de:{l:"Video ansehen",c:"Video eines Dritten, auf YouTube. Vor dem Klick wird nichts geladen."}
   };
   function langue(){ var l=(document.documentElement.lang||"fr").slice(0,2); return UI[l]?l:"fr"; }
   function esc(s){ return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];}); }
@@ -189,10 +187,10 @@ JS = """
       if(!carte || carte.querySelector(".seq")) return;
       var cible = carte.querySelector(".resume");
       if(!cible) return;
-      var etapes = SEQ[cle], h = '<div class="seq">';
-      [["a",0],["p",1],["r",2]].forEach(function(x,i){
-        h += '<div class="seq-etape"><span>'+esc(u[x[0]])+'</span>'+etapes[x[1]]+'</div>';
-        if(i<2) h += '<div class="seq-fleche">↓</div>';
+      var etapes = SEQ[cle], h = '<div class="seq' + (etapes.length < 2 ? ' seq-seul' : '') + '">';
+      etapes.forEach(function(svg, i){
+        h += '<div class="seq-etape"><span>' + (i + 1) + '</span>' + svg + '</div>';
+        if(i < etapes.length - 1) h += '<div class="seq-fleche">↓</div>';
       });
       if(VIDEO[cle]){
         h += '<div class="video"><button class="lecture" type="button" data-cle="'+cle+'">'
