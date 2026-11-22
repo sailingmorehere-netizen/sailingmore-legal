@@ -1352,7 +1352,7 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
     # la page d'essai disparaîtrait à la reconstruction suivante. Voir regles_video_test.py.
     try:
         import regles_video_test
-        print(f"essai vidéo et schéma : {regles_video_test.main()} carte(s)")
+        print(f"essai vidéo et schéma : {regles_video_test.ecrire_page(SITE)} carte(s)")
     except Exception as e:  # noqa: BLE001  (une page d'essai ne doit jamais bloquer la reconstruction)
         print(f"essai vidéo non écrit : {e}")
     # Stages et cours de voile (22/11/2026) : même chemin que le calendrier, jamais d'écriture à la main.
