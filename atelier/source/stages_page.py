@@ -1,36 +1,29 @@
 #!/usr/bin/env python3
-"""Construit la page `stages.html` : les stages et cours de voile des écoles privées et des clubs
-qui en vendent, en France et en Suisse. Filtres : lieu, âge, niveau, date, prix.
+"""Construit la page `stages.html` : les stages et cours que vendent des écoles de voile européennes,
+sur leurs propres eaux comme aux Antilles, en Atlantique ou en mer du Nord.
 
-Entrée  : `projets/sailingmore/stages.json`, tenu à la main depuis les sites des écoles (Les Glénans
-          en tête, puis Léman, Haute-Savoie, Suisse romande). Aucune extraction de base FFVoile ni
-          Destination Voile (CGU §9.1) : une offre = une ligne saisie, avec son lien et sa date de
-          vérification.
+Entrée  : `projets/sailingmore/stages.json`, écrit par `stages_releve.py` (relevé des fiches des
+          écoles ; un prix n'y entre que s'il est publié par l'école sur la fiche du stage).
 Sortie  : `projets/sailingmore/site/stages.html` (appelée par `accueil_site.sortir_le_site`).
 
-Une offre dans le JSON :
-  {"ecole": "Les Glénans", "titre": "Stage Dériveur initiation", "lieu": "Paimpol", "region": "Bretagne",
-   "pays": "FRA" | "SUI", "age_min": 15, "age_max": null, "niveau": "debutant|intermediaire|confirme",
-   "debut": "2027-04-12", "fin": "2027-04-17", "prix": 560, "devise": "EUR" | "CHF",
-   "lien": "https://…", "verifie": "2026-11-22"}
-`age_*`, `fin` et `prix` peuvent manquer : la page écrit alors « — » plutôt que d'inventer.
+Ce que la page montre, et pourquoi ces champs-là :
+  - la **destination** (pays du stage) et le **pays de l'école** : une école française qui emmène en
+    Grèce n'est ni un stage grec, ni un stage français ;
+  - la **langue du stage** : l'école l'écrit rarement. Quand elle ne l'écrit pas, la page prend la
+    langue du pays de l'école et l'annonce comme telle (`langue_src = "pays"`), sans jamais la
+    présenter comme une certitude ;
+  - les **filtres se placent d'eux-mêmes** sur la langue et le pays du visiteur (navigateur), et son
+    choix, dès qu'il touche un filtre, est retenu (`localStorage`) ;
+  - une offre sans prix publié par l'école n'existe pas ici ; une session passée disparaît seule ; un
+    relevé de plus de 60 jours n'est plus publié.
 
-Comment la page reste juste :
-  - le passé disparaît seul : à la génération (offre dont la fin est passée) ET dans le navigateur
-    (le JS compare à la date du jour), donc une page non reconstruite ne montre pas un stage fini ;
-  - une offre non revérifiée depuis plus de `PEREMPTION_JOURS` jours n'est plus publiée : mieux vaut
-    l'absence qu'un prix d'il y a un an ;
-  - une école qui change son offre : on corrige la ligne et on met `verifie` à jour — le lien
-    renvoie toujours vers la page de l'école, qui fait foi.
-Rythme de changement : les catalogues d'été s'ouvrent à l'automne-hiver, les prix bougent une fois
-par an, les places partent au fil des mois : revérification mensuelle, hebdomadaire de mai à août.
+NE PAS RÉÉCRIRE CE FICHIER SANS REPRENDRE LE RELEVÉ. Les offres ne se saisissent pas à la main : elles
+sont mesurées par `stages_releve.py` (et `stages_moisson.py` pour les catalogues).
 """
 from __future__ import annotations
 
-import html as _html
 import json
 import os
-import sys
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -40,213 +33,305 @@ PEREMPTION_JOURS = 60
 NIVEAUX = ("debutant", "intermediaire", "confirme")
 
 UI = {
-    "fr": {"titre": "Stages et cours de voile", "retour": "← Sailing More",
-           "chapo": "Les stages et cours proposés par les écoles de voile et les clubs, en France et en Suisse. Chaque offre renvoie vers l'école, qui fait foi : prix et dates se confirment chez elle.",
-           "lieu": "Lieu", "age": "Âge", "niveau": "Niveau", "quand": "Date", "prix": "Prix max.",
-           "tous": "Tous", "tout_age": "Tout âge", "avenir": "À venir", "mois": "Ce mois-ci",
-           "debutant": "Débutant", "intermediaire": "Intermédiaire", "confirme": "Confirmé",
-           "FRA": "France", "SUI": "Suisse", "verifie": "vérifié le", "voir": "Voir l'offre",
-           "du": "du", "au": "au", "ans": "ans", "n_offres": "offres", "aucune": "Aucune offre ne correspond à ces filtres.",
-           "vide": "Aucune offre n'est publiée pour le moment : la liste se remplit à la main depuis les sites des écoles, et chaque offre est retirée seule une fois passée.",
-           "pied": "Liste tenue à la main, école par école, sans reprise de base de données tierce. Un stage manque ou un prix a changé ?"},
-    "en": {"titre": "Sailing courses and camps", "retour": "← Sailing More",
-           "chapo": "Courses and camps offered by sailing schools and clubs in France and Switzerland. Each offer links to the school, which is the authority: confirm prices and dates there.",
-           "lieu": "Place", "age": "Age", "niveau": "Level", "quand": "Date", "prix": "Max. price",
-           "tous": "All", "tout_age": "Any age", "avenir": "Upcoming", "mois": "This month",
-           "debutant": "Beginner", "intermediaire": "Intermediate", "confirme": "Advanced",
-           "FRA": "France", "SUI": "Switzerland", "verifie": "checked on", "voir": "See the offer",
-           "du": "from", "au": "to", "ans": "years", "n_offres": "offers", "aucune": "No offer matches these filters.",
-           "vide": "No offer is published yet: the list is filled by hand from the schools' own sites, and each offer drops off by itself once it has passed.",
-           "pied": "Hand-kept list, school by school, no third-party database reused. A course missing or a price changed?"},
-    "it": {"titre": "Corsi e stage di vela", "retour": "← Sailing More",
-           "chapo": "Corsi e stage proposti da scuole di vela e circoli in Francia e Svizzera. Ogni offerta rimanda alla scuola, che fa fede: prezzi e date si confermano da loro.",
-           "lieu": "Luogo", "age": "Età", "niveau": "Livello", "quand": "Data", "prix": "Prezzo max.",
-           "tous": "Tutti", "tout_age": "Ogni età", "avenir": "In arrivo", "mois": "Questo mese",
-           "debutant": "Principiante", "intermediaire": "Intermedio", "confirme": "Esperto",
-           "FRA": "Francia", "SUI": "Svizzera", "verifie": "verificato il", "voir": "Vedi l'offerta",
-           "du": "dal", "au": "al", "ans": "anni", "n_offres": "offerte", "aucune": "Nessuna offerta corrisponde ai filtri.",
-           "vide": "Nessuna offerta è ancora pubblicata: l'elenco si compila a mano dai siti delle scuole e ogni offerta sparisce da sola una volta passata.",
-           "pied": "Elenco tenuto a mano, scuola per scuola, senza riuso di banche dati di terzi. Manca un corso o un prezzo è cambiato?"},
-    "es": {"titre": "Cursos y estancias de vela", "retour": "← Sailing More",
-           "chapo": "Cursos y estancias que ofrecen escuelas de vela y clubes en Francia y Suiza. Cada oferta remite a la escuela, que es la que manda: precios y fechas se confirman allí.",
-           "lieu": "Lugar", "age": "Edad", "niveau": "Nivel", "quand": "Fecha", "prix": "Precio máx.",
-           "tous": "Todos", "tout_age": "Cualquier edad", "avenir": "Próximos", "mois": "Este mes",
-           "debutant": "Principiante", "intermediaire": "Intermedio", "confirme": "Avanzado",
-           "FRA": "Francia", "SUI": "Suiza", "verifie": "verificado el", "voir": "Ver la oferta",
-           "du": "del", "au": "al", "ans": "años", "n_offres": "ofertas", "aucune": "Ninguna oferta coincide con los filtros.",
-           "vide": "Todavía no hay ofertas publicadas: la lista se rellena a mano desde las webs de las escuelas y cada oferta desaparece sola al pasar.",
-           "pied": "Lista hecha a mano, escuela por escuela, sin reutilizar bases de datos de terceros. ¿Falta un curso o ha cambiado un precio?"},
-    "pt": {"titre": "Cursos e estágios de vela", "retour": "← Sailing More",
-           "chapo": "Cursos e estágios propostos por escolas de vela e clubes em França e na Suíça. Cada oferta remete para a escola, que é quem decide: preços e datas confirmam-se aí.",
-           "lieu": "Local", "age": "Idade", "niveau": "Nível", "quand": "Data", "prix": "Preço máx.",
-           "tous": "Todos", "tout_age": "Qualquer idade", "avenir": "Próximos", "mois": "Este mês",
-           "debutant": "Iniciante", "intermediaire": "Intermédio", "confirme": "Avançado",
-           "FRA": "França", "SUI": "Suíça", "verifie": "verificado em", "voir": "Ver a oferta",
-           "du": "de", "au": "a", "ans": "anos", "n_offres": "ofertas", "aucune": "Nenhuma oferta corresponde aos filtros.",
-           "vide": "Ainda não há ofertas publicadas: a lista é preenchida à mão a partir dos sites das escolas e cada oferta sai sozinha depois de passar.",
-           "pied": "Lista feita à mão, escola por escola, sem reutilizar bases de dados de terceiros. Falta um curso ou mudou um preço?"},
-    "de": {"titre": "Segelkurse und Segelcamps", "retour": "← Sailing More",
-           "chapo": "Kurse und Camps von Segelschulen und Clubs in Frankreich und der Schweiz. Jedes Angebot führt zur Schule, die massgebend ist: Preise und Termine dort bestätigen.",
-           "lieu": "Ort", "age": "Alter", "niveau": "Niveau", "quand": "Datum", "prix": "Max. Preis",
-           "tous": "Alle", "tout_age": "Jedes Alter", "avenir": "Kommende", "mois": "Diesen Monat",
-           "debutant": "Anfänger", "intermediaire": "Fortgeschritten", "confirme": "Erfahren",
-           "FRA": "Frankreich", "SUI": "Schweiz", "verifie": "geprüft am", "voir": "Angebot ansehen",
-           "du": "vom", "au": "bis", "ans": "Jahre", "n_offres": "Angebote", "aucune": "Kein Angebot passt zu diesen Filtern.",
-           "vide": "Noch kein Angebot veröffentlicht: die Liste wird von Hand nach den Seiten der Schulen gefüllt, jedes Angebot verschwindet nach Ablauf von selbst.",
-           "pied": "Von Hand geführte Liste, Schule für Schule, ohne Übernahme fremder Datenbanken. Ein Kurs fehlt oder ein Preis hat sich geändert?"},
+ "fr": {"titre": "Stages de voile", "retour": "← Sailing More",
+        "chapo": "Les stages et cours que vendent des écoles de voile européennes, sur leurs propres eaux comme aux Antilles, en Atlantique ou en mer du Nord. Chaque offre renvoie à la fiche de l'école, qui fait foi.",
+        "langue": "Langue du stage", "destination": "Destination", "pays_ecole": "Pays de l'école",
+        "ecole": "École", "niveau": "Niveau", "quand": "Date", "prix": "Prix max.",
+        "tous": "Toutes", "tout_age": "Tout âge", "avenir": "À venir", "mois": "Ce mois-ci",
+        "chercher": "Chercher (école, stage, lieu)", "dates_ecole": "dates chez l'école",
+        "compte": "{n} offres · {e} écoles", "aucune": "Aucune offre ne répond à ces filtres.",
+        "vide": "Aucune offre n'est publiée pour le moment : le relevé se fait sur les fiches des écoles.",
+        "du": "du", "au": "au", "voir": "Voir l'offre →", "jours": "jours", "prix_vide": "prix non publié",
+        "type": "Type", "pratique": "Pratique", "theorie": "Théorie",
+        "debutant": "Débutant", "intermediaire": "Intermédiaire", "confirme": "Confirmé",
+        "langue_supposee": "langue du pays de l'école : l'école ne l'affiche pas",
+        "verifie": "vérifié le", "pied": "Relevé sur les fiches des écoles, offre par offre. Une offre sans prix affiché n'est pas reprise ; un stage manque ou un prix a changé ?"},
+ "en": {"titre": "Sailing courses and camps", "retour": "← Sailing More",
+        "chapo": "Courses and camps sold by European sailing schools, on their own waters and far from them — Antilles, Atlantic, North Sea. Each offer links to the school's own page, which is the authority.",
+        "langue": "Course language", "destination": "Destination", "pays_ecole": "School's country",
+        "ecole": "School", "niveau": "Level", "quand": "Date", "prix": "Max. price",
+        "tous": "All", "tout_age": "Any age", "avenir": "Upcoming", "mois": "This month",
+        "chercher": "Search (school, course, place)", "dates_ecole": "dates at the school",
+        "compte": "{n} offers · {e} schools", "aucune": "No offer matches these filters.",
+        "vide": "No offer is published yet: the list is read from the schools' own pages.",
+        "du": "from", "au": "to", "voir": "See the offer →", "jours": "days", "prix_vide": "price not published",
+        "type": "Type", "pratique": "Practical", "theorie": "Theory",
+        "debutant": "Beginner", "intermediaire": "Intermediate", "confirme": "Advanced",
+        "langue_supposee": "school country's language: the school does not state it",
+        "verifie": "checked on", "pied": "Read off the schools' own pages, offer by offer. An offer without a published price is not listed; a course missing or a price changed?"},
+ "it": {"titre": "Corsi e stage di vela", "retour": "← Sailing More",
+        "chapo": "Corsi e stage venduti da scuole di vela europee, nelle proprie acque come alle Antille, in Atlantico o nel Mare del Nord. Ogni offerta rimanda alla pagina della scuola, che fa fede.",
+        "langue": "Lingua del corso", "destination": "Destinazione", "pays_ecole": "Paese della scuola",
+        "ecole": "Scuola", "niveau": "Livello", "quand": "Data", "prix": "Prezzo max.",
+        "tous": "Tutti", "tout_age": "Ogni età", "avenir": "In arrivo", "mois": "Questo mese",
+        "chercher": "Cerca (scuola, corso, luogo)", "dates_ecole": "date presso la scuola",
+        "compte": "{n} offerte · {e} scuole", "aucune": "Nessuna offerta con questi filtri.",
+        "vide": "Nessuna offerta è ancora pubblicata: l'elenco si legge dalle pagine delle scuole.",
+        "du": "dal", "au": "al", "voir": "Vedi l'offerta →", "jours": "giorni", "prix_vide": "prezzo non pubblicato",
+        "type": "Tipo", "pratique": "Pratica", "theorie": "Teoria",
+        "debutant": "Principiante", "intermediaire": "Intermedio", "confirme": "Avanzato",
+        "langue_supposee": "lingua del paese della scuola: la scuola non la indica",
+        "verifie": "verificato il", "pied": "Letto dalle pagine delle scuole, offerta per offerta. Un'offerta senza prezzo pubblicato non è ripresa; manca un corso o un prezzo è cambiato?"},
+ "es": {"titre": "Cursos y estancias de vela", "retour": "← Sailing More",
+        "chapo": "Cursos y estancias que venden escuelas de vela europeas, en sus propias aguas y también en Antillas, Atlántico o mar del Norte. Cada oferta remite a la ficha de la escuela, que es la que manda.",
+        "langue": "Idioma del curso", "destination": "Destino", "pays_ecole": "País de la escuela",
+        "ecole": "Escuela", "niveau": "Nivel", "quand": "Fecha", "prix": "Precio máx.",
+        "tous": "Todos", "tout_age": "Cualquier edad", "avenir": "Próximos", "mois": "Este mes",
+        "chercher": "Buscar (escuela, curso, lugar)", "dates_ecole": "fechas en la escuela",
+        "compte": "{n} ofertas · {e} escuelas", "aucune": "Ninguna oferta con estos filtros.",
+        "vide": "Todavía no hay ofertas publicadas: la lista se lee de las fichas de las escuelas.",
+        "du": "del", "au": "al", "voir": "Ver la oferta →", "jours": "días", "prix_vide": "precio no publicado",
+        "type": "Tipo", "pratique": "Práctica", "theorie": "Teoría",
+        "debutant": "Principiante", "intermediaire": "Intermedio", "confirme": "Avanzado",
+        "langue_supposee": "idioma del país de la escuela: la escuela no lo indica",
+        "verifie": "verificado el", "pied": "Leído en las fichas de las escuelas, oferta por oferta. Una oferta sin precio publicado no se recoge; ¿falta un curso o ha cambiado un precio?"},
+ "pt": {"titre": "Cursos e estágios de vela", "retour": "← Sailing More",
+        "chapo": "Cursos e estágios vendidos por escolas de vela europeias, nas suas próprias águas e também nas Antilhas, no Atlântico ou no Mar do Norte. Cada oferta remete para a página da escola, que é quem decide.",
+        "langue": "Idioma do curso", "destination": "Destino", "pays_ecole": "País da escola",
+        "ecole": "Escola", "niveau": "Nível", "quand": "Data", "prix": "Preço máx.",
+        "tous": "Todos", "tout_age": "Qualquer idade", "avenir": "Próximos", "mois": "Este mês",
+        "chercher": "Procurar (escola, curso, local)", "dates_ecole": "datas na escola",
+        "compte": "{n} ofertas · {e} escolas", "aucune": "Nenhuma oferta com estes filtros.",
+        "vide": "Ainda não há ofertas publicadas: a lista é lida das páginas das escolas.",
+        "du": "de", "au": "a", "voir": "Ver a oferta →", "jours": "dias", "prix_vide": "preço não publicado",
+        "type": "Tipo", "pratique": "Prática", "theorie": "Teoria",
+        "debutant": "Iniciante", "intermediaire": "Intermédio", "confirme": "Avançado",
+        "langue_supposee": "idioma do país da escola: a escola não o indica",
+        "verifie": "verificado a", "pied": "Lido nas páginas das escolas, oferta por oferta. Uma oferta sem preço publicado não é recolhida; falta um curso ou mudou um preço?"},
+ "de": {"titre": "Segelkurse und Camps", "retour": "← Sailing More",
+        "chapo": "Kurse und Camps von europäischen Segelschulen, auf eigenen Gewässern wie in der Karibik, im Atlantik oder in der Nordsee. Jedes Angebot führt zur Seite der Schule, die massgebend ist.",
+        "langue": "Kurssprache", "destination": "Ziel", "pays_ecole": "Land der Schule",
+        "ecole": "Schule", "niveau": "Niveau", "quand": "Datum", "prix": "Max. Preis",
+        "tous": "Alle", "tout_age": "Jedes Alter", "avenir": "Kommende", "mois": "Diesen Monat",
+        "chercher": "Suchen (Schule, Kurs, Ort)", "dates_ecole": "Termine bei der Schule",
+        "compte": "{n} Angebote · {e} Schulen", "aucune": "Kein Angebot mit diesen Filtern.",
+        "vide": "Noch kein Angebot veröffentlicht: die Liste wird von den Seiten der Schulen gelesen.",
+        "du": "vom", "au": "bis", "voir": "Zum Angebot →", "jours": "Tage", "prix_vide": "Preis nicht veröffentlicht",
+        "type": "Art", "pratique": "Praxis", "theorie": "Theorie",
+        "debutant": "Anfänger", "intermediaire": "Fortgeschritten", "confirme": "Könner",
+        "langue_supposee": "Sprache des Schullandes: die Schule gibt sie nicht an",
+        "verifie": "geprüft am", "pied": "Von den Seiten der Schulen gelesen, Angebot für Angebot. Ein Angebot ohne veröffentlichten Preis wird nicht aufgenommen; ein Kurs fehlt oder ein Preis hat sich geändert?"},
 }
 
+LANGUES = {"fr": "Français", "en": "English", "nl": "Nederlands", "de": "Deutsch", "it": "Italiano",
+           "es": "Español", "pt": "Português", "el": "Ελληνικά", "hr": "Hrvatski", "tr": "Türkçe",
+           "da": "Dansk", "sv": "Svenska", "no": "Norsk", "pl": "Polski", "fi": "Suomi", "is": "Íslenska",
+           "sl": "Slovenščina", "mt": "Malti", "et": "Eesti", "lv": "Latviešu", "lt": "Lietuvių",
+           "sq": "Shqip", "ga": "Gaeilge", "cy": "Cymraeg", "ar": "العربية"}
 CSS = """
-:root{--nuit:#0a1a2b;--panneau:#0f2438;--ivoire:#eef3f7;--gris:#9db2c6;--rouge:#e23a3e}
+:root{--fond:#0a1a2b;--carte:#0f2438;--trait:#1d3549;--encre:#e8eef5;--doux:#9db2c7;--accent:#5fd3c4}
 *{box-sizing:border-box}
-body{margin:0;background:#071c31;color:var(--ivoire);font-family:ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
-.page{max-width:56rem;margin:0 auto;padding:2rem 1.4rem 5rem}
-.haut{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
-a.retour{color:var(--gris);text-decoration:none;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
-.langues button{background:none;border:1px solid #27425b;color:var(--gris);font-size:.64rem;padding:.25rem .5rem;margin-left:.2rem;cursor:pointer;border-radius:3px}
-.langues button[aria-pressed=true]{color:var(--ivoire);border-color:var(--rouge)}
-h1{font-size:2rem;margin:2rem 0 .4rem}
-.chapo{color:var(--gris)}
-.filtres{display:flex;flex-wrap:wrap;gap:.8rem;margin:1.4rem 0 .6rem}
-.filtres label{display:flex;flex-direction:column;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gris);gap:.25rem}
-.filtres select,.filtres input{background:var(--panneau);color:var(--ivoire);border:1px solid #27425b;border-radius:3px;padding:.4rem .5rem;font-size:.85rem;min-width:8rem}
-.compte{color:var(--gris);font-size:.8rem;margin:.4rem 0 1rem}
-.offre{background:var(--panneau);border-left:3px solid var(--rouge);padding:.9rem 1.2rem;margin:.8rem 0;border-radius:3px}
-.offre h2{font-size:1.05rem;margin:0 0 .2rem}
-.offre .ecole{color:var(--gris);font-size:.8rem}
-.offre .ligne{display:flex;flex-wrap:wrap;gap:.3rem 1.2rem;font-size:.88rem;margin:.4rem 0}
-.offre .prix{font-weight:600}
-.offre .verif{color:var(--gris);font-size:.74rem}
-.offre a{color:var(--ivoire)}
-.vide,.pied{color:var(--gris);font-size:.88rem;margin-top:2rem}
-a{color:var(--ivoire)}
-"""
-
-JS = r"""
-(function(){
-var D=JSON.parse(document.getElementById('donnees').textContent),U=D.ui,L='fr';
-var $=function(i){return document.getElementById(i)};
-var MOIS={fr:'fr-FR',en:'en-GB',it:'it-IT',es:'es-ES',pt:'pt-PT',de:'de-DE'};
-function dt(iso){return new Date(iso+'T12:00:00').toLocaleDateString(MOIS[L],{day:'numeric',month:'short',year:'numeric'})}
-function t(k){return (U[L]&&U[L][k])||U.fr[k]||k}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function futur(o){var auj=new Date().toISOString().slice(0,10);return (o.fin||o.debut)>=auj}
-function remplir(){
-  var v={lieu:$('f-lieu').value,niveau:$('f-niveau').value,quand:$('f-quand').value};
-  var l=$('f-lieu');l.innerHTML='<option value="">'+t('tous')+'</option>'+D.lieux.map(function(x){return '<option>'+esc(x)+'</option>'}).join('');l.value=v.lieu;
-  var n=$('f-niveau');n.innerHTML='<option value="">'+t('tous')+'</option>'+D.niveaux.map(function(x){return '<option value="'+x+'">'+t(x)+'</option>'}).join('');n.value=v.niveau;
-  var q=$('f-quand');q.innerHTML='<option value="avenir">'+t('avenir')+'</option><option value="mois">'+t('mois')+'</option>';q.value=v.quand||'avenir';
-  ['lieu','age','niveau','quand','prix'].forEach(function(k){$('e-'+k).textContent=t(k)});
-}
-function ok(o){
-  var lieu=$('f-lieu').value,niv=$('f-niveau').value,age=$('f-age').value,prix=$('f-prix').value,q=$('f-quand').value;
-  if(!futur(o))return false;
-  if(lieu&&o.lieu!==lieu)return false;
-  if(niv&&o.niveau!==niv)return false;
-  if(age!==''){var a=+age;if(o.age_min!=null&&a<o.age_min)return false;if(o.age_max!=null&&a>o.age_max)return false}
-  if(prix!==''&&o.prix!=null&&o.prix>+prix)return false;
-  if(q==='mois'){var m=new Date().toISOString().slice(0,7);if(o.debut.slice(0,7)>m||(o.fin||o.debut).slice(0,7)<m)return false}
-  return true;
-}
-function carte(o){
-  var ages=o.age_min!=null?(o.age_max!=null?o.age_min+'–'+o.age_max:o.age_min+'+')+' '+t('ans'):t('tout_age');
-  var dates=o.fin&&o.fin!==o.debut?t('du')+' '+dt(o.debut)+' '+t('au')+' '+dt(o.fin):dt(o.debut);
-  var prix=o.prix!=null?o.prix.toLocaleString(MOIS[L])+' '+(o.devise==='CHF'?'CHF':'€'):'—';
-  return '<div class="offre"><h2>'+esc(o.titre)+'</h2><div class="ecole">'+esc(o.ecole)+'</div>'
-   +'<div class="ligne"><span>'+esc(o.lieu)+' · '+t(o.pays)+'</span><span>'+dates+'</span><span>'+ages+'</span>'
-   +(o.niveau?'<span>'+t(o.niveau)+'</span>':'')+'<span class="prix">'+prix+'</span></div>'
-   +'<div class="verif">'+t('verifie')+' '+dt(o.verifie)+' · <a href="'+esc(o.lien)+'" rel="noopener" target="_blank">'+t('voir')+' →</a></div></div>';
-}
-function dessiner(){
-  var r=D.offres.filter(ok);
-  $('compte').textContent=r.length+' '+t('n_offres');
-  $('liste').innerHTML=r.length?r.map(carte).join(''):'<p class="vide">'+(D.offres.filter(futur).length?t('aucune'):t('vide'))+'</p>';
-}
-function langue(l){L=l;document.documentElement.lang=l;
-  document.querySelectorAll('#langues button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.lang===l)});
-  document.querySelectorAll('[data-t]').forEach(function(e){e.textContent=t(e.dataset.t)});
-  $('f-age').placeholder=t('tout_age');remplir();dessiner();try{localStorage.setItem('lang',l)}catch(e){}}
-['f-lieu','f-niveau','f-quand','f-age','f-prix'].forEach(function(i){$(i).addEventListener('input',dessiner)});
-document.querySelectorAll('#langues button').forEach(function(b){b.addEventListener('click',function(){langue(b.dataset.lang)})});
-var l0='fr';try{l0=localStorage.getItem('lang')||(navigator.language||'fr').slice(0,2)}catch(e){}
-langue(U[l0]?l0:'fr');
-})();
+body{margin:0;background:var(--fond);color:var(--encre);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:inherit}
+.page{max-width:60rem;margin:0 auto;padding:2rem 1.2rem 5rem}
+h1{font-size:clamp(1.6rem,4vw,2.4rem);margin:.2rem 0 .6rem;letter-spacing:-.02em}
+.chapo{color:var(--doux);max-width:44rem;margin:0 0 1.6rem}
+.retour{display:inline-block;color:var(--doux);text-decoration:none;font-size:.9rem;margin-bottom:.6rem}
+.filtres{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:.7rem;background:var(--carte);border:1px solid var(--trait);border-radius:14px;padding:.9rem;margin-bottom:1rem}
+label{display:flex;flex-direction:column;gap:.25rem;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--doux)}
+select,input{background:#0b1e30;color:var(--encre);border:1px solid var(--trait);border-radius:9px;padding:.5rem .55rem;font:inherit;font-size:.92rem;min-width:0}
+input[type=search]{grid-column:span 2}
+.compte{color:var(--doux);font-size:.9rem;margin:.2rem 0 1rem}
+.liste{display:grid;gap:.8rem}
+.offre{background:var(--carte);border:1px solid var(--trait);border-radius:14px;padding:.9rem 1rem;display:grid;grid-template-columns:1fr auto;gap:.5rem .9rem;align-items:start}
+.offre h2{font-size:1.02rem;margin:0 0 .2rem;line-height:1.3}
+.offre .ecole{color:var(--doux);font-size:.86rem}
+.offre .bas{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap;padding-top:.55rem;border-top:1px solid var(--trait);font-size:.86rem;color:var(--doux)}
+.offre .prix{font-size:1.05rem;font-weight:600;color:var(--encre);white-space:nowrap;text-align:right}
+.offre .ligne{display:flex;flex-wrap:wrap;gap:.35rem .9rem;font-size:.84rem;color:var(--doux);grid-column:1/-1}
+.offre a.lien{color:var(--accent);text-decoration:none;font-size:.88rem}
+.marque{font-size:.72rem;border:1px solid var(--trait);border-radius:99px;padding:.06rem .45rem;color:var(--doux)}
+.pied{margin-top:2rem;color:var(--doux);font-size:.82rem;border-top:1px solid var(--trait);padding-top:1rem}
+.vide{color:var(--doux);padding:2rem 0}
+@media(max-width:560px){input[type=search]{grid-column:1/-1}.offre{grid-template-columns:1fr}}
 """
 
 
 def charger() -> dict:
     if not JSON.exists():
-        return {"maj": "", "offres": []}
+        return {"offres": []}
     return json.loads(JSON.read_text(encoding="utf-8"))
 
 
 def affichable(o: dict, aujourdhui: date | None = None) -> bool:
-    """Une offre se publie si elle a ce qu'il faut pour être vérifiée, n'est pas passée et n'est pas périmée."""
     aujourdhui = aujourdhui or date.today()
     try:
-        debut = date.fromisoformat(o["debut"])
-        fin = date.fromisoformat(o.get("fin") or o["debut"])
+        fin = date.fromisoformat(o["fin"]) if o.get("fin") else None
         verifie = date.fromisoformat(o["verifie"])
     except (KeyError, ValueError):
         return False
-    if not (o.get("titre") and o.get("ecole") and o.get("lieu") and str(o.get("lien", "")).startswith("https://")):
-        return False
-    if o.get("pays") not in ("FRA", "SUI"):
-        return False
-    if fin < aujourdhui or fin < debut:
+    if fin and fin < aujourdhui:
         return False
     return verifie >= aujourdhui - timedelta(days=PEREMPTION_JOURS)
 
 
 def construire(d: dict | None = None) -> str:
     d = d if d is not None else charger()
-    offres = sorted((o for o in d.get("offres", []) if affichable(o)),
-                    key=lambda o: (o["debut"], o["ecole"].lower()))
+    offres = [o for o in d.get("offres", []) if affichable(o)]
+    # Les offres qui publient un prix passent devant : une ligne sans prix reste utile, mais elle ne
+    # doit pas remplir la première page.
+    offres.sort(key=lambda o: (o.get("prix") is None, o.get("debut") or "9999-12-31",
+                               o.get("prix_eur") or 0))
     donnees = {
-        "ui": UI, "offres": offres,
-        "lieux": sorted({o["lieu"] for o in offres}),
+        "ui": UI, "offres": offres, "langues": LANGUES,
+        "pays": sorted({(o["pays"], o["pays_nom"]) for o in offres if o.get("pays")}),
+        "ecoles": sorted({(o["ecole_slug"], o["ecole"]) for o in offres}),
+        "pays_ecole": sorted({(o["ecole_pays"], o["ecole_pays_nom"]) for o in offres if o.get("ecole_pays")}),
+        "langues_presentes": sorted({o["langue"] for o in offres if o.get("langue")}),
         "niveaux": [n for n in NIVEAUX if any(o.get("niveau") == n for o in offres)],
+        "types": [t for t in ("apprentissage", "theorie") if any(
+            (o.get("type") == t) or (t == "theorie" and o.get("type") not in ("apprentissage", "theorie"))
+            for o in offres)],
     }
-    fr = UI["fr"]
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
-    import site_blocks  # la barre du site : un seul endroit
-    maj = d.get("maj", "")[:10]
-    return (
-        '<!doctype html>\n<html lang="fr"><head><meta charset="utf-8">'
-        '<meta name="viewport" content="width=device-width,initial-scale=1">'
-        f"<title>{fr['titre']} — Sailing More</title>"
-        '<link rel="canonical" href="https://sailingmore.fr/stages.html">'
-        '<meta name="description" content="Stages et cours de voile des écoles et clubs en France et en Suisse : '
-        'lieu, âge, niveau, date, prix, lien vers l\'école.">'
-        "<style>" + site_blocks.ENTETE_CSS + CSS + "</style></head><body>"
-        + site_blocks.entete_site("stages.html", ["fr", "en", "it", "es", "pt", "de"], auto=False)
-        + "<div class=\"page\">"
-        f'<h1 data-t="titre">{fr["titre"]}</h1><p class="chapo" data-t="chapo">{fr["chapo"]}</p>'
-        '<div class="filtres">'
-        '<label><span id="e-lieu">Lieu</span><select id="f-lieu"></select></label>'
-        '<label><span id="e-age">Âge</span><input id="f-age" type="number" min="3" max="99" inputmode="numeric"></label>'
-        '<label><span id="e-niveau">Niveau</span><select id="f-niveau"></select></label>'
-        '<label><span id="e-quand">Date</span><select id="f-quand"></select></label>'
-        '<label><span id="e-prix">Prix max.</span><input id="f-prix" type="number" min="0" step="10" inputmode="numeric"></label>'
-        '</div><div class="compte" id="compte" role="status"></div><div id="liste"></div>'
-        f'<p class="pied"><span data-t="pied">{fr["pied"]}</span> '
-        '<a href="annonceurs.html">Contact</a>'
-        + (f" · {maj}" if maj else "") + "</p></div>"
-        '<script type="application/json" id="donnees">'
-        + json.dumps(donnees, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
-        + "</script><script>" + JS + "</script></body></html>\n"
-    )
+    return _html(donnees)
 
 
-def ecrire_page(dossier: Path) -> int:
-    """Écrit `stages.html` dans `dossier` — le seul chemin de sortie de cette page, appelé par
-    `accueil_site.sortir_le_site()` pour passer par le même pipeline que le reste du site."""
+def _html(d: dict) -> str:
+    import html as H
+    corps = ("<!doctype html><html lang=\"fr\"><head><meta charset=\"utf-8\">"
+             "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
+             f"<title>{H.escape(UI['fr']['titre'])} — Sailing More</title>"
+             "<meta name=\"description\" content=\"Stages et cours de voile vendus par des écoles "
+             "européennes : prix publiés, destination, langue, lien direct vers la fiche de l'école.\">"
+             f"<style>{CSS}</style></head><body><main class=\"page\">"
+             f"<a class=\"retour\" href=\"/\" data-t=\"retour\">{H.escape(UI['fr']['retour'])}</a>"
+             "<div id=\"langues\"></div>"
+             f"<h1 data-t=\"titre\">{H.escape(UI['fr']['titre'])}</h1>"
+             f"<p class=\"chapo\" data-t=\"chapo\">{H.escape(UI['fr']['chapo'])}</p>"
+             "<section class=\"filtres\">"
+             "<label><span data-t=\"chercher\">Chercher</span><input id=\"f-q\" type=\"search\"></label>"
+             "<label><span data-t=\"langue\">Langue</span><select id=\"f-langue\"></select></label>"
+             "<label><span data-t=\"destination\">Destination</span><select id=\"f-pays\"></select></label>"
+             "<label><span data-t=\"pays_ecole\">Pays de l'école</span><select id=\"f-pays-ecole\"></select></label>"
+             "<label><span data-t=\"ecole\">École</span><select id=\"f-ecole\"></select></label>"
+             "<label><span data-t=\"type\">Type</span><select id=\"f-type\"></select></label>"
+             "<label><span data-t=\"niveau\">Niveau</span><select id=\"f-niveau\"></select></label>"
+             "<label><span data-t=\"quand\">Date</span><select id=\"f-quand\"></select></label>"
+             "<label><span data-t=\"prix\">Prix max.</span><input id=\"f-prix\" type=\"number\" min=\"0\" step=\"50\" inputmode=\"numeric\"></label>"
+             "</section>"
+             "<p class=\"compte\" id=\"compte\"></p><div class=\"liste\" id=\"liste\"></div>"
+             f"<p class=\"pied\" data-t=\"pied\">{H.escape(UI['fr']['pied'])}</p>"
+             "</main>"
+             "<script id=\"donnees\" type=\"application/json\">"
+             + json.dumps(d, ensure_ascii=False).replace("</", "<\\/")
+             + "</script><script>" + JS + "</script></body></html>")
+    return corps
+
+
+JS = r"""
+var D=JSON.parse(document.getElementById('donnees').textContent),U=D.ui;
+var L='fr';try{L=localStorage.getItem('lang')||(navigator.language||'fr').slice(0,2)}catch(e){}
+if(!U[L])L='en';
+function t(k){return (U[L]&&U[L][k])||U.fr[k]||k}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function dt(s){if(!s)return '';var p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0].slice(2)}
+function sym(d){return {EUR:'€',GBP:'£',CHF:'CHF',USD:'$',NOK:'NOK',SEK:'SEK',DKK:'DKK'}[d]||d}
+/* langue et pays proposés par défaut : ceux du navigateur, quand des offres y répondent */
+var nav=(navigator.language||'fr-FR');var navLang=nav.slice(0,2).toLowerCase();
+var m=nav.match(/[-_]([A-Za-z]{2})$/);var navPays=m?m[1].toUpperCase():'';
+var ISO2ISO3={FR:'FRA',DE:'DEU',NL:'NLD',GB:'GBR',IE:'IRL',ES:'ESP',IT:'ITA',PT:'PRT',GR:'GRC',HR:'HRV',TR:'TUR',
+BE:'BEL',CH:'CHE',AT:'AUT',DK:'DNK',SE:'SWE',NO:'NOR',FI:'FIN',PL:'POL',SI:'SVN',MT:'MLT',CY:'CYP',EE:'EST',
+LV:'LVA',LT:'LTU',IS:'ISL',US:'USA',CA:'CAN',SE:'SWE',ZA:'ZAF',AU:'AUS'};
+var defPays=ISO2ISO3[navPays]||'';
+function mem(k,d){try{var v=localStorage.getItem('st_'+k);return v==null?d:v}catch(e){return d}}
+function garde(k,v){try{localStorage.setItem('st_'+k,v)}catch(e){}}
+function options(sel,liste,tous){
+  var el=document.getElementById(sel);var garde=el.value;
+  el.innerHTML='<option value="">'+t('tous')+'</option>'+liste.map(function(o){
+    return '<option value="'+esc(o[0])+'">'+esc(o[1])+'</option>'}).join('');
+  el.value=garde;
+}
+function remplir(){
+  document.documentElement.lang=L;
+  ['titre','chapo','pied','retour','chercher','langue','destination','pays_ecole','ecole','niveau','quand','prix','tous'].forEach(function(k){
+    var e=document.querySelector('[data-t="'+k+'"]');if(e)e.textContent=t(k)});
+  var f=document.getElementById('f-q');if(f)f.placeholder=t('chercher');
+  options('f-langue',D.langues_presentes.map(function(c){return [c,D.langues[c]||c.toUpperCase()]}));
+  options('f-pays',D.pays.map(function(p){return [p[0],p[1]]}));
+  options('f-pays-ecole',D.pays_ecole.map(function(p){return [p[0],p[1]]}));
+  options('f-ecole',D.ecoles.map(function(e){return [e[0],e[1]]}));
+  options('f-niveau',D.niveaux.map(function(n){return [n,t(n)]}));
+  options('f-type',(D.types||[]).map(function(x){return [x,x==='theorie'?t('theorie'):t('pratique')]}));
+  var q=document.getElementById('f-quand'),gq=q.value;
+  q.innerHTML='<option value="">'+t('tous')+'</option><option value="avenir">'+t('avenir')+'</option><option value="mois">'+t('mois')+'</option>';
+  q.value=gq;
+  var fl=document.getElementById('f-langue');
+  if(fl.value===''){fl.value=mem('langue', D.langues_presentes.indexOf(navLang)>=0?navLang:'');if(fl.value==='')fl.value='';}
+  var fp=document.getElementById('f-pays');
+  if(fp.value===''){var d=mem('pays',D.pays.some(function(p){return p[0]===defPays})?defPays:'');fp.value=d;}
+  /* Un filtre par défaut qui ne montre rien n'aide personne : si le couple langue+pays du visiteur
+     ne laisse aucune offre, on relâche le pays, puis la langue. */
+  var pose=false;try{pose=localStorage.getItem('st_pose')==='1'}catch(e){}
+  if(!pose){
+    var rien=D.offres.filter(function(o){
+      return (!fl.value||o.langue===fl.value)&&(!fp.value||o.pays===fp.value)}).length;
+    if(!rien){fp.value='';rien=D.offres.filter(function(o){return !fl.value||o.langue===fl.value}).length;}
+    if(!rien){fl.value='';}
+    try{localStorage.setItem('st_pose','1')}catch(e){}
+  }
+  var l=document.getElementById('langues');
+  l.innerHTML=Object.keys(U).map(function(c){return '<button data-l="'+c+'" style="background:none;border:0;color:'+(c===L?'#5fd3c4':'#9db2c7')+';font:inherit;font-size:.8rem;cursor:pointer;padding:.1rem .25rem">'+c.toUpperCase()+'</button>'}).join('');
+  [].forEach.call(l.querySelectorAll('button'),function(b){b.onclick=function(){L=b.dataset.l;try{localStorage.setItem('lang',L)}catch(e){}remplir();dessiner()}});
+}
+function futur(o){if(!o.debut)return true;var a=new Date().toISOString().slice(0,10);return (o.fin||o.debut)>=a}
+function dessiner(){
+  var q=(document.getElementById('f-q').value||'').toLowerCase().trim();
+  var lg=document.getElementById('f-langue').value,py=document.getElementById('f-pays').value;
+  var pe=document.getElementById('f-pays-ecole').value,ec=document.getElementById('f-ecole').value;
+  var nv=document.getElementById('f-niveau').value,qd=document.getElementById('f-quand').value;
+  var ty=document.getElementById('f-type').value;
+  var px=parseFloat(document.getElementById('f-prix').value||'0');
+  garde('langue',lg);garde('pays',py);
+  var mois=new Date().toISOString().slice(0,7);
+  var vus=D.offres.filter(function(o){
+    if(lg&&o.langue!==lg)return false;
+    if(py&&o.pays!==py)return false;
+    if(pe&&o.ecole_pays!==pe)return false;
+    if(ec&&o.ecole_slug!==ec)return false;
+    if(nv&&o.niveau!==nv)return false;
+    if(ty&&((ty==='theorie')!==(o.type==='theorie')))return false;
+    if(px&&(o.prix_eur||o.prix||0)>px)return false;
+    if(qd==='avenir'&&!futur(o))return false;
+    if(qd==='mois'&&(!o.debut||o.debut.slice(0,7)!==mois))return false;
+    if(q){var s=(o.titre+' '+o.ecole+' '+o.lieu+' '+o.pays_nom+' '+o.region).toLowerCase();if(s.indexOf(q)<0)return false}
+    return true;
+  });
+  var html=vus.map(function(o){
+    var dates=!o.debut?t('dates_ecole'):(o.fin&&o.fin!==o.debut?t('du')+' '+dt(o.debut)+' '+t('au')+' '+dt(o.fin):dt(o.debut));
+    var ou=o.lieu?(o.lieu===o.pays_nom?o.lieu:o.lieu+' · '+o.pays_nom):(o.region||o.pays_nom);
+    var lng=o.langue?(D.langues[o.langue]||o.langue.toUpperCase()):'—';
+    var marque='';
+    return '<article class="offre"><div><h2>'+esc(o.titre)+'</h2>'
+      +'<div class="ecole">'+esc(o.ecole)+(o.ecole_pays_nom?' · '+esc(o.ecole_pays_nom):'')+'</div></div>'
+      +'<div class="prix">'+(o.prix!=null?o.prix.toLocaleString(L)+' '+sym(o.devise):'<span style="font-weight:400;font-size:.85rem">'+t('prix_vide')+'</span>')+'</div>' 
+      +'<div class="ligne"><span>'+esc(ou)+'</span><span>'+dates+'</span>'
+      +(o.duree_jours?'<span>'+o.duree_jours+' '+t('jours')+'</span>':'')
+      +'<span>'+esc(lng)+marque+'</span>'
+      +(o.niveau?'<span>'+t(o.niveau)+'</span>':'')+'</div>'
+      +'<div class="bas"><span>'+t('verifie')+' '+dt(o.verifie)+'</span>'
+      +'<a class="lien" href="'+esc(o.lien)+'" rel="noopener nofollow" target="_blank">'+t('voir')+'</a></div>'
+      +'</article>';
+  }).join('');
+  document.getElementById('liste').innerHTML=html||('<p class="vide">'+(D.offres.length?t('aucune'):t('vide'))+'</p>');
+  var ne=new Set(vus.map(function(o){return o.ecole_slug})).size;
+  document.getElementById('compte').textContent=t('compte').replace('{n}',vus.length).replace('{e}',ne)
+    .replace('offers · 1 schools','offer · 1 school').replace('offres · 1 écoles','offre · 1 école');
+}
+['f-q','f-langue','f-pays','f-pays-ecole','f-ecole','f-type','f-niveau','f-quand','f-prix'].forEach(function(i){
+  var e=document.getElementById(i);if(e){e.addEventListener('input',dessiner);e.addEventListener('change',dessiner)}});
+remplir();dessiner();
+"""
+
+SITE = ICI / "projets/sailingmore/site"
+
+
+def ecrire_page(dossier: Path = SITE) -> int:
+    """Écrit `stages.html` dans `dossier` — appelé par `accueil_site.sortir_le_site`."""
+    dossier.mkdir(parents=True, exist_ok=True)
     d = charger()
     (dossier / "stages.html").write_text(construire(d), encoding="utf-8")
     return sum(1 for o in d.get("offres", []) if affichable(o))
 
 
 if __name__ == "__main__":
-    SITE = ICI / "projets/sailingmore/site"
-    SITE.mkdir(parents=True, exist_ok=True)
-    print(f"stages.html : {ecrire_page(SITE)} offre(s) publiable(s)")
+    print(f"stages.html : {ecrire_page()} offre(s) publiable(s)")
