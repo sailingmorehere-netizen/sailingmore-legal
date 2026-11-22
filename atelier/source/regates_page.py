@@ -952,8 +952,7 @@ def construire(d: dict) -> str:
         # chiffre : deux nombres différents sur la même page donnent l'impression que l'un ment
         # (corrigé une première fois le 21/11, revenu par le filtre des trois jours).
         f'{len(epreuves)} épreuves '
-        "à venir, relevées chez les organisateurs et les fédérations. "
-        "Recherchez par nom, par lieu, par classe — ou filtrez.</p>"
+        "à venir, relevées chez les organisateurs et les fédérations.</p>"
         '<div class="panneau">'
         '<div class="recherche">'
         '<div class="ligne-recherche"><div class="champ">'
