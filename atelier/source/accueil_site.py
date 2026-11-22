@@ -1346,6 +1346,7 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
     n = poser_mer_partout()
     print(f"mer posée sur {n} page(s) supplémentaire(s)")
     print(f"équilibre posé sur {poser_equilibre(SITE)} page(s)")
+    print(f"https imposé sur {poser_https(SITE)} page(s)")
     print(f"site écrit dans {SITE} — {len(list(SITE.rglob('*')))} entrées")
     liste = fichiers_a_publier()
     # `--page` ne recopie que la page demandée : recopier tout `cache/rhum/site` depuis un cron
@@ -1387,6 +1388,35 @@ def poser_equilibre(dossier: Path) -> int:
         (dossier / "fonts").mkdir(parents=True, exist_ok=True)
         for f in POLICES.glob("*.woff"):
             shutil.copy2(f, dossier / "fonts" / f.name)
+    return fait
+
+
+# ---------------------------------------------------------------------------
+# HTTPS imposé côté page (22/11/2026 : Nicolas voit « Non sécurisé » dans son navigateur).
+# GitHub Pages sert encore http:// quand on le demande — `https_enforced` est à False sur le dépôt
+# et le jeton n'a pas la portée `pages` : la bascule est dans Réglages → Pages. En attendant, une
+# page ouverte en http se remplace elle-même par son adresse https, ce qui règle le cas d'un
+# raccourci ou d'une barre d'adresse tapée à la main.
+# ---------------------------------------------------------------------------
+SCRIPT_HTTPS = ('<script id="https">(function(){if(location.protocol==="http:"){'
+                'location.replace("https://"+location.host+location.pathname'
+                '+location.search+location.hash);}})();</script>')
+
+
+def poser_https(dossier: Path) -> int:
+    """Force https dans chaque page du dossier, avant tout rendu."""
+    fait = 0
+    for page in sorted(dossier.glob("*.html")):
+        html = page.read_text(encoding="utf-8")
+        html = re.sub(r'<script id="https">.*?</script>\n?', "", html, flags=re.S)
+        if "<head>" in html:
+            html = html.replace("<head>", "<head>\n" + SCRIPT_HTTPS, 1)
+        elif "</head>" in html:
+            html = html.replace("</head>", SCRIPT_HTTPS + "\n</head>", 1)
+        else:
+            continue
+        page.write_text(html, encoding="utf-8")
+        fait += 1
     return fait
 
 
@@ -1613,6 +1643,7 @@ def main() -> int:
     print(f"écrit {SORTIE / 'index.html'} · {SORTIE / 'jeux.html'}")
     print(f"chiffres au {chiffres().get('maj')} · prochain jeu {jeu} · {len(citations())} citations")
     poser_equilibre(SORTIE)
+    poser_https(SORTIE)
     if "--publier" in sys.argv:
         images = [n for n in ("og-image.jpg", "icon-512.png", "icon-180.png", "favicon-32.png")
                   if (SORTIE / n).exists()]
