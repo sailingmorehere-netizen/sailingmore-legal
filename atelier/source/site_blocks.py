@@ -15,6 +15,7 @@ D'où viennent les données — rien n'est saisi à la main :
 from __future__ import annotations
 
 import json
+import math
 import os
 import subprocess
 import urllib.parse
@@ -655,39 +656,47 @@ def _espace(items: list[dict]) -> list[tuple[dict, float, float, float, float]]:
     """Écarte les bateaux qui se chevauchent, sans mentir sur leur position.
 
     Le Léman tient en 8 px sur une carte du monde : posé à sa vraie place, son bateau recouvre celui de
-    France. Le bateau est donc décalé vers le haut et relié à son point exact par un fin trait pointillé —
-    le point reste juste, le bateau reste lisible. Unités : celles de la carte, 1000 × 500.
+    France. Le bateau est donc décalé et relié à son point exact par un fin trait pointillé — le point
+    reste juste, le bateau reste lisible. Unités : celles de la carte, 1000 × 500.
+
+    Un bateau posé sur un port ou un pays (`port`, `vif`) ne bouge pas d'un pixel : c'est lui qui donne
+    la géographie, et un trait de rappel s'y lisait comme une flèche vers la côte (Nicolas, 19/11/2026).
+    Ce sont donc les autres qui s'écartent, par anneaux de plus en plus larges — une grille de neuf
+    places ne suffisait pas à séparer six bourses entassées sur la France (22/11/2026).
     """
-    MINIMUM, PAS = 34.0, 40.0
-    # Deux ports distants de trois cents kilomètres (Genève et Marseille) tombent à neuf unités l'un de
-    # l'autre : les écarter de quarante les envoyait l'un en Norvège, l'autre au Sahara, sans trait pour
-    # le dire (Nicolas, 19/11/2026 : « l'icône du groupe Marseille n'est pas sur Marseille »). Dans une
-    # grappe serrée, on préfère un petit décalage de neuf unités à un grand mensonge.
-    PRES, PAS_PRES = 17.0, 9.0
+    MINIMUM, PRES, MIN_SERRE = 34.0, 17.0, 26.0
+    RAYONS = (30.0, 42.0, 58.0, 76.0, 96.0)
+    # Un port reste à sa place : il est la référence des autres.
+    items = sorted(items, key=lambda b: 0 if (b.get("port") or b.get("vif")) else 1)
     place: list[tuple[float, float]] = []
     sortie = []
     for b in items:
         if b.get("x") is None or b.get("y") is None:
             continue
         px, py = float(b["x"]) * 10, float(b["y"]) * 5      # % → unités de carte
-        dx = dy = 0.0
-        # grappe serrée : on reste près du point, quitte à ce que deux bateaux se touchent
-        serre = any((px - qx) ** 2 + (py - qy) ** 2 < PRES ** 2 for qx, qy in place)
-        pas, minimum = (PAS_PRES, PAS_PRES) if serre else (PAS, MINIMUM)
-        # on essaie les places autour du point et on garde la plus proche qui soit libre : le bateau reste
-        # une étiquette, le trait dit où il devrait être
-        candidats = sorted(((ox, oy) for ox in (-pas, 0, pas) for oy in (-pas, 0, pas)
-                            if (ox, oy) != (0, 0)), key=lambda o: o[0] ** 2 + o[1] ** 2)
-        candidats = [(0, 0)] + candidats
-        for ox, oy in candidats:
-            dx, dy = float(ox), float(oy)
-            if all((px + ox - qx) ** 2 + (py + oy - qy) ** 2 >= minimum ** 2 for qx, qy in place):
-                break
-        # un bateau au bord de la carte (le pôle Nord) serait coupé par le cadre : on le rentre juste assez
-        ty = min(max(py + dy, 16.0), 484.0)
         px = min(max(px, 16.0), 984.0)
+        ancre = bool(b.get("port") or b.get("vif"))
+        serre = any((px - qx) ** 2 + (py - qy) ** 2 < PRES ** 2 for qx, qy in place)
+        minimum = MIN_SERRE if serre else MINIMUM
+        if ancre:
+            candidats = [(0.0, 0.0)]
+        else:
+            candidats = [(0.0, 0.0)]
+            for r in RAYONS:
+                for k in range(12):
+                    a = math.radians(30 * k)
+                    candidats.append((round(r * math.cos(a), 2), round(r * math.sin(a), 2)))
+        dx = dy = 0.0
+        for ox, oy in candidats:
+            # un bateau au bord de la carte (le pôle Nord) serait coupé par le cadre : on le rentre juste assez
+            ty = min(max(py + oy, 16.0), 484.0)
+            bx = min(max(px + ox, 16.0), 984.0)
+            if all((bx - qx) ** 2 + (ty - qy) ** 2 >= minimum ** 2 for qx, qy in place):
+                dx, dy = bx - px, ty - py
+                break
+        ty = min(max(py + dy, 16.0), 484.0)
         if not b.get("errant"):
-            place.append((px, ty))       # un bateau qui se promène ne réserve aucune place
+            place.append((px + dx, ty))       # un bateau qui se promène ne réserve aucune place
         sortie.append((b, px, py, dx, ty))
     return sortie
 
@@ -714,10 +723,14 @@ def marques_bourses(items: list[dict] | None = None) -> str:
             morceaux.append('<i>' + gens + mot + '</i>')
         bulle = '<span class="bulle">' + "".join(morceaux) + '</span>'
 
+        # Un bateau écarté se dessine écarté : le décalage calculé par _espace() servait au trait mais
+        # pas au bateau lui-même, si bien que deux bourses au même point restaient l'une sur l'autre
+        # (Le Bon Coin Voile tombait exactement sur la bourse France, 22/11/2026).
+        bx = min(max(px + dx, 16.0), 984.0)
         # Pas de trait de rappel pour une bourse posée sur un port ou un pays (Léman, Marseille,
         # France) : le trait se lisait comme une flèche vers la côte (Nicolas, 19/11/2026).
-        if abs(ty - py) > 0.5 and not (b.get("vif") or b.get("port")):
-            d = f"M{px:.1f} {py:.1f}L{px + dx:.1f} {ty:.1f}"
+        if (abs(ty - py) > 0.5 or abs(dx) > 0.5) and not (b.get("vif") or b.get("port")):
+            d = f"M{px:.1f} {py:.1f}L{bx:.1f} {ty:.1f}"
             # deux traits superposés : un fond sombre pour tenir sur la terre claire, puis le pointillé ivoire
             liens.append(f'<path class="lien-fond" d="{d}"/><path class="lien-trait" d="{d}"/>'
                          f'<circle cx="{px:.1f}" cy="{py:.1f}" r="3.4"/>')
@@ -772,16 +785,17 @@ def marques_bourses(items: list[dict] | None = None) -> str:
                 anime = ' data-pts="' + json.dumps(pts, separators=(",", ":")) + '"'
                 if b.get("vif"):
                     anime += ' data-vif="1"'
+        type_mot = "groupe de vente" if b.get("colis") else "bourse aux équipiers"
         if anime:
             sortie.append(
                 f'<a class="{classe}"{anime} href="{b["lien"]}" target="_blank" rel="noopener" '
-                f'title="{titre}" aria-label="{titre}, bourse aux équipiers" '
-                f'style="left:{px / 10:.2f}%;top:{ty / 5:.2f}%">{icone}{bulle}</a>')
+                f'title="{titre}" aria-label="{titre}, {type_mot}" '
+                f'style="left:{bx / 10:.2f}%;top:{ty / 5:.2f}%">{icone}{bulle}</a>')
             continue
         sortie.append(
             f'<a class="{classe}" href="{b["lien"]}" target="_blank" rel="noopener" title="{titre}" '
-            f'aria-label="{titre}, bourse aux équipiers" '
-            f'style="left:{px / 10:.2f}%;top:{ty / 5:.2f}%">{icone}{bulle}</a>')
+            f'aria-label="{titre}, {type_mot}" '
+            f'style="left:{bx / 10:.2f}%;top:{ty / 5:.2f}%">{icone}{bulle}</a>')
     if liens:
         sortie.insert(0, '<svg class="liens-bourses" viewBox="0 0 1000 500" '
                          'preserveAspectRatio="none" aria-hidden="true">'
