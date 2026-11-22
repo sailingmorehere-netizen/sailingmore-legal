@@ -20,6 +20,10 @@ import sys
 from datetime import date, datetime
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import regates_classes  # noqa: E402  (table sigle → nom, jauges « tout bateau »)
+import regates_drapeaux  # noqa: E402  (drapeaux SVG, noms de pays en six langues)
+
 ICI = Path(os.environ.get("SAILINGMORE_RACINE", "/opt/data"))
 JSON = ICI / "projets/sailingmore/regates.json"
 SORTIE = ICI / "projets/sailingmore/site"
@@ -68,15 +72,19 @@ a{color:#fff;text-decoration:none}
   font-family:inherit}
 .champ input::placeholder{color:#6f8598}
 .champ svg{flex:0 0 auto;opacity:.55}
-.filtres{display:flex;flex-direction:column;gap:.42rem;margin-top:.7rem}
-.filtres .groupe{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+.filtres{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.15rem;margin-top:.7rem}
+.filtres .groupe{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;min-width:0}
 .filtres .etiq{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:#6f8598;
   margin-right:.2rem}
-.puce{font:inherit;font-size:.72rem;letter-spacing:.04em;color:var(--gris);background:none;
-  border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:.28rem .6rem;cursor:pointer;
-  transition:color .15s,border-color .15s,background .15s}
-.puce:hover{color:#fff;border-color:rgba(255,255,255,.4)}
-.puce[aria-pressed="true"]{color:#fff;border-color:var(--rouge);background:rgba(226,58,62,.14)}
+.menu{font:inherit;font-size:.72rem;letter-spacing:.04em;color:#fff;background-color:var(--panneau);
+  border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:.34rem 1.7rem .34rem .55rem;
+  cursor:pointer;appearance:none;-webkit-appearance:none;max-width:19rem;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23c9d6e2' stroke-width='1.4'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .6rem center}
+.menu:hover{border-color:rgba(255,255,255,.4);color:#fff}
+.menu:focus{outline:none;border-color:rgba(226,58,62,.7);box-shadow:0 0 0 2px rgba(226,58,62,.18)}
+.menu option,.menu optgroup{background:#0a1f33;color:#fff}
+.menu.actif{border-color:var(--rouge);background-color:rgba(226,58,62,.14)}
 .compte{color:var(--gris);font-size:.72rem;letter-spacing:.06em;margin:.9rem 0 .2rem;
   display:flex;justify-content:space-between;align-items:baseline;gap:1.2rem;flex-wrap:wrap}
 .compte b{color:#fff;font-weight:500}
@@ -114,7 +122,44 @@ a{color:#fff;text-decoration:none}
   color:#6f8598;font-size:.72rem;line-height:1.8}
 .pied a{color:var(--gris);text-decoration:underline;text-decoration-color:rgba(226,58,62,.5)}
 
+/* ── un cadre par type de course (le type est toujours aussi écrit : pictogramme + mot) ── */
+.epreuve{padding-left:.8rem;border-left:2px solid transparent}
+.t-club{border-left-color:rgba(255,255,255,.10)}
+.t-regate{border-left-color:rgba(255,255,255,.26)}
+.t-champ{border-left:3px solid #e8c468;background:rgba(232,196,104,.06);
+  box-shadow:inset 0 0 0 1px rgba(232,196,104,.22)}
+.t-large{border-left-color:rgba(255,255,255,.26);background:rgba(0,0,0,.34)}
+.tag.type{display:inline-flex;align-items:center;gap:.3rem;color:#c9d6e2;border-color:rgba(255,255,255,.22)}
+.tag.type svg{width:.8rem;height:.8rem;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.4;
+  stroke-linecap:round;stroke-linejoin:round}
+.tag.type.champ{color:#e8c468;border-color:rgba(232,196,104,.6)}
+.dr{display:inline-block;width:1.1rem;height:.74rem;vertical-align:-.08rem;margin-right:.45rem;
+  box-shadow:0 0 0 1px rgba(255,255,255,.4)}
+.sans-classe{font-size:.68rem;font-style:italic;color:#8196a9;letter-spacing:.02em}
+
+/* ── alerte par filtre ─────────────────────────────────────────────── */
+.ligne-recherche{display:flex;gap:.6rem;align-items:stretch}
+.ligne-recherche .champ{flex:1}
+.btn-alerte{font:inherit;font-size:.72rem;letter-spacing:.04em;color:#fff;background:rgba(226,58,62,.14);
+  border:1px solid var(--rouge);border-radius:3px;padding:0 .9rem;cursor:pointer;white-space:nowrap}
+.btn-alerte:hover{background:rgba(226,58,62,.3)}
+.alerte{margin-top:.8rem;padding:.9rem 1rem;background:var(--panneau);border:1px solid rgba(255,255,255,.13);
+  border-radius:3px;font-size:.78rem;color:var(--gris)}
+.alerte[hidden]{display:none}
+.alerte .resume{color:#fff;margin:0 0 .6rem}
+.alerte input[type=email]{width:100%;font:inherit;font-size:.9rem;color:var(--ivoire);background:#0a1f33;
+  border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:.5rem .6rem;margin:.2rem 0 .6rem}
+.alerte label.case{display:flex;gap:.5rem;align-items:flex-start;margin:.35rem 0;line-height:1.4;cursor:pointer}
+.alerte select{font:inherit;font-size:.78rem;color:var(--ivoire);background:#0a1f33;
+  border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:.2rem .4rem}
+.alerte .hp{position:absolute;left:-9999px;height:0;overflow:hidden}
+.alerte button[type=submit]{font:inherit;font-size:.78rem;color:#fff;background:var(--rouge);border:0;
+  border-radius:2px;padding:.5rem 1rem;margin-top:.5rem;cursor:pointer}
+.alerte .msg{margin:.6rem 0 0;color:#fff}
+
 @media (max-width:640px){
+  .ligne-recherche{flex-direction:column}
+  .btn-alerte{padding:.5rem .9rem}
   .page{padding:2.4rem 1rem 4rem}
   .epreuve{grid-template-columns:1fr;gap:.15rem}
   .quand{margin-bottom:.1rem}
@@ -131,9 +176,39 @@ JS = r"""
   var champ = document.getElementById('q');
   var compte = document.getElementById('compte');
   var liste = document.getElementById('liste');
-  var boutons = Array.prototype.slice.call(document.querySelectorAll('.puce'));
+  var menus = Array.prototype.slice.call(document.querySelectorAll('select[data-groupe]'));
   var effacer = document.getElementById('effacer');
-  var etat = {region:'tout', type:'tout', quand:'venir', texte:''};
+  var etat = {region:'tout', type:'tout', quand:'venir', texte:'', classe:'tous'};
+
+  // Les mots ajoutés par ce chantier existent dans les six langues ; la langue est celle de <html lang>.
+  var T = {
+    fr:{tous:'Toutes', inter:'Tout bateau', bateau:'Bateau', chercher:'Chercher une classe…', sans:'classe non précisée', aucune:'Aucune classe ne correspond.',
+        t:{'régate':'Régate','championnat':'Championnat','club':'Club','course au large':'Course au large'}},
+    de:{tous:'Alle', inter:'Alle Boote', bateau:'Bootsklasse', chercher:'Klasse suchen…', sans:'Klasse nicht angegeben', aucune:'Keine Klasse gefunden.',
+        t:{'régate':'Regatta','championnat':'Meisterschaft','club':'Verein','course au large':'Hochseeregatta'}},
+    en:{tous:'All', inter:'All boats', bateau:'Boat class', chercher:'Search a class…', sans:'class not specified', aucune:'No class matches.',
+        t:{'régate':'Race','championnat':'Championship','club':'Club','course au large':'Offshore race'}},
+    it:{tous:'Tutte', inter:'Tutte le barche', bateau:'Classe', chercher:'Cerca una classe…', sans:'classe non indicata', aucune:'Nessuna classe trovata.',
+        t:{'régate':'Regata','championnat':'Campionato','club':'Club','course au large':'Regata d\'altura'}},
+    es:{tous:'Todas', inter:'Todos los barcos', bateau:'Clase', chercher:'Buscar una clase…', sans:'clase no indicada', aucune:'Ninguna clase coincide.',
+        t:{'régate':'Regata','championnat':'Campeonato','club':'Club','course au large':'Regata de altura'}},
+    pt:{tous:'Todas', inter:'Todos os barcos', bateau:'Classe', chercher:'Procurar uma classe…', sans:'classe não indicada', aucune:'Nenhuma classe encontrada.',
+        t:{'régate':'Regata','championnat':'Campeonato','club':'Clube','course au large':'Regata de alto mar'}}
+  };
+  var lang = (document.documentElement.lang || 'fr').slice(0,2);
+  var L = T[lang] || T.fr;
+  var CADRE = {'régate':'t-regate','championnat':'t-champ','club':'t-club','course au large':'t-large'};
+  var ICONE = {'régate':'i-regate','championnat':'i-champ','club':'i-club','course au large':'i-large'};
+  var jauges = data.jauges;
+  function interSerie(e){
+    return (e.classes||[]).some(function(c){ return jauges.indexOf(c.toUpperCase()) > -1; });
+  }
+  function nomClasse(c){ return data.noms[c.toUpperCase()] || c; }
+  function drapeau(e){
+    if(!e.pays || data.pays[e.pays] === undefined) return '';
+    var n = data.pays[e.pays][lang] || data.pays[e.pays].fr;
+    return '<svg class="dr" role="img" aria-label="' + n + '" preserveAspectRatio="none"><title>' + n + '</title><use href="#f-' + e.pays + '"/></svg>';
+  }
 
   function normalise(s){return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
 
@@ -159,7 +234,10 @@ JS = r"""
     }
     if(etat.region !== 'tout' && e.region !== etat.region) return false;
     if(etat.type !== 'tout' && e.type !== etat.type) return false;
-    if(etat.quand === 'venir' && e.debut < data.aujourdhui) return false;
+    // « tous » ne filtre rien (sans classe comprises) ; toute autre entrée écarte les épreuves sans classe.
+    if(etat.classe === '__inter'){ if(!interSerie(e)) return false; }
+    else if(etat.classe !== 'tous' && (e.classes||[]).indexOf(etat.classe) === -1) return false;
+    if(etat.quand === 'venir' && e.fin < data.aujourdhui) return false;
     return true;
   }
 
@@ -187,7 +265,7 @@ JS = r"""
     var html = '';
     groupes.forEach(function(k){
       var l = vus[k];
-      html += '<section class="mois"><h2>' + moisLisible(k) + '<span>' + l.length + (l.length>1?' épreuves':' épreuve') + '</span></h2>';
+      html += '<section class="mois"><h2>' + moisLisible(k) + ' <span>' + l.length + (l.length>1?' épreuves':' épreuve') + '</span></h2>';
       l.forEach(function(e){
         var an = e.debut.slice(0,4) !== data.aujourdhui.slice(0,4) || etat.quand === 'tout';
         var dates = (e.fin && e.fin !== e.debut) ? jour(e.debut, an) + ' → ' + jour(e.fin, an) : jour(e.debut, an);
@@ -195,13 +273,15 @@ JS = r"""
         var tags = '';
         if(e.region === 'Léman') tags += '<span class="tag leman">Léman</span>';
         else if(e.region) tags += '<span class="tag">' + e.region + '</span>';
-        if(e.classes && e.classes.length) tags += '<span class="tag">' + e.classes.slice(0,4).join(' · ') + '</span>';
-        if(e.type === 'championnat') tags += '<span class="tag rouge">Championnat</span>';
+        if(ICONE[e.type]) tags += '<span class="tag type' + (e.type === 'championnat' ? ' champ' : '') + '"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#' + ICONE[e.type] + '"/></svg>' + (L.t[e.type] || e.type) + '</span>';
+        if(e.classes && e.classes.length) tags += '<span class="tag">' + e.classes.slice(0,4).map(nomClasse).join(' · ') + '</span>';
+        else tags += '<span class="sans-classe">' + L.sans + '</span>';
         if(e.annulee) tags += '<span class="tag rouge">Annulée</span>';
-        html += '<article class="epreuve">'
+        var dr = drapeau(e);
+        html += '<article class="epreuve ' + (CADRE[e.type] || '') + '">'
              + '<div class="quand"><span class="j">' + dates + '</span></div>'
              + '<div><div class="titre">' + casse(e.nom) + '</div>'
-             + (lieu ? '<div class="ou"><span class="vil">' + casse(lieu) + '</span></div>' : '')
+             + ((dr || lieu) ? '<div class="ou">' + dr + (lieu ? '<span class="vil">' + casse(lieu) + '</span>' : '') + '</div>' : '')
              + (tags ? '<div class="tags">' + tags + '</div>' : '')
              + '</div>'
              + '<div class="cles">' + (e.lien ? '<a href="' + e.lien + '" target="_blank" rel="noopener">' + (e.lien_quoi||'site') + ' →</a>' : '') + '</div>'
@@ -214,26 +294,124 @@ JS = r"""
       + (etat.quand==='venir' && gardes.length ? '<span>la prochaine : <b>' + casse(gardes[0].nom) + '</b></span>' : '');
   }
 
-  boutons.forEach(function(b){
-    b.addEventListener('click', function(){
-      var g = b.dataset.groupe, v = b.dataset.valeur;
-      etat[g] = v;
-      document.querySelectorAll('.puce[data-groupe="'+g+'"]').forEach(function(x){
-        x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
-      });
+  // Filtres : quatre menus déroulants (lieu, type, bateau, quand). Le bateau est rempli ici parce
+  // que ses options portent leur nombre d'épreuves : « Toutes » (ne filtre rien), « Tout bateau »
+  // (jauges inter-séries), puis chaque classe par nombre d'épreuves décroissant, sigle brut si le
+  // nom manque. Le sigle est aussi la valeur du menu, comme l'était la puce.
+  var selClasse = document.getElementById('classe');
+  document.getElementById('etiq-classe').textContent = L.bateau;
+  var nInter = data.epreuves.filter(interSerie).length;
+  function echappe(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function dessineClasses(){
+    var h = '<option value="tous">' + L.tous + ' (' + data.epreuves.length + ')</option>'
+          + '<option value="__inter">' + L.inter + ' (' + nInter + ')</option>';
+    data.classes.forEach(function(c){
+      h += '<option value="' + echappe(c.s) + '">' + echappe(c.n || c.s) + ' (' + c.c + ')</option>';
+    });
+    selClasse.innerHTML = h;
+    selClasse.value = etat.classe;
+  }
+  // Un menu qui filtre vraiment prend la couleur de l'accent : on voit d'un coup d'œil ce qui est actif.
+  function marque(){
+    menus.forEach(function(m){
+      var g = m.dataset.groupe;
+      m.value = etat[g];
+      m.classList.toggle('actif', etat[g] !== (m.dataset.defaut || 'tout'));
+    });
+    selClasse.classList.toggle('actif', etat.classe !== 'tous');
+  }
+  menus.forEach(function(m){
+    m.addEventListener('change', function(){
+      etat[m.dataset.groupe] = m.value;
+      marque();
       dessine();
     });
   });
+  selClasse.addEventListener('change', function(){
+    etat.classe = selClasse.value;
+    marque();
+    dessine();
+  });
+  dessineClasses();
   champ.addEventListener('input', function(){ etat.texte = champ.value; dessine(); });
   effacer.addEventListener('click', function(){
-    etat = {region:'tout', type:'tout', quand:'venir', texte:''};
+    etat = {region:'tout', type:'tout', quand:'venir', texte:'', classe:'tous'};
     champ.value = '';
-    document.querySelectorAll('.puce').forEach(function(x){
-      x.setAttribute('aria-pressed', x.dataset.valeur === (x.dataset.groupe==='quand'?'venir':'tout') ? 'true':'false');
-    });
+    marque();
     dessine();
   });
   dessine();
+
+  // ── Alerte par filtre ────────────────────────────────────────────────────────
+  // Le bouton n'existe que si le relais est configuré (data.alertes_url). Ne part vers le relais
+  // que : e-mail, deux consentements, région, type, classe, horizon, langue. Jamais la position,
+  // jamais le texte tapé dans la recherche.
+  var A = {
+    fr:{btn:'M\'alerter pour ce filtre', tout:'tous les filtres', email:'Votre e-mail', h:'Horizon', h30:'1 mois', h90:'3 mois', h365:'1 an', htout:'toutes les épreuves à venir',
+        c1:'Je veux recevoir un résumé chaque lundi des nouvelles épreuves correspondant à ce filtre.', c2:'Je veux aussi recevoir les offres de Sailing More (facultatif).',
+        ok:'Envoyer', recu:'Un e-mail de confirmation vous a été envoyé : cliquez sur le lien pour activer l\'alerte.', err:'Échec de l\'envoi, réessayez plus tard.', pour:'Alerte pour :'},
+    de:{btn:'Für diesen Filter benachrichtigen', tout:'alle Filter', email:'Ihre E-Mail', h:'Zeitraum', h30:'1 Monat', h90:'3 Monate', h365:'1 Jahr', htout:'alle kommenden Regatten',
+        c1:'Ich möchte jeden Montag eine Zusammenfassung neuer Regatten zu diesem Filter erhalten.', c2:'Ich möchte außerdem Angebote von Sailing More erhalten (freiwillig).',
+        ok:'Senden', recu:'Eine Bestätigungs-E-Mail wurde gesendet: Klicken Sie auf den Link, um die Benachrichtigung zu aktivieren.', err:'Senden fehlgeschlagen, bitte später erneut versuchen.', pour:'Benachrichtigung für:'},
+    en:{btn:'Alert me for this filter', tout:'all filters', email:'Your email', h:'Horizon', h30:'1 month', h90:'3 months', h365:'1 year', htout:'all upcoming races',
+        c1:'I want a Monday summary of new races matching this filter.', c2:'I also want to receive Sailing More offers (optional).',
+        ok:'Send', recu:'A confirmation email has been sent: click the link to activate the alert.', err:'Sending failed, please try again later.', pour:'Alert for:'},
+    it:{btn:'Avvisami per questo filtro', tout:'tutti i filtri', email:'La tua e-mail', h:'Orizzonte', h30:'1 mese', h90:'3 mesi', h365:'1 anno', htout:'tutte le regate in programma',
+        c1:'Voglio ricevere ogni lunedì un riepilogo delle nuove regate che corrispondono a questo filtro.', c2:'Voglio ricevere anche le offerte di Sailing More (facoltativo).',
+        ok:'Invia', recu:'Ti abbiamo inviato un\'e-mail di conferma: clicca sul link per attivare l\'avviso.', err:'Invio non riuscito, riprova più tardi.', pour:'Avviso per:'},
+    es:{btn:'Avisarme para este filtro', tout:'todos los filtros', email:'Tu correo', h:'Horizonte', h30:'1 mes', h90:'3 meses', h365:'1 año', htout:'todas las regatas próximas',
+        c1:'Quiero recibir cada lunes un resumen de las nuevas regatas que coincidan con este filtro.', c2:'También quiero recibir las ofertas de Sailing More (opcional).',
+        ok:'Enviar', recu:'Te hemos enviado un correo de confirmación: haz clic en el enlace para activar el aviso.', err:'Error al enviar, inténtalo más tarde.', pour:'Aviso para:'},
+    pt:{btn:'Avisar-me para este filtro', tout:'todos os filtros', email:'O teu e-mail', h:'Horizonte', h30:'1 mês', h90:'3 meses', h365:'1 ano', htout:'todas as regatas futuras',
+        c1:'Quero receber à segunda-feira um resumo das novas regatas que correspondem a este filtro.', c2:'Quero também receber as ofertas da Sailing More (opcional).',
+        ok:'Enviar', recu:'Foi enviado um e-mail de confirmação: clica no link para ativar o alerta.', err:'Falha no envio, tenta mais tarde.', pour:'Alerta para:'}
+  };
+  var AL = A[lang] || A.fr;
+  var btnA = document.getElementById('btn-alerte');
+  var formA = document.getElementById('alerte');
+  if(data.alertes_url && btnA && formA){
+    btnA.hidden = false;
+    btnA.textContent = AL.btn;
+    function filtreCourant(){
+      return {region: etat.region === 'tout' ? '' : etat.region,
+              type: etat.type === 'tout' ? '' : etat.type,
+              classe: etat.classe === 'tous' ? '' : etat.classe};
+    }
+    function libelleFiltre(f){
+      var p = [];
+      if(f.region) p.push(f.region);
+      if(f.type) p.push(L.t[f.type] || f.type);
+      if(f.classe) p.push(f.classe === '__inter' ? L.inter : nomClasse(f.classe));
+      return p.length ? p.join(' · ') : AL.tout;
+    }
+    formA.innerHTML = '<p class="resume" id="al-resume"></p>'
+      + '<label>' + AL.email + '<input type="email" name="email" required autocomplete="email"></label>'
+      + '<label>' + AL.h + ' <select name="horizon"><option value="tout">' + AL.htout + '</option><option value="30">' + AL.h30 + '</option><option value="90">' + AL.h90 + '</option><option value="365">' + AL.h365 + '</option></select></label>'
+      + '<label class="case"><input type="checkbox" name="alerte" required><span>' + AL.c1 + '</span></label>'
+      + '<label class="case"><input type="checkbox" name="promo"><span>' + AL.c2 + '</span></label>'
+      + '<input class="hp" type="text" name="site" tabindex="-1" autocomplete="off" aria-hidden="true">'
+      + '<button type="submit">' + AL.ok + '</button><p class="msg" id="al-msg" role="status"></p>';
+    btnA.addEventListener('click', function(){
+      formA.hidden = !formA.hidden;
+      document.getElementById('al-resume').textContent = AL.pour + ' ' + libelleFiltre(filtreCourant());
+    });
+    // Le résumé suit le filtre tant que le formulaire est ouvert.
+    document.addEventListener('click', function(){
+      if(!formA.hidden) document.getElementById('al-resume').textContent = AL.pour + ' ' + libelleFiltre(filtreCourant());
+    });
+    formA.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var f = filtreCourant(), m = document.getElementById('al-msg');
+      var corps = {email: formA.email.value.trim(), alerte: formA.alerte.checked, promo: formA.promo.checked,
+                   region: f.region, type: f.type, classe: f.classe, horizon: formA.horizon.value,
+                   langue: lang, site: formA.site.value};
+      fetch(data.alertes_url + '/inscription', {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(corps)})
+        .then(function(r){ if(!r.ok) throw 0; m.textContent = AL.recu; formA.querySelector('button[type=submit]').disabled = true; })
+        .catch(function(){ m.textContent = AL.err; });
+    });
+  }
 })();
 """
 
@@ -290,7 +468,10 @@ def epreuves_pour_page(d: dict) -> list[dict]:
             "fin": e["fin"],
             "ville": e["ville"],
             "club": e["club"],
-            "classes": e["classes"][:6],
+            # Liste complète : le filtre de classe doit voir OSIR/IRC même en 7e position.
+            # La carte, elle, n'en affiche que quatre.
+            "classes": list(e["classes"]),
+            "pays": e.get("pays") or "",
             "region": e["region"],
             "type": e["type"],
             "pays_fr": PAYS_FR.get(e["pays"], e["pays"]),
@@ -308,29 +489,61 @@ def construire(d: dict) -> str:
     regions = [r for r in REGIONS if any(e["region"] == r for e in epreuves)]
     types = [t for t in TYPES if any(e["type"] == t for e in epreuves)]
     prochaine = epreuves[0]["nom"] if epreuves else ""
+    # Filtre de classe : sigles par nombre d'épreuves décroissant (puis ordre alphabétique).
+    # Une épreuve sans classe n'est comptée dans aucun sigle.
+    compte_classes: dict[str, int] = {}
+    for e in epreuves:
+        for s in {c.strip() for c in e["classes"] if c and c.strip()}:
+            compte_classes[s] = compte_classes.get(s, 0) + 1
+    classes = [{"s": s, "n": regates_classes.nom(s), "c": n}
+               for s, n in sorted(compte_classes.items(), key=lambda kv: (-kv[1], kv[0].lower()))]
+    codes_pays = {e["pays"] for e in epreuves if e["pays"] in regates_drapeaux.DRAPEAUX}
     donnees = {
         "aujourdhui": date.today().isoformat(),
+        # URL publique du relais d'alertes ; vide = le bouton « m'alerter » reste caché.
+        "alertes_url": os.environ.get("ALERTES_BASE_URL", ""),
         "mois": MOIS_FR[1:],
         "epreuves": epreuves,
         "prochaine": prochaine,
+        "classes": classes,
+        "jauges": list(regates_classes.JAUGES),
+        "noms": regates_classes.NOMS,
+        "pays": {c: regates_drapeaux.NOMS_PAYS[c] for c in sorted(codes_pays)},
     }
+    # Pictogrammes des types : tracés au trait, couleur = celle du texte voisin (jamais seuls : le mot suit).
+    icones = (
+        '<symbol id="i-regate" viewBox="0 0 16 16"><path d="M8 2v10M8 2l5 9H8M3 12h10l-1.5 2h-7z"/></symbol>'
+        '<symbol id="i-champ" viewBox="0 0 16 16"><path d="M5 2h6v4a3 3 0 0 1-6 0zM5 3.5H3v1.2a2 2 0 0 0 2 2M11 3.5h2v1.2a2 2 0 0 1-2 2M8 9v3M5.5 14h5"/></symbol>'
+        '<symbol id="i-club" viewBox="0 0 16 16"><path d="M2 8l6-5 6 5M4 7.5V13h8V7.5M7 13v-3h2v3"/></symbol>'
+        '<symbol id="i-large" viewBox="0 0 16 16"><path d="M1.5 6c1.5-1.6 3-1.6 4.5 0s3 1.6 4.5 0 3-1.6 4.5 0M1.5 10c1.5-1.6 3-1.6 4.5 0s3 1.6 4.5 0 3-1.6 4.5 0"/></symbol>'
+    )
+    sprite = (
+        '<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">'
+        + icones + regates_drapeaux.sprite(codes_pays) + "</svg>"
+    )
 
-    def puces(groupe, valeurs, defaut):
-        return "".join(
-            f'<button class="puce" data-groupe="{groupe}" data-valeur="{v}" '
-            f'aria-pressed="{"true" if v == defaut else "false"}">{libelle}</button>'
+    def menu(groupe, etiquette, valeurs, defaut):
+        """Un menu déroulant de filtre ; l'option par défaut est retenue et servira à marquer l'état."""
+        options = "".join(
+            f'<option value="{v}"{" selected" if v == defaut else ""}>{libelle}</option>'
             for v, libelle in valeurs)
+        return (f'<select class="menu" data-groupe="{groupe}" data-defaut="{defaut}" '
+                f'aria-label="{etiquette}">{options}</select>')
 
     filtres = (
         '<div class="filtres">'
         '<div class="groupe"><span class="etiq">Lieu</span>'
-        + puces("region", [("tout", "Tout")] + [(r, r) for r in regions], "tout")
+        + menu("region", "Lieu", [("tout", "Tous les lieux")] + [(r, r) for r in regions], "tout")
         + "</div>"
         '<div class="groupe"><span class="etiq">Type</span>'
-        + puces("type", [("tout", "Tout")] + [(t, t.capitalize()) for t in types], "tout")
+        + menu("type", "Type de course", [("tout", "Tous les types")]
+               + [(t, t.capitalize()) for t in types], "tout")
         + "</div>"
+        '<div class="groupe"><span class="etiq" id="etiq-classe">Bateau</span>'
+        '<select class="menu" id="classe" data-groupe="classe" data-defaut="tous"'
+        ' aria-label="Classe de bateau"></select></div>'
         '<div class="groupe"><span class="etiq">Quand</span>'
-        + puces("quand", [("venir", "À venir"), ("tout", "Tout")], "venir")
+        + menu("quand", "Quand", [("venir", "À venir"), ("tout", "Toutes les dates")], "venir")
         + "</div></div>"
     )
 
@@ -354,7 +567,7 @@ def construire(d: dict) -> str:
         '<link rel="canonical" href="https://sailingmore.fr/regates.html">'
         '<meta name="description" content="Toutes les régates de voile : Léman, France, Suisse et '
         'monde. Dates, lieux, clubs, classes, inscriptions. Recherche et filtres.">'
-        "<style>" + CSS + "</style></head><body>"
+        "<style>" + CSS + "</style></head><body>" + sprite +
         '<div class="page">'
         '<a class="retour" href="index.html">← Sailing More</a>'
         "<h1>Calendrier des régates</h1>"
@@ -368,14 +581,16 @@ def construire(d: dict) -> str:
         "Recherchez par nom, par lieu, par classe — ou filtrez.</p>"
         '<div class="panneau">'
         '<div class="recherche">'
-        '<div class="champ">'
+        '<div class="ligne-recherche"><div class="champ">'
         '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">'
         '<circle cx="7" cy="7" r="5" stroke="#eef3f7" stroke-width="1.4"/>'
         '<path d="M10.6 10.6 14 14" stroke="#eef3f7" stroke-width="1.4"/></svg>'
         '<input id="q" type="search" placeholder="Une régate, un port, un club, une classe…" '
         'aria-label="Rechercher une épreuve" autocomplete="off">'
         "</div>"
+        '<button class="btn-alerte" id="btn-alerte" type="button" hidden></button></div>'
         + filtres +
+        '<form class="alerte" id="alerte" hidden></form>'
         "</div>"
         '<div class="compte"><span id="compte"></span>'
         '<button class="lien-effacer" id="effacer" type="button">Tout effacer</button></div>'
@@ -461,6 +676,13 @@ def verifier(d: dict, avertissements: list[str] | None = None) -> list[str]:
         s = "s" if n > 1 else ""
         detail = ", ".join(f"{r} {k}" for r, k in sorted(replis.items()))
         avertissements.append(f"{n} épreuve{s} repliée{s} vers « France » faute de puce ({detail})")
+    # Un pays sans drapeau dans la table : la carte n'a rien (voulu), mais on le dit pour l'ajouter.
+    sans_drapeau: dict[str, int] = {}
+    for e in epreuves:
+        if e["pays"] and e["pays"] not in regates_drapeaux.DRAPEAUX:
+            sans_drapeau[e["pays"]] = sans_drapeau.get(e["pays"], 0) + 1
+    if sans_drapeau and avertissements is not None:
+        avertissements.append("pays sans drapeau : " + ", ".join(f"{c} {n}" for c, n in sorted(sans_drapeau.items())))
     aujourdhui = date.today().isoformat()
     if any(e["type"] == "hors-regate" for e in epreuves):
         problemes.append("des épreuves « hors-regate » sont dans la page")
@@ -481,9 +703,16 @@ def verifier(d: dict, avertissements: list[str] | None = None) -> list[str]:
     for groupe, valeurs, cle in (("region", REGIONS, "region"), ("type", TYPES, "type")):
         presentes = {e[cle] for e in epreuves}
         voulues = {v for v in valeurs if v in presentes}
-        puces = set(re.findall(rf'data-groupe="{groupe}" data-valeur="([^"]*)"', html)) - {"tout"}
-        if puces != voulues:
-            problemes.append(f"puces « {groupe} » : {sorted(puces)} au lieu de {sorted(voulues)}")
+        bloc = re.search(rf'<select class="menu" data-groupe="{groupe}".*?</select>', html, re.S)
+        options = set(re.findall(r'<option value="([^"]*)"', bloc.group(0))) - {"tout"} if bloc else set()
+        if options != voulues:
+            problemes.append(f"menu « {groupe} » : {sorted(options)} au lieu de {sorted(voulues)}")
+    # Le menu « bateau » est rempli par le navigateur : ce qui compte, c'est que les données
+    # embarquées portent bien toutes les classes (sans elles, le menu serait vide).
+    if "id=\"classe\"" not in html:
+        problemes.append("menu « bateau » absent de la page")
+    elif not (embarquees and any(e.get("classes") for e in embarquees)):
+        problemes.append("aucune classe dans les données embarquées : le menu « bateau » serait vide")
     return problemes
 
 
