@@ -199,7 +199,7 @@
      Le trait ne traverse plus la page : c'est la main courante du bloc, elle s'arrête au bord du MORE.
      Réglé sur .hero seulement : ailleurs (page du jeu, pages légales) un h1 porte un mot, pas un titre
      en deux lignes, et la barre y tombait au milieu du texte. */
-  html{overflow-x:hidden}
+  html{overflow-x:clip}
   /* Nicolas, 20/11/2026 : « la barre doit être pile entre les deux, à la même distance ». Un interligne
      ne se mesure pas à l'œil : le titre est une colonne (`flex-direction:column`) avec un écart fixe de
      `.72rem`, et la barre se pose au milieu exact de cet écart (`top:calc(-.72rem / 2 - 1.5px)`, 1,5 px
