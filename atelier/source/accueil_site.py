@@ -115,7 +115,7 @@ TEXTES = {
         "kit_lien": "notre adresse",
         "kit_rappel": "Annonceurs — recevoir la grille des tarifs",
         "hero_cta": "Annoncer sur Sailing More",
-        "cookies_texte": "Aucun cookie de mesure ni de publicité. Les vidéos YouTube ne se chargent qu'au clic.",
+        "cookies_texte": "Aucun cookie de mesure ni de publicité : ce site n'en dépose aucun.",
         "cookies_lien": "En savoir plus",
         "cookies_bouton": "J'ai compris",
         "ann_intro": f"Sailing More publie tous les soirs à 18 h : les courses en cours, puis une vidéo un soir sur deux. Quatre formules pour y mettre votre marque : de {_PMIN} à {_PMAX} €, jeu concours compris.",
@@ -184,7 +184,7 @@ TEXTES = {
         "kit_lien": "our address",
         "kit_rappel": "Advertisers — get the rate card",
         "hero_cta": "Advertise on Sailing More",
-        "cookies_texte": "No analytics or advertising cookies. YouTube videos only load when you click play.",
+        "cookies_texte": "No analytics or advertising cookies: this site sets none.",
         "cookies_lien": "Learn more",
         "cookies_bouton": "Got it",
         "ann_intro": f"Sailing More posts every evening at 6 pm: the races under way, then a video every other evening. Four packages to put your brand in front of it: €{_PMIN_EN} to €{_PMAX_EN}, giveaway included.",
@@ -253,7 +253,7 @@ TEXTES = {
         "kit_lien": "il nostro indirizzo",
         "kit_rappel": "Inserzionisti — ricevere il listino",
         "hero_cta": "Pubblicizza su Sailing More",
-        "cookies_texte": "Nessun cookie di analisi né pubblicitario. I video YouTube si caricano solo al clic.",
+        "cookies_texte": "Nessun cookie di analisi né pubblicitario: questo sito non ne usa.",
         "cookies_lien": "Scopri di più",
         "cookies_bouton": "Ho capito",
         "ann_intro": f"Sailing More pubblica ogni sera alle 18: le regate in corso, poi un video una sera su due. Quattro formule per mettere il vostro marchio lì davanti: da {_PMIN} a {_PMAX} €, concorso incluso.",
@@ -322,7 +322,7 @@ TEXTES = {
         "kit_lien": "nuestra dirección",
         "kit_rappel": "Anunciantes — recibir las tarifas",
         "hero_cta": "Anuncie en Sailing More",
-        "cookies_texte": "Sin cookies de medición ni de publicidad. Los vídeos de YouTube solo se cargan al hacer clic.",
+        "cookies_texte": "Sin cookies de medición ni de publicidad: este sitio no instala ninguno.",
         "cookies_lien": "Saber más",
         "cookies_bouton": "Entendido",
         "ann_intro": f"Sailing More publica cada noche a las 18 h: las regatas en curso, y un vídeo una noche de cada dos. Cuatro fórmulas para poner tu marca delante: de {_PMIN} a {_PMAX} €, sorteo incluido.",
@@ -391,7 +391,7 @@ TEXTES = {
         "kit_lien": "o nosso endereço",
         "kit_rappel": "Anunciantes — receber a tabela de preços",
         "hero_cta": "Anuncie na Sailing More",
-        "cookies_texte": "Sem cookies de medição nem de publicidade. Os vídeos do YouTube só carregam ao clicar.",
+        "cookies_texte": "Sem cookies de medição nem de publicidade: este site não instala nenhum.",
         "cookies_lien": "Saber mais",
         "cookies_bouton": "Entendi",
         "ann_intro": f"A Sailing More publica todas as noites às 18 h: as regatas em curso e, uma noite sim, uma noite não, um vídeo. Quatro fórmulas para pôr a sua marca à frente: de {_PMIN} a {_PMAX} €, passatempo incluído.",
@@ -460,7 +460,7 @@ TEXTES = {
         "kit_lien": "unsere Adresse",
         "kit_rappel": "Werbekunden — Preisliste erhalten",
         "hero_cta": "Werben auf Sailing More",
-        "cookies_texte": "Keine Mess- oder Werbe-Cookies. YouTube-Videos laden erst beim Klick.",
+        "cookies_texte": "Keine Mess- oder Werbe-Cookies: diese Seite setzt keine.",
         "cookies_lien": "Mehr erfahren",
         "cookies_bouton": "Verstanden",
         "ann_intro": f"Sailing More veröffentlicht jeden Abend um 18 Uhr: die laufenden Regatten, dazu jeden zweiten Abend ein Video. Vier Pakete, um Ihre Marke davorzusetzen: {_PMIN} bis {_PMAX} €, Gewinnspiel inklusive.",
@@ -892,7 +892,7 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
 
 
 <div class="cookies" id="cookies" hidden>
-  <p><span data-t="cookies_texte">Aucun cookie de mesure ni de publicité. Les vidéos YouTube ne se chargent qu'au clic.</span>
+  <p><span data-t="cookies_texte">Aucun cookie de mesure ni de publicité : ce site n'en dépose aucun.</span>
   <a href="confidentialite.html" data-t="cookies_lien">En savoir plus</a></p>
   <button id="cookies-ok" data-t="cookies_bouton">J'ai compris</button>
 </div>
@@ -1348,13 +1348,6 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         print(f"règles de course : {regles_page.ecrire_page(SITE)} entrées")
     except SystemExit as e:
         print(f"règles de course non écrites : {e}")
-    # Essai vidéo + schéma sur trois règles (22/11/2026) : même chemin que la page des règles, sinon
-    # la page d'essai disparaîtrait à la reconstruction suivante. Voir regles_video_test.py.
-    try:
-        import regles_video_test
-        print(f"essai vidéo et schéma : {regles_video_test.ecrire_page(SITE)} carte(s)")
-    except Exception as e:  # noqa: BLE001  (une page d'essai ne doit jamais bloquer la reconstruction)
-        print(f"essai vidéo non écrit : {e}")
     # Stages et cours de voile (22/11/2026) : même chemin que le calendrier, jamais d'écriture à la main.
     try:
         import stages_page
