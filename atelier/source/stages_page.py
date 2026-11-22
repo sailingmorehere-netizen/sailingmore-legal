@@ -30,6 +30,7 @@ from __future__ import annotations
 import html as _html
 import json
 import os
+import sys
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -99,7 +100,7 @@ CSS = """
 :root{--nuit:#0a1a2b;--panneau:#0f2438;--ivoire:#eef3f7;--gris:#9db2c6;--rouge:#e23a3e}
 *{box-sizing:border-box}
 body{margin:0;background:#071c31;color:var(--ivoire);font-family:ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
-.page{max-width:56rem;margin:0 auto;padding:3.6rem 1.4rem 5rem}
+.page{max-width:56rem;margin:0 auto;padding:2rem 1.4rem 5rem}
 .haut{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 a.retour{color:var(--gris);text-decoration:none;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
 .langues button{background:none;border:1px solid #27425b;color:var(--gris);font-size:.64rem;padding:.25rem .5rem;margin-left:.2rem;cursor:pointer;border-radius:3px}
@@ -207,8 +208,8 @@ def construire(d: dict | None = None) -> str:
         "niveaux": [n for n in NIVEAUX if any(o.get("niveau") == n for o in offres)],
     }
     fr = UI["fr"]
-    boutons = "".join(f'<button type="button" data-lang="{c}">{c.upper()}</button>'
-                      for c in ("fr", "en", "it", "es", "pt", "de"))
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import site_blocks  # la barre du site : un seul endroit
     maj = d.get("maj", "")[:10]
     return (
         '<!doctype html>\n<html lang="fr"><head><meta charset="utf-8">'
@@ -217,9 +218,9 @@ def construire(d: dict | None = None) -> str:
         '<link rel="canonical" href="https://sailingmore.fr/stages.html">'
         '<meta name="description" content="Stages et cours de voile des écoles et clubs en France et en Suisse : '
         'lieu, âge, niveau, date, prix, lien vers l\'école.">'
-        "<style>" + CSS + "</style></head><body><div class=\"page\">"
-        f'<div class="haut"><a class="retour" href="index.html" data-t="retour">{fr["retour"]}</a>'
-        f'<div class="langues" id="langues">{boutons}</div></div>'
+        "<style>" + site_blocks.ENTETE_CSS + CSS + "</style></head><body>"
+        + site_blocks.entete_site("stages.html", ["fr", "en", "it", "es", "pt", "de"], auto=False)
+        + "<div class=\"page\">"
         f'<h1 data-t="titre">{fr["titre"]}</h1><p class="chapo" data-t="chapo">{fr["chapo"]}</p>'
         '<div class="filtres">'
         '<label><span id="e-lieu">Lieu</span><select id="f-lieu"></select></label>'

@@ -515,6 +515,32 @@ def menu_site(actuelle: str = "index.html") -> str:
     return ('<details class="menu-d"><summary>Menu</summary>'
             f'<nav aria-label="Toutes les pages du site">{"".join(liens)}</nav></details>')
 
+
+_MENU_JS = """<script>
+(function(){
+  var d = document.querySelector('.entete .menu-d');
+  if(!d) return;
+  document.addEventListener('click', function(e){ if(!d.contains(e.target)) d.open = false; });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') d.open = false; });
+})();
+</script>"""
+
+
+def entete_site(actuelle: str, langues: list[str], auto: bool = True) -> str:
+    """La barre du site, la même sur toutes les pages : le nom, le menu des onze pages, les langues.
+
+    Une seule source (Nicolas, 22/11/2026 : « la barre de menu doit être présente tout le temps, sur
+    toutes les pages »). À poser juste après `<body>`, hors de tout conteneur : un `position:sticky`
+    ne colle que dans son parent. Les boutons de langue portent `#langues` et `data-lang`, comme
+    partout ; le script de chaque page les branche.
+    """
+    boutons = ('<button data-lang="auto" aria-pressed="true">Auto</button>' if auto else "") + "".join(
+        f'<button data-lang="{l}" aria-pressed="false">{l.upper()}</button>' for l in langues)
+    return ('<header class="entete"><a class="nom" href="index.html">Sailing More</a>'
+            f'{menu_site(actuelle)}'
+            f'<div class="langues" id="langues" aria-label="Language">{boutons}</div></header>'
+            + _MENU_JS)
+
 CARTE_JS = """
 <script>
 (function(){
@@ -1275,6 +1301,76 @@ def html_rappel_kit() -> str:
             '<span data-t="kit_rappel">Annonceurs — recevoir la grille des tarifs</span> →</a></section>')
 
 
+# Le menu du site (Nicolas, 22/11/2026 : « il faudrait que le menu descende et que les différentes
+# pages soient mieux équilibrées dans le menu »). Un seul bouton, les onze pages en deux colonnes.
+MENU_CSS = """
+  .entete .menu-d{position:relative;margin-left:auto;margin-right:1.1rem}
+  .entete .menu-d summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:.45rem;
+    font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--creme);
+    border-bottom:1px solid rgba(226,58,62,.55);padding-bottom:1px}
+  .entete .menu-d summary::-webkit-details-marker{display:none}
+  .entete .menu-d summary::after{content:"";width:0;height:0;border:4px solid transparent;
+    border-top-color:currentColor;transform:translateY(1px);transition:transform .18s ease}
+  .entete .menu-d[open] summary{color:#fff;border-bottom-color:var(--rouge)}
+  .entete .menu-d[open] summary::after{transform:translateY(-1px) rotate(180deg)}
+  .entete .menu-d nav{position:absolute;right:0;top:calc(100% + .4rem);z-index:40;
+    display:grid;grid-template-columns:1fr 1fr;gap:.2rem;width:min(86vw,23rem);padding:.55rem;
+    max-height:calc(100vh - var(--h-entete) - 1rem);overflow-y:auto;
+    border-radius:.9rem;background:linear-gradient(180deg,rgba(12,27,44,.985),rgba(7,17,29,.985));
+    border:1px solid rgba(238,243,247,.14);box-shadow:0 24px 48px -18px rgba(0,0,0,.92);
+    animation:menu-descend .16s ease both}
+  @keyframes menu-descend{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  .entete .menu-d nav a{padding:.6rem .7rem;border-radius:.55rem;font-size:.82rem;line-height:1.2;
+    color:#e9f1f7;transition:background .14s ease,color .14s ease}
+  .entete .menu-d nav a:hover,.entete .menu-d nav a:focus-visible{background:rgba(126,214,214,.14);
+    color:#fff;outline:none}
+  .entete .menu-d nav a[aria-current="page"]{color:#fff;box-shadow:inset 2px 0 0 var(--rouge);
+    background:rgba(226,58,62,.10)}
+  .entete .menu-d nav a.legal{font-size:.74rem;color:var(--gris)}
+  .entete .menu-d nav a.legal:hover{color:#fff}
+  @media(max-width:520px){.entete .menu-d{margin-right:.6rem}
+    .entete .menu-d summary{font-size:.7rem}}
+"""
+
+# La barre du site, toujours visible (Nicolas, 22/11/2026). Ces règles valent pour TOUTES les pages :
+# l'accueil les reçoit avec `CSS`, les autres pages les reçoivent avec `ENTETE_CSS`.
+#  · hauteur fixe (`--h-entete`) : 48 px sur téléphone, une seule ligne, le menu derrière son bouton ;
+#  · `scroll-padding-top` + `scroll-margin-top` : une ancre (#r10, #r18…) ne passe pas sous la barre ;
+#  · la barre est à 30 : au-dessus du bandeau de cookies (9), sous une éventuelle barre de progression
+#    de lecture, qui devra viser un z-index supérieur à 30.
+BARRE_CSS = """
+:root{--h-entete:3.2rem}
+html{scroll-padding-top:calc(var(--h-entete) + .6rem)}
+[id]{scroll-margin-top:calc(var(--h-entete) + .6rem)}
+header.entete{position:sticky;top:0;z-index:30;height:var(--h-entete);flex-wrap:nowrap;
+  padding-top:0;padding-bottom:0}
+@media(max-width:600px){
+  :root{--h-entete:48px}
+  header.entete{padding-left:.7rem;padding-right:.7rem;gap:.4rem}
+  header.entete .nom{white-space:nowrap}
+}
+"""
+
+# Pour les pages qui n'ont pas la feuille de l'accueil : le fond, le nom, les langues, et le menu.
+ENTETE_CSS = """
+.entete{display:flex;align-items:center;justify-content:space-between;padding:0 1.2rem;
+  background:rgba(6,16,32,.96);border-bottom:1px solid rgba(126,214,214,.14);
+  --creme:#eef3f7;--gris:#9db2c6;--rouge:#e23a3e}
+.entete .nom{font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.82rem;
+  color:var(--gris);text-decoration:none}
+.entete .langues{display:flex;gap:.15rem;align-items:center;margin:0}
+.entete .langues button{background:none;border:0;color:var(--gris);font:inherit;font-size:.72rem;
+  letter-spacing:.06em;text-transform:uppercase;padding:.28rem .45rem;margin:0;border-radius:.35rem;
+  cursor:pointer}
+.entete .langues button:hover{color:#fff}
+.entete .langues button[aria-pressed="true"]{color:#0a1a2b;background:#7ed6d6;font-weight:700}
+@media(max-width:600px){
+  .entete .nom{font-size:.6rem;letter-spacing:.1em}
+  .entete .langues{gap:0}
+  .entete .langues button{font-size:.56rem;padding:.15rem .26rem;letter-spacing:0}
+}
+""" + MENU_CSS + BARRE_CSS
+
 CSS = """
   .stories,.reels,.monde{max-width:62rem;margin:0 auto 6.5rem;padding:0 1.4rem}
   /* Nicolas, 20/11/2026 : « d'un coup il y a un grand espace, d'un coup moins ». Un seul rythme entre
@@ -1451,33 +1547,4 @@ CSS = """
    pose du bouton dans le héros : couleur, bordure et rayon viennent de `.bouton` (accueil_site.py). */
 .hero .bouton-hero{margin:5rem 0 0;text-decoration:none;pointer-events:auto}
 @media(max-width:640px){.hero .bouton-hero{margin-top:2.6rem}}
-  /* ---- Le menu du site (Nicolas, 22/11/2026 : « il faudrait que le menu descende et que les
-     différentes pages soient mieux équilibrées dans le menu, affiche toutes les autres pages »).
-     Un seul bouton, et les huit pages en deux colonnes de quatre : ni ligne qui déborde, ni page
-     oubliée. ---- */
-  .entete .menu-d{position:relative;margin-left:auto;margin-right:1.1rem}
-  .entete .menu-d summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:.45rem;
-    font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--creme);
-    border-bottom:1px solid rgba(226,58,62,.55);padding-bottom:1px}
-  .entete .menu-d summary::-webkit-details-marker{display:none}
-  .entete .menu-d summary::after{content:"";width:0;height:0;border:4px solid transparent;
-    border-top-color:currentColor;transform:translateY(1px);transition:transform .18s ease}
-  .entete .menu-d[open] summary{color:#fff;border-bottom-color:var(--rouge)}
-  .entete .menu-d[open] summary::after{transform:translateY(-1px) rotate(180deg)}
-  .entete .menu-d nav{position:absolute;right:0;top:calc(100% + .8rem);z-index:40;
-    display:grid;grid-template-columns:1fr 1fr;gap:.2rem;width:min(86vw,23rem);padding:.55rem;
-    border-radius:.9rem;background:linear-gradient(180deg,rgba(12,27,44,.985),rgba(7,17,29,.985));
-    border:1px solid rgba(238,243,247,.14);box-shadow:0 24px 48px -18px rgba(0,0,0,.92);
-    animation:menu-descend .16s ease both}
-  @keyframes menu-descend{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-  .entete .menu-d nav a{padding:.6rem .7rem;border-radius:.55rem;font-size:.82rem;line-height:1.2;
-    color:#e9f1f7;transition:background .14s ease,color .14s ease}
-  .entete .menu-d nav a:hover,.entete .menu-d nav a:focus-visible{background:rgba(126,214,214,.14);
-    color:#fff;outline:none}
-  .entete .menu-d nav a[aria-current="page"]{color:#fff;box-shadow:inset 2px 0 0 var(--rouge);
-    background:rgba(226,58,62,.10)}
-  .entete .menu-d nav a.legal{font-size:.74rem;color:var(--gris)}
-  .entete .menu-d nav a.legal:hover{color:#fff}
-  @media(max-width:520px){.entete .menu-d{margin-right:.6rem}
-    .entete .menu-d summary{font-size:.7rem}}
-"""
+""" + MENU_CSS + BARRE_CSS

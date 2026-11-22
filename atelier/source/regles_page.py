@@ -56,7 +56,9 @@ UI = {
            "effacer": "Tout effacer", "pdf": "Texte officiel (PDF gratuit)",
            "source": "Source officielle : Racing Rules of Sailing 2025-2028, © World Sailing Limited. "
                      "Résumés et exemples écrits par Sailing More ; en cas de doute, le texte officiel fait foi.",
-           "edition": "Édition", "corr": "corrections du"},
+           "edition": "Édition", "corr": "corrections du",
+           "schema": "Schéma de la règle", "video_lire": "Lire la vidéo",
+           "video_tiers": "Vidéo d'un tiers, lue chez YouTube : rien n'est chargé avant votre clic."},
     "en": {"titre": "Sailing racing rules",
            "chapo": "The racing rules (RRS 2025-2028) explained in our own words, with a concrete example for each. "
                     "Search by number, by title or by a situation you lived.",
@@ -70,7 +72,9 @@ UI = {
            "effacer": "Clear all", "pdf": "Official text (free PDF)",
            "source": "Official source: Racing Rules of Sailing 2025-2028, © World Sailing Limited. "
                      "Summaries and examples written by Sailing More; in case of doubt, the official text prevails.",
-           "edition": "Edition", "corr": "corrections of"},
+           "edition": "Edition", "corr": "corrections of",
+           "schema": "Diagram of the rule", "video_lire": "Play the video",
+           "video_tiers": "Third-party video, played by YouTube: nothing is loaded before you click."},
     "it": {"titre": "Regole di regata a vela",
            "chapo": "Le regole di regata (RRS 2025-2028) spiegate con parole nostre, con un esempio concreto per ciascuna. "
                     "Cerca per numero, per titolo o per situazione vissuta.",
@@ -84,7 +88,9 @@ UI = {
            "effacer": "Cancella tutto", "pdf": "Testo ufficiale (PDF gratuito)",
            "source": "Fonte ufficiale: Racing Rules of Sailing 2025-2028, © World Sailing Limited. "
                      "Riassunti ed esempi scritti da Sailing More; in caso di dubbio fa fede il testo ufficiale.",
-           "edition": "Edizione", "corr": "correzioni del"},
+           "edition": "Edizione", "corr": "correzioni del",
+           "schema": "Schema della regola", "video_lire": "Guarda il video",
+           "video_tiers": "Video di terzi, riprodotto da YouTube: nulla viene caricato prima del tuo clic."},
     "es": {"titre": "Reglas de regata a vela",
            "chapo": "Las reglas de regata (RRS 2025-2028) explicadas con nuestras palabras, con un ejemplo concreto para cada una. "
                     "Busca por número, por título o por una situación vivida.",
@@ -98,7 +104,9 @@ UI = {
            "effacer": "Borrar todo", "pdf": "Texto oficial (PDF gratuito)",
            "source": "Fuente oficial: Racing Rules of Sailing 2025-2028, © World Sailing Limited. "
                      "Resúmenes y ejemplos escritos por Sailing More; en caso de duda, prevalece el texto oficial.",
-           "edition": "Edición", "corr": "correcciones del"},
+           "edition": "Edición", "corr": "correcciones del",
+           "schema": "Esquema de la regla", "video_lire": "Ver el vídeo",
+           "video_tiers": "Vídeo de un tercero, reproducido por YouTube: no se carga nada antes de tu clic."},
     "pt": {"titre": "Regras de regata à vela",
            "chapo": "As regras de regata (RRS 2025-2028) explicadas com as nossas palavras, com um exemplo concreto para cada uma. "
                     "Pesquise por número, por título ou por uma situação vivida.",
@@ -112,7 +120,9 @@ UI = {
            "effacer": "Limpar tudo", "pdf": "Texto oficial (PDF gratuito)",
            "source": "Fonte oficial: Racing Rules of Sailing 2025-2028, © World Sailing Limited. "
                      "Resumos e exemplos escritos pela Sailing More; em caso de dúvida, o texto oficial prevalece.",
-           "edition": "Edição", "corr": "correções de"},
+           "edition": "Edição", "corr": "correções de",
+           "schema": "Esquema da regra", "video_lire": "Ver o vídeo",
+           "video_tiers": "Vídeo de terceiros, reproduzido pelo YouTube: nada é carregado antes do seu clique."},
     "de": {"titre": "Wettfahrtregeln im Segeln",
            "chapo": "Die Wettfahrtregeln (RRS 2025-2028) in eigenen Worten erklärt, mit einem konkreten Beispiel für jede. "
                     "Suche nach Nummer, Titel oder erlebter Situation.",
@@ -126,7 +136,9 @@ UI = {
            "effacer": "Alles löschen", "pdf": "Offizieller Text (kostenloses PDF)",
            "source": "Offizielle Quelle: Racing Rules of Sailing 2025-2028, © World Sailing Limited. "
                      "Zusammenfassungen und Beispiele von Sailing More; im Zweifel gilt der offizielle Text.",
-           "edition": "Ausgabe", "corr": "Berichtigungen vom"},
+           "edition": "Ausgabe", "corr": "Berichtigungen vom",
+           "schema": "Schema der Regel", "video_lire": "Video abspielen",
+           "video_tiers": "Video eines Dritten, von YouTube abgespielt: Vor Ihrem Klick wird nichts geladen."},
 }
 
 # Même charte que `lexique_page.py` : palette Signal B, rouge qui souligne et n'écrit pas ; ici aucune
@@ -138,7 +150,7 @@ CSS = """
 body{margin:0;background:#071c31;color:var(--ivoire);
   font-family:ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
   line-height:1.6;-webkit-font-smoothing:antialiased}
-.page{max-width:64rem;margin:0 auto;padding:3.6rem 1.4rem 5rem}
+.page{max-width:64rem;margin:0 auto;padding:2rem 1.4rem 5rem}
 .haut{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
 a.retour{color:var(--gris);text-decoration:none;font-size:.64rem;letter-spacing:.14em;
   text-transform:uppercase;font-weight:500}
@@ -157,7 +169,7 @@ a{color:#fff;text-decoration:none}
 
 .panneau{background:#0a1f33;border:1px solid rgba(255,255,255,.09);border-radius:2px;
   padding:0 1.2rem 1.4rem;margin:0 0 1rem;box-shadow:0 18px 50px rgba(0,0,0,.35)}
-.recherche{position:sticky;top:0;z-index:20;background:#0a1f33;
+.recherche{position:sticky;top:var(--h-entete);z-index:20;background:#0a1f33;
   padding:.9rem 1.2rem 1rem;margin:0 -1.2rem .4rem}
 .champ{display:flex;align-items:center;gap:.6rem;background:var(--panneau);
   border:1px solid rgba(255,255,255,.13);border-radius:3px;padding:.62rem .8rem}
@@ -193,7 +205,7 @@ a{color:#fff;text-decoration:none}
   font-weight:500;margin:0 0 .2rem;padding-top:1rem;border-top:1px solid rgba(226,58,62,.22)}
 .groupe h2 span{color:#8aa0b4;letter-spacing:.1em;margin-left:.5rem}
 .regle{padding:.95rem 0 .9rem .9rem;border-bottom:1px solid rgba(255,255,255,.07);
-  border-left:3px solid transparent;scroll-margin-top:9rem}
+  border-left:3px solid transparent;scroll-margin-top:calc(var(--h-entete) + 9rem)}
 .regle:hover{background:rgba(255,255,255,.025)}
 .regle:target{border-left-color:var(--rouge);background:rgba(226,58,62,.06)}
 .regle h3{margin:0;font-size:1.05rem;font-weight:500;color:#fff;line-height:1.35}
@@ -213,6 +225,37 @@ a{color:#fff;text-decoration:none}
   margin-right:.6rem}
 .regle .renvois a:hover{color:#fff}
 .regle .sanction b{color:var(--gris);font-weight:600}
+/* Schémas : un à cinq temps, le nombre dépend de la règle. Les formes se lisent sans la couleur :
+   trait plein = garde sa route, pointillés = s'écarte, bateau pâle = où il serait allé. */
+.regle .schema{margin:.7rem 0 0;max-width:44rem;padding:0;list-style:none}
+ol.schema{display:flex;flex-wrap:wrap;gap:1.3rem}
+ol.schema>li{position:relative;flex:1 1 11rem;max-width:15rem;margin:0}
+ol.schema>li:not(:last-child)::after{content:"\\2192" / "";position:absolute;right:-1.15rem;top:30%;
+  width:1rem;text-align:center;color:var(--gris);font-size:1rem}
+figure.schema{margin:.7rem 0 0;max-width:16rem}
+.schema figure{margin:0}
+.schema figcaption{margin:.35rem 0 0;color:#c9d6e2;font-size:.76rem;line-height:1.45}
+.schema .n{display:inline-block;min-width:1.15rem;text-align:center;margin-right:.2rem;color:#fff;
+  background:rgba(255,255,255,.12);border-radius:50%;font-size:.7rem;font-weight:600}
+svg.sc{display:block;width:100%;height:auto;background:#071c31;border:1px solid rgba(255,255,255,.12)}
+.sc .sc-t{fill:none;stroke:#eef3f7;stroke-width:1.6}
+.sc .sc-td{fill:none;stroke:#9db2c6;stroke-width:1.6;stroke-dasharray:4 3}
+.sc .sc-f{opacity:.4}
+.sc .sc-lien{fill:none;stroke:#9db2c6;stroke-width:1;stroke-dasharray:1 3}
+.sc .sc-z{fill:none;stroke:#9db2c6;stroke-width:1;stroke-dasharray:2 4;opacity:.6}
+.sc .sc-m{fill:#0a1f33;stroke:#e23a3e;stroke-width:2.4}
+.sc .sc-x{fill:none;stroke:#e23a3e;stroke-width:2.4;stroke-linecap:round}
+.sc-v{fill:none;stroke:#9db2c6;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sc .sc-pri{color:#eef3f7}
+.sc .sc-ev{color:#9db2c6}
+.sc .sc-fant{color:#9db2c6;opacity:.35}
+.video{margin:.7rem 0 0;max-width:44rem}
+.video-lire{font:inherit;font-size:.78rem;letter-spacing:.04em;color:#fff;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.3);border-radius:2px;padding:.4rem .8rem;cursor:pointer}
+.video-lire:hover{border-color:#fff}
+.video-lire::before{content:"\\25B6\\00a0"}
+.video-tiers{margin:.3rem 0 0;color:#8aa0b4;font-size:.72rem}
+.video iframe{display:block;width:100%;max-width:32rem;aspect-ratio:16/9;border:0;background:#000}
 .vide{padding:3rem 0;color:var(--gris);font-size:.9rem}
 .pied{margin-top:3.6rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,.09);
   color:#8aa0b4;font-size:.72rem;line-height:1.8}
@@ -226,7 +269,7 @@ a{color:#fff;text-decoration:none}
   .page{padding:2.4rem 1rem 4rem}
   .recherche{padding:.7rem 0 .8rem}
   .filtres .etiq{width:100%}
-  .regle{padding-left:.6rem;scroll-margin-top:12rem}
+  .regle{padding-left:.6rem;scroll-margin-top:calc(var(--h-entete) + 12rem)}
   .regle .num{display:block;min-width:0}
 }
 """
@@ -315,11 +358,31 @@ JS = r"""
       + '<button type="button" class="tout" data-retire="tout">' + esc(u.effacer) + '</button>' : '';
   }
 
+  // Le schéma : une étape = le dessin seul, sans numéro ; deux à cinq = étapes numérotées, une flèche entre elles.
+  // Les SVG viennent de regles.json (notre texte, jamais de l'extérieur).
+  function schemaHtml(r){
+    var s = r.schema; if(!s || !s.length) return '';
+    var u = UI[lang];
+    if(s.length === 1) return '<figure class="schema" aria-label="' + esc(u.schema) + '">' + s[0].svg
+      + '<figcaption>' + esc(s[0].legende[lang]) + '</figcaption></figure>';
+    return '<ol class="schema" aria-label="' + esc(u.schema) + '">' + s.map(function(e, i){
+      return '<li><figure>' + e.svg + '<figcaption><b class="n">' + (i+1) + '</b> ' + esc(e.legende[lang])
+        + '</figcaption></figure></li>'; }).join('') + '</ol>';
+  }
+  // La vidéo : un bouton, aucune requête avant le clic (l'iframe youtube-nocookie naît du clic).
+  function videoHtml(r){
+    var v = r.video; if(!v) return '';
+    var u = UI[lang];
+    return '<div class="video"><button type="button" class="video-lire" data-yt="' + esc(v.id) + '" data-titre="' + esc(v.titre) + '">'
+      + esc(u.video_lire) + ' (' + esc(v.chaine) + ')</button><p class="video-tiers">' + esc(u.video_tiers) + '</p></div>';
+  }
+
   function carte(r){
     var u = UI[lang];
     var h = '<article class="regle" id="r' + esc(r.cle) + '">'
       + '<h3><a href="#r' + esc(r.cle) + '"><span class="num">' + esc(etiquette(r)) + '</span> ' + esc(r.titre[lang]) + '</a></h3>'
-      + '<p class="resume">' + esc(r.resume[lang]) + '</p>';
+      + '<p class="resume">' + esc(r.resume[lang]) + '</p>'
+      + schemaHtml(r) + videoHtml(r);
     (r.exemples || []).forEach(function(x, i){
       var n = (r.exemples.length > 1) ? ' ' + (i+1) : '';
       h += '<details><summary>' + esc(u.exemple) + n + '</summary><p>' + esc(x.situation[lang]) + '</p>'
@@ -418,6 +481,16 @@ JS = r"""
     if(k === 'theme' || k === 'tout') etat.theme = 'tous';
     if(k === 'texte' || k === 'tout'){ etat.texte = ''; champ.value = ''; }
     boutonsFiltres(); dessine();
+  });
+  liste.addEventListener('click', function(ev){
+    var b = ev.target.closest('.video-lire'); if(!b) return;
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(b.dataset.yt) + '?autoplay=1&rel=0';
+    f.title = b.dataset.titre;
+    f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    f.allowFullscreen = true;
+    f.referrerPolicy = 'strict-origin-when-cross-origin';
+    b.parentNode.insertBefore(f, b); b.parentNode.removeChild(b);
   });
   champ.addEventListener('input', function(){ etat.texte = champ.value; dessine(); });
   window.addEventListener('hashchange', versLAncre);
@@ -564,6 +637,7 @@ def verifier(d: dict) -> list[str]:
                 for l in LANGUES:
                     if not x.get(champ, {}).get(l):
                         pb.append(f"{cle} : exemple {i}, {champ} {l} absent")
+        pb += verifier_schema(r)
         sa = r.get("sanction")
         if sa is not None:
             for l in LANGUES:
@@ -648,6 +722,72 @@ def nom_partie(d: dict, cle: str, lang: str = "fr") -> str:
     return f'{u["partie"]} {cle} · {nom}'
 
 
+SPRITE = (
+    "<svg width='0' height='0' style='position:absolute' aria-hidden='true' focusable='false'><defs>"
+    # Un bateau, étrave en haut, à l'origine ; la couleur vient de `color` sur le <use>.
+    "<g id='sc-bat'><path d='M0,-10 C5,-4 5,6 3,10 L-3,10 C-5,6 -5,-4 0,-10Z' fill='currentColor'/>"
+    "<path d='M0,-6 L0,7' stroke='#0a1f33' stroke-width='1.2'/></g>"
+    # Le vent, flèche vers le bas, en haut à gauche de chaque dessin.
+    "<g id='sc-vent'><path class='sc-v' d='M22,10 L22,38 M16,31 L22,38 L28,31'/></g>"
+    "</defs></svg>"
+)
+
+
+def schema_statique(r: dict, lang: str = "fr") -> str:
+    """Même balisage que `schemaHtml()` dans le JS : une étape = dessin seul ; deux à cinq = numérotées."""
+    s = r.get("schema") or []
+    if not s:
+        return ""
+    e = _html.escape
+    lib = e(UI[lang]["schema"])
+    if len(s) == 1:
+        return (f'<figure class="schema" aria-label="{lib}">{s[0]["svg"]}'
+                f'<figcaption>{e(s[0]["legende"][lang])}</figcaption></figure>')
+    items = "".join(f'<li><figure>{x["svg"]}<figcaption><b class="n">{i}</b> {e(x["legende"][lang])}'
+                    f'</figcaption></figure></li>' for i, x in enumerate(s, 1))
+    return f'<ol class="schema" aria-label="{lib}">{items}</ol>'
+
+
+def video_statique(r: dict, lang: str = "fr") -> str:
+    """Sans JavaScript : un simple lien vers YouTube (rien n'est chargé avant le clic), avec la mention."""
+    v = r.get("video")
+    if not v:
+        return ""
+    e = _html.escape
+    u = UI[lang]
+    return (f'<div class="video"><a href="https://www.youtube.com/watch?v={e(v["id"])}" rel="noopener">'
+            f'{e(u["video_lire"])} ({e(v["chaine"])})</a><p class="video-tiers">{e(u["video_tiers"])}</p></div>')
+
+
+def verifier_schema(r: dict) -> list[str]:
+    """Un à cinq temps, une légende en six langues par temps, SVG sobre (pas de script, pas de lien
+    sortant) ; une vidéo = identifiant YouTube de 11 caractères, titre, chaîne."""
+    pb: list[str] = []
+    cle = r.get("cle", "?")
+    s = r.get("schema")
+    if s is not None:
+        if not isinstance(s, list) or not 1 <= len(s) <= 5:
+            pb.append(f"{cle} : schéma de {len(s) if isinstance(s, list) else '?'} étape(s), 1 à 5 attendues")
+        else:
+            for i, x in enumerate(s, 1):
+                svg = x.get("svg", "")
+                if not svg.startswith("<svg") or not svg.endswith("</svg>"):
+                    pb.append(f"{cle} : schéma, étape {i} n'est pas un <svg>")
+                if re.search(r"<script|<foreignobject|<image|\son\w+\s*=|javascript:|href\s*=\s*['\"](?!#sc-)", svg, re.I):
+                    pb.append(f"{cle} : schéma, étape {i} contient un élément non permis (script, image, lien sortant)")
+                for l in LANGUES:
+                    if not x.get("legende", {}).get(l):
+                        pb.append(f"{cle} : schéma, étape {i}, légende {l} absente")
+    v = r.get("video")
+    if v is not None:
+        if not re.fullmatch(r"[A-Za-z0-9_-]{11}", v.get("id", "")):
+            pb.append(f"{cle} : vidéo, identifiant YouTube invalide")
+        for k in ("titre", "chaine"):
+            if not v.get(k):
+                pb.append(f"{cle} : vidéo, « {k} » absent")
+    return pb
+
+
 def carte_statique(d: dict, r: dict, par_cle: dict, lang: str = "fr") -> str:
     """Même balisage que `carte()` dans le JS."""
     e = _html.escape
@@ -655,6 +795,7 @@ def carte_statique(d: dict, r: dict, par_cle: dict, lang: str = "fr") -> str:
     h = (f'<article class="regle" id="r{e(r["cle"])}"><h3><a href="#r{e(r["cle"])}">'
          f'<span class="num">{e(etiquette(r, lang))}</span> {e(r["titre"][lang])}</a></h3>'
          f'<p class="resume">{e(r["resume"][lang])}</p>')
+    h += schema_statique(r, lang) + video_statique(r, lang)
     ex = r.get("exemples", [])
     for i, x in enumerate(ex, 1):
         n = f" {i}" if len(ex) > 1 else ""
@@ -687,6 +828,8 @@ def liste_statique(d: dict, lang: str = "fr") -> str:
 
 
 def page_regles(d: dict | None = None) -> str:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import site_blocks  # la barre du site : un seul endroit
     d = d or charger()
     e = _html.escape
     ui = UI["fr"]
@@ -717,11 +860,10 @@ def page_regles(d: dict | None = None) -> str:
         '<meta name="description" content="Les règles de course à la voile (RRS 2025-2028) : numéro, '
         'intitulé, résumé et exemple concret pour chaque règle, avec recherche et filtres, en français, '
         'anglais, italien, espagnol, portugais et allemand.">'
-        "<style>" + CSS + "</style>"
+        "<style>" + site_blocks.ENTETE_CSS + CSS + "</style>"
         "<noscript><style>.recherche{display:none}</style></noscript></head><body>"
+        + site_blocks.entete_site("regles-de-course.html", LANGUES) + SPRITE +
         '<div class="page">'
-        '<div class="haut"><a class="retour" href="index.html" data-t="retour">' + ui["retour"] + "</a>"
-        '<div class="langues" id="langues" aria-label="Language">' + boutons_langue + "</div></div>"
         '<h1 data-t="titre">' + ui["titre"] + "</h1>"
         '<p class="chapo" data-t="chapo">' + ui["chapo"] + "</p>"
         '<div class="panneau">'

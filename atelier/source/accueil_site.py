@@ -115,7 +115,7 @@ TEXTES = {
         "kit_lien": "notre adresse",
         "kit_rappel": "Annonceurs — recevoir la grille des tarifs",
         "hero_cta": "Annoncer sur Sailing More",
-        "cookies_texte": "Aucun cookie de mesure ni de publicité : ce site n'en dépose aucun.",
+        "cookies_texte": "Aucun cookie de mesure ni de publicité. Les vidéos YouTube ne se chargent qu'au clic.",
         "cookies_lien": "En savoir plus",
         "cookies_bouton": "J'ai compris",
         "ann_intro": f"Sailing More publie tous les soirs à 18 h : les courses en cours, puis une vidéo un soir sur deux. Quatre formules pour y mettre votre marque : de {_PMIN} à {_PMAX} €, jeu concours compris.",
@@ -184,7 +184,7 @@ TEXTES = {
         "kit_lien": "our address",
         "kit_rappel": "Advertisers — get the rate card",
         "hero_cta": "Advertise on Sailing More",
-        "cookies_texte": "No analytics or advertising cookies: this site sets none.",
+        "cookies_texte": "No analytics or advertising cookies. YouTube videos only load when you click play.",
         "cookies_lien": "Learn more",
         "cookies_bouton": "Got it",
         "ann_intro": f"Sailing More posts every evening at 6 pm: the races under way, then a video every other evening. Four packages to put your brand in front of it: €{_PMIN_EN} to €{_PMAX_EN}, giveaway included.",
@@ -253,7 +253,7 @@ TEXTES = {
         "kit_lien": "il nostro indirizzo",
         "kit_rappel": "Inserzionisti — ricevere il listino",
         "hero_cta": "Pubblicizza su Sailing More",
-        "cookies_texte": "Nessun cookie di analisi né pubblicitario: questo sito non ne usa.",
+        "cookies_texte": "Nessun cookie di analisi né pubblicitario. I video YouTube si caricano solo al clic.",
         "cookies_lien": "Scopri di più",
         "cookies_bouton": "Ho capito",
         "ann_intro": f"Sailing More pubblica ogni sera alle 18: le regate in corso, poi un video una sera su due. Quattro formule per mettere il vostro marchio lì davanti: da {_PMIN} a {_PMAX} €, concorso incluso.",
@@ -322,7 +322,7 @@ TEXTES = {
         "kit_lien": "nuestra dirección",
         "kit_rappel": "Anunciantes — recibir las tarifas",
         "hero_cta": "Anuncie en Sailing More",
-        "cookies_texte": "Sin cookies de medición ni de publicidad: este sitio no instala ninguno.",
+        "cookies_texte": "Sin cookies de medición ni de publicidad. Los vídeos de YouTube solo se cargan al hacer clic.",
         "cookies_lien": "Saber más",
         "cookies_bouton": "Entendido",
         "ann_intro": f"Sailing More publica cada noche a las 18 h: las regatas en curso, y un vídeo una noche de cada dos. Cuatro fórmulas para poner tu marca delante: de {_PMIN} a {_PMAX} €, sorteo incluido.",
@@ -391,7 +391,7 @@ TEXTES = {
         "kit_lien": "o nosso endereço",
         "kit_rappel": "Anunciantes — receber a tabela de preços",
         "hero_cta": "Anuncie na Sailing More",
-        "cookies_texte": "Sem cookies de medição nem de publicidade: este site não instala nenhum.",
+        "cookies_texte": "Sem cookies de medição nem de publicidade. Os vídeos do YouTube só carregam ao clicar.",
         "cookies_lien": "Saber mais",
         "cookies_bouton": "Entendi",
         "ann_intro": f"A Sailing More publica todas as noites às 18 h: as regatas em curso e, uma noite sim, uma noite não, um vídeo. Quatro fórmulas para pôr a sua marca à frente: de {_PMIN} a {_PMAX} €, passatempo incluído.",
@@ -460,7 +460,7 @@ TEXTES = {
         "kit_lien": "unsere Adresse",
         "kit_rappel": "Werbekunden — Preisliste erhalten",
         "hero_cta": "Werben auf Sailing More",
-        "cookies_texte": "Keine Mess- oder Werbe-Cookies: diese Seite setzt keine.",
+        "cookies_texte": "Keine Mess- oder Werbe-Cookies. YouTube-Videos laden erst beim Klick.",
         "cookies_lien": "Mehr erfahren",
         "cookies_bouton": "Verstanden",
         "ann_intro": f"Sailing More veröffentlicht jeden Abend um 18 Uhr: die laufenden Regatten, dazu jeden zweiten Abend ein Video. Vier Pakete, um Ihre Marke davorzusetzen: {_PMIN} bis {_PMAX} €, Gewinnspiel inklusive.",
@@ -680,7 +680,7 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
   html{{scroll-behavior:smooth}}
   body{{margin:0;background:#071c31;
     color:var(--creme);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-    -webkit-font-smoothing:antialiased;overflow-x:hidden}}
+    -webkit-font-smoothing:antialiased;overflow-x:clip}}
   a{{color:inherit;text-decoration:none}}
   .entete{{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
     padding:.7rem 1.2rem;background:rgba(6,16,32,.72);backdrop-filter:blur(10px);
@@ -839,22 +839,7 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
 <body>
 {mer}
 <div class="contenu">
-<header class="entete">
-  <span class="nom">Sailing More</span>
-  {menu}
-  <div class="langues" id="langues" aria-label="Language">
-    <button data-lang="auto" aria-pressed="true">Auto</button>
-    {"".join(f'<button data-lang="{l}" aria-pressed="false">{l.upper()}</button>' for l in LANGUES)}
-  </div>
-</header>
-<script>
-(function(){{
-  var d = document.querySelector('.entete .menu-d');
-  if(!d) return;
-  document.addEventListener('click', function(e){{ if(!d.contains(e.target)) d.open = false; }});
-  document.addEventListener('keydown', function(e){{ if(e.key === 'Escape') d.open = false; }});
-}})();
-</script>
+{site_blocks.entete_site("index.html", LANGUES)}
 
 {heros}
 
@@ -892,7 +877,7 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
 
 
 <div class="cookies" id="cookies" hidden>
-  <p><span data-t="cookies_texte">Aucun cookie de mesure ni de publicité : ce site n'en dépose aucun.</span>
+  <p><span data-t="cookies_texte">Aucun cookie de mesure ni de publicité. Les vidéos YouTube ne se chargent qu'au clic.</span>
   <a href="confidentialite.html" data-t="cookies_lien">En savoir plus</a></p>
   <button id="cookies-ok" data-t="cookies_bouton">J'ai compris</button>
 </div>
@@ -2037,7 +2022,7 @@ MAQUETTES = {
      Le trait ne traverse plus la page : c'est la main courante du bloc, elle s'arrête au bord du MORE.
      Réglé sur .hero seulement : ailleurs (page du jeu, pages légales) un h1 porte un mot, pas un titre
      en deux lignes, et la barre y tombait au milieu du texte. */
-  html{overflow-x:hidden}
+  html{overflow-x:clip}
   /* Nicolas, 20/11/2026 : « la barre doit être pile entre les deux, à la même distance ». Un interligne
      ne se mesure pas à l'œil : le titre est une colonne (`flex-direction:column`) avec un écart fixe de
      `.72rem`, et la barre se pose au milieu exact de cet écart (`top:calc(-.72rem / 2 - 1.5px)`, 1,5 px
