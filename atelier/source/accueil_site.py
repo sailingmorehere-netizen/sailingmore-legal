@@ -646,6 +646,8 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
 
     bandeau = "".join(bloc_citation(i, x) for i, x in enumerate(cites))
     cites_js = citations_pour_js(cites)
+    # Toutes les pages dans un seul panneau qui descend (voir site_blocks.menu_site).
+    menu = site_blocks.menu_site()
 
     html = f"""<!doctype html>
 <html lang="fr">
@@ -839,13 +841,20 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
 <div class="contenu">
 <header class="entete">
   <span class="nom">Sailing More</span>
-  <a class="menu" href="regates.html">Calendrier des régates</a>
-  <a class="menu" href="lexique.html">Lexique</a>
+  {menu}
   <div class="langues" id="langues" aria-label="Language">
     <button data-lang="auto" aria-pressed="true">Auto</button>
     {"".join(f'<button data-lang="{l}" aria-pressed="false">{l.upper()}</button>' for l in LANGUES)}
   </div>
 </header>
+<script>
+(function(){{
+  var d = document.querySelector('.entete .menu-d');
+  if(!d) return;
+  document.addEventListener('click', function(e){{ if(!d.contains(e.target)) d.open = false; }});
+  document.addEventListener('keydown', function(e){{ if(e.key === 'Escape') d.open = false; }});
+}})();
+</script>
 
 {heros}
 
@@ -1253,7 +1262,10 @@ def fichiers_a_publier() -> list[str]:
     medias = sorted(p.relative_to(SITE).as_posix() for d in ("stories", "reels", "drapeaux")
                     for p in (SITE / d).glob("*") if p.suffix.lower() in {".jpg", ".png"})
     polices = sorted(p.relative_to(SITE).as_posix() for p in (SITE / "fonts").glob("*.woff"))
-    return [*pages, *images, *medias, *polices]
+    # Le JavaScript des pages : un fichier à part vit à côté du HTML, il doit donc partir avec lui
+    # (sans lui, le filtre par classe du calendrier reste muet à l'écran).
+    js = sorted(p.relative_to(SITE).as_posix() for p in SITE.glob("*.js"))
+    return [*pages, *images, *medias, *polices, *js]
 
 
 def miroir_vers_sortie(liste: list[str] | None = None) -> int:
