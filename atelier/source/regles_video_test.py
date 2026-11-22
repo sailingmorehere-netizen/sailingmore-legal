@@ -14,13 +14,14 @@ le schéma est du SVG écrit ici, le texte vient de `regles.json`.
 from __future__ import annotations
 
 import html as _html
+import os
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import regles_page as R  # noqa: E402  (CSS et lecture de regles.json : une seule source)
 
-SITE = Path("/opt/data/projets/sailingmore/site")
+SITE = Path(os.environ.get("SITE_ROOT", "/opt/data")) / "projets/sailingmore/site"
 
 # Vidéos retenues : édition 2025-2028 uniquement, courtes, une règle par vidéo.
 # Vérifiées le 22/11/2026 (oEmbed 200, date de publication et édition lues sur la page YouTube).
@@ -254,12 +255,18 @@ def page() -> str:
     )
 
 
-def main() -> int:
-    SITE.mkdir(parents=True, exist_ok=True)
-    cible = SITE / "regles-video-test.html"
+def ecrire_page(site: Path | None = None) -> int:
+    """Écrit la page dans le site en construction (accueil_site.py --site)."""
+    site = site or SITE
+    site.mkdir(parents=True, exist_ok=True)
+    cible = site / "regles-video-test.html"
     cible.write_text(page(), encoding="utf-8")
     print(f"{cible} ({cible.stat().st_size} octets)")
     return len(VIDEOS)
+
+
+def main() -> int:
+    return ecrire_page(SITE)
 
 
 if __name__ == "__main__":
