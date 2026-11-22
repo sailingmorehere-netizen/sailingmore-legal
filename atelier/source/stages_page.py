@@ -41,7 +41,7 @@ UI = {
         "chercher": "Chercher (école, stage, lieu)", "dates_ecole": "dates chez l'école",
         "compte": "{n} offres · {e} écoles", "aucune": "Aucune offre ne répond à ces filtres.",
         "vide": "Aucune offre n'est publiée pour le moment : le relevé se fait sur les fiches des écoles.",
-        "du": "du", "au": "au", "voir": "Voir l'offre →", "jours": "jours", "prix_vide": "prix non publié",
+        "du": "du", "au": "au", "voir": "Voir l'offre →", "jours": "jours", "prix_vide": "prix non publié", "photo": "photo :",
         "type": "Type", "pratique": "Pratique", "theorie": "Théorie",
         "debutant": "Débutant", "intermediaire": "Intermédiaire", "confirme": "Confirmé",
         "langue_supposee": "langue du pays de l'école : l'école ne l'affiche pas",
@@ -54,7 +54,7 @@ UI = {
         "chercher": "Search (school, course, place)", "dates_ecole": "dates at the school",
         "compte": "{n} offers · {e} schools", "aucune": "No offer matches these filters.",
         "vide": "No offer is published yet: the list is read from the schools' own pages.",
-        "du": "from", "au": "to", "voir": "See the offer →", "jours": "days", "prix_vide": "price not published",
+        "du": "from", "au": "to", "voir": "See the offer →", "jours": "days", "prix_vide": "price not published", "photo": "photo:",
         "type": "Type", "pratique": "Practical", "theorie": "Theory",
         "debutant": "Beginner", "intermediaire": "Intermediate", "confirme": "Advanced",
         "langue_supposee": "school country's language: the school does not state it",
@@ -67,7 +67,7 @@ UI = {
         "chercher": "Cerca (scuola, corso, luogo)", "dates_ecole": "date presso la scuola",
         "compte": "{n} offerte · {e} scuole", "aucune": "Nessuna offerta con questi filtri.",
         "vide": "Nessuna offerta è ancora pubblicata: l'elenco si legge dalle pagine delle scuole.",
-        "du": "dal", "au": "al", "voir": "Vedi l'offerta →", "jours": "giorni", "prix_vide": "prezzo non pubblicato",
+        "du": "dal", "au": "al", "voir": "Vedi l'offerta →", "jours": "giorni", "prix_vide": "prezzo non pubblicato", "photo": "foto:",
         "type": "Tipo", "pratique": "Pratica", "theorie": "Teoria",
         "debutant": "Principiante", "intermediaire": "Intermedio", "confirme": "Avanzato",
         "langue_supposee": "lingua del paese della scuola: la scuola non la indica",
@@ -80,7 +80,7 @@ UI = {
         "chercher": "Buscar (escuela, curso, lugar)", "dates_ecole": "fechas en la escuela",
         "compte": "{n} ofertas · {e} escuelas", "aucune": "Ninguna oferta con estos filtros.",
         "vide": "Todavía no hay ofertas publicadas: la lista se lee de las fichas de las escuelas.",
-        "du": "del", "au": "al", "voir": "Ver la oferta →", "jours": "días", "prix_vide": "precio no publicado",
+        "du": "del", "au": "al", "voir": "Ver la oferta →", "jours": "días", "prix_vide": "precio no publicado", "photo": "foto:",
         "type": "Tipo", "pratique": "Práctica", "theorie": "Teoría",
         "debutant": "Principiante", "intermediaire": "Intermedio", "confirme": "Avanzado",
         "langue_supposee": "idioma del país de la escuela: la escuela no lo indica",
@@ -93,7 +93,7 @@ UI = {
         "chercher": "Procurar (escola, curso, local)", "dates_ecole": "datas na escola",
         "compte": "{n} ofertas · {e} escolas", "aucune": "Nenhuma oferta com estes filtros.",
         "vide": "Ainda não há ofertas publicadas: a lista é lida das páginas das escolas.",
-        "du": "de", "au": "a", "voir": "Ver a oferta →", "jours": "dias", "prix_vide": "preço não publicado",
+        "du": "de", "au": "a", "voir": "Ver a oferta →", "jours": "dias", "prix_vide": "preço não publicado", "photo": "foto:",
         "type": "Tipo", "pratique": "Prática", "theorie": "Teoria",
         "debutant": "Iniciante", "intermediaire": "Intermédio", "confirme": "Avançado",
         "langue_supposee": "idioma do país da escola: a escola não o indica",
@@ -106,7 +106,7 @@ UI = {
         "chercher": "Suchen (Schule, Kurs, Ort)", "dates_ecole": "Termine bei der Schule",
         "compte": "{n} Angebote · {e} Schulen", "aucune": "Kein Angebot mit diesen Filtern.",
         "vide": "Noch kein Angebot veröffentlicht: die Liste wird von den Seiten der Schulen gelesen.",
-        "du": "vom", "au": "bis", "voir": "Zum Angebot →", "jours": "Tage", "prix_vide": "Preis nicht veröffentlicht",
+        "du": "vom", "au": "bis", "voir": "Zum Angebot →", "jours": "Tage", "prix_vide": "Preis nicht veröffentlicht", "photo": "Foto:",
         "type": "Art", "pratique": "Praxis", "theorie": "Theorie",
         "debutant": "Anfänger", "intermediaire": "Fortgeschritten", "confirme": "Könner",
         "langue_supposee": "Sprache des Schullandes: die Schule gibt sie nicht an",
@@ -134,6 +134,9 @@ input[type=search]{grid-column:span 2}
 .compte{color:var(--doux);font-size:.9rem;margin:.2rem 0 1rem}
 .liste{display:grid;gap:.8rem}
 .offre{background:var(--carte);border:1px solid var(--trait);border-radius:14px;padding:.9rem 1rem;display:grid;grid-template-columns:1fr auto;gap:.5rem .9rem;align-items:start}
+.offre .ph{grid-column:1/-1;width:100%;height:150px;object-fit:cover;border-radius:10px;background:#0b1e30;display:block}
+.offre .tete{display:flex;gap:.65rem;align-items:flex-start}
+.badge{flex:0 0 auto;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:.8rem;letter-spacing:.02em;color:#dff3ef}
 .offre h2{font-size:1.02rem;margin:0 0 .2rem;line-height:1.3}
 .offre .ecole{color:var(--doux);font-size:.86rem}
 .offre .bas{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap;padding-top:.55rem;border-top:1px solid var(--trait);font-size:.86rem;color:var(--doux)}
@@ -221,6 +224,9 @@ var L='fr';try{L=localStorage.getItem('lang')||(navigator.language||'fr').slice(
 if(!U[L])L='en';
 function t(k){return (U[L]&&U[L][k])||U.fr[k]||k}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function sigle(nom){var m=(nom||'?').replace(/[^\p{L} ]/gu,'').split(/\s+/).filter(Boolean);
+  return m.length>1?(m[0][0]+m[1][0]).toUpperCase():((m[0]||'?').slice(0,2).toUpperCase())}
+function teinte(s){var h=0;s=s||'';for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%360;return h}
 function dt(s){if(!s)return '';var p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0].slice(2)}
 function sym(d){return {EUR:'€',GBP:'£',CHF:'CHF',USD:'$',NOK:'NOK',SEK:'SEK',DKK:'DKK'}[d]||d}
 /* langue et pays proposés par défaut : ceux du navigateur, quand des offres y répondent */
@@ -288,19 +294,27 @@ function dessiner(){
     var ou=o.lieu?(o.lieu===o.pays_nom?o.lieu:o.lieu+' · '+o.pays_nom):(o.region||o.pays_nom);
     var lng=o.langue?(D.langues[o.langue]||o.langue.toUpperCase()):'—';
     var marque=o.langue&&o.langue_src==='pays'?' <span class="marque" title="'+esc(t('langue_supposee'))+'">?</span>':'';
-    return '<article class="offre"><div><h2>'+esc(o.titre)+'</h2>'
-      +'<div class="ecole">'+esc(o.ecole)+(o.ecole_pays_nom?' · '+esc(o.ecole_pays_nom):'')+'</div></div>'
+    return '<article class="offre">'
+      +(o.image?'<img class="ph" loading="lazy" src="'+esc(o.image)+'" alt="">':'')
+      +'<div class="tete"><span class="badge" style="background:hsl('+teinte(o.ecole_slug)+',38%,22%);border:1px solid hsl('+teinte(o.ecole_slug)+',45%,34%)">'+esc(sigle(o.ecole))+'</span>'
+      +'<div><h2>'+esc(o.titre)+'</h2>'
+      +'<div class="ecole">'+esc(o.ecole)+(o.ecole_pays_nom?' · '+esc(o.ecole_pays_nom):'')+'</div></div></div>'
       +'<div class="prix">'+(o.prix!=null?o.prix.toLocaleString(L)+' '+sym(o.devise):'<span style="font-weight:400;font-size:.85rem">'+t('prix_vide')+'</span>')+'</div>' 
       +'<div class="ligne"><span>'+esc(ou)+'</span><span>'+dates+'</span>'
       +(o.duree_jours?'<span>'+o.duree_jours+' '+t('jours')+'</span>':'')
       +'<span>'+esc(lng)+marque+'</span>'
       +(o.niveau?'<span>'+t(o.niveau)+'</span>':'')+'</div>'
-      +'<div class="bas"><span>'+t('verifie')+' '+dt(o.verifie)+'</span>'
+      +'<div class="bas"><span>'+t('verifie')+' '+dt(o.verifie)
+      +(o.image?' · '+t('photo')+' '+esc(o.ecole):'')+'</span>' 
       +'<a class="lien" href="'+esc(o.lien)+'" rel="noopener nofollow" target="_blank">'+t('voir')+'</a></div>'
       +'</article>';
   }).join('');
   document.getElementById('liste').innerHTML=html||('<p class="vide">'+(D.offres.length?t('aucune'):t('vide'))+'</p>');
-  document.getElementById('compte').textContent=t('compte').replace('{n}',vus.length).replace('{e}',new Set(vus.map(function(o){return o.ecole_slug})).size);
+  var ne=new Set(vus.map(function(o){return o.ecole_slug})).size;
+  var txt=t('compte').replace('{n}',vus.length).replace('{e}',ne);
+  if(ne===1){txt=txt.replace(/1 (schools|écoles|scuole|escuelas|escolas|Schulen)/,'1 $1').replace('1 schools','1 school').replace('1 écoles','1 école').replace('1 scuole','1 scuola').replace('1 escuelas','1 escuela').replace('1 escolas','1 escola').replace('1 Schulen','1 Schule')}
+  if(vus.length===1){txt=txt.replace(/^1 (offers|offres|offerte|ofertas|ofertas|Angebote)/,'1 offre').replace(/^1 (offers|offerte|ofertas|Angebote)/,'1 offre')}
+  document.getElementById('compte').textContent=txt;
 }
 ['f-q','f-langue','f-pays','f-pays-ecole','f-ecole','f-type','f-niveau','f-quand','f-prix'].forEach(function(i){
   var e=document.getElementById(i);if(e){e.addEventListener('input',dessiner);e.addEventListener('change',dessiner)}});
@@ -310,11 +324,28 @@ remplir();dessiner();
 SITE = ICI / "projets/sailingmore/site"
 
 
+IMAGES = ICI / "projets/sailingmore/stages-img"
+
+
 def ecrire_page(dossier: Path = SITE) -> int:
-    """Écrit `stages.html` dans `dossier` — appelé par `accueil_site.sortir_le_site`."""
+    """Écrit `stages.html` dans `dossier` — appelé par `accueil_site.sortir_le_site`.
+
+    Les photos des stages voyagent avec la page : recopiées une fois, elles ne sont pas relues au
+    prochain envoi (mêmes noms, même contenu).
+    """
     dossier.mkdir(parents=True, exist_ok=True)
     d = charger()
     (dossier / "stages.html").write_text(construire(d), encoding="utf-8")
+    if IMAGES.exists():
+        cible = dossier / "stages-img"
+        cible.mkdir(exist_ok=True)
+        for o in d.get("offres", []):
+            nom = (o.get("image") or "").split("/")[-1]
+            if not nom:
+                continue
+            src, dst = IMAGES / nom, cible / nom
+            if src.exists() and (not dst.exists() or dst.stat().st_size != src.stat().st_size):
+                dst.write_bytes(src.read_bytes())
     return sum(1 for o in d.get("offres", []) if affichable(o))
 
 
