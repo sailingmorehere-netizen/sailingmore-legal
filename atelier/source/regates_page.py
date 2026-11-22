@@ -24,6 +24,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import regates_classes  # noqa: E402  (table sigle → nom, jauges « tout bateau »)
 import regates_drapeaux  # noqa: E402  (drapeaux SVG, noms de pays en six langues)
+import carte_epreuves  # noqa: E402  (la carte, commune aux régates et aux stages)
 
 ICI = Path(os.environ.get("SAILINGMORE_RACINE", "/opt/data"))
 JSON = ICI / "projets/sailingmore/regates.json"
@@ -275,20 +276,10 @@ a{color:#fff;text-decoration:none}
 .proche-msg b{color:#fff;font-weight:500}
 .dist{display:block;color:#fff;font-size:.68rem;letter-spacing:.06em;margin-top:.15rem;white-space:nowrap}
 
-/* ── la carte des épreuves (fond = carte-monde.png, pastilles posées par le JS) ── */
-.carte-regates{margin:.8rem 0 .4rem}
+/* ── la carte des épreuves : brique commune, voir carte_epreuves.py ── */
 .carte-regates h2{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gris);
   font-weight:500;margin:0 0 .5rem}
-.carte-regates svg{display:block;width:100%;height:auto;aspect-ratio:2/1;background:#071c31;
-  border:1px solid rgba(255,255,255,.09);border-radius:2px}
-.carte-regates .pt{fill:var(--rouge);fill-opacity:.8;stroke:#fff;stroke-opacity:.8;cursor:pointer}
-.carte-regates .pt.champ{fill:#e8c468}
-.carte-regates .pt.ap{fill-opacity:.35}
-.carte-regates .pt:hover,.carte-regates .pt:focus,.carte-regates .pt.sel{fill:#fff;outline:none}
-.carte-info{min-height:2.6rem;margin:.5rem 0 0;font-size:.78rem;color:var(--gris)}
-.carte-info b{color:#fff;font-weight:500}
-.carte-info a{text-decoration:underline;text-decoration-color:rgba(226,58,62,.6)}
-
+__CARTE_CSS__
 @media (max-width:640px){
   .ligne-recherche{flex-direction:column}
   .btn-alerte{padding:.5rem .9rem}
@@ -302,6 +293,8 @@ a{color:#fff;text-decoration:none}
 }
 """
 
+CSS = CSS.replace("__CARTE_CSS__", carte_epreuves.CSS)
+
 JS = r"""
 (function(){
   var data = JSON.parse(document.getElementById('donnees').textContent);
@@ -310,7 +303,7 @@ JS = r"""
   var liste = document.getElementById('liste');
   var menus = Array.prototype.slice.call(document.querySelectorAll('select[data-groupe]'));
   var effacer = document.getElementById('effacer');
-  var etat = {region:'tout', type:'tout', quand:'venir', texte:'', classe:'tous', moi:null};
+  var etat = {region:'tout', type:'tout', quand:'venir', texte:'', classe:'tous', pays:'tous', moi:null};
 
   // Les mots ajoutés par ce chantier existent dans les six langues ; la langue est celle de <html lang>.
   var T = {
@@ -394,6 +387,8 @@ JS = r"""
     }
     if(etat.region !== 'tout' && e.region !== etat.region) return false;
     if(etat.type !== 'tout' && e.type !== etat.type) return false;
+    // Pays : le code du pays de l'épreuve (le lieu « Suisse » ne couvre pas les épreuves suisses du Léman).
+    if(etat.pays !== 'tous' && e.pays !== etat.pays) return false;
     // « tous » ne filtre rien (sans classe comprises) ; toute autre entrée écarte les épreuves sans classe.
     if(etat.classe === '__inter'){ if(!interSerie(e)) return false; }
     else if(etat.classe !== 'tous' && (e.classes||[]).indexOf(etat.classe) === -1) return false;
@@ -461,7 +456,10 @@ JS = r"""
       });
       html += '</section>';
     });
-    liste.innerHTML = html || '<p class="vide">Aucune épreuve ne correspond à ces filtres.</p>';
+    liste.innerHTML = html || '<p class="vide">Aucune épreuve ne correspond à ces filtres. <button class="lien-effacer" type="button" id="vide-effacer">Tout effacer</button></p>';
+    var ve = document.getElementById('vide-effacer');
+    if(ve) ve.addEventListener('click', function(){ effacer.click(); });
+    ecrireUrl();
     dessineCarte(gardes);
     var nIcs = gardes.filter(function(e){ return !e.annulee; }).length;
     btnIcsTout.hidden = !nIcs;
@@ -476,61 +474,27 @@ JS = r"""
         : G.aucune + ' <span>' + G.note + '</span>';
     }
   }
-  // ── Carte : les épreuves filtrées posées sur carte-monde.png (équirectangulaire : x = lon+180, y = 90-lat).
-  // Le cadre se resserre sur les épreuves affichées ; clic ou Entrée sur une pastille = nom, dates, lien.
-  var CT = {
-    fr:{titre:'Les épreuves sur la carte', aide:'Touchez une pastille pour voir l\'épreuve.', ap:'position approximative (centre du pays)', sans:'Aucune position à afficher.'},
-    de:{titre:'Die Veranstaltungen auf der Karte', aide:'Punkt antippen, um die Veranstaltung zu sehen.', ap:'ungefähre Position (Landesmitte)', sans:'Keine Position anzuzeigen.'},
-    en:{titre:'Races on the map', aide:'Tap a dot to see the race.', ap:'approximate position (country centre)', sans:'No position to show.'},
-    it:{titre:'Le regate sulla mappa', aide:'Tocca un punto per vedere la regata.', ap:'posizione approssimativa (centro del paese)', sans:'Nessuna posizione da mostrare.'},
-    es:{titre:'Las regatas en el mapa', aide:'Toca un punto para ver la regata.', ap:'posición aproximada (centro del país)', sans:'Ninguna posición que mostrar.'},
-    pt:{titre:'As regatas no mapa', aide:'Toca num ponto para ver a regata.', ap:'posição aproximada (centro do país)', sans:'Nenhuma posição a mostrar.'}
+  // ── Carte : brique commune carte_epreuves.py (côtes, pastilles de 44 px, regroupement, clavier).
+  var carte = CarteEpreuves.creer({});
+  document.getElementById('carte-titre').textContent = carte.titre;
+  var dateLongue = function(d){
+    try { return new Intl.DateTimeFormat(lang, {day:'numeric', month:'long', year:'numeric'}).format(new Date(d + 'T12:00:00')); }
+    catch(x){ return d; }
   };
-  var C = CT[lang] || CT.fr;
-  var carteSvg = document.getElementById('carte-svg');
-  var carteInfo = document.getElementById('carte-info');
-  var carteLiens = [];
-  document.getElementById('carte-titre').textContent = C.titre;
   function dessineCarte(liste){
-    var pts = liste.filter(function(e){ return e.lat !== undefined; });
-    carteLiens = pts;
-    var x0 = 0, y0 = 0, w = 360, h = 180;
-    if(pts.length){
-      var la = pts.map(function(e){return e.lat;}), lo = pts.map(function(e){return e.lon;});
-      var mnLa = Math.min.apply(null,la), mxLa = Math.max.apply(null,la);
-      var mnLo = Math.min.apply(null,lo), mxLo = Math.max.apply(null,lo);
-      w = Math.max((mxLo - mnLo) * 1.3, 8); h = Math.max((mxLa - mnLa) * 1.3, 4);
-      if(w < 2*h) w = 2*h; else h = w/2;
-      if(w > 360){ w = 360; h = 180; }
-      x0 = Math.min(Math.max((mnLo + mxLo)/2 + 180 - w/2, 0), 360 - w);
-      y0 = Math.min(Math.max(90 - (mnLa + mxLa)/2 - h/2, 0), 180 - h);
-    }
-    carteSvg.setAttribute('viewBox', x0 + ' ' + y0 + ' ' + w + ' ' + h);
-    var r = Math.max(w * 0.007, 0.25);
-    var s = '<image href="carte-monde.png" x="0" y="0" width="360" height="180" preserveAspectRatio="none"/>';
-    pts.forEach(function(e, i){
-      s += '<circle class="pt' + (e.type === 'championnat' ? ' champ' : '') + (e.ap ? ' ap' : '') + '" data-i="' + i
-        + '" cx="' + (e.lon + 180) + '" cy="' + (90 - e.lat) + '" r="' + r + '" stroke-width="' + (r * 0.25)
-        + '" tabindex="0" role="button" aria-label="' + echappe(casse(e.nom)) + '"/>';
+    var pts = liste.filter(function(e){ return e.lat !== undefined; }).map(function(e){
+      var an = e.debut.slice(0,4) !== data.aujourdhui.slice(0,4);
+      var dates = (e.fin && e.fin !== e.debut) ? jour(e.debut, an) + ' → ' + jour(e.fin, an) : jour(e.debut, an);
+      return {
+        lat: e.lat, lon: e.lon, ap: e.ap, champ: e.type === 'championnat',
+        label: casse(e.nom) + (e.ville ? ', ' + casse(e.ville) : '') + ', ' + dateLongue(e.debut),
+        html: '<b>' + echappe(casse(e.nom)) + '</b> — ' + dates
+          + (e.ville ? ' · ' + echappe(casse(e.ville)) : '')
+          + (e.lien ? ' · <a href="' + echappe(e.lien) + '" target="_blank" rel="noopener">' + echappe(e.lien_quoi || 'site') + ' →</a>' : '')
+      };
     });
-    carteSvg.innerHTML = s;
-    carteInfo.innerHTML = pts.length ? C.aide : C.sans;
+    carte.montre(pts, liste.length);
   }
-  function choisitPoint(el){
-    var e = carteLiens[parseInt(el.getAttribute('data-i'), 10)];
-    if(!e) return;
-    Array.prototype.forEach.call(carteSvg.querySelectorAll('.sel'), function(n){ n.classList.remove('sel'); });
-    el.classList.add('sel');
-    var an = e.debut.slice(0,4) !== data.aujourdhui.slice(0,4);
-    var dates = (e.fin && e.fin !== e.debut) ? jour(e.debut, an) + ' → ' + jour(e.fin, an) : jour(e.debut, an);
-    carteInfo.innerHTML = '<b>' + echappe(casse(e.nom)) + '</b> — ' + dates
-      + (e.ville ? ' · ' + echappe(casse(e.ville)) : '') + (e.ap ? ' <i>(' + C.ap + ')</i>' : '')
-      + (e.lien ? ' · <a href="' + echappe(e.lien) + '" target="_blank" rel="noopener">' + echappe(e.lien_quoi || 'site') + ' →</a>' : '');
-  }
-  carteSvg.addEventListener('click', function(ev){ if(ev.target.classList && ev.target.classList.contains('pt')) choisitPoint(ev.target); });
-  carteSvg.addEventListener('keydown', function(ev){
-    if((ev.key === 'Enter' || ev.key === ' ') && ev.target.classList && ev.target.classList.contains('pt')){ ev.preventDefault(); choisitPoint(ev.target); }
-  });
   // Fuseau horaire → pays (codes de regates.json). Seulement ce que le navigateur sait déjà : aucun envoi.
   var FUSEAU = {'Europe/Paris':'FRA','Europe/Zurich':'SUI','Europe/Rome':'ITA','Europe/Berlin':'GER','Europe/Madrid':'ESP',
     'Europe/Brussels':'BEL','Europe/Amsterdam':'NED','Europe/London':'GBR','Europe/Lisbon':'POR','Europe/Copenhagen':'DEN',
@@ -614,6 +578,44 @@ JS = r"""
     });
     selClasse.classList.toggle('actif', etat.classe !== 'tous');
   }
+  // Pays : un menu rempli ici, avec le nombre d'épreuves de chaque pays (seuls les pays qui ont des épreuves).
+  var selPays = document.getElementById('pays');
+  var LIBPAYS = {fr:'Pays', de:'Land', en:'Country', it:'Paese', es:'País', pt:'País'};
+  var TOUSPAYS = {fr:'Tous les pays', de:'Alle Länder', en:'All countries', it:'Tutti i paesi', es:'Todos los países', pt:'Todos os países'};
+  document.getElementById('etiq-pays').textContent = LIBPAYS[lang] || LIBPAYS.fr;
+  selPays.setAttribute('aria-label', LIBPAYS[lang] || LIBPAYS.fr);
+  function dessinePays(){
+    var n = {};
+    data.epreuves.forEach(function(e){ if(e.pays && data.pays[e.pays] !== undefined) n[e.pays] = (n[e.pays]||0) + 1; });
+    var nom = function(c){ return data.pays[c][lang] || data.pays[c].fr; };
+    var codes = Object.keys(n).sort(function(a,b){ return n[b] - n[a] || (nom(a) < nom(b) ? -1 : 1); });
+    selPays.innerHTML = '<option value="tous">' + (TOUSPAYS[lang] || TOUSPAYS.fr) + '</option>'
+      + codes.map(function(c){ return '<option value="' + c + '">' + echappe(nom(c)) + ' (' + n[c] + ')</option>'; }).join('');
+  }
+  // État dans l'adresse : ?lieu=Suisse&pays=SUI&type=régate&bateau=OSIR&quand=tout&q=…
+  // Seules les valeurs qui diffèrent du défaut s'écrivent ; une valeur inconnue est ignorée.
+  var CLES_URL = {region:'lieu', pays:'pays', type:'type', classe:'bateau', quand:'quand', texte:'q'};
+  function lireUrl(){
+    var p;
+    try { p = new URLSearchParams(location.search); } catch(x){ return; }
+    Object.keys(CLES_URL).forEach(function(g){
+      var v = p.get(CLES_URL[g]);
+      if(v === null || v === '') return;
+      if(g === 'texte'){ etat.texte = v.slice(0, 80); return; }
+      var m = g === 'classe' ? selClasse : g === 'pays' ? selPays : document.querySelector('select[data-groupe="' + g + '"]');
+      if(m && Array.prototype.some.call(m.options, function(o){ return o.value === v; })) etat[g] = v;
+    });
+    champ.value = etat.texte;
+  }
+  function ecrireUrl(){
+    var p = [];
+    Object.keys(CLES_URL).forEach(function(g){
+      var m = g === 'classe' ? selClasse : g === 'pays' ? selPays : document.querySelector('select[data-groupe="' + g + '"]');
+      var def = g === 'texte' ? '' : m.dataset.defaut;
+      if(etat[g] !== def && etat[g] !== '') p.push(CLES_URL[g] + '=' + encodeURIComponent(etat[g]));
+    });
+    try { history.replaceState(null, '', location.pathname + (p.length ? '?' + p.join('&') : '') + location.hash); } catch(x){}
+  }
   menus.forEach(function(m){
     m.addEventListener('change', function(){
       etat[m.dataset.groupe] = m.value;
@@ -694,9 +696,12 @@ JS = r"""
     if(l.length) icsTelecharge(l, 'regates-sailingmore');
   });
   dessineClasses();
+  dessinePays();
+  lireUrl();
+  marque();
   champ.addEventListener('input', function(){ etat.texte = champ.value; dessine(); });
   effacer.addEventListener('click', function(){
-    etat = {region:'tout', type:'tout', quand:'venir', texte:'', classe:'tous', moi:null};
+    etat = {region:'tout', type:'tout', quand:'venir', texte:'', classe:'tous', pays:'tous', moi:null};
     if(btnProche) quitteProche();
     champ.value = '';
     marque();
@@ -910,6 +915,9 @@ def construire(d: dict) -> str:
         + menu("type", "Type de course", [("tout", "Tous les types")]
                + [(t, t.capitalize()) for t in types], "tout")
         + "</div>"
+        '<div class="groupe"><span class="etiq" id="etiq-pays">Pays</span>'
+        '<select class="menu" id="pays" data-groupe="pays" data-defaut="tous"'
+        ' aria-label="Pays"></select></div>'
         '<div class="groupe"><span class="etiq" id="etiq-classe">Bateau</span>'
         '<select class="menu" id="classe" data-groupe="classe" data-defaut="tous"'
         ' aria-label="Classe de bateau"></select></div>'
@@ -969,9 +977,7 @@ def construire(d: dict) -> str:
         '<div class="compte"><span id="compte"></span>'
         '<span><button class="lien-effacer" id="btn-ics-tout" type="button" hidden></button> '
         '<button class="lien-effacer" id="effacer" type="button">Tout effacer</button></span></div>'
-        '<div class="carte-regates"><h2 id="carte-titre" class="etiq"></h2>'
-        '<svg id="carte-svg" viewBox="0 0 360 180" role="group" aria-label="Carte des épreuves"></svg>'
-        '<p class="carte-info" id="carte-info" role="status"></p></div>'
+        + carte_epreuves.html() +
         '<div id="liste"></div>'
         "</div>"
         '<p class="pied">Calendrier relevé le ' + (maj_lisible or "—") + " depuis "
@@ -984,7 +990,7 @@ def construire(d: dict) -> str:
         "</div>"
         '<script type="application/json" id="donnees">'
         + json.dumps(donnees, ensure_ascii=False, separators=(",", ":"))
-        + "</script><script>" + JS + "</script>"
+        + "</script><script>" + carte_epreuves.js() + JS + "</script>"
         "</body></html>\n"
     )
 

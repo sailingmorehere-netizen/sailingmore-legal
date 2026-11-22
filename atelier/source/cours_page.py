@@ -20,7 +20,7 @@ import re
 import sys
 from pathlib import Path
 
-RACINE = Path(os.environ.get("SITE_ROOT", "/opt/data"))
+RACINE = Path(os.environ.get("SITE_ROOT", str(Path(__file__).resolve().parent.parent)))
 SITE = RACINE / "projets" / "sailingmore" / "site"
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 

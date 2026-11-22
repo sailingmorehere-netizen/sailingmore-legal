@@ -224,7 +224,7 @@ def html_stories(items: list[dict]) -> str:
     vignettes = "".join(
         f'<a class="vignette" href="{x.get("lien") or IG_PROFIL}" target="_blank" rel="noopener" '
         f'aria-label="Story du {x["jour"]} — {"ouvrir la story" if x.get("lien") else "voir sur notre Instagram"}">'
-        f'<span class="anneau"><img src="{x["vignette"]}" alt="Story du {x["jour"]}"></span>'
+        f'<span class="anneau"><img src="{x["vignette"]}" alt="Story SailingMore.fr du {x["jour"]} : aperçu de la première feuille" loading="lazy"></span>'
         '</a>'
         for x in items)
     return ('<section class="stories"><h2 data-t="stories_titre">Nos informations quotidiennes</h2>'
@@ -492,6 +492,7 @@ MENU_PAGES = [
     ("stages.html", "Stages de voile", ""),
     ("cours.html", "Cours théoriques", ""),
     ("jeux.html", "Jeux", ""),
+    ("bateaux.html", "Bateaux", ""),
     ("lexique.html", "Lexique", ""),
     ("annonceurs.html", "Annonceurs", ""),
     ("mentions-legales.html", "Mentions légales", "legal"),

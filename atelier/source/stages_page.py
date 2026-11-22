@@ -23,11 +23,15 @@ sont mesurées par `stages_releve.py` (et `stages_moisson.py` pour les catalogue
 from __future__ import annotations
 
 import json
+import sys
 import os
 from datetime import date, timedelta
 from pathlib import Path
 
 ICI = Path(os.environ.get("SAILINGMORE_RACINE", "/opt/data"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import carte_epreuves  # noqa: E402
+
 JSON = ICI / "projets/sailingmore/stages.json"
 PEREMPTION_JOURS = 60
 NIVEAUX = ("debutant", "intermediaire", "confirme")
@@ -41,7 +45,7 @@ UI = {
         "chercher": "Chercher (école, stage, lieu)", "dates_ecole": "dates chez l'école",
         "compte": "{n} offres · {e} écoles", "aucune": "Aucune offre ne répond à ces filtres.",
         "vide": "Aucune offre n'est publiée pour le moment : le relevé se fait sur les fiches des écoles.",
-        "du": "du", "au": "au", "voir": "Voir l'offre →", "jours": "jours", "prix_vide": "prix non publié", "photo": "photo :",
+        "du": "du", "au": "au", "voir": "Voir l'offre →", "jours": "jours", "prix_vide": "prix non publié", "photo": "photo :", "tri": "Trier", "proche": "Au plus près", "prix_croissant": "Prix croissant", "date_proche": "Date", "position_refusee": "Position refusée · pays proposé :", "geoloc": "Autoriser ma position",
         "type": "Type", "pratique": "Pratique", "theorie": "Théorie",
         "debutant": "Débutant", "intermediaire": "Intermédiaire", "confirme": "Confirmé",
         "langue_supposee": "langue du pays de l'école : l'école ne l'affiche pas",
@@ -54,7 +58,7 @@ UI = {
         "chercher": "Search (school, course, place)", "dates_ecole": "dates at the school",
         "compte": "{n} offers · {e} schools", "aucune": "No offer matches these filters.",
         "vide": "No offer is published yet: the list is read from the schools' own pages.",
-        "du": "from", "au": "to", "voir": "See the offer →", "jours": "days", "prix_vide": "price not published", "photo": "photo:",
+        "du": "from", "au": "to", "voir": "See the offer →", "jours": "days", "prix_vide": "price not published", "photo": "photo:", "tri": "Sort", "proche": "Nearest first", "prix_croissant": "Lowest price", "date_proche": "Date", "position_refusee": "Location refused · country guessed:", "geoloc": "Use my location",
         "type": "Type", "pratique": "Practical", "theorie": "Theory",
         "debutant": "Beginner", "intermediaire": "Intermediate", "confirme": "Advanced",
         "langue_supposee": "school country's language: the school does not state it",
@@ -68,6 +72,7 @@ UI = {
         "compte": "{n} offerte · {e} scuole", "aucune": "Nessuna offerta con questi filtri.",
         "vide": "Nessuna offerta è ancora pubblicata: l'elenco si legge dalle pagine delle scuole.",
         "du": "dal", "au": "al", "voir": "Vedi l'offerta →", "jours": "giorni", "prix_vide": "prezzo non pubblicato", "photo": "foto:",
+        "tri": "Ordina", "proche": "Più vicini", "prix_croissant": "Prezzo crescente", "date_proche": "Data", "position_refusee": "Posizione negata · paese ipotizzato:", "geoloc": "Usa la mia posizione",
         "type": "Tipo", "pratique": "Pratica", "theorie": "Teoria",
         "debutant": "Principiante", "intermediaire": "Intermedio", "confirme": "Avanzato",
         "langue_supposee": "lingua del paese della scuola: la scuola non la indica",
@@ -81,6 +86,7 @@ UI = {
         "compte": "{n} ofertas · {e} escuelas", "aucune": "Ninguna oferta con estos filtros.",
         "vide": "Todavía no hay ofertas publicadas: la lista se lee de las fichas de las escuelas.",
         "du": "del", "au": "al", "voir": "Ver la oferta →", "jours": "días", "prix_vide": "precio no publicado", "photo": "foto:",
+        "tri": "Ordenar", "proche": "Más cercanos", "prix_croissant": "Precio ascendente", "date_proche": "Fecha", "position_refusee": "Ubicación rechazada · país supuesto:", "geoloc": "Usar mi ubicación",
         "type": "Tipo", "pratique": "Práctica", "theorie": "Teoría",
         "debutant": "Principiante", "intermediaire": "Intermedio", "confirme": "Avanzado",
         "langue_supposee": "idioma del país de la escuela: la escuela no lo indica",
@@ -94,6 +100,7 @@ UI = {
         "compte": "{n} ofertas · {e} escolas", "aucune": "Nenhuma oferta com estes filtros.",
         "vide": "Ainda não há ofertas publicadas: a lista é lida das páginas das escolas.",
         "du": "de", "au": "a", "voir": "Ver a oferta →", "jours": "dias", "prix_vide": "preço não publicado", "photo": "foto:",
+        "tri": "Ordenar", "proche": "Mais próximos", "prix_croissant": "Preço crescente", "date_proche": "Data", "position_refusee": "Localização recusada · país suposto:", "geoloc": "Usar a minha localização",
         "type": "Tipo", "pratique": "Prática", "theorie": "Teoria",
         "debutant": "Iniciante", "intermediaire": "Intermédio", "confirme": "Avançado",
         "langue_supposee": "idioma do país da escola: a escola não o indica",
@@ -106,7 +113,7 @@ UI = {
         "chercher": "Suchen (Schule, Kurs, Ort)", "dates_ecole": "Termine bei der Schule",
         "compte": "{n} Angebote · {e} Schulen", "aucune": "Kein Angebot mit diesen Filtern.",
         "vide": "Noch kein Angebot veröffentlicht: die Liste wird von den Seiten der Schulen gelesen.",
-        "du": "vom", "au": "bis", "voir": "Zum Angebot →", "jours": "Tage", "prix_vide": "Preis nicht veröffentlicht", "photo": "Foto:",
+        "du": "vom", "au": "bis", "voir": "Zum Angebot →", "jours": "Tage", "prix_vide": "Preis nicht veröffentlicht", "photo": "Foto:", "tri": "Sortieren", "proche": "Am nächsten", "prix_croissant": "Preis aufsteigend", "date_proche": "Datum", "position_refusee": "Standort abgelehnt · Land geschätzt:", "geoloc": "Meinen Standort verwenden",
         "type": "Art", "pratique": "Praxis", "theorie": "Theorie",
         "debutant": "Anfänger", "intermediaire": "Fortgeschritten", "confirme": "Könner",
         "langue_supposee": "Sprache des Schullandes: die Schule gibt sie nicht an",
@@ -146,6 +153,8 @@ input[type=search]{grid-column:span 2}
 .marque{font-size:.72rem;border:1px solid var(--trait);border-radius:99px;padding:.06rem .45rem;color:var(--doux)}
 .pied{margin-top:2rem;color:var(--doux);font-size:.82rem;border-top:1px solid var(--trait);padding-top:1rem}
 .vide{color:var(--doux);padding:2rem 0}
+.carte-regates h2{font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--doux);font-weight:400;margin:0 0 .5rem}
+__CARTE_CSS__
 @media(max-width:560px){input[type=search]{grid-column:1/-1}.offre{grid-template-columns:1fr}}
 """
 
@@ -168,9 +177,22 @@ def affichable(o: dict, aujourdhui: date | None = None) -> bool:
     return verifie >= aujourdhui - timedelta(days=PEREMPTION_JOURS)
 
 
+def _avec_position(o: dict) -> dict:
+    """Ajoute lat/lon (et precision='pays' si c'est le centre du pays) quand le lieu est connu. Sans position,
+    l'offre reste dans la liste et n'a simplement pas de pastille."""
+    if o.get("lat") is not None and o.get("lon") is not None:
+        return o
+    import regates_page  # import tardif : la table des ports pèse, et stages n'en a besoin qu'ici
+    pos = regates_page.position({"ville": o.get("lieu") or "", "pays": o.get("pays") or ""})
+    if not pos:
+        return o
+    return {**o, "lat": pos[0], "lon": pos[1], **({"precision": "pays"} if pos[2] else {})}
+
+
 def construire(d: dict | None = None) -> str:
     d = d if d is not None else charger()
     offres = [o for o in d.get("offres", []) if affichable(o)]
+    offres = [_avec_position(o) for o in offres]
     offres.sort(key=lambda o: (o.get("debut") or "9999-12-31", o.get("prix_eur") or 0))
     donnees = {
         "ui": UI, "offres": offres, "langues": LANGUES,
@@ -191,6 +213,7 @@ def _html(d: dict) -> str:
     corps = ("<!doctype html><html lang=\"fr\"><head><meta charset=\"utf-8\">"
              "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
              f"<title>{H.escape(UI['fr']['titre'])} — Sailing More</title>"
+             "<link rel=\"canonical\" href=\"https://sailingmore.fr/stages.html\">"
              "<meta name=\"description\" content=\"Stages et cours de voile vendus par des écoles "
              "européennes : prix publiés, destination, langue, lien direct vers la fiche de l'école.\">"
              f"<style>{CSS}</style></head><body><main class=\"page\">"
@@ -207,16 +230,20 @@ def _html(d: dict) -> str:
              "<label><span data-t=\"type\">Type</span><select id=\"f-type\"></select></label>"
              "<label><span data-t=\"niveau\">Niveau</span><select id=\"f-niveau\"></select></label>"
              "<label><span data-t=\"quand\">Date</span><select id=\"f-quand\"></select></label>"
+             "<label><span data-t=\"tri\">Trier</span><select id=\"f-tri\"></select></label>"
              "<label><span data-t=\"prix\">Prix max.</span><input id=\"f-prix\" type=\"number\" min=\"0\" step=\"50\" inputmode=\"numeric\"></label>"
              "</section>"
+             + carte_epreuves.html() +
              "<p class=\"compte\" id=\"compte\"></p><div class=\"liste\" id=\"liste\"></div>"
              f"<p class=\"pied\" data-t=\"pied\">{H.escape(UI['fr']['pied'])}</p>"
              "</main>"
              "<script id=\"donnees\" type=\"application/json\">"
              + json.dumps(d, ensure_ascii=False).replace("</", "<\\/")
-             + "</script><script>" + JS + "</script></body></html>")
+             + "</script><script>" + carte_epreuves.js() + JS + "</script></body></html>")
     return corps
 
+
+CSS = CSS.replace("__CARTE_CSS__", carte_epreuves.CSS)
 
 JS = r"""
 var D=JSON.parse(document.getElementById('donnees').textContent),U=D.ui;
@@ -255,6 +282,10 @@ function remplir(){
   options('f-ecole',D.ecoles.map(function(e){return [e[0],e[1]]}));
   options('f-niveau',D.niveaux.map(function(n){return [n,t(n)]}));
   options('f-type',(D.types||[]).map(function(x){return [x,x==='theorie'?t('theorie'):t('pratique')]}));
+  var tri=document.getElementById('f-tri'),gt=tri.value;
+  tri.innerHTML='<option value="proche">'+t('proche')+'</option><option value="prix">'+t('prix_croissant')+
+    '</option><option value="date">'+t('date_proche')+'</option>';
+  tri.value=gt||mem('tri','proche');
   var q=document.getElementById('f-quand'),gq=q.value;
   q.innerHTML='<option value="">'+t('tous')+'</option><option value="avenir">'+t('avenir')+'</option><option value="mois">'+t('mois')+'</option>';
   q.value=gq;
@@ -265,6 +296,25 @@ function remplir(){
   var l=document.getElementById('langues');
   l.innerHTML=Object.keys(U).map(function(c){return '<button data-l="'+c+'" style="background:none;border:0;color:'+(c===L?'#5fd3c4':'#9db2c7')+';font:inherit;font-size:.8rem;cursor:pointer;padding:.1rem .25rem">'+c.toUpperCase()+'</button>'}).join('');
   [].forEach.call(l.querySelectorAll('button'),function(b){b.onclick=function(){L=b.dataset.l;try{localStorage.setItem('lang',L)}catch(e){}remplir();dessiner()}});
+}
+/* Position du visiteur : le navigateur d'abord (il demande l'accord), l'adresse IP ensuite si elle
+   est refusée ou indisponible. Aucune position n'est envoyée ni conservée : elle sert à trier. */
+var POS=null;
+function haversine(a,b,c,d){var R=6371,r=Math.PI/180;
+  var dLa=(c-a)*r,dLo=(d-b)*r,la1=a*r,la2=c*r;
+  var h=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(la1)*Math.cos(la2)*Math.sin(dLo/2)*Math.sin(dLo/2);
+  return 2*R*Math.asin(Math.sqrt(h))}
+function distance(o){if(!POS||o.lat==null||o.lon==null)return null;return haversine(POS[0],POS[1],o.lat,o.lon)}
+function poserPosition(){
+  function parIP(){
+    fetch('https://ipwho.is/?fields=latitude,longitude,success').then(function(r){return r.json()})
+      .then(function(d){if(d&&d.success&&d.latitude!=null){POS=[d.latitude,d.longitude,'ip'];dessiner()}})
+      .catch(function(){});
+  }
+  if(!navigator.geolocation){parIP();return}
+  navigator.geolocation.getCurrentPosition(
+    function(p){POS=[p.coords.latitude,p.coords.longitude,'gps'];dessiner()},
+    function(){parIP()}, {timeout:6000,maximumAge:600000});
 }
 function futur(o){if(!o.debut)return true;var a=new Date().toISOString().slice(0,10);return (o.fin||o.debut)>=a}
 function dessiner(){
@@ -289,10 +339,20 @@ function dessiner(){
     if(q){var s=(o.titre+' '+o.ecole+' '+o.lieu+' '+o.pays_nom+' '+o.region).toLowerCase();if(s.indexOf(q)<0)return false}
     return true;
   });
+  var ordre=document.getElementById('f-tri').value;garde('tri',ordre);
+  var sansPos=function(o){return (!POS||o.lat==null)?1:0};
+  vus.sort(function(a,b){
+    if(ordre==='prix')return ((a.prix_eur!=null?a.prix_eur:1e9)-(b.prix_eur!=null?b.prix_eur:1e9));
+    if(ordre==='date')return ((a.debut||'9999')<(b.debut||'9999')?-1:(a.debut||'9999')>(b.debut||'9999')?1:0);
+    var sp=sansPos(a),sb=sansPos(b);if(sp!==sb)return sp-sb;
+    return (distance(a)||1e9)-(distance(b)||1e9);
+  });
   var html=vus.map(function(o){
     var dates=!o.debut?t('dates_ecole'):(o.fin&&o.fin!==o.debut?t('du')+' '+dt(o.debut)+' '+t('au')+' '+dt(o.fin):dt(o.debut));
     var ou=o.lieu?(o.lieu===o.pays_nom?o.lieu:o.lieu+' · '+o.pays_nom):(o.region||o.pays_nom);
     var lng=o.langue?(D.langues[o.langue]||o.langue.toUpperCase()):'—';
+    var d=distance(o);
+    var loin=(d==null?'':(o.precision==='pays'?' · ~':' · ')+Math.round(d).toLocaleString(L)+' km');
     var marque=o.langue&&o.langue_src==='pays'?' <span class="marque" title="'+esc(t('langue_supposee'))+'">?</span>':'';
     return '<article class="offre">'
       +(o.image?'<img class="ph" loading="lazy" src="'+esc(o.image)+'" alt="">':'')
@@ -300,7 +360,7 @@ function dessiner(){
       +'<div><h2>'+esc(o.titre)+'</h2>'
       +'<div class="ecole">'+esc(o.ecole)+(o.ecole_pays_nom?' · '+esc(o.ecole_pays_nom):'')+'</div></div></div>'
       +'<div class="prix">'+(o.prix!=null?o.prix.toLocaleString(L)+' '+sym(o.devise):'<span style="font-weight:400;font-size:.85rem">'+t('prix_vide')+'</span>')+'</div>' 
-      +'<div class="ligne"><span>'+esc(ou)+'</span><span>'+dates+'</span>'
+      +'<div class="ligne"><span>'+esc(ou)+loin+'</span><span>'+dates+'</span>' 
       +(o.duree_jours?'<span>'+o.duree_jours+' '+t('jours')+'</span>':'')
       +'<span>'+esc(lng)+marque+'</span>'
       +(o.niveau?'<span>'+t(o.niveau)+'</span>':'')+'</div>'
@@ -310,15 +370,31 @@ function dessiner(){
       +'</article>';
   }).join('');
   document.getElementById('liste').innerHTML=html||('<p class="vide">'+(D.offres.length?t('aucune'):t('vide'))+'</p>');
+  var MT={fr:{groupe:'{n} offres à cet endroit',aide:"Touchez une pastille pour voir l'offre ; un rond numéroté regroupe plusieurs offres.",compte:'{n} sur la carte, {m} sans position (elles figurent dans la liste ci-dessous).',titre:'Les stages sur la carte'},
+    en:{groupe:'{n} offers at this place',aide:'Tap a dot to see the offer; a numbered circle groups several offers.',compte:'{n} on the map, {m} without a position (they are in the list below).',titre:'Courses on the map',plus:'and {n} more'},
+    de:{groupe:'{n} Angebote an diesem Ort',aide:'Punkt antippen, um das Angebot zu sehen; ein nummerierter Kreis fasst mehrere zusammen.',compte:'{n} auf der Karte, {m} ohne Position (sie stehen in der Liste unten).',titre:'Die Kurse auf der Karte'},
+    it:{groupe:'{n} offerte in questo luogo',aide:"Tocca un punto per vedere l'offerta; un cerchio numerato ne raggruppa più d'una.",compte:"{n} sulla mappa, {m} senza posizione (sono nell'elenco qui sotto).",titre:'I corsi sulla mappa'},
+    es:{groupe:'{n} ofertas en este lugar',aide:'Toca un punto para ver la oferta; un círculo numerado agrupa varias.',compte:'{n} en el mapa, {m} sin posición (están en la lista de abajo).',titre:'Los cursos en el mapa'},
+    pt:{groupe:'{n} ofertas neste local',aide:'Toca num ponto para ver a oferta; um círculo numerado agrupa várias.',compte:'{n} no mapa, {m} sem posição (estão na lista abaixo).',titre:'Os cursos no mapa'}};
+  if(!window.carteStages)window.carteStages=CarteEpreuves.creer({textes:MT});
+  var dlong=function(s){try{return new Intl.DateTimeFormat(L,{day:'numeric',month:'long',year:'numeric'}).format(new Date(s+'T12:00:00'))}catch(x){return s}};
+  window.carteStages.montre(vus.filter(function(o){return o.lat!=null&&o.lon!=null}).map(function(o){
+    var dates=!o.debut?t('dates_ecole'):(o.fin&&o.fin!==o.debut?t('du')+' '+dt(o.debut)+' '+t('au')+' '+dt(o.fin):dt(o.debut));
+    var ou=o.lieu?(o.lieu===o.pays_nom?o.lieu:o.lieu+' · '+o.pays_nom):(o.region||o.pays_nom);
+    return {lat:o.lat,lon:o.lon,ap:o.precision==='pays',champ:false,
+      label:o.titre+', '+(o.lieu||o.pays_nom||'')+(o.debut?', '+dlong(o.debut):''),
+      html:'<b>'+esc(o.titre)+'</b> — '+esc(ou)+' · '+dates+(o.prix!=null?' · '+o.prix.toLocaleString(L)+' '+sym(o.devise):'')
+        +' · <a href="'+esc(o.lien)+'" rel="noopener nofollow" target="_blank">'+t('voir')+'</a>'};
+  }),vus.length);
   var ne=new Set(vus.map(function(o){return o.ecole_slug})).size;
   var txt=t('compte').replace('{n}',vus.length).replace('{e}',ne);
   if(ne===1){txt=txt.replace(/1 (schools|écoles|scuole|escuelas|escolas|Schulen)/,'1 $1').replace('1 schools','1 school').replace('1 écoles','1 école').replace('1 scuole','1 scuola').replace('1 escuelas','1 escuela').replace('1 escolas','1 escola').replace('1 Schulen','1 Schule')}
   if(vus.length===1){txt=txt.replace(/^1 (offers|offres|offerte|ofertas|ofertas|Angebote)/,'1 offre').replace(/^1 (offers|offerte|ofertas|Angebote)/,'1 offre')}
   document.getElementById('compte').textContent=txt;
 }
-['f-q','f-langue','f-pays','f-pays-ecole','f-ecole','f-type','f-niveau','f-quand','f-prix'].forEach(function(i){
+['f-q','f-langue','f-pays','f-pays-ecole','f-ecole','f-type','f-niveau','f-quand','f-prix','f-tri'].forEach(function(i){
   var e=document.getElementById(i);if(e){e.addEventListener('input',dessiner);e.addEventListener('change',dessiner)}});
-remplir();dessiner();
+remplir();dessiner();poserPosition();
 """
 
 SITE = ICI / "projets/sailingmore/site"

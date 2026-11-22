@@ -1254,14 +1254,17 @@ def fichiers_a_publier() -> list[str]:
     """
     pages = [n for n in ("index.html", "jeux.html", "annonceurs.html", "merci.html",
                          "regates.html", "regles-de-course.html", "lexique.html", "stages.html",
-                         "cours.html", "mentions-legales.html", "confidentialite.html", "delete.html",
-                         "sitemap.xml")
+                         "cours.html", "bateaux.html", "bateaux.json", "mentions-legales.html",
+                         "confidentialite.html", "delete.html", "sitemap.xml")
              if (SITE / n).exists()]
     images = [n for n in ("og-image.jpg", "icon-512.png", "icon-180.png", "favicon-32.png",
                           "carte-monde.png") if (SITE / n).exists()]
     medias = sorted(p.relative_to(SITE).as_posix() for d in ("stories", "reels", "drapeaux")
                     for p in (SITE / d).glob("*") if p.suffix.lower() in {".jpg", ".png"})
     polices = sorted(p.relative_to(SITE).as_posix() for p in (SITE / "fonts").glob("*.woff"))
+    # Les neuf images WebP de la nomenclature des bateaux (rendues par Hermes depuis images-src/bateaux/*.svg,
+    # voir bateaux-images.json) : stables, à `images/bateaux/sailingmore-nomenclature-<sujet>.webp`.
+    medias += sorted(p.relative_to(SITE).as_posix() for p in (SITE / "images" / "bateaux").glob("*.webp"))
     # Le JavaScript des pages : un fichier à part vit à côté du HTML, il doit donc partir avec lui
     # (sans lui, le filtre par classe du calendrier reste muet à l'écran).
     js = sorted(p.relative_to(SITE).as_posix() for p in SITE.glob("*.js"))
@@ -1360,6 +1363,13 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         print(f"cours théoriques : {cours_page.ecrire_page(SITE)}")
     except Exception as e:  # noqa: BLE001
         print(f"cours théoriques non écrits : {e}")
+    # Nomenclature des bateaux (22/11/2026) : même chemin ; bateaux_page.py écrit la page, bateaux.json (lu par
+    # lexique_page.py), les sources SVG des images et le sitemap. Les mots ajoutés au lexique y sont rangés d'abord.
+    try:
+        import bateaux_page
+        print(f"nomenclature des bateaux : {bateaux_page.ecrire_page(SITE)}")
+    except Exception as e:  # noqa: BLE001
+        print(f"nomenclature des bateaux non écrite : {e}")
     for nom in ("mentions-legales.html", "confidentialite.html", "delete.html"):
         if (SORTIE / nom).exists():
             brut = (SORTIE / nom).read_text()
