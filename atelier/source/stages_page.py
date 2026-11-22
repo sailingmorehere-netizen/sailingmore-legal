@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
-"""Construit la page `stages.html` : les stages et cours de voile des écoles privées et des clubs
-qui en vendent, en France et en Suisse. Filtres : lieu, âge, niveau, date, prix.
+"""Construit la page `stages.html` : les stages et cours de voile que vendent des écoles européennes,
+sur leurs propres eaux comme aux Antilles, en Atlantique ou en mer du Nord.
+Filtres : lieu, âge, niveau, date, prix.
 
-Entrée  : `projets/sailingmore/stages.json`, tenu à la main depuis les sites des écoles (Les Glénans
-          en tête, puis Léman, Haute-Savoie, Suisse romande). Aucune extraction de base FFVoile ni
+NE PAS RÉÉCRIRE CE FICHIER SANS REPRENDRE LE RELEVÉ. Le 22/11/2026 à 19 h 21, une réécriture
+complète a republié une page à zéro offre alors que trente-deux étaient en ligne : les offres ne se
+saisissent pas à la main, elles sont mesurées par `stages_releve.py`, qui lit les pages des écoles
+déjà téléchargées et écrit le fichier ci-dessous. Ce générateur ne fait que rendre ce JSON ; il
+n'invente ni prix, ni date, ni pays, et il ne publie pas une offre sans prix affiché par l'école.
+
+Entrée  : `projets/sailingmore/stages.json`, écrit par `stages_releve.py` (32 offres, 3 écoles au
+          22/11/2026 : Les Glénans, Rubicon 3, Zeezeilschool Scheveningen). Aucune extraction de base FFVoile ni
           Destination Voile (CGU §9.1) : une offre = une ligne saisie, avec son lien et sa date de
           vérification.
 Sortie  : `projets/sailingmore/site/stages.html` (appelée par `accueil_site.sortir_le_site`).
