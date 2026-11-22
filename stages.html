@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Stages de voile — Sailing More</title><link rel="canonical" href="https://sailingmore.fr/stages.html"><meta name="description" content="Stages et cours de voile vendus par des écoles européennes : prix publiés, destination, langue, lien direct vers la fiche de l'école."><style>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Stages de voile — Sailing More</title><link rel="canonical" href="https://sailingmore.fr/stages.html"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://sailingmore.fr/"},{"@type":"ListItem","position":2,"name":"Stages de voile","item":"https://sailingmore.fr/stages.html"}]}]}</script><meta name="description" content="Stages et cours de voile vendus par des écoles européennes : prix publiés, destination, langue, lien direct vers la fiche de l'école."><style>
 :root{--fond:#0a1a2b;--carte:#0f2438;--trait:#1d3549;--encre:#e8eef5;--doux:#9db2c7;--accent:#5fd3c4}
 *{box-sizing:border-box}
 body{margin:0;background:var(--fond);color:var(--encre);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
@@ -292,6 +292,10 @@ function remplir(){
   if(fl.value===''){fl.value=mem('langue', D.langues_presentes.indexOf(navLang)>=0?navLang:'');if(fl.value==='')fl.value='';}
   var fp=document.getElementById('f-pays');
   if(fp.value===''){var d=mem('pays',D.pays.some(function(p){return p[0]===defPays})?defPays:'');fp.value=d;}
+  /* les défauts se relâchent si le couple langue + destination ne laisse aucune offre */
+  var qp=fp.value,ql=fl.value;
+  function reste(lg,py){return D.offres.some(function(o){return (!lg||o.langue===lg)&&(!py||o.pays===py)})}
+  if(!reste(ql,qp)){if(reste('',qp))fl.value='';else if(reste(ql,''))fp.value='';else{fl.value='';fp.value=''}}
   var l=document.getElementById('langues');
   l.innerHTML=Object.keys(U).map(function(c){return '<button data-l="'+c+'" style="background:none;border:0;color:'+(c===L?'#5fd3c4':'#9db2c7')+';font:inherit;font-size:.8rem;cursor:pointer;padding:.1rem .25rem">'+c.toUpperCase()+'</button>'}).join('');
   [].forEach.call(l.querySelectorAll('button'),function(b){b.onclick=function(){L=b.dataset.l;try{localStorage.setItem('lang',L)}catch(e){}remplir();dessiner()}});
@@ -338,13 +342,16 @@ function dessiner(){
     if(q){var s=(o.titre+' '+o.ecole+' '+o.lieu+' '+o.pays_nom+' '+o.region).toLowerCase();if(s.indexOf(q)<0)return false}
     return true;
   });
-  var ordre=document.getElementById('f-tri').value;garde('tri',ordre);
+  var ordre=document.getElementById('f-tri').value;
   var sansPos=function(o){return (!POS||o.lat==null)?1:0};
+  var chezNous=function(o){return (defPays&&o.pays===defPays)?0:1};
   vus.sort(function(a,b){
     if(ordre==='prix')return ((a.prix_eur!=null?a.prix_eur:1e9)-(b.prix_eur!=null?b.prix_eur:1e9));
     if(ordre==='date')return ((a.debut||'9999')<(b.debut||'9999')?-1:(a.debut||'9999')>(b.debut||'9999')?1:0);
+    if(!POS){var ca=chezNous(a),cb=chezNous(b);if(ca!==cb)return ca-cb;
+      return ((a.debut||'9999')<(b.debut||'9999')?-1:(a.debut||'9999')>(b.debut||'9999')?1:0)}
     var sp=sansPos(a),sb=sansPos(b);if(sp!==sb)return sp-sb;
-    return (distance(a)||1e9)-(distance(b)||1e9);
+    var da=distance(a),db=distance(b);return (da==null?1e9:da)-(db==null?1e9:db);
   });
   var html=vus.map(function(o){
     var dates=!o.debut?t('dates_ecole'):(o.fin&&o.fin!==o.debut?t('du')+' '+dt(o.debut)+' '+t('au')+' '+dt(o.fin):dt(o.debut));
@@ -352,9 +359,9 @@ function dessiner(){
     var lng=o.langue?(D.langues[o.langue]||o.langue.toUpperCase()):'—';
     var d=distance(o);
     var loin=(d==null?'':(o.precision==='pays'?' · ~':' · ')+Math.round(d).toLocaleString(L)+' km');
-    var marque=o.langue&&o.langue_src==='pays'?' <span class="marque" title="'+esc(t('langue_supposee'))+'">?</span>':'';
+    var marque=o.langue&&(o.langue_src==='pays'||o.langue_src==='ecole')?' <span class="marque" title="'+esc(t('langue_supposee'))+'">?</span>':'';
     return '<article class="offre">'
-      +(o.image?'<img class="ph" loading="lazy" src="'+esc(o.image)+'" alt="">':'')
+      +(o.image?'<a class="phl" href="'+esc(o.lien)+'" rel="noopener nofollow" target="_blank" style="grid-column:1/-1"><img class="ph" loading="lazy" src="'+esc(o.image)+'" alt="'+esc(o.titre+' — '+o.ecole)+'"></a>':'')
       +'<div class="tete"><span class="badge" style="background:hsl('+teinte(o.ecole_slug)+',38%,22%);border:1px solid hsl('+teinte(o.ecole_slug)+',45%,34%)">'+esc(sigle(o.ecole))+'</span>'
       +'<div><h2>'+esc(o.titre)+'</h2>'
       +'<div class="ecole">'+esc(o.ecole)+(o.ecole_pays_nom?' · '+esc(o.ecole_pays_nom):'')+'</div></div></div>'
@@ -393,6 +400,7 @@ function dessiner(){
 }
 ['f-q','f-langue','f-pays','f-pays-ecole','f-ecole','f-type','f-niveau','f-quand','f-prix','f-tri'].forEach(function(i){
   var e=document.getElementById(i);if(e){e.addEventListener('input',dessiner);e.addEventListener('change',dessiner)}});
+document.getElementById('f-tri').addEventListener('change',function(){garde('tri',this.value)});
 remplir();dessiner();poserPosition();
 </script><!--mer-debut-->
 <div class="mer-fond" id="cadre">
