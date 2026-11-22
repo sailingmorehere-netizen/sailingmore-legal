@@ -1,0 +1,1077 @@
+{
+ "page": "bateaux.html",
+ "genere_par": "scripts/bateaux_page.py",
+ "bateaux": {
+  "x35": "Voilier Habitable X35",
+  "hobie16": "Catamaran Hobie 16 avec spi",
+  "laser": "Dériveur Laser",
+  "49er": "Skiff 49er",
+  "iqfoil": "Planche à voile iQFOiL",
+  "kite": "Kite Formula Kite",
+  "wing": "Wingfoil",
+  "imoca": "IMOCA",
+  "ultim": "Ultim"
+ },
+ "mots": {
+  "aile-avant": [
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-aile-avant",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "kite",
+    "ancre": "kite-aile-avant",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "wing",
+    "ancre": "wing-aile-avant",
+    "niveau": "essentiel"
+   }
+  ],
+  "aile-de-kite": [
+   {
+    "bateau": "kite",
+    "ancre": "kite-aile-de-kite",
+    "niveau": "essentiel"
+   }
+  ],
+  "aile-de-rappel": [
+   {
+    "bateau": "49er",
+    "ancre": "49er-aile-de-rappel",
+    "niveau": "essentiel"
+   }
+  ],
+  "aile-de-wing": [
+   {
+    "bateau": "wing",
+    "ancre": "wing-aile-de-wing",
+    "niveau": "essentiel"
+   }
+  ],
+  "balcon-avant": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-balcon-avant",
+    "niveau": "tout"
+   }
+  ],
+  "barre": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-barre",
+    "niveau": "essentiel"
+   }
+  ],
+  "barre-d-accouplement": [
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-barre-d-accouplement",
+    "niveau": "tout"
+   }
+  ],
+  "barre-de-fleche": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-barre-de-fleche",
+    "niveau": "tout"
+   }
+  ],
+  "barre-de-kite": [
+   {
+    "bateau": "kite",
+    "ancre": "kite-barre-de-kite",
+    "niveau": "essentiel"
+   }
+  ],
+  "barre-franche": [
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-barre-franche",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-barre-franche",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-barre-franche",
+    "niveau": "essentiel"
+   }
+  ],
+  "bastaque": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-bastaque",
+    "niveau": "tout"
+   }
+  ],
+  "bome": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-bome",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-bome",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-bome",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-bome",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-bome",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-bome",
+    "niveau": "essentiel"
+   }
+  ],
+  "bord-d-attaque": [
+   {
+    "bateau": "kite",
+    "ancre": "kite-bord-d-attaque",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "wing",
+    "ancre": "wing-bord-d-attaque",
+    "niveau": "essentiel"
+   }
+  ],
+  "bordure": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-bordure",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-bordure",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-bordure",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-bordure",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-bordure",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-bordure",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-bordure",
+    "niveau": "tout"
+   }
+  ],
+  "bout-dehors": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-bout-dehors",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-bout-dehors",
+    "niveau": "essentiel"
+   }
+  ],
+  "bras-de-liaison": [
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-bras-de-liaison",
+    "niveau": "essentiel"
+   }
+  ],
+  "bulbe": [
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-bulbe",
+    "niveau": "essentiel"
+   }
+  ],
+  "cale-pieds": [
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-cale-pieds",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "kite",
+    "ancre": "kite-cale-pieds",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "wing",
+    "ancre": "wing-cale-pieds",
+    "niveau": "essentiel"
+   }
+  ],
+  "capot": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-capot",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-capot",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-capot",
+    "niveau": "tout"
+   }
+  ],
+  "chaumard": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-chaumard",
+    "niveau": "tout"
+   }
+  ],
+  "chute": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-chute",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-chute",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-chute",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-chute",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-chute",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-chute",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-chute",
+    "niveau": "tout"
+   }
+  ],
+  "cockpit": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-cockpit",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-cockpit",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-cockpit",
+    "niveau": "essentiel"
+   }
+  ],
+  "coque": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-coque",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-coque",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-coque",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-coque",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-coque",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-coque",
+    "niveau": "essentiel"
+   }
+  ],
+  "cunningham": [
+   {
+    "bateau": "laser",
+    "ancre": "laser-cunningham",
+    "niveau": "essentiel"
+   }
+  ],
+  "derive-mobile": [
+   {
+    "bateau": "laser",
+    "ancre": "laser-derive-mobile",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-derive-mobile",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-derive-mobile",
+    "niveau": "essentiel"
+   }
+  ],
+  "dorade": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-dorade",
+    "niveau": "tout"
+   }
+  ],
+  "drisse": [
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-drisse",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-drisse",
+    "niveau": "tout"
+   }
+  ],
+  "ecoute": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-ecoute",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-ecoute",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-ecoute",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-ecoute",
+    "niveau": "tout"
+   }
+  ],
+  "etai": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-etai",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-etai",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-etai",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-etai",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-etai",
+    "niveau": "tout"
+   }
+  ],
+  "etambot": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-etambot",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-etambot",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-etambot",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-etambot",
+    "niveau": "tout"
+   }
+  ],
+  "etrave": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-etrave",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-etrave",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-etrave",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-etrave",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-etrave",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-etrave",
+    "niveau": "essentiel"
+   }
+  ],
+  "flotteur": [
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-flotteur",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "wing",
+    "ancre": "wing-flotteur",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-flotteur",
+    "niveau": "essentiel"
+   }
+  ],
+  "foc": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-foc",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-foc",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-foc",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-foc",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-foc",
+    "niveau": "essentiel"
+   }
+  ],
+  "foil": [
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-foil",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "kite",
+    "ancre": "kite-foil",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "wing",
+    "ancre": "wing-foil",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-foil",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-foil",
+    "niveau": "essentiel"
+   }
+  ],
+  "fuselage": [
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-fuselage",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "kite",
+    "ancre": "kite-fuselage",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "wing",
+    "ancre": "wing-fuselage",
+    "niveau": "tout"
+   }
+  ],
+  "grand-voile": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-grand-voile",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-grand-voile",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-grand-voile",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-grand-voile",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-grand-voile",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-grand-voile",
+    "niveau": "essentiel"
+   }
+  ],
+  "guindant": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-guindant",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-guindant",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-guindant",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-guindant",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-guindant",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-guindant",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-guindant",
+    "niveau": "tout"
+   }
+  ],
+  "guindeau": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-guindeau",
+    "niveau": "tout"
+   }
+  ],
+  "hale-bas": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-hale-bas",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-hale-bas",
+    "niveau": "tout"
+   }
+  ],
+  "harnais": [
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-harnais",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "kite",
+    "ancre": "kite-harnais",
+    "niveau": "essentiel"
+   }
+  ],
+  "hauban": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-hauban",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-hauban",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-hauban",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-hauban",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-hauban",
+    "niveau": "tout"
+   }
+  ],
+  "hublot": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-hublot",
+    "niveau": "tout"
+   }
+  ],
+  "latte": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-latte",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-latte",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-latte",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-latte",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-latte",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-latte",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-latte",
+    "niveau": "tout"
+   }
+  ],
+  "latte-centrale": [
+   {
+    "bateau": "wing",
+    "ancre": "wing-latte-centrale",
+    "niveau": "essentiel"
+   }
+  ],
+  "leash-d-aile": [
+   {
+    "bateau": "wing",
+    "ancre": "wing-leash-d-aile",
+    "niveau": "essentiel"
+   }
+  ],
+  "leash-de-planche": [
+   {
+    "bateau": "kite",
+    "ancre": "kite-leash-de-planche",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "wing",
+    "ancre": "wing-leash-de-planche",
+    "niveau": "essentiel"
+   }
+  ],
+  "lest": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-lest",
+    "niveau": "tout"
+   }
+  ],
+  "lignes": [
+   {
+    "bateau": "kite",
+    "ancre": "kite-lignes",
+    "niveau": "essentiel"
+   }
+  ],
+  "mat": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-mat",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-mat",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-mat",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-mat",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-mat",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-mat",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-mat",
+    "niveau": "essentiel"
+   }
+  ],
+  "mat-de-foil": [
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-mat-de-foil",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "kite",
+    "ancre": "kite-mat-de-foil",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "wing",
+    "ancre": "wing-mat-de-foil",
+    "niveau": "essentiel"
+   }
+  ],
+  "pataras": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-pataras",
+    "niveau": "essentiel"
+   }
+  ],
+  "pied-de-mat": [
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-pied-de-mat",
+    "niveau": "essentiel"
+   }
+  ],
+  "planche": [
+   {
+    "bateau": "kite",
+    "ancre": "kite-planche",
+    "niveau": "essentiel"
+   }
+  ],
+  "poignee": [
+   {
+    "bateau": "wing",
+    "ancre": "wing-poignee",
+    "niveau": "essentiel"
+   }
+  ],
+  "pont": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-pont",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-pont",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-pont",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-pont",
+    "niveau": "tout"
+   }
+  ],
+  "poulie": [
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-poulie",
+    "niveau": "tout"
+   }
+  ],
+  "quille": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-quille",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-quille",
+    "niveau": "essentiel"
+   }
+  ],
+  "rallonge-de-barre": [
+   {
+    "bateau": "laser",
+    "ancre": "laser-rallonge-de-barre",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-rallonge-de-barre",
+    "niveau": "tout"
+   }
+  ],
+  "safran": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-safran",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-safran",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-safran",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-safran",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-safran",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-safran",
+    "niveau": "essentiel"
+   }
+  ],
+  "sangle-de-rappel": [
+   {
+    "bateau": "laser",
+    "ancre": "laser-sangle-de-rappel",
+    "niveau": "tout"
+   }
+  ],
+  "sous-barbe": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-sous-barbe",
+    "niveau": "tout"
+   }
+  ],
+  "spinnaker": [
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-spinnaker",
+    "niveau": "essentiel"
+   }
+  ],
+  "stabilisateur": [
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-stabilisateur",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "kite",
+    "ancre": "kite-stabilisateur",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "wing",
+    "ancre": "wing-stabilisateur",
+    "niveau": "essentiel"
+   }
+  ],
+  "taquet": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-taquet",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-taquet",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "laser",
+    "ancre": "laser-taquet",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-taquet",
+    "niveau": "tout"
+   }
+  ],
+  "trampoline": [
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-trampoline",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "ultim",
+    "ancre": "ultim-trampoline",
+    "niveau": "tout"
+   }
+  ],
+  "trapeze": [
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-trapeze",
+    "niveau": "essentiel"
+   },
+   {
+    "bateau": "49er",
+    "ancre": "49er-trapeze",
+    "niveau": "essentiel"
+   }
+  ],
+  "traverse": [
+   {
+    "bateau": "hobie16",
+    "ancre": "hobie16-traverse",
+    "niveau": "essentiel"
+   }
+  ],
+  "voile": [
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-voile",
+    "niveau": "essentiel"
+   }
+  ],
+  "winch": [
+   {
+    "bateau": "x35",
+    "ancre": "x35-winch",
+    "niveau": "tout"
+   },
+   {
+    "bateau": "imoca",
+    "ancre": "imoca-winch",
+    "niveau": "tout"
+   }
+  ],
+  "wishbone": [
+   {
+    "bateau": "iqfoil",
+    "ancre": "iqfoil-wishbone",
+    "niveau": "essentiel"
+   }
+  ]
+ }
+}
