@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Essai — vidéo et schéma sur trois règles — Sailing More</title><style>
+:root{--nuit:#0a1a2b;--panneau:#0f2438;--ivoire:#eef3f7;--gris:#9db2c6;--rouge:#e23a3e}
+*{box-sizing:border-box}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:#071c31;color:var(--ivoire);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  line-height:1.6;-webkit-font-smoothing:antialiased}
+.page{max-width:64rem;margin:0 auto;padding:3.6rem 1.4rem 5rem}
+.haut{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+a.retour{color:var(--gris);text-decoration:none;font-size:.64rem;letter-spacing:.14em;
+  text-transform:uppercase;font-weight:500}
+a.retour:hover{color:#fff}
+.langues{display:flex;gap:.15rem;align-items:center}
+.langues button{background:none;border:0;color:var(--gris);font:inherit;font-size:.72rem;
+  padding:.2rem .45rem;border-radius:2px;cursor:pointer;letter-spacing:.04em}
+.langues button:hover{color:#fff}
+.langues button[aria-pressed="true"]{color:#fff;box-shadow:inset 0 -2px 0 var(--rouge)}
+h1{font-size:clamp(1.9rem,6vw,2.7rem);line-height:1.04;margin:1.6rem 0 0;letter-spacing:-.01em;
+  color:#fff;font-weight:300;text-transform:uppercase}
+h1::after{content:"";display:block;width:3.4rem;height:3px;background:var(--rouge);margin:1.3rem 0 1.6rem}
+.chapo{color:var(--gris);font-size:.95rem;max-width:38rem;margin:0 0 2.2rem}
+a{color:#fff;text-decoration:none}
+:focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+.panneau{background:#0a1f33;border:1px solid rgba(255,255,255,.09);border-radius:2px;
+  padding:0 1.2rem 1.4rem;margin:0 0 1rem;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.recherche{position:sticky;top:0;z-index:20;background:#0a1f33;
+  padding:.9rem 1.2rem 1rem;margin:0 -1.2rem .4rem}
+.champ{display:flex;align-items:center;gap:.6rem;background:var(--panneau);
+  border:1px solid rgba(255,255,255,.13);border-radius:3px;padding:.62rem .8rem}
+.champ:focus-within{border-color:rgba(226,58,62,.7)}
+.champ input{flex:1;background:none;border:0;color:var(--ivoire);font-size:.95rem;outline:none;
+  font-family:inherit;min-width:0}
+.champ input::placeholder{color:#7d92a6}
+.champ svg{flex:0 0 auto;opacity:.55}
+.filtres{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;margin-top:.7rem}
+.filtres .etiq{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:#8aa0b4;
+  margin-right:.2rem}
+.puce{font:inherit;font-size:.72rem;letter-spacing:.04em;color:var(--gris);background:none;
+  border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:.28rem .6rem;cursor:pointer}
+.puce:hover{color:#fff;border-color:rgba(255,255,255,.4)}
+.puce[aria-pressed="true"]{color:#fff;border-color:var(--rouge);background:rgba(226,58,62,.14);
+  font-weight:600}
+.puce[aria-pressed="true"]::before{content:"\2713\00a0"}
+@media (prefers-reduced-motion:no-preference){
+  .puce{transition:color .15s,border-color .15s,background .15s}}
+.actifs{display:none;flex-wrap:wrap;gap:.35rem;align-items:center;margin-top:.7rem;font-size:.72rem;
+  color:var(--gris)}
+.actifs.on{display:flex}
+.actifs button{font:inherit;font-size:.72rem;color:#fff;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.3);border-radius:2px;padding:.2rem .5rem;cursor:pointer}
+.actifs button::after{content:"\00a0\00d7"}
+.actifs button.tout{border-style:dashed}
+.actifs button.tout::after{content:""}
+.compte{color:var(--gris);font-size:.72rem;letter-spacing:.06em;margin:.9rem 0 .2rem}
+.compte b{color:#fff;font-weight:500}
+
+.groupe{margin:0 0 2.2rem}
+.groupe h2{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gris);
+  font-weight:500;margin:0 0 .2rem;padding-top:1rem;border-top:1px solid rgba(226,58,62,.22)}
+.groupe h2 span{color:#8aa0b4;letter-spacing:.1em;margin-left:.5rem}
+.regle{padding:.95rem 0 .9rem .9rem;border-bottom:1px solid rgba(255,255,255,.07);
+  border-left:3px solid transparent;scroll-margin-top:9rem}
+.regle:hover{background:rgba(255,255,255,.025)}
+.regle:target{border-left-color:var(--rouge);background:rgba(226,58,62,.06)}
+.regle h3{margin:0;font-size:1.05rem;font-weight:500;color:#fff;line-height:1.35}
+.regle h3 a:hover{text-decoration:underline;text-decoration-color:rgba(226,58,62,.7);
+  text-underline-offset:.25em}
+.regle .num{display:inline-block;min-width:4.6rem;color:var(--gris);font-size:.72rem;
+  letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.regle .resume{margin:.3rem 0 0;color:#c9d6e2;font-size:.92rem;max-width:44rem}
+.regle details{margin:.55rem 0 0;max-width:44rem;border-left:2px solid rgba(255,255,255,.14);
+  padding:0 0 0 .8rem}
+.regle summary{cursor:pointer;color:var(--gris);font-size:.78rem;letter-spacing:.04em}
+.regle summary:hover{color:#fff}
+.regle details p{margin:.35rem 0 0;color:#c9d6e2;font-size:.88rem}
+.regle details b{color:#fff;font-weight:600}
+.regle .renvois,.regle .sanction{margin:.5rem 0 0;color:#8aa0b4;font-size:.74rem;letter-spacing:.03em}
+.regle .renvois a{color:var(--gris);text-decoration:underline;text-underline-offset:.2em;
+  margin-right:.6rem}
+.regle .renvois a:hover{color:#fff}
+.regle .sanction b{color:var(--gris);font-weight:600}
+.vide{padding:3rem 0;color:var(--gris);font-size:.9rem}
+.pied{margin-top:3.6rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,.09);
+  color:#8aa0b4;font-size:.72rem;line-height:1.8}
+.pied a{color:var(--gris);text-decoration:underline;text-underline-offset:.2em}
+
+@media (prefers-color-scheme:light){
+  /* La page garde sa nuit : le contraste est tenu par les couleurs ci-dessus (>= 4,5:1 sur #0a1f33). */
+  :root{color-scheme:dark}
+}
+@media (max-width:640px){
+  .page{padding:2.4rem 1rem 4rem}
+  .recherche{padding:.7rem 0 .8rem}
+  .filtres .etiq{width:100%}
+  .regle{padding-left:.6rem;scroll-margin-top:12rem}
+  .regle .num{display:block;min-width:0}
+}
+
+.video{margin:1rem 0 .2rem;border:1px solid rgba(255,255,255,.12);background:#08192b}
+.video iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.lecture{position:relative;display:flex;align-items:center;justify-content:center;gap:.75rem;
+  width:100%;aspect-ratio:16/9;background:
+    repeating-linear-gradient(115deg,rgba(255,255,255,.035) 0 2px,transparent 2px 11px),
+    radial-gradient(120% 120% at 30% 20%,#12344f 0%,#08192b 70%);
+  border:0;color:#fff;font:inherit;cursor:pointer}
+.lecture .rond{width:3.2rem;height:3.2rem;border-radius:50%;background:rgba(226,58,62,.92);
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.lecture:hover .rond{background:#e23a3e;transform:scale(1.04)}
+.lecture .txt{text-align:left;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+  color:#d6e5f1;line-height:1.5}
+.lecture .txt small{display:block;letter-spacing:.04em;text-transform:none;color:#8aa0b4;font-size:.68rem}
+.credit{font-size:.67rem;color:#7d92a6;margin:.45rem 0 0;letter-spacing:.02em}
+.credit a{color:#cfe0ee;text-decoration:underline;text-decoration-color:rgba(226,58,62,.6)}
+.schema{margin:1.1rem 0 .3rem;background:#0a1f33;border:1px solid rgba(255,255,255,.08);padding:.7rem}
+.schema svg{display:block;width:100%;height:auto}
+.schema figcaption{font-size:.66rem;color:#8aa0b4;margin-top:.55rem;line-height:1.5}
+.note{font-size:.72rem;color:#8aa0b4;border-left:3px solid rgba(226,58,62,.5);padding:.1rem 0 .1rem .8rem;
+  margin:2rem 0 0;max-width:42rem}
+.regle{background:#0a1f33;border:1px solid rgba(255,255,255,.09);padding:1.1rem 1.2rem 1.3rem;
+  margin:0 0 1.2rem;border-left:3px solid rgba(226,58,62,.55)}
+.regle h3{font-size:1.25rem}
+.regle .num{color:#8aa0b4;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;display:block;
+  margin-bottom:.15rem}
+</style></head><body><div class="page"><div class="haut"><a class="retour" href="regles-de-course.html">Règles de course</a></div><h1>Essai : vidéo et schéma</h1><p class="chapo">Trois règles, trois cartes complètes : le texte, une vidéo de moins de deux minutes, un schéma, un exemple. La vidéo ne se charge qu'au clic — avant, aucune requête ne part vers YouTube. Page d'essai, non indexée : elle ne remplace pas la page des règles.</p><article class="regle" id="r10"><h3><span class="num">Règle 10</span>Sur des amures opposées</h3><p class="resume">Quand deux bateaux sont sur des amures opposées, celui qui reçoit le vent par bâbord doit s&#x27;écarter de celui qui le reçoit par tribord. C&#x27;est la règle de priorité la plus connue : tribord passe, bâbord évite la collision.</p><div class="video" data-video="5rS5GpzEOYY"><button type="button" class="lecture" aria-label="Lire la vidéo de la règle 10 (1 min, en anglais)"><span class="rond" aria-hidden="true"><svg width="16" height="18" viewBox="0 0 16 18" fill="#fff"><path d="M1 1.2v15.6L15 9z"/></svg></span><span class="txt">Voir la vidéo<small>1 min · en anglais</small></span></button></div><p class="credit">Sailing Kiwi, 2026 · « Don&#x27;t Get Penalized — The Sailing Rule Most Beginners Get Wrong » · <a href="https://www.youtube.com/watch?v=5rS5GpzEOYY" rel="noopener nofollow">ouvrir sur YouTube</a> · chargée seulement au clic</p><figure class="schema">
+<svg viewBox="0 0 480 250" role="img" aria-labelledby="s10t">
+  <title id="s10t">Règle 10 : sur des amures opposées, le bateau bâbord amures s'écarte.</title>
+  <defs>
+    <marker id="a10" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8aa0b4"/>
+    </marker>
+    <marker id="a10r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#e23a3e"/>
+    </marker>
+  </defs>
+  <g stroke="#8aa0b4" stroke-width="1.6" marker-end="url(#a10)" opacity=".7">
+    <line x1="60" y1="22" x2="60" y2="54"/><line x1="240" y1="22" x2="240" y2="54"/>
+    <line x1="420" y1="22" x2="420" y2="54"/>
+  </g>
+  <text x="240" y="14" fill="#8aa0b4" font-size="12" text-anchor="middle" letter-spacing="3">VENT</text>
+
+  <line x1="306" y1="100" x2="135" y2="100" stroke="#eef3f7" stroke-width="2"
+        marker-end="url(#a10)" opacity=".85"/>
+  <g transform="translate(330,100) rotate(-90) scale(1.9)"><path d="M0,-16 L3.6,-7 L3.6,11 L-3.6,11 L-3.6,-7 Z" fill="#eef3f7" stroke="none" stroke-width=".7"/><path d="M0,-13 C 8,-6 9,4 3,10 Z" fill="#b9cad8"/><path d="M0,-9 C -4,-3 -4,4 0,9 Z" fill="#cfe0ee"/></g>
+  <circle cx="330" cy="58" r="13" fill="#eef3f7"/><text x="330" y="62.8" fill="#08192b" font-size="14" font-weight="700" text-anchor="middle">A</text>
+
+  <path d="M150,190 C 215,208 275,204 315,214" fill="none" stroke="#e23a3e" stroke-width="2"
+        stroke-dasharray="6 5" marker-end="url(#a10r)"/>
+  <g transform="translate(120,200) rotate(45) scale(1.9)"><path d="M0,-16 L3.6,-7 L3.6,11 L-3.6,11 L-3.6,-7 Z" fill="#e23a3e" stroke="none" stroke-width=".7"/><path d="M0,-13 C 8,-6 9,4 3,10 Z" fill="#c94346"/><path d="M0,-9 C -4,-3 -4,4 0,9 Z" fill="#a32024"/></g>
+  <circle cx="120" cy="158" r="13" fill="#e23a3e"/><text x="120" y="162.8" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">B</text>
+</svg><figcaption>A, tribord amures, garde sa route ; B, bâbord amures, doit s&#x27;écarter — il vire ou passe derrière. Personne n&#x27;est dispensé d&#x27;éviter l&#x27;abordage (règles 10 et 14).</figcaption></figure><details><summary>Exemple</summary><p>Vous remontez au près, tribord amures, vers la bouée au vent. Un autre voilier arrive en face, bâbord amures, et sa route croise la vôtre quelques longueurs devant votre étrave.</p><p><b>Issue :</b> Le bateau bâbord amures doit s&#x27;écarter, en virant de bord ou en passant derrière vous ; vous gardez votre route, mais vous devez quand même éviter le contact si l&#x27;autre ne s&#x27;écarte pas.</p></details></article><article class="regle" id="r18"><h3><span class="num">Règle 18</span>Place à la marque</h3><p class="resume">Quand deux bateaux doivent laisser une marque du même côté et que l&#x27;un d&#x27;eux est dans la zone (trois longueurs de coque), celui qui est à l&#x27;extérieur doit donner à l&#x27;autre la place de passer. Ce qui compte, c&#x27;est la situation au moment où le premier bateau entre dans la zone.</p><div class="video" data-video="AiLKmHfAYiE"><button type="button" class="lecture" aria-label="Lire la vidéo de la règle 18 (1 min 15, en anglais)"><span class="rond" aria-hidden="true"><svg width="16" height="18" viewBox="0 0 16 18" fill="#fff"><path d="M1 1.2v15.6L15 9z"/></svg></span><span class="txt">Voir la vidéo<small>1 min 15 · en anglais</small></span></button></div><p class="credit">Sailing Kiwi, 2026 · « You Rounded the Mark Wrong: Room to Round vs Room to Sail » · <a href="https://www.youtube.com/watch?v=AiLKmHfAYiE" rel="noopener nofollow">ouvrir sur YouTube</a> · chargée seulement au clic</p><figure class="schema">
+<svg viewBox="0 0 480 240" role="img" aria-labelledby="s18t">
+  <title id="s18t">Règle 18 : dans la zone, l'extérieur laisse la place à la marque à l'intérieur.</title>
+  <text x="8" y="24" fill="#8aa0b4" font-size="12">zone = 3 longueurs de coque</text>
+  <circle cx="240" cy="90" r="68" fill="rgba(238,243,247,.03)" stroke="#8aa0b4" stroke-width="1.4"
+          stroke-dasharray="7 6"/>
+  <circle cx="240" cy="90" r="9" fill="#e23a3e"/>
+  <text x="258" y="94" fill="#8aa0b4" font-size="12">la marque</text>
+
+  <g transform="translate(214,126) rotate(4) scale(1.9)"><path d="M0,-16 L3.6,-7 L3.6,11 L-3.6,11 L-3.6,-7 Z" fill="#eef3f7" stroke="none" stroke-width=".7"/><path d="M0,-13 C 8,-6 9,4 3,10 Z" fill="#b9cad8"/><path d="M0,-9 C -4,-3 -4,4 0,9 Z" fill="#cfe0ee"/></g>
+  <circle cx="176" cy="126" r="13" fill="#eef3f7"/><text x="176" y="130.8" fill="#08192b" font-size="14" font-weight="700" text-anchor="middle">A</text>
+
+  <g transform="translate(300,184) rotate(4) scale(1.9)"><path d="M0,-16 L3.6,-7 L3.6,11 L-3.6,11 L-3.6,-7 Z" fill="#8aa0b4" stroke="none" stroke-width=".7"/><path d="M0,-13 C 8,-6 9,4 3,10 Z" fill="#9db2c6"/><path d="M0,-9 C -4,-3 -4,4 0,9 Z" fill="#6f8ba1"/></g>
+  <circle cx="340" cy="184" r="13" fill="#8aa0b4"/><text x="340" y="188.8" fill="#08192b" font-size="14" font-weight="700" text-anchor="middle">B</text>
+</svg><figcaption>A est à l&#x27;intérieur : B, à l&#x27;extérieur, doit lui laisser la place de passer la marque. La zone se mesure à trois longueurs de coque, et c&#x27;est la situation au moment où le premier bateau y entre qui compte.</figcaption></figure><details><summary>Exemple</summary><p>Au portant, deux bateaux sur la même amure approchent la bouée sous le vent, à laisser à bâbord. A est côté bouée, B à l&#x27;extérieur, et ils sont engagés quand le premier entre dans la zone.</p><p><b>Issue :</b> B, à l&#x27;extérieur, doit donner à A la place à la marque, jusqu&#x27;à ce qu&#x27;elle l&#x27;ait laissée derrière elle, même si l&#x27;engagement se rompt ensuite.</p></details></article><article class="regle" id="r44"><h3><span class="num">Règle 44</span>Pénalités au moment de l&#x27;incident</h3><p class="resume">Un bateau qui a pu enfreindre une règle de la partie 2 peut prendre sur l&#x27;eau une pénalité de deux tours ; pour la règle 31, un seul tour suffit. Les instructions de course peuvent la remplacer par une pénalité de points. Si le bateau a causé un dommage sérieux ou une blessure, ou a tiré un avantage important malgré la pénalité, la pénalité est l&#x27;abandon.</p><div class="video" data-video="Tlk798UfvVo"><button type="button" class="lecture" aria-label="Lire la vidéo de la règle 44 (1 min 29, en anglais)"><span class="rond" aria-hidden="true"><svg width="16" height="18" viewBox="0 0 16 18" fill="#fff"><path d="M1 1.2v15.6L15 9z"/></svg></span><span class="txt">Voir la vidéo<small>1 min 29 · en anglais</small></span></button></div><p class="credit">Sailing Kiwi, 2026 · « How to Correctly Execute a One-Turn Penalty (Step-by-Step) » · <a href="https://www.youtube.com/watch?v=Tlk798UfvVo" rel="noopener nofollow">ouvrir sur YouTube</a> · chargée seulement au clic</p><figure class="schema">
+<svg viewBox="0 0 480 250" role="img" aria-labelledby="s44t">
+  <title id="s44t">Règle 44 : un tour complet compte un virement et un empannage.</title>
+  <defs>
+    <marker id="a44" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#e23a3e"/>
+    </marker>
+  </defs>
+  <g fill="#8aa0b4" font-size="12.5" text-anchor="end">
+    <text x="168" y="112">deux tours</text><text x="168" y="130">pour la partie 2</text>
+    <text x="168" y="158">un seul tour</text><text x="168" y="176">pour la règle 31</text>
+  </g>
+  <circle cx="250" cy="128" r="70" fill="none" stroke="#8aa0b4" stroke-width="1.4"
+          stroke-dasharray="7 6" opacity=".8"/>
+  <path d="M250,58 A70,70 0 1,1 246,58" fill="none" stroke="#e23a3e" stroke-width="2.2"
+        marker-end="url(#a44)"/>
+  <text x="250" y="34" fill="#e23a3e" font-size="13" text-anchor="middle">virement</text>
+  <text x="250" y="226" fill="#e23a3e" font-size="13" text-anchor="middle">empannage</text>
+
+  <g transform="translate(322,128) rotate(90) scale(1.9)"><path d="M0,-16 L3.6,-7 L3.6,11 L-3.6,11 L-3.6,-7 Z" fill="#eef3f7" stroke="none" stroke-width=".7"/><path d="M0,-13 C 8,-6 9,4 3,10 Z" fill="#b9cad8"/><path d="M0,-9 C -4,-3 -4,4 0,9 Z" fill="#cfe0ee"/></g>
+  <text x="352" y="124" fill="#eef3f7" font-size="13">départ</text>
+  <text x="352" y="142" fill="#8aa0b4" font-size="11.5">le bateau pénalisé</text>
+</svg><figcaption>Un tour = un virement et un empannage, dans le même sens et sans s&#x27;arrêter. Deux tours pour une règle de la partie 2, un seul pour avoir touché une marque.</figcaption></figure><details><summary>Exemple</summary><p>Au près, vous êtes bâbord amures et vous coupez la route d&#x27;un bateau tribord amures, qui doit abattre pour vous éviter. Vous comprenez que c&#x27;est vous qui auriez dû vous écarter.</p><p><b>Issue :</b> Dès que vous êtes bien dégagé des autres bateaux, vous faites deux tours dans le même sens, chacun avec un virement et un empannage, puis vous reprenez la course ; sauf dommage sérieux ou avantage important, l&#x27;affaire est réglée.</p></details></article><p class="note">Les vidéos appartiennent à leurs auteurs et restent chez YouTube : la page les affiche, elle ne les héberge pas. Elles expliquent la règle en anglais ; seule l'édition 2025-2028 du texte officiel fait foi. Les schémas sont dessinés par Sailing More.</p></div><script>
+document.querySelectorAll('.video').forEach(function(v){
+  var b = v.querySelector('.lecture'); if(!b) return;
+  b.addEventListener('click', function(){
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/' + v.dataset.video + '?autoplay=1&rel=0&modestbranding=1';
+    f.title = b.getAttribute('aria-label') || 'Vidéo';
+    f.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen';
+    f.allowFullscreen = true;
+    f.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    v.replaceChildren(f);
+  });
+});
+</script></body></html>
