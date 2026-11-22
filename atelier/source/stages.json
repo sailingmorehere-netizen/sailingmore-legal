@@ -1,0 +1,1264 @@
+{
+ "ecoles": {
+  "glenans": {
+   "nom": "Les Glénans",
+   "pays": "FRA",
+   "url": "https://www.glenans.asso.fr/stages",
+   "langue": "fr",
+   "note": "La plus grande école de croisière d'Europe."
+  },
+  "zeezeil": {
+   "nom": "Zeezeilschool Scheveningen",
+   "pays": "NLD",
+   "url": "https://zeezeilschool.nl/alle-cursussen/",
+   "langue": "nl",
+   "note": "École de dériveur et de croisière côtière aux Pays-Bas, certifiée CWO."
+  },
+  "rubicon3": {
+   "nom": "Rubicon 3",
+   "pays": "GBR",
+   "url": "https://www.rubicon3adventure.com/",
+   "langue": "en",
+   "note": "Traversées et expéditions, équipage débutant accepté."
+  }
+ },
+ "offres": [
+  {
+   "ecole": "glenans",
+   "titre": "Certificat Restreint Radiotelephoniste",
+   "zone": "Île-de-France",
+   "pays_stage": "FRA",
+   "lieu": "Paris",
+   "niveau": "debutant",
+   "duree_jours": 1,
+   "prix": 110.0,
+   "devise": "EUR",
+   "sessions": [],
+   "lien": "https://www.glenans.asso.fr/stages/certificat-restreint-radiotelephoniste--01t0Y0000099a0uQAA?location=a070Y000003aCheQAE",
+   "reservation_en_ligne": false,
+   "type": "croisiere",
+   "verifie": "2026-11-22",
+   "prix_eur": 110
+  },
+  {
+   "ecole": "glenans",
+   "titre": "Navigation Niveau 1",
+   "zone": "Île-de-France",
+   "pays_stage": "FRA",
+   "lieu": "Paris",
+   "niveau": "debutant",
+   "duree_jours": 2,
+   "prix": 150.0,
+   "devise": "EUR",
+   "sessions": [],
+   "lien": "https://www.glenans.asso.fr/stages/navigation-niveau-1--01t0Y0000099a1sQAA?location=a070Y000003aCheQAE",
+   "reservation_en_ligne": false,
+   "type": "croisiere",
+   "verifie": "2026-11-22",
+   "prix_eur": 150
+  },
+  {
+   "ecole": "glenans",
+   "titre": "Extension Hauturiere",
+   "zone": "Île-de-France",
+   "pays_stage": "FRA",
+   "lieu": "Paris",
+   "niveau": "debutant",
+   "duree_jours": 2,
+   "prix": 420.0,
+   "devise": "EUR",
+   "sessions": [],
+   "lien": "https://www.glenans.asso.fr/stages/extension-hauturiere--01t0Y0000099ZvEQAU?location=a070Y000003aCheQAE",
+   "reservation_en_ligne": false,
+   "type": "croisiere",
+   "verifie": "2026-11-22",
+   "prix_eur": 420
+  },
+  {
+   "ecole": "glenans",
+   "titre": "Permis Option Cotiere",
+   "zone": "Île-de-France",
+   "pays_stage": "FRA",
+   "lieu": "Paris",
+   "niveau": "debutant",
+   "duree_jours": 1,
+   "prix": 505.0,
+   "devise": "EUR",
+   "sessions": [],
+   "lien": "https://www.glenans.asso.fr/stages/permis-option-cotiere--01t0Y0000099ZusQAE?location=a070Y000003aCheQAE",
+   "reservation_en_ligne": false,
+   "type": "croisiere",
+   "verifie": "2026-11-22",
+   "prix_eur": 505
+  },
+  {
+   "ecole": "glenans",
+   "titre": "Decouverte Croisiere Cotiere",
+   "zone": "Méditerranée",
+   "pays_stage": "FRA",
+   "lieu": "Sete",
+   "niveau": "debutant",
+   "duree_jours": 7,
+   "prix": 565.0,
+   "devise": "EUR",
+   "sessions": [],
+   "lien": "https://www.glenans.asso.fr/stages/decouverte-croisiere-cotiere--01t0Y0000099a0jQAA?location=a070Y000003aCLJQA2",
+   "reservation_en_ligne": false,
+   "type": "croisiere",
+   "verifie": "2026-11-22",
+   "prix_eur": 565
+  },
+  {
+   "ecole": "glenans",
+   "titre": "Specialisation Manoeuvres",
+   "zone": "Méditerranée",
+   "pays_stage": "FRA",
+   "lieu": "Sete",
+   "niveau": "confirme",
+   "duree_jours": 7,
+   "prix": 590.75,
+   "devise": "EUR",
+   "sessions": [],
+   "lien": "https://www.glenans.asso.fr/stages/specialisation-manoeuvres--01t0Y0000099a1AQAQ?location=a070Y000003aCLJQA2",
+   "reservation_en_ligne": false,
+   "type": "croisiere",
+   "verifie": "2026-11-22",
+   "prix_eur": 591
+  },
+  {
+   "ecole": "glenans",
+   "titre": "Grenadines",
+   "zone": "Antilles",
+   "pays_stage": "LCA",
+   "lieu": "Antilles",
+   "niveau": "confirme",
+   "duree_jours": 13,
+   "prix": 1320.0,
+   "devise": "EUR",
+   "sessions": [],
+   "lien": "https://www.glenans.asso.fr/stages/grenadines--01t0Y0000099a0wQAA?location=a070Y00000D4pflQAB",
+   "reservation_en_ligne": false,
+   "type": "croisiere",
+   "verifie": "2026-11-22",
+   "prix_eur": 1320
+  },
+  {
+   "ecole": "glenans",
+   "titre": "Antigua",
+   "zone": "Antilles",
+   "pays_stage": "ATG",
+   "lieu": "Antilles",
+   "niveau": "debutant",
+   "duree_jours": 13,
+   "prix": 1320.0,
+   "devise": "EUR",
+   "sessions": [],
+   "lien": "https://www.glenans.asso.fr/stages/antigua--01t0Y0000099ZycQAE?location=a070Y00000D4pflQAB",
+   "reservation_en_ligne": false,
+   "type": "croisiere",
+   "verifie": "2026-11-22",
+   "prix_eur": 1320
+  },
+  {
+   "ecole": "glenans",
+   "titre": "Martinique",
+   "zone": "Antilles",
+   "pays_stage": "MTQ",
+   "lieu": "Antilles",
+   "niveau": "debutant",
+   "duree_jours": 13,
+   "prix": 1320.0,
+   "devise": "EUR",
+   "sessions": [],
+   "lien": "https://www.glenans.asso.fr/stages/martinique--01t0Y0000099a1cQAA?location=a070Y00000D4pflQAB",
+   "reservation_en_ligne": false,
+   "type": "croisiere",
+   "verifie": "2026-11-22",
+   "prix_eur": 1320
+  },
+  {
+   "ecole": "glenans",
+   "titre": "Saint Barthelemy",
+   "zone": "Antilles",
+   "pays_stage": "BLM",
+   "lieu": "Antilles",
+   "niveau": "confirme",
+   "duree_jours": 13,
+   "prix": 1320.0,
+   "devise": "EUR",
+   "sessions": [],
+   "lien": "https://www.glenans.asso.fr/stages/saint-barthelemy--01t0Y0000099ZyiQAE?location=a070Y00000D4pflQAB",
+   "reservation_en_ligne": false,
+   "type": "croisiere",
+   "verifie": "2026-11-22",
+   "prix_eur": 1320
+  },
+  {
+   "ecole": "rubicon3",
+   "titre": "Caribbean Offshore 1000: St Lucia to Dominican Republic",
+   "zone": "Antilles",
+   "pays_stage": "LCA",
+   "lieu": "Caribbean Offshore 1000",
+   "niveau": "intermediaire",
+   "type": "croisiere",
+   "duree_jours": 12,
+   "prix": 2399.0,
+   "devise": "GBP",
+   "sessions": [
+    {
+     "debut": "2027-04-12",
+     "fin": "2027-04-23",
+     "lien": "https://www.rubicon3adventure.com/product/caribbean-offshore-1000/?attribute_dates=Monday+12th+April+2027+-+Friday+23rd+April+2027"
+    },
+    {
+     "debut": "2027-04-12",
+     "fin": "2027-04-23",
+     "lien": "https://www.rubicon3adventure.com/product/caribbean-offshore-1000/?attribute_dates=Monday+12th+April+2027+-+Friday+23rd+April+2027#r3dpt-waitlist"
+    },
+    {
+     "debut": "2028-04-10",
+     "fin": "2028-04-21",
+     "lien": "https://www.rubicon3adventure.com/product/caribbean-offshore-1000/?attribute_dates=Monday+10th+April+2028+-+Friday+21st+April+2028"
+    }
+   ],
+   "lien": "https://www.rubicon3adventure.com/product/caribbean-offshore-1000/?attribute_dates=Monday+12th+April+2027+-+Friday+23rd+April+2027",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 2864
+  },
+  {
+   "ecole": "rubicon3",
+   "titre": "Caribbean Christmas & New Year Sailing: The Grenadines",
+   "zone": "Antilles",
+   "pays_stage": "LCA",
+   "lieu": "Caribbean Christmas & New Year Sailing",
+   "niveau": "intermediaire",
+   "type": "croisiere",
+   "duree_jours": 11,
+   "prix": 2499.0,
+   "devise": "GBP",
+   "sessions": [
+    {
+     "debut": "2026-12-23",
+     "fin": "2027-01-02",
+     "lien": "https://www.rubicon3adventure.com/product/christmas-new-year-eve-sailing-holiday/?attribute_dates=Wednesday+23rd+December+2026+-+Saturday+2nd+January+2027"
+    },
+    {
+     "debut": "2027-12-23",
+     "fin": "2028-01-02",
+     "lien": "https://www.rubicon3adventure.com/product/christmas-new-year-eve-sailing-holiday/?attribute_dates=Thursday+23rd+December+2027+-+Sunday+02nd+January+2028"
+    }
+   ],
+   "lien": "https://www.rubicon3adventure.com/product/christmas-new-year-eve-sailing-holiday/?attribute_dates=Wednesday+23rd+December+2026+-+Saturday+2nd+January+2027",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 2984
+  },
+  {
+   "ecole": "rubicon3",
+   "titre": "The Mystery Islands of the Caribbean",
+   "zone": "Antilles",
+   "pays_stage": "LCA",
+   "lieu": "The Mystery Islands of the Caribbean",
+   "niveau": "intermediaire",
+   "type": "croisiere",
+   "duree_jours": 10,
+   "prix": 2549.0,
+   "devise": "GBP",
+   "sessions": [
+    {
+     "debut": "2027-02-02",
+     "fin": "2027-02-11",
+     "lien": "https://www.rubicon3adventure.com/product/mystery-islands-caribbean/?attribute_dates=Tuesday+02nd+February+2027+-+Thursday+11th+February+2027"
+    },
+    {
+     "debut": "2027-02-02",
+     "fin": "2027-02-11",
+     "lien": "https://www.rubicon3adventure.com/product/mystery-islands-caribbean/?attribute_dates=Tuesday+02nd+February+2027+-+Thursday+11th+February+2027#r3dpt-waitlist"
+    },
+    {
+     "debut": "2027-03-16",
+     "fin": "2027-03-25",
+     "lien": "https://www.rubicon3adventure.com/product/mystery-islands-caribbean/?attribute_dates=Tuesday+16th+March+2027+-+Thursday+25th+March+2027"
+    },
+    {
+     "debut": "2028-02-01",
+     "fin": "2028-02-10",
+     "lien": "https://www.rubicon3adventure.com/product/mystery-islands-caribbean/?attribute_dates=Tuesday+1st+February+2028+-+Thursday+10th+February+2028"
+    },
+    {
+     "debut": "2028-03-14",
+     "fin": "2028-03-23",
+     "lien": "https://www.rubicon3adventure.com/product/mystery-islands-caribbean/?attribute_dates=Tuesday+14th+March+2028+-+Thursday+23rd+March+2028"
+    }
+   ],
+   "lien": "https://www.rubicon3adventure.com/product/mystery-islands-caribbean/?attribute_dates=Tuesday+02nd+February+2027+-+Thursday+11th+February+2027",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 3044
+  },
+  {
+   "ecole": "rubicon3",
+   "titre": "St Maarten Regatta",
+   "zone": "Antilles",
+   "pays_stage": "SXM",
+   "lieu": "St Maarten Regatta",
+   "niveau": "intermediaire",
+   "type": "croisiere",
+   "duree_jours": 10,
+   "prix": 2649.0,
+   "devise": "GBP",
+   "sessions": [
+    {
+     "debut": "2027-03-02",
+     "fin": "2027-03-11",
+     "lien": "https://www.rubicon3adventure.com/product/st-maarten-regatta/?attribute_dates=Tuesday+2nd+March+2027+-+Thursday+11th+March+2027"
+    },
+    {
+     "debut": "2028-02-29",
+     "fin": "2028-03-10",
+     "lien": "https://www.rubicon3adventure.com/product/st-maarten-regatta/?attribute_dates=Tuesday+29th+February+2028+-+Friday+10th+March+2028"
+    }
+   ],
+   "lien": "https://www.rubicon3adventure.com/product/st-maarten-regatta/?attribute_dates=Tuesday+2nd+March+2027+-+Thursday+11th+March+2027",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 3163
+  },
+  {
+   "ecole": "rubicon3",
+   "titre": "RORC Caribbean 600",
+   "zone": "Antilles",
+   "pays_stage": "LCA",
+   "lieu": "RORC Caribbean 600",
+   "niveau": "intermediaire",
+   "type": "croisiere",
+   "duree_jours": 9,
+   "prix": 2699.0,
+   "devise": "GBP",
+   "sessions": [
+    {
+     "debut": "2027-02-19",
+     "fin": "2027-02-27",
+     "lien": "https://www.rubicon3adventure.com/product/rorc-caribbean-600/?attribute_dates=Friday+19th+February+2027+-+Saturday+27th+February+2027"
+    },
+    {
+     "debut": "2027-02-19",
+     "fin": "2027-02-27",
+     "lien": "https://www.rubicon3adventure.com/product/rorc-caribbean-600/?attribute_dates=Friday+19th+February+2027+-+Saturday+27th+February+2027#r3dpt-waitlist"
+    },
+    {
+     "debut": "2028-02-18",
+     "fin": "2028-02-26",
+     "lien": "https://www.rubicon3adventure.com/product/rorc-caribbean-600/?attribute_dates=Friday+18th+February+2028+-+Saturday+26th+February+2028"
+    }
+   ],
+   "lien": "https://www.rubicon3adventure.com/product/rorc-caribbean-600/?attribute_dates=Friday+19th+February+2027+-+Saturday+27th+February+2027",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 3223
+  },
+  {
+   "ecole": "rubicon3",
+   "titre": "Sail Across the Atlantic Using Celestial Navigation",
+   "zone": "Atlantique",
+   "pays_stage": "GBR",
+   "lieu": "Sail Across the Atlantic Using Celestial",
+   "niveau": "confirme",
+   "type": "traversee",
+   "duree_jours": 36,
+   "prix": 6499.0,
+   "devise": "GBP",
+   "sessions": [
+    {
+     "debut": "2027-04-02",
+     "fin": "2027-05-07",
+     "lien": "https://www.rubicon3adventure.com/product/atlantic-crossing-celestial-navigation/?attribute_dates=Friday+02nd+April+2027+-+Friday+7th+May+2027"
+    },
+    {
+     "debut": "2027-04-02",
+     "fin": "2027-05-07",
+     "lien": "https://www.rubicon3adventure.com/product/atlantic-crossing-celestial-navigation/?attribute_dates=Friday+02nd+April+2027+-+Friday+7th+May+2027#r3dpt-waitlist"
+    },
+    {
+     "debut": "2028-03-31",
+     "fin": "2028-05-05",
+     "lien": "https://www.rubicon3adventure.com/product/atlantic-crossing-celestial-navigation/?attribute_dates=Friday+31st+March+2028+-+Friday+5th+May+2028"
+    }
+   ],
+   "lien": "https://www.rubicon3adventure.com/product/atlantic-crossing-celestial-navigation/?attribute_dates=Friday+02nd+April+2027+-+Friday+7th+May+2027",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 7760
+  },
+  {
+   "ecole": "rubicon3",
+   "titre": "Sail the Atlantic in the ARC",
+   "zone": "Atlantique",
+   "pays_stage": "GBR",
+   "lieu": "Sail the Atlantic in the ARC",
+   "niveau": "confirme",
+   "type": "traversee",
+   "duree_jours": 31,
+   "prix": 6799.0,
+   "devise": "GBP",
+   "sessions": [
+    {
+     "debut": "2026-11-18",
+     "fin": "2026-12-18",
+     "lien": "https://www.rubicon3adventure.com/product/sail-the-atlantic-in-the-arc/?attribute_dates=Wednesday+18th+November+2026+-+Friday+18th+December+2026"
+    },
+    {
+     "debut": "2026-11-18",
+     "fin": "2026-12-18",
+     "lien": "https://www.rubicon3adventure.com/product/sail-the-atlantic-in-the-arc/?attribute_dates=Wednesday+18th+November+2026+-+Friday+18th+December+2026#r3dpt-waitlist"
+    },
+    {
+     "debut": "2027-11-17",
+     "fin": "2027-12-17",
+     "lien": "https://www.rubicon3adventure.com/product/sail-the-atlantic-in-the-arc/?attribute_dates=Wednesday+17th+November+2027+-+Friday+17th+December+2027"
+    },
+    {
+     "debut": "2028-11-15",
+     "fin": "2028-12-15",
+     "lien": "https://www.rubicon3adventure.com/product/sail-the-atlantic-in-the-arc/?attribute_dates=Wednesday+15th+November+2028+-+Friday+15th+December+2028"
+    }
+   ],
+   "lien": "https://www.rubicon3adventure.com/product/sail-the-atlantic-in-the-arc/?attribute_dates=Wednesday+18th+November+2026+-+Friday+18th+December+2026",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 8118
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Avondzeilen",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Scheveningen",
+   "niveau": "debutant",
+   "type": "apprentissage",
+   "duree_jours": 1,
+   "prix": 120.0,
+   "prix_max": 120.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2026-11-24",
+     "fin": "2026-11-24",
+     "prix": 120.0
+    }
+   ],
+   "nb_sessions": 1,
+   "lien": "https://zeezeilschool.nl/cwo/avondzeilen/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 120,
+   "prix_max_eur": 120
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Dagzeilen",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Scheveningen",
+   "niveau": "debutant",
+   "type": "apprentissage",
+   "duree_jours": 1,
+   "prix": 195.0,
+   "prix_max": 210.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2026-11-24",
+     "fin": "2026-11-24",
+     "prix": 195.0
+    },
+    {
+     "debut": "2027-03-13",
+     "fin": "2027-03-13",
+     "prix": 195.0
+    },
+    {
+     "debut": "2027-04-08",
+     "fin": "2027-04-08",
+     "prix": 195.0
+    },
+    {
+     "debut": "2027-04-20",
+     "fin": "2027-04-20",
+     "prix": 195.0
+    },
+    {
+     "debut": "2027-05-01",
+     "fin": "2027-05-01",
+     "prix": 195.0
+    },
+    {
+     "debut": "2027-05-13",
+     "fin": "2027-05-13",
+     "prix": 195.0
+    },
+    {
+     "debut": "2027-05-27",
+     "fin": "2027-05-27",
+     "prix": 195.0
+    },
+    {
+     "debut": "2027-06-17",
+     "fin": "2027-06-17",
+     "prix": 210.0
+    },
+    {
+     "debut": "2027-06-26",
+     "fin": "2027-06-26",
+     "prix": 210.0
+    },
+    {
+     "debut": "2027-07-10",
+     "fin": "2027-07-10",
+     "prix": 210.0
+    },
+    {
+     "debut": "2027-07-24",
+     "fin": "2027-07-24",
+     "prix": 210.0
+    },
+    {
+     "debut": "2027-08-05",
+     "fin": "2027-08-05",
+     "prix": 210.0
+    }
+   ],
+   "nb_sessions": 12,
+   "lien": "https://zeezeilschool.nl/cwo/dagzeilen/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 195,
+   "prix_max_eur": 210
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Rya Eerste Hulp",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Amsterdam",
+   "niveau": "intermediaire",
+   "type": "apprentissage",
+   "duree_jours": 1,
+   "prix": 215.0,
+   "prix_max": 225.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2026-12-03",
+     "fin": "2026-12-03",
+     "prix": 225.0
+    },
+    {
+     "debut": "2026-12-18",
+     "fin": "2026-12-18",
+     "prix": 225.0
+    },
+    {
+     "debut": "2027-01-10",
+     "fin": "2027-01-10",
+     "prix": 215.0
+    },
+    {
+     "debut": "2027-01-17",
+     "fin": "2027-01-17",
+     "prix": 215.0
+    },
+    {
+     "debut": "2027-01-22",
+     "fin": "2027-01-22",
+     "prix": 215.0
+    },
+    {
+     "debut": "2027-02-07",
+     "fin": "2027-02-07",
+     "prix": 215.0
+    },
+    {
+     "debut": "2027-02-12",
+     "fin": "2027-02-12",
+     "prix": 215.0
+    },
+    {
+     "debut": "2027-02-19",
+     "fin": "2027-02-19",
+     "prix": 215.0
+    },
+    {
+     "debut": "2027-02-28",
+     "fin": "2027-02-28",
+     "prix": 215.0
+    },
+    {
+     "debut": "2027-03-12",
+     "fin": "2027-03-12",
+     "prix": 215.0
+    },
+    {
+     "debut": "2027-03-21",
+     "fin": "2027-03-21",
+     "prix": 215.0
+    },
+    {
+     "debut": "2027-03-26",
+     "fin": "2027-03-26",
+     "prix": 215.0
+    }
+   ],
+   "nb_sessions": 36,
+   "lien": "https://zeezeilschool.nl/course/rya-eerste-hulp/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 215,
+   "prix_max_eur": 225
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Rya Dieselcursus",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Amsterdam",
+   "niveau": "intermediaire",
+   "type": "apprentissage",
+   "duree_jours": 1,
+   "prix": 235.0,
+   "prix_max": 350.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2026-11-28",
+     "fin": "2026-11-28",
+     "prix": 350.0
+    },
+    {
+     "debut": "2026-12-06",
+     "fin": "2026-12-06",
+     "prix": 350.0
+    },
+    {
+     "debut": "2026-12-20",
+     "fin": "2026-12-20",
+     "prix": 350.0
+    },
+    {
+     "debut": "2027-01-03",
+     "fin": "2027-01-03",
+     "prix": 235.0
+    },
+    {
+     "debut": "2027-01-24",
+     "fin": "2027-01-24",
+     "prix": 235.0
+    },
+    {
+     "debut": "2027-01-30",
+     "fin": "2027-01-30",
+     "prix": 235.0
+    },
+    {
+     "debut": "2027-02-14",
+     "fin": "2027-02-14",
+     "prix": 235.0
+    },
+    {
+     "debut": "2027-02-26",
+     "fin": "2027-02-26",
+     "prix": 235.0
+    },
+    {
+     "debut": "2027-03-14",
+     "fin": "2027-03-14",
+     "prix": 235.0
+    },
+    {
+     "debut": "2027-03-27",
+     "fin": "2027-03-27",
+     "prix": 235.0
+    },
+    {
+     "debut": "2027-04-17",
+     "fin": "2027-04-17",
+     "prix": 235.0
+    },
+    {
+     "debut": "2027-04-30",
+     "fin": "2027-04-30",
+     "prix": 235.0
+    }
+   ],
+   "nb_sessions": 27,
+   "lien": "https://zeezeilschool.nl/course/rya-dieselcursus/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 235,
+   "prix_max_eur": 350
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Rya Src | Gmdss",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Amsterdam / Huizen / Scheveningen",
+   "niveau": "intermediaire",
+   "type": "apprentissage",
+   "duree_jours": 1,
+   "prix": 285.0,
+   "prix_max": 350.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2026-11-27",
+     "fin": "2026-11-27",
+     "prix": 350.0
+    },
+    {
+     "debut": "2026-12-19",
+     "fin": "2026-12-19",
+     "prix": 350.0
+    },
+    {
+     "debut": "2027-01-09",
+     "fin": "2027-01-09",
+     "prix": 285.0
+    },
+    {
+     "debut": "2027-01-23",
+     "fin": "2027-01-23",
+     "prix": 285.0
+    },
+    {
+     "debut": "2027-01-29",
+     "fin": "2027-01-29",
+     "prix": 285.0
+    },
+    {
+     "debut": "2027-02-13",
+     "fin": "2027-02-13",
+     "prix": 285.0
+    },
+    {
+     "debut": "2027-02-20",
+     "fin": "2027-02-20",
+     "prix": 285.0
+    },
+    {
+     "debut": "2027-02-27",
+     "fin": "2027-02-27",
+     "prix": 285.0
+    },
+    {
+     "debut": "2027-03-13",
+     "fin": "2027-03-13",
+     "prix": 285.0
+    },
+    {
+     "debut": "2027-03-19",
+     "fin": "2027-03-19",
+     "prix": 285.0
+    },
+    {
+     "debut": "2027-04-03",
+     "fin": "2027-04-03",
+     "prix": 285.0
+    },
+    {
+     "debut": "2027-04-11",
+     "fin": "2027-04-11",
+     "prix": 285.0
+    }
+   ],
+   "nb_sessions": 36,
+   "lien": "https://zeezeilschool.nl/course/rya-src-gmdss/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 285,
+   "prix_max_eur": 350
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Cwo I-Weekend",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Scheveningen",
+   "niveau": "debutant",
+   "type": "apprentissage",
+   "duree_jours": 3,
+   "prix": 675.0,
+   "prix_max": 675.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2026-10-30",
+     "fin": "2026-11-01",
+     "prix": 675.0
+    }
+   ],
+   "nb_sessions": 1,
+   "lien": "https://zeezeilschool.nl/cwo/cwo-i-weekend/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 675,
+   "prix_max_eur": 675
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Cwo Ii-Weekend",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Scheveningen",
+   "niveau": "debutant",
+   "type": "apprentissage",
+   "duree_jours": 3,
+   "prix": 695.0,
+   "prix_max": 695.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2027-03-26",
+     "fin": "2027-03-28",
+     "prix": 695.0
+    },
+    {
+     "debut": "2027-05-28",
+     "fin": "2027-05-30",
+     "prix": 695.0
+    }
+   ],
+   "nb_sessions": 2,
+   "lien": "https://zeezeilschool.nl/cwo/cwo-ii-weekend/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 695,
+   "prix_max_eur": 695
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Rya Competent Crew Weekend",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Scheveningen",
+   "niveau": "debutant",
+   "type": "apprentissage",
+   "duree_jours": 3,
+   "prix": 720.0,
+   "prix_max": 795.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2027-03-19",
+     "fin": "2027-03-21",
+     "prix": 720.0
+    },
+    {
+     "debut": "2027-03-26",
+     "fin": "2027-03-28",
+     "prix": 720.0
+    },
+    {
+     "debut": "2027-04-02",
+     "fin": "2027-04-04",
+     "prix": 720.0
+    },
+    {
+     "debut": "2027-04-09",
+     "fin": "2027-04-11",
+     "prix": 720.0
+    },
+    {
+     "debut": "2027-04-16",
+     "fin": "2027-04-18",
+     "prix": 720.0
+    },
+    {
+     "debut": "2027-04-23",
+     "fin": "2027-04-25",
+     "prix": 720.0
+    },
+    {
+     "debut": "2027-05-14",
+     "fin": "2027-05-16",
+     "prix": 720.0
+    },
+    {
+     "debut": "2027-05-15",
+     "fin": "2027-05-17",
+     "prix": 720.0
+    },
+    {
+     "debut": "2027-05-28",
+     "fin": "2027-05-30",
+     "prix": 720.0
+    },
+    {
+     "debut": "2027-06-11",
+     "fin": "2027-06-13",
+     "prix": 795.0
+    },
+    {
+     "debut": "2027-06-18",
+     "fin": "2027-06-20",
+     "prix": 795.0
+    },
+    {
+     "debut": "2027-07-16",
+     "fin": "2027-07-18",
+     "prix": 795.0
+    }
+   ],
+   "nb_sessions": 14,
+   "lien": "https://zeezeilschool.nl/course/rya-competent-crew-weekend-2/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 720,
+   "prix_max_eur": 795
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Rya Powerboat Level 2",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Medemblik",
+   "niveau": "intermediaire",
+   "type": "apprentissage",
+   "duree_jours": 2,
+   "prix": 795.0,
+   "prix_max": 795.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2027-03-17",
+     "fin": "2027-03-18",
+     "prix": 795.0
+    },
+    {
+     "debut": "2027-03-31",
+     "fin": "2027-04-01",
+     "prix": 795.0
+    },
+    {
+     "debut": "2027-04-13",
+     "fin": "2027-04-14",
+     "prix": 795.0
+    },
+    {
+     "debut": "2027-04-28",
+     "fin": "2027-04-29",
+     "prix": 795.0
+    },
+    {
+     "debut": "2027-06-09",
+     "fin": "2027-06-10",
+     "prix": 795.0
+    },
+    {
+     "debut": "2027-07-06",
+     "fin": "2027-07-07",
+     "prix": 795.0
+    },
+    {
+     "debut": "2027-07-28",
+     "fin": "2027-07-29",
+     "prix": 795.0
+    },
+    {
+     "debut": "2027-08-05",
+     "fin": "2027-08-06",
+     "prix": 795.0
+    },
+    {
+     "debut": "2027-09-15",
+     "fin": "2027-09-16",
+     "prix": 795.0
+    }
+   ],
+   "nb_sessions": 9,
+   "lien": "https://zeezeilschool.nl/course/rya-powerboat-niveau-2/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 795,
+   "prix_max_eur": 795
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Cwo I 5-Daagse Live-Aboard",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Scheveningen",
+   "niveau": "debutant",
+   "type": "apprentissage",
+   "duree_jours": 5,
+   "prix": 850.0,
+   "prix_max": 950.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2027-04-26",
+     "fin": "2027-04-30",
+     "prix": 850.0
+    },
+    {
+     "debut": "2027-07-05",
+     "fin": "2027-07-09",
+     "prix": 950.0
+    }
+   ],
+   "nb_sessions": 2,
+   "lien": "https://zeezeilschool.nl/cwo/cwo-i-5-daagse-live-aboard/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 850,
+   "prix_max_eur": 950
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Cwo Ii 5-Daagse Live-Aboard",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Scheveningen",
+   "niveau": "debutant",
+   "type": "apprentissage",
+   "duree_jours": 5,
+   "prix": 915.0,
+   "prix_max": 1015.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2027-04-26",
+     "fin": "2027-04-30",
+     "prix": 915.0
+    },
+    {
+     "debut": "2027-07-05",
+     "fin": "2027-07-09",
+     "prix": 1015.0
+    }
+   ],
+   "nb_sessions": 2,
+   "lien": "https://zeezeilschool.nl/cwo/cwo-ii-5-daagse-live-aboard/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 915,
+   "prix_max_eur": 1015
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Rya Competent Crew",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Scheveningen Sat 16:00",
+   "niveau": "debutant",
+   "type": "apprentissage",
+   "duree_jours": 5,
+   "prix": 995.0,
+   "prix_max": 1095.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2027-03-08",
+     "fin": "2027-03-12",
+     "prix": 995.0
+    },
+    {
+     "debut": "2027-03-14",
+     "fin": "2027-03-18",
+     "prix": 995.0
+    },
+    {
+     "debut": "2027-04-28",
+     "fin": "2027-05-02",
+     "prix": 995.0
+    },
+    {
+     "debut": "2027-06-02",
+     "fin": "2027-06-06",
+     "prix": 1095.0
+    },
+    {
+     "debut": "2027-06-16",
+     "fin": "2027-06-20",
+     "prix": 1095.0
+    },
+    {
+     "debut": "2027-06-21",
+     "fin": "2027-06-25",
+     "prix": 1095.0
+    },
+    {
+     "debut": "2027-06-30",
+     "fin": "2027-07-04",
+     "prix": 1095.0
+    },
+    {
+     "debut": "2027-07-09",
+     "fin": "2027-07-13",
+     "prix": 1095.0
+    },
+    {
+     "debut": "2027-07-19",
+     "fin": "2027-07-23",
+     "prix": 1095.0
+    },
+    {
+     "debut": "2027-08-04",
+     "fin": "2027-08-08",
+     "prix": 1095.0
+    }
+   ],
+   "nb_sessions": 10,
+   "lien": "https://zeezeilschool.nl/course/rya-competent-crew/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 995,
+   "prix_max_eur": 1095
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Cwo Iii 5-Daagse Live-Aboard",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Scheveningen",
+   "niveau": "intermediaire",
+   "type": "apprentissage",
+   "duree_jours": 5,
+   "prix": 995.0,
+   "prix_max": 1095.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2027-04-26",
+     "fin": "2027-04-30",
+     "prix": 995.0
+    },
+    {
+     "debut": "2027-07-05",
+     "fin": "2027-07-09",
+     "prix": 1095.0
+    }
+   ],
+   "nb_sessions": 2,
+   "lien": "https://zeezeilschool.nl/cwo/cwo-iii-5-daagse-live-aboard/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 995,
+   "prix_max_eur": 1095
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Rya Dayskipper",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Scheveningen Sat 16:00",
+   "niveau": "intermediaire",
+   "type": "apprentissage",
+   "duree_jours": 5,
+   "prix": 1050.0,
+   "prix_max": 1150.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2027-03-08",
+     "fin": "2027-03-12",
+     "prix": 1050.0
+    },
+    {
+     "debut": "2027-03-14",
+     "fin": "2027-03-18",
+     "prix": 1050.0
+    },
+    {
+     "debut": "2027-04-28",
+     "fin": "2027-05-02",
+     "prix": 1050.0
+    },
+    {
+     "debut": "2027-05-13",
+     "fin": "2027-05-17",
+     "prix": 1050.0
+    },
+    {
+     "debut": "2027-06-02",
+     "fin": "2027-06-06",
+     "prix": 1150.0
+    },
+    {
+     "debut": "2027-06-16",
+     "fin": "2027-06-20",
+     "prix": 1150.0
+    },
+    {
+     "debut": "2027-06-21",
+     "fin": "2027-06-25",
+     "prix": 1150.0
+    },
+    {
+     "debut": "2027-06-30",
+     "fin": "2027-07-04",
+     "prix": 1150.0
+    },
+    {
+     "debut": "2027-07-09",
+     "fin": "2027-07-13",
+     "prix": 1150.0
+    },
+    {
+     "debut": "2027-07-19",
+     "fin": "2027-07-23",
+     "prix": 1150.0
+    },
+    {
+     "debut": "2027-08-04",
+     "fin": "2027-08-08",
+     "prix": 1150.0
+    }
+   ],
+   "nb_sessions": 11,
+   "lien": "https://zeezeilschool.nl/course/rya-dayskipper/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 1050,
+   "prix_max_eur": 1150
+  },
+  {
+   "ecole": "zeezeil",
+   "titre": "Cwo Iv 5-Daagse Live-Aboard",
+   "zone": "Pays-Bas",
+   "pays_stage": "NLD",
+   "lieu": "Scheveningen",
+   "niveau": "confirme",
+   "type": "apprentissage",
+   "duree_jours": 5,
+   "prix": 1050.0,
+   "prix_max": 1150.0,
+   "devise": "EUR",
+   "sessions": [
+    {
+     "debut": "2027-04-26",
+     "fin": "2027-04-29",
+     "prix": 1050.0
+    },
+    {
+     "debut": "2027-07-05",
+     "fin": "2027-07-09",
+     "prix": 1150.0
+    }
+   ],
+   "nb_sessions": 2,
+   "lien": "https://zeezeilschool.nl/cwo/cwo-iv-5-daagse-live-aboard/",
+   "reservation_en_ligne": true,
+   "verifie": "2026-11-22",
+   "prix_eur": 1050,
+   "prix_max_eur": 1150
+  }
+ ],
+ "releve": "2026-11-22",
+ "taux": {
+  "EUR": 1.0,
+  "GBP": 1.194,
+  "CHF": 1.084
+ }
+}
