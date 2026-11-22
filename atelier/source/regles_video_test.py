@@ -93,16 +93,14 @@ def _badge(x: float, y: float, lettre: str, fond: str = "#eef3f7", texte: str = 
             f'text-anchor="middle">{lettre}</text>')
 
 
-def _bateau(x: float, y: float, angle: float, coque: str, v1: str, v2: str,
-            bord: str = "none") -> str:
-    """Bateau vu de dessus, assez gros pour rester lisible sur un téléphone."""
-    return (f'<g transform="translate({x},{y}) rotate({angle}) scale(1.9)">'
-            # coque vue de dessus : étrave pointue, tableau arrière droit
-            f'<path d="M0,-16 L3.6,-7 L3.6,11 L-3.6,11 L-3.6,-7 Z" fill="{coque}" stroke="{bord}" '
-            f'stroke-width=".7"/>'
-            # grand-voile et foc, de part et d'autre du mât
-            f'<path d="M0,-13 C 8,-6 9,4 3,10 Z" fill="{v1}"/>'
-            f'<path d="M0,-9 C -4,-3 -4,4 0,9 Z" fill="{v2}"/>'
+def _bateau(x: float, y: float, coque: str, gv: str, foc: str, echelle: float = 1.7) -> str:
+    """Voilier de profil : à 40 px, c'est la seule silhouette qui se lit tout de suite comme un bateau.
+    Le cap est donné par les flèches, pas par la rotation du pictogramme."""
+    return (f'<g transform="translate({x},{y}) scale({echelle})">'
+            f'<path d="M-11,3 Q0,12 11,3 L8.5,-1 L-8.5,-1 Z" fill="{coque}"/>'
+            '<line x1="0" y1="-1" x2="0" y2="-15" stroke="{}" stroke-width="1.1"/>'.format(coque)
+            + f'<path d="M0.8,-14 L0.8,-2.5 L9,-2.5 Z" fill="{gv}"/>'
+            f'<path d="M-1,-12 L-1,-2.5 L-7.5,-2.5 Z" fill="{foc}"/>'
             "</g>")
 
 
@@ -126,12 +124,12 @@ def schema_10() -> str:
 
   <line x1="306" y1="100" x2="135" y2="100" stroke="#eef3f7" stroke-width="2"
         marker-end="url(#a10)" opacity=".85"/>
-  {_bateau(330, 100, -90, "#eef3f7", "#b9cad8", "#cfe0ee")}
+  {_bateau(330, 100, "#eef3f7", "#b9cad8", "#cfe0ee")}
   {_badge(330, 58, "A")}
 
   <path d="M150,190 C 215,208 275,204 315,214" fill="none" stroke="#e23a3e" stroke-width="2"
         stroke-dasharray="6 5" marker-end="url(#a10r)"/>
-  {_bateau(120, 200, 45, "#e23a3e", "#c94346", "#a32024")}
+  {_bateau(120, 200, "#e23a3e", "#f08b8d", "#c94346")}
   {_badge(120, 158, "B", "#e23a3e", "#ffffff")}
 </svg>"""
 
@@ -151,12 +149,12 @@ def schema_18() -> str:
   <circle cx="240" cy="90" r="9" fill="#e23a3e"/>
   <text x="258" y="94" fill="#8aa0b4" font-size="12">la marque</text>
 
-  {_bateau(214, 126, 4, "#eef3f7", "#b9cad8", "#cfe0ee")}
+  {_bateau(214, 126, "#eef3f7", "#b9cad8", "#cfe0ee")}
   {_badge(176, 126, "A")}
 
   <path d="M318,182 C 306,168 300,150 296,140" fill="none" stroke="#8aa0b4" stroke-width="1.8"
         stroke-dasharray="5 5" marker-end="url(#a18)"/>
-  {_bateau(334,198, -28, "#8aa0b4", "#9db2c6", "#6f8ba1")}
+  {_bateau(334, 198, "#8aa0b4", "#c3d3df", "#9db2c6")}
   {_badge(374, 198, "B", "#8aa0b4", "#08192b")}
 </svg>"""
 
@@ -181,7 +179,7 @@ def schema_44() -> str:
   <text x="250" y="34" fill="#e23a3e" font-size="13" text-anchor="middle">virement</text>
   <text x="250" y="226" fill="#e23a3e" font-size="13" text-anchor="middle">empannage</text>
 
-  {_bateau(322,128, 90, "#eef3f7", "#b9cad8", "#cfe0ee")}
+  {_bateau(322, 128, "#eef3f7", "#b9cad8", "#cfe0ee")}
   <text x="352" y="124" fill="#eef3f7" font-size="13">départ</text>
   <text x="352" y="142" fill="#8aa0b4" font-size="11.5">le bateau pénalisé</text>
 </svg>"""
@@ -270,4 +268,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
+    sys.exit(0)
