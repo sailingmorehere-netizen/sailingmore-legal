@@ -816,7 +816,7 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
   .cookies a{{color:var(--eau);text-decoration:none;margin-left:.35rem}}
   .cookies button{{background:var(--eau);color:#06202a;border:0;border-radius:.55rem;
     padding:.45rem .85rem;font:inherit;font-weight:600;cursor:pointer;white-space:nowrap}}
-  .cookies[hidden]{{display:none}}
+  body #cookies[hidden]{{display:none!important}}
   body:has(#cookies:not([hidden])) footer{{padding-bottom:6rem}}
   footer{{border-top:1px solid rgba(126,214,214,.14);margin-top:6.5rem;padding:2.4rem 1.4rem 2.4rem;
     display:flex;flex-wrap:wrap;gap:.6rem 1.3rem;justify-content:center;color:var(--gris);font-size:.84rem}}

@@ -1,0 +1,60 @@
+/* Rééquilibrage design — 20/11/2026. Posé en dernier dans chaque page : il l'emporte sur les styles d'origine. */
+
+/* 1. Une police de marque, la même sur tous les appareils (Inter, licence SIL OFL, hébergée sur le site) */
+@font-face{font-family:"Inter SM";src:url(fonts/inter-light.woff) format("woff");font-weight:300;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-regular.woff) format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-semibold.woff) format("woff");font-weight:500 700;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-black.woff) format("woff");font-weight:800 900;font-display:swap}
+body,button,input,textarea,select{font-family:"Inter SM",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+
+/* 2. Les couleurs de la charte : marine, panneaux, crème, rouge. Le turquoise et l'or rentrent dans le rang. */
+:root{--eau:#f4efe4;--ambre:#f4efe4}
+.grand b{color:#f4efe4!important}
+
+/* 3. « Le rouge souligne, il n'écrit pas » */
+.accroche .rouge{color:inherit!important;text-decoration:underline;text-decoration-color:#e23a3e;
+  text-decoration-thickness:2px;text-underline-offset:.24em}
+.bulle i,.bulle i span{color:#f4efe4!important}
+.bulle{border-left:2px solid #e23a3e!important}
+
+/* 4. « Filets droits, rien de franchement arrondi » */
+.cadre,.carte-kit,.planisphere,.bulle,.carte-jeu,.cookies,.cookies button,.langues button,
+.anneau,.anneau img,.vignette img{border-radius:0!important}
+.cadre,.carte-kit,.carte-jeu{background-image:none!important;background-color:#0f2438!important;
+  border:1px solid rgba(244,239,228,.12)!important;box-shadow:none!important}
+.anneau{background:rgba(244,239,228,.22)!important}
+
+/* 5. Rien sous 12 px : le cœur de cible a souvent plus de 50 ans */
+.grand span,.tarif-ce,.tarif-notes,.kit-note,label span,.bulle b,.bulle i,.bulle i span,
+figcaption strong,figcaption span:not(.siecle),.retour,.ann-carte,.page h2,.date,.geste,.bouton span{font-size:12px!important}
+.siecle{font-size:11px!important;color:rgba(195,214,230,.75)!important}
+
+/* 6. Réseaux en crème, couleur d'origine au survol */
+.reseau svg{filter:grayscale(1) brightness(2.4);transition:filter .2s}
+.reseau:hover svg,.reseau:focus-visible svg{filter:none}
+
+/* 7. Bandeau cookies : une ligne fine sous l'en-tête, dans le vide du haut de page, qui ne cache plus les chiffres */
+.cookies{top:3.4rem!important;bottom:auto!important;left:50%!important;right:auto!important;transform:translateX(-50%);
+  width:max-content;max-width:calc(100% - 1.2rem)!important;margin:0!important;display:flex!important;align-items:center;gap:.9rem;
+  padding:.45rem .55rem .45rem .9rem!important;font-size:12px!important;line-height:1.35;background:#0f2438!important;
+  border:1px solid rgba(244,239,228,.15)!important;border-left:2px solid #e23a3e!important;box-shadow:none!important;animation:none!important}
+.cookies[hidden]{display:none!important}
+.cookies p{margin:0!important}
+.cookies button{flex:none;background:transparent!important;color:#f4efe4!important;border:1px solid #e23a3e!important;
+  padding:.35rem .8rem!important;font-size:12px!important;margin:0!important}
+.cookies a{text-decoration:underline;text-decoration-color:#e23a3e}
+body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
+
+/* 8. En-tête mobile : le nom sur une ligne */
+.entete .nom{white-space:nowrap}
+@media (max-width:480px){
+  .entete .nom{font-size:.72rem;letter-spacing:.1em}
+  .langues button{padding-left:.3rem!important;padding-right:.3rem!important}
+  .accroche{padding:0 1.2rem}
+  .cookies{top:auto!important;bottom:.6rem!important;left:.6rem!important;right:.6rem!important;transform:none;width:auto;
+    max-width:none!important;gap:.6rem;padding:.4rem .45rem .4rem .7rem!important;font-size:11.5px!important}
+  .cookies button{padding:.3rem .6rem!important}
+}
+
+/* 9. Un seul style de titre pour les pages secondaires */
+.page h1{font-weight:300;text-transform:uppercase;letter-spacing:.02em}
