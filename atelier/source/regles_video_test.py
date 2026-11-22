@@ -138,6 +138,11 @@ def schema_10() -> str:
 def schema_18() -> str:
     return f"""
 <svg viewBox="0 0 480 240" role="img" aria-labelledby="s18t">
+  <defs>
+    <marker id="a18" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8aa0b4"/>
+    </marker>
+  </defs>
   <title id="s18t">Règle 18 : dans la zone, l'extérieur laisse la place à la marque à l'intérieur.</title>
   <text x="8" y="24" fill="#8aa0b4" font-size="12">zone = 3 longueurs de coque</text>
   <circle cx="240" cy="90" r="68" fill="rgba(238,243,247,.03)" stroke="#8aa0b4" stroke-width="1.4"
@@ -148,8 +153,10 @@ def schema_18() -> str:
   {_bateau(214, 126, 4, "#eef3f7", "#b9cad8", "#cfe0ee")}
   {_badge(176, 126, "A")}
 
-  {_bateau(300,184, 4, "#8aa0b4", "#9db2c6", "#6f8ba1")}
-  {_badge(340, 184, "B", "#8aa0b4", "#08192b")}
+  <path d="M318,182 C 306,168 300,150 296,140" fill="none" stroke="#8aa0b4" stroke-width="1.8"
+        stroke-dasharray="5 5" marker-end="url(#a18)"/>
+  {_bateau(334,198, -28, "#8aa0b4", "#9db2c6", "#6f8ba1")}
+  {_badge(374, 198, "B", "#8aa0b4", "#08192b")}
 </svg>"""
 
 
