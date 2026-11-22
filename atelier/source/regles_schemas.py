@@ -94,17 +94,17 @@ def etapes_10() -> list[str]:
     C'est la grammaire du Case Book de World Sailing : une image, les traces, et le bateau qui
     n'a pas la priorité dessiné en pointillé à l'endroit où il serait allé s'il avait tenu son cap.
     """
-    corps = (
-        # trace de A, franche, vers la gauche
-        _fleche("M292,54 L40,54", COQUE_A, "A", True)
-        # ce que B aurait fait sans s'écarter : fin pointillé qui coupe la route de A
-        + '<path d="M52,116 L268,104" fill="none" stroke="#5b7c96" stroke-width="1.2" '
-        'stroke-dasharray="2 6" opacity=".75"/>'
-        # trace réelle de B, qui s'écarte et passe derrière A
-        + _fleche("M52,116 C 130,132 210,132 296,126", COQUE_B, "B")
-        + _bateau(252, 54, COQUE_A, GV_A, FOC_A) + _badge(280, 34, "A", COQUE_A)
-        + _bateau(64, 116, COQUE_B, GV_B, FOC_B) + _badge(40, 136, "B", COQUE_B, "#fff")
-    )
+    corps = "".join([
+        # A tient son cap : trace pleine, vers le haut à gauche
+        _fleche("M300,112 L120,40", COQUE_A, "A", True),
+        # ce que B aurait fait en tenant son cap : pointillé qui coupe la trace de A
+        '<path d="M56,110 L250,30" fill="none" stroke="#5b7c96" stroke-width="1.2" '
+        'stroke-dasharray="2 6" opacity=".8"/>',
+        # B s'écarte : sa trace s'aplatit et passe derrière A
+        _fleche("M56,110 C 130,132 220,134 300,126", COQUE_B, "B"),
+        _bateau(258, 94, COQUE_A, GV_A, FOC_A), _badge(284, 72, "A", COQUE_A),
+        _bateau(62, 112, COQUE_B, GV_B, FOC_B), _badge(38, 132, "B", COQUE_B, "#fff"),
+    ])
     return [_panneau(corps, {"A": COQUE_A, "B": COQUE_B})]
 
 
