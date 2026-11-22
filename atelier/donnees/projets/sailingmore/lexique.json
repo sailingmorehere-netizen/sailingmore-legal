@@ -1,0 +1,1835 @@
+{
+  "langues": ["fr", "en", "it", "es", "pt", "de"],
+  "themes": [
+    {
+      "cle": "bateau",
+      "nom": {"fr": "Le bateau", "en": "The boat", "it": "La barca", "es": "El barco", "pt": "O barco", "de": "Das Boot"},
+      "termes": [
+        {
+          "cle": "coque",
+          "mot": {"fr": "coque", "en": "hull", "it": "scafo", "es": "casco", "pt": "casco", "de": "Rumpf"},
+          "def": {
+            "fr": "La coque est le corps du bateau, la partie qui flotte et qui protège l'intérieur de l'eau.",
+            "en": "The hull is the body of the boat, the part that floats and keeps the water out of the interior.",
+            "it": "Lo scafo è il corpo della barca, la parte che galleggia e protegge l'interno dall'acqua.",
+            "es": "El casco es el cuerpo del barco, la parte que flota y protege el interior del agua.",
+            "pt": "O casco é o corpo do barco, a parte que flutua e protege o interior da água.",
+            "de": "Der Rumpf ist der Körper des Bootes, der Teil, der schwimmt und das Innere vor dem Wasser schützt."
+          }
+        },
+        {
+          "cle": "quille",
+          "mot": {"fr": "quille", "en": "keel", "it": "chiglia", "es": "quilla", "pt": "quilha", "de": "Kiel"},
+          "def": {
+            "fr": "La quille est l'aileron lesté sous la coque qui empêche le bateau de dériver et le redresse.",
+            "en": "The keel is the weighted fin under the hull that stops the boat drifting sideways and keeps it upright.",
+            "it": "La chiglia è la pinna zavorrata sotto lo scafo che impedisce alla barca di scarrocciare e la mantiene dritta.",
+            "es": "La quilla es la aleta lastrada bajo el casco que impide que el barco derive y lo mantiene derecho.",
+            "pt": "A quilha é a barbatana lastrada sob o casco que impede o barco de derivar e o mantém direito.",
+            "de": "Der Kiel ist die beschwerte Flosse unter dem Rumpf, die das Boot am Abtreiben hindert und aufrecht hält."
+          }
+        },
+        {
+          "cle": "safran",
+          "mot": {"fr": "safran", "en": "rudder", "it": "timone", "es": "timón", "pt": "leme", "de": "Ruder"},
+          "def": {
+            "fr": "Le safran est la pale immergée à l'arrière que la barre fait pivoter pour diriger le bateau.",
+            "en": "The rudder is the submerged blade at the stern that the tiller turns in order to steer the boat.",
+            "it": "Il timone è la pala immersa a poppa che la barra fa ruotare per dirigere la barca.",
+            "es": "El timón es la pala sumergida a popa que la caña hace girar para dirigir el barco.",
+            "pt": "O leme é a pá submersa à popa que a cana faz girar para dirigir o barco.",
+            "de": "Das Ruder ist das untergetauchte Blatt am Heck, das die Pinne dreht, um das Boot zu steuern."
+          }
+        },
+        {
+          "cle": "etrave",
+          "mot": {"fr": "étrave", "en": "stem", "it": "dritto di prua", "es": "roda", "pt": "roda de proa", "de": "Vorsteven"},
+          "def": {
+            "fr": "L'étrave est la pièce qui forme l'avant de la coque et fend l'eau quand le bateau avance.",
+            "en": "The stem is the piece that forms the front of the hull and cuts the water as the boat moves forward.",
+            "it": "Il dritto di prua è il pezzo che forma la parte anteriore dello scafo e fende l'acqua quando la barca avanza.",
+            "es": "La roda es la pieza que forma la parte delantera del casco y corta el agua cuando el barco avanza.",
+            "pt": "A roda de proa é a peça que forma a parte da frente do casco e corta a água quando o barco avança.",
+            "de": "Der Vorsteven ist das Bauteil, das den vorderen Abschluss des Rumpfes bildet und beim Fahren das Wasser durchschneidet."
+          }
+        },
+        {
+          "cle": "etambot",
+          "mot": {"fr": "étambot", "en": "sternpost", "it": "dritto di poppa", "es": "codaste", "pt": "cadaste", "de": "Achtersteven"},
+          "def": {
+            "fr": "L'étambot est la pièce verticale qui ferme l'arrière de la coque et porte le safran ou l'hélice.",
+            "en": "The sternpost is the vertical piece that closes the rear of the hull and carries the rudder or the propeller.",
+            "it": "Il dritto di poppa è il pezzo verticale che chiude la parte posteriore dello scafo e sostiene il timone o l'elica.",
+            "es": "El codaste es la pieza vertical que cierra la parte trasera del casco y sostiene el timón o la hélice.",
+            "pt": "O cadaste é a peça vertical que fecha a parte traseira do casco e sustenta o leme ou a hélice.",
+            "de": "Der Achtersteven ist das senkrechte Bauteil, das den hinteren Abschluss des Rumpfes bildet und Ruder oder Propeller trägt."
+          }
+        },
+        {
+          "cle": "barre",
+          "mot": {"fr": "barre", "en": "tiller", "it": "barra", "es": "caña", "pt": "cana", "de": "Pinne"},
+          "def": {
+            "fr": "La barre est le levier fixé au safran que l'on pousse à la main pour gouverner le bateau.",
+            "en": "The tiller is the lever fixed to the rudder that you push by hand in order to steer the boat.",
+            "it": "La barra è la leva fissata al timone che si spinge a mano per governare la barca.",
+            "es": "La caña es la palanca fijada al timón que se empuja con la mano para gobernar el barco.",
+            "pt": "A cana é a alavanca presa ao leme que se empurra com a mão para governar o barco.",
+            "de": "Die Pinne ist der am Ruder befestigte Hebel, den man von Hand schiebt, um das Boot zu steuern."
+          }
+        },
+        {
+          "cle": "pont",
+          "mot": {"fr": "pont", "en": "deck", "it": "coperta", "es": "cubierta", "pt": "convés", "de": "Deck"},
+          "def": {
+            "fr": "Le pont est la surface qui couvre la coque et sur laquelle l'équipage circule pour manœuvrer.",
+            "en": "The deck is the surface covering the hull on which the crew moves about to work the boat.",
+            "it": "La coperta è la superficie che copre lo scafo e su cui l'equipaggio si muove per manovrare.",
+            "es": "La cubierta es la superficie que cubre el casco y por la que la tripulación se mueve para maniobrar.",
+            "pt": "O convés é a superfície que cobre o casco e onde a tripulação se desloca para manobrar.",
+            "de": "Das Deck ist die Fläche, die den Rumpf abdeckt und auf der sich die Crew bewegt, um zu manövrieren."
+          }
+        },
+        {
+          "cle": "cockpit",
+          "mot": {"fr": "cockpit", "en": "cockpit", "it": "pozzetto", "es": "bañera", "pt": "cockpit", "de": "Cockpit"},
+          "def": {
+            "fr": "Le cockpit est l'espace creusé dans le pont où l'équipage s'assoit et d'où l'on barre et règle les voiles.",
+            "en": "The cockpit is the recess in the deck where the crew sits and from which the boat is steered and the sails are trimmed.",
+            "it": "Il pozzetto è l'incavo ricavato nella coperta dove l'equipaggio siede e da cui si governa la barca e si regolano le vele.",
+            "es": "La bañera es el hueco de la cubierta donde se sienta la tripulación y desde el que se gobierna y se regulan las velas.",
+            "pt": "O cockpit é o espaço rebaixado no convés onde a tripulação se senta e de onde se governa o barco e se regulam as velas.",
+            "de": "Das Cockpit ist die Vertiefung im Deck, in der die Crew sitzt und von der aus gesteuert wird und die Segel getrimmt werden."
+          }
+        },
+        {
+          "cle": "mat",
+          "mot": {"fr": "mât", "en": "mast", "it": "albero", "es": "mástil", "pt": "mastro", "de": "Mast"},
+          "def": {
+            "fr": "Le mât est le grand espar vertical qui porte les voiles et les hisse haut pour prendre le vent.",
+            "en": "The mast is the tall vertical spar that carries the sails and lifts them high to catch the wind.",
+            "it": "L'albero è il lungo elemento verticale che regge le vele e le porta in alto per catturare il vento.",
+            "es": "El mástil es el palo vertical alto que sostiene las velas y las eleva para captar el viento.",
+            "pt": "O mastro é o espar vertical alto que sustenta as velas e as eleva para captar o vento.",
+            "de": "Der Mast ist die hohe senkrechte Stange, die die Segel trägt und sie hoch hinaufführt, um den Wind einzufangen."
+          }
+        },
+        {
+          "cle": "bome",
+          "mot": {"fr": "bôme", "en": "boom", "it": "boma", "es": "botavara", "pt": "retranca", "de": "Baum"},
+          "def": {
+            "fr": "La bôme est la barre horizontale qui prolonge le bas de la grand-voile et permet de régler son angle au vent.",
+            "en": "The boom is the horizontal spar that extends the foot of the mainsail and lets you set its angle to the wind.",
+            "it": "Il boma è l'asta orizzontale che prolunga la base della randa e permette di regolarne l'angolo rispetto al vento.",
+            "es": "La botavara es el palo horizontal que prolonga la parte baja de la vela mayor y permite regular su ángulo respecto al viento.",
+            "pt": "A retranca é o espar horizontal que prolonga a base da vela grande e permite regular o seu ângulo em relação ao vento.",
+            "de": "Der Baum ist die waagerechte Stange, die das Unterliek des Großsegels verlängert und seinen Winkel zum Wind einstellbar macht."
+          }
+        },
+        {
+          "cle": "hauban",
+          "mot": {"fr": "hauban", "en": "shroud", "it": "sartia", "es": "obenque", "pt": "enxárcia", "de": "Want"},
+          "def": {
+            "fr": "Le hauban est le câble qui tient le mât de côté et l'empêche de plier sous la poussée des voiles.",
+            "en": "The shroud is the cable that holds the mast from the side and stops it bending under the pressure of the sails.",
+            "it": "La sartia è il cavo che sostiene l'albero lateralmente e gli impedisce di piegarsi sotto la spinta delle vele.",
+            "es": "El obenque es el cable que sujeta el mástil por los lados y evita que se doble por el empuje de las velas.",
+            "pt": "A enxárcia é o cabo que segura o mastro de lado e impede que ele dobre com a pressão das velas.",
+            "de": "Das Want ist das Tau, das den Mast seitlich hält und verhindert, dass er sich unter dem Druck der Segel biegt."
+          }
+        },
+        {
+          "cle": "etai",
+          "mot": {"fr": "étai", "en": "forestay", "it": "strallo", "es": "estay", "pt": "estai", "de": "Vorstag"},
+          "def": {
+            "fr": "L'étai est le câble tendu entre le haut du mât et l'avant du bateau, qui empêche le mât de tomber vers l'arrière.",
+            "en": "The forestay is the cable stretched between the top of the mast and the bow, which stops the mast falling backward.",
+            "it": "Lo strallo è il cavo teso tra la testa dell'albero e la prua, che impedisce all'albero di cadere all'indietro.",
+            "es": "El estay es el cable tendido entre lo alto del mástil y la proa, que impide que el mástil caiga hacia atrás.",
+            "pt": "O estai é o cabo esticado entre o topo do mastro e a proa, que impede o mastro de cair para trás.",
+            "de": "Das Vorstag ist das Drahtseil zwischen Masttopp und Bug, das verhindert, dass der Mast nach hinten fällt."
+          }
+        },
+        {
+          "cle": "pataras",
+          "mot": {"fr": "pataras", "en": "backstay", "it": "paterazzo", "es": "estay de popa", "pt": "estai de popa", "de": "Achterstag"},
+          "def": {
+            "fr": "Le pataras est le câble qui va du haut du mât à l'arrière du bateau et empêche le mât de basculer vers l'avant.",
+            "en": "The backstay is the cable running from the top of the mast to the stern that stops the mast tipping forward.",
+            "it": "Il paterazzo è il cavo che va dalla testa dell'albero alla poppa e impedisce all'albero di cadere in avanti.",
+            "es": "El estay de popa es el cable que va desde lo alto del mástil hasta la popa e impide que el mástil caiga hacia delante.",
+            "pt": "O estai de popa é o cabo que vai do topo do mastro até à popa e impede que o mastro caia para a frente.",
+            "de": "Das Achterstag ist das Drahtseil vom Masttopp zum Heck, das verhindert, dass der Mast nach vorn kippt."
+          }
+        },
+        {
+          "cle": "grand-voile",
+          "mot": {"fr": "grand-voile", "en": "mainsail", "it": "randa", "es": "vela mayor", "pt": "vela grande", "de": "Großsegel"},
+          "def": {
+            "fr": "La grand-voile est la voile principale, hissée le long du mât, qui fournit l'essentiel de la propulsion.",
+            "en": "The mainsail is the principal sail, hoisted along the mast, which provides most of the boat's propulsion.",
+            "it": "La randa è la vela principale, issata lungo l'albero, che fornisce la maggior parte della propulsione.",
+            "es": "La vela mayor es la vela principal, izada a lo largo del mástil, que aporta la mayor parte de la propulsión.",
+            "pt": "A vela grande é a vela principal, içada ao longo do mastro, que fornece a maior parte da propulsão.",
+            "de": "Das Großsegel ist das Hauptsegel, am Mast hochgezogen, das den größten Teil des Vortriebs liefert."
+          }
+        },
+        {
+          "cle": "foc",
+          "mot": {"fr": "foc", "en": "jib", "it": "fiocco", "es": "foque", "pt": "buja", "de": "Fock"},
+          "def": {
+            "fr": "Le foc est la petite voile triangulaire établie à l'avant du mât, qui aide le bateau à remonter au vent.",
+            "en": "The jib is the small triangular sail set in front of the mast, which helps the boat sail upwind.",
+            "it": "Il fiocco è la piccola vela triangolare murata davanti all'albero, che aiuta la barca a risalire il vento.",
+            "es": "El foque es la pequeña vela triangular situada delante del mástil, que ayuda al barco a ceñir contra el viento.",
+            "pt": "A buja é a pequena vela triangular colocada à frente do mastro, que ajuda o barco a navegar contra o vento.",
+            "de": "Die Fock ist das kleine dreieckige Segel vor dem Mast, das dem Boot hilft, hoch am Wind zu segeln."
+          }
+        },
+        {
+          "cle": "genois",
+          "mot": {"fr": "génois", "en": "genoa", "it": "genoa", "es": "génova", "pt": "genoa", "de": "Genua"},
+          "def": {
+            "fr": "Le génois est un foc très large qui recouvre en partie la grand-voile et donne de la puissance au près.",
+            "en": "The genoa is a very large jib that partly overlaps the mainsail and gives extra power when sailing close to the wind.",
+            "it": "Il genoa è un fiocco molto largo che si sovrappone in parte alla randa e dà potenza nelle andature di bolina.",
+            "es": "El génova es un foque muy ancho que se superpone en parte a la vela mayor y da potencia al ceñir.",
+            "pt": "O genoa é uma buja muito larga que se sobrepõe em parte à vela grande e dá potência na bolina.",
+            "de": "Die Genua ist eine sehr breite Fock, die das Großsegel teilweise überlappt und beim Segeln am Wind Kraft gibt."
+          }
+        },
+        {
+          "cle": "spinnaker",
+          "mot": {"fr": "spinnaker", "en": "spinnaker", "it": "spinnaker", "es": "spinnaker", "pt": "spinnaker", "de": "Spinnaker"},
+          "def": {
+            "fr": "Le spinnaker est une grande voile légère et bombée qu'on hisse devant le bateau pour aller vite vent arrière.",
+            "en": "The spinnaker is a large, light, balloon-shaped sail hoisted in front of the boat to go fast when running downwind.",
+            "it": "Lo spinnaker è una vela grande, leggera e bombata, issata a prua della barca per andare veloci con il vento in poppa.",
+            "es": "El spinnaker es una vela grande, ligera y abombada que se iza delante del barco para ir rápido con el viento de popa.",
+            "pt": "O spinnaker é uma vela grande, leve e bojuda que se iça à frente do barco para andar depressa com vento de popa.",
+            "de": "Der Spinnaker ist ein großes, leichtes, bauchiges Segel, das vor dem Boot gesetzt wird, um mit achterlichem Wind schnell zu fahren."
+          }
+        },
+        {
+          "cle": "latte",
+          "mot": {"fr": "latte", "en": "batten", "it": "stecca", "es": "sable", "pt": "vareta", "de": "Segellatte"},
+          "def": {
+            "fr": "La latte est une baguette rigide glissée dans la voile pour maintenir sa forme et tendre son bord arrière.",
+            "en": "The batten is a stiff strip slipped into the sail to hold its shape and keep its trailing edge taut.",
+            "it": "La stecca è una bacchetta rigida infilata nella vela per mantenerne la forma e tenere teso il suo bordo di uscita.",
+            "es": "El sable es una varilla rígida metida en la vela para mantener su forma y tensar su borde de salida.",
+            "pt": "A vareta é uma haste rígida introduzida na vela para manter a sua forma e esticar o seu bordo de fuga.",
+            "de": "Die Segellatte ist ein steifer Stab im Segel, der die Form hält und die Achterkante gespannt hält."
+          }
+        },
+        {
+          "cle": "ecoute",
+          "mot": {"fr": "écoute", "en": "sheet", "it": "scotta", "es": "escota", "pt": "escota", "de": "Schot"},
+          "def": {
+            "fr": "L'écoute est le cordage qui sert à border ou choquer une voile pour en régler l'angle par rapport au vent.",
+            "en": "The sheet is the rope used to trim or ease a sail in order to adjust its angle to the wind.",
+            "it": "La scotta è il cavo che serve a cazzare o lascare una vela per regolarne l'angolo rispetto al vento.",
+            "es": "La escota es el cabo que sirve para cazar o lascar una vela y regular su ángulo respecto al viento.",
+            "pt": "A escota é o cabo que serve para caçar ou folgar uma vela e regular o seu ângulo em relação ao vento.",
+            "de": "Die Schot ist das Tau, mit dem man ein Segel dichtholt oder fiert, um seinen Winkel zum Wind einzustellen."
+          }
+        },
+        {
+          "cle": "drisse",
+          "mot": {"fr": "drisse", "en": "halyard", "it": "drizza", "es": "driza", "pt": "adriça", "de": "Fall"},
+          "def": {
+            "fr": "La drisse est le cordage qui sert à hisser une voile le long du mât et à la maintenir en haut.",
+            "en": "The halyard is the rope used to hoist a sail up the mast and keep it raised.",
+            "it": "La drizza è il cavo che serve a issare una vela lungo l'albero e a tenerla in alto.",
+            "es": "La driza es el cabo que sirve para izar una vela a lo largo del mástil y mantenerla arriba.",
+            "pt": "A adriça é o cabo que serve para içar uma vela ao longo do mastro e mantê-la no alto.",
+            "de": "Das Fall ist das Tau, mit dem man ein Segel am Mast hochzieht und oben hält."
+          }
+        },
+        {
+          "cle": "winch",
+          "mot": {"fr": "winch", "en": "winch", "it": "winch", "es": "winche", "pt": "winche", "de": "Winsch"},
+          "def": {
+            "fr": "Le winch est un tambour à manivelle qui démultiplie la force pour tendre une écoute ou une drisse.",
+            "en": "The winch is a cranked drum that multiplies your strength to tighten a sheet or a halyard.",
+            "it": "Il winch è un tamburo a manovella che moltiplica la forza per tesare una scotta o una drizza.",
+            "es": "El winche es un tambor con manivela que multiplica la fuerza para tensar una escota o una driza.",
+            "pt": "O winche é um tambor com manivela que multiplica a força para esticar uma escota ou uma adriça.",
+            "de": "Die Winsch ist eine Trommel mit Kurbel, die die Kraft vervielfacht, um eine Schot oder ein Fall zu spannen."
+          }
+        },
+        {
+          "cle": "taquet",
+          "mot": {"fr": "taquet", "en": "cleat", "it": "galloccia", "es": "cornamusa", "pt": "cunho", "de": "Klampe"},
+          "def": {
+            "fr": "Le taquet est la pièce à deux cornes sur laquelle on amarre un cordage pour le bloquer solidement.",
+            "en": "The cleat is the two-horned fitting to which a rope is made fast so that it is held securely.",
+            "it": "La galloccia è il pezzo a due corna su cui si abbozza una cima per bloccarla saldamente.",
+            "es": "La cornamusa es la pieza de dos cuernos en la que se amarra un cabo para fijarlo con firmeza.",
+            "pt": "O cunho é a peça de dois braços onde se amarra um cabo para o prender com firmeza.",
+            "de": "Die Klampe ist das zweihörnige Beschlagteil, an dem ein Tau festgemacht wird, damit es sicher gehalten wird."
+          }
+        },
+        {
+          "cle": "poulie",
+          "mot": {"fr": "poulie", "en": "block", "it": "bozzello", "es": "motón", "pt": "moitão", "de": "Block"},
+          "def": {
+            "fr": "La poulie est une roue à gorge dans une chape qui guide un cordage et réduit l'effort pour le tirer.",
+            "en": "The block is a grooved wheel in a housing that guides a rope and reduces the effort needed to pull it.",
+            "it": "Il bozzello è una ruota a gola in un involucro che guida un cavo e riduce lo sforzo per tirarlo.",
+            "es": "El motón es una rueda acanalada dentro de una caja que guía un cabo y reduce el esfuerzo para tirar de él.",
+            "pt": "O moitão é uma roda com sulco numa caixa que guia um cabo e reduz o esforço para o puxar.",
+            "de": "Der Block ist eine Rolle mit Rille in einem Gehäuse, die ein Tau führt und den Kraftaufwand beim Ziehen verringert."
+          }
+        },
+        {
+          "cle": "balcon-avant",
+          "mot": {"fr": "balcon avant", "en": "bow pulpit", "it": "pulpito di prua", "es": "púlpito de proa", "pt": "púlpito de proa", "de": "Bugkorb"},
+          "def": {
+            "fr": "Le balcon avant est la rambarde tubulaire fixée à la proue qui protège l'équipage d'une chute à l'eau.",
+            "en": "The bow pulpit is the tubular railing fixed at the front of the boat that protects the crew from falling overboard.",
+            "it": "Il pulpito di prua è la ringhiera tubolare fissata a prua che protegge l'equipaggio dalle cadute in mare.",
+            "es": "El púlpito de proa es la barandilla tubular fijada en la proa que protege a la tripulación de caer al mar.",
+            "pt": "O púlpito de proa é o corrimão tubular fixado na proa que protege a tripulação de cair ao mar.",
+            "de": "Der Bugkorb ist das rohrförmige Geländer am Bug, das die Crew davor schützt, über Bord zu fallen."
+          }
+        },
+        {
+          "cle": "ancre",
+          "mot": {"fr": "ancre", "en": "anchor", "it": "ancora", "es": "ancla", "pt": "âncora", "de": "Anker"},
+          "def": {
+            "fr": "L'ancre est la lourde pièce métallique jetée au fond de l'eau qui retient le bateau à l'arrêt.",
+            "en": "The anchor is the heavy metal piece dropped to the bottom that holds the boat in place when it is stopped.",
+            "it": "L'ancora è il pesante attrezzo metallico calato sul fondo che trattiene la barca quando è ferma.",
+            "es": "El ancla es la pesada pieza metálica echada al fondo que sujeta el barco cuando está parado.",
+            "pt": "A âncora é a pesada peça metálica lançada ao fundo que prende o barco quando está parado.",
+            "de": "Der Anker ist das schwere Metallteil, das auf den Grund gelassen wird und das Boot im Stillstand festhält."
+          }
+        },
+        {
+          "cle": "guindeau",
+          "mot": {"fr": "guindeau", "en": "windlass", "it": "salpancora", "es": "molinete", "pt": "molinete", "de": "Ankerwinde"},
+          "def": {
+            "fr": "Le guindeau est le treuil à l'avant qui remonte la chaîne et l'ancre sans effort pour l'équipage.",
+            "en": "The windlass is the winch at the bow that hauls up the chain and anchor without effort from the crew.",
+            "it": "Il salpancora è l'argano a prua che recupera la catena e l'ancora senza sforzo per l'equipaggio.",
+            "es": "El molinete es el torno de proa que recoge la cadena y el ancla sin esfuerzo para la tripulación.",
+            "pt": "O molinete é o guincho da proa que recolhe a corrente e a âncora sem esforço da tripulação.",
+            "de": "Die Ankerwinde ist die Winde am Bug, die Kette und Anker ohne Kraftaufwand der Crew einholt."
+          }
+        },
+        {
+          "cle": "lest",
+          "mot": {"fr": "lest", "en": "ballast", "it": "zavorra", "es": "lastre", "pt": "lastro", "de": "Ballast"},
+          "def": {
+            "fr": "Le lest est la masse lourde placée au fond du bateau, souvent dans la quille, qui lui donne sa stabilité.",
+            "en": "The ballast is the heavy mass placed low in the boat, often in the keel, that gives it stability.",
+            "it": "La zavorra è la massa pesante collocata in basso nella barca, spesso nella chiglia, che le dà stabilità.",
+            "es": "El lastre es la masa pesada colocada en el fondo del barco, a menudo en la quilla, que le da estabilidad.",
+            "pt": "O lastro é a massa pesada colocada no fundo do barco, muitas vezes na quilha, que lhe dá estabilidade.",
+            "de": "Der Ballast ist die schwere Masse tief im Boot, oft im Kiel, die ihm Stabilität gibt."
+          }
+        },
+        {
+          "cle": "capot",
+          "mot": {"fr": "capot", "en": "hatch", "it": "osteriggio", "es": "escotilla", "pt": "escotilha", "de": "Luke"},
+          "def": {
+            "fr": "Le capot est le panneau du pont qui ferme une ouverture et s'ouvre pour laisser passer l'air et les personnes.",
+            "en": "The hatch is the deck panel that closes an opening and opens to let air and people through.",
+            "it": "L'osteriggio è il pannello di coperta che chiude un'apertura e si apre per far passare aria e persone.",
+            "es": "La escotilla es el panel de cubierta que cierra una abertura y se abre para dejar pasar el aire y las personas.",
+            "pt": "A escotilha é o painel do convés que fecha uma abertura e se abre para deixar passar o ar e as pessoas.",
+            "de": "Die Luke ist die Abdeckung im Deck, die eine Öffnung verschließt und sich öffnet, um Luft und Personen durchzulassen."
+          }
+        },
+        {
+          "cle": "hublot",
+          "mot": {"fr": "hublot", "en": "porthole", "it": "oblò", "es": "portilla", "pt": "vigia", "de": "Bullauge"},
+          "def": {
+            "fr": "Le hublot est la petite fenêtre ronde ou ovale percée dans la coque pour éclairer l'intérieur.",
+            "en": "The porthole is the small round or oval window cut into the hull to light the interior.",
+            "it": "L'oblò è la piccola finestra rotonda o ovale ricavata nello scafo per illuminare l'interno.",
+            "es": "La portilla es la pequeña ventana redonda u ovalada abierta en el casco para iluminar el interior.",
+            "pt": "A vigia é a pequena janela redonda ou oval aberta no casco para iluminar o interior.",
+            "de": "Das Bullauge ist das kleine runde oder ovale Fenster im Rumpf, das den Innenraum erhellt."
+          }
+        },
+        {
+          "cle": "bout",
+          "mot": {"fr": "bout", "en": "line", "it": "cima", "es": "cabo", "pt": "cabo", "de": "Leine"},
+          "def": {
+            "fr": "Un bout est tout cordage utilisé à bord, par exemple pour tirer, amarrer ou régler un élément du bateau.",
+            "en": "A line is any rope used aboard a boat, for example to pull, tie up or adjust a part of it.",
+            "it": "Una cima è qualsiasi cavo usato a bordo, per esempio per tirare, ormeggiare o regolare una parte della barca.",
+            "es": "Un cabo es cualquier cuerda usada a bordo, por ejemplo para tirar, amarrar o regular una parte del barco.",
+            "pt": "Um cabo é qualquer corda usada a bordo, por exemplo para puxar, amarrar ou regular uma parte do barco.",
+            "de": "Eine Leine ist jedes an Bord verwendete Tau, zum Beispiel zum Ziehen, Festmachen oder Einstellen eines Bootsteils."
+          }
+        }
+      ]
+    },
+    {
+      "cle": "manoeuvre",
+      "nom": {"fr": "La manœuvre", "en": "The manoeuvre", "it": "La manovra", "es": "La maniobra", "pt": "A manobra", "de": "Das Manöver"},
+      "termes": [
+        {
+          "cle": "virer",
+          "mot": {"fr": "virer", "en": "tack", "it": "virare", "es": "virar por avante", "pt": "virar por davante", "de": "wenden"},
+          "def": {
+            "fr": "Virer consiste à faire passer l'avant du bateau par le vent pour changer de bord en gardant sa vitesse.",
+            "en": "Tacking means turning the bow of the boat through the wind to change tack while keeping your speed.",
+            "it": "Virare significa far passare la prua della barca attraverso il vento per cambiare mura mantenendo la velocità.",
+            "es": "Virar por avante consiste en pasar la proa del barco por el viento para cambiar de amura sin perder velocidad.",
+            "pt": "Virar por davante consiste em passar a proa do barco pelo vento para mudar de amura sem perder velocidade.",
+            "de": "Wenden heißt, den Bug des Bootes durch den Wind zu drehen, um die Seite zu wechseln und Fahrt zu behalten."
+          }
+        },
+        {
+          "cle": "empanner",
+          "mot": {"fr": "empanner", "en": "gybe", "it": "strambare", "es": "trasluchar", "pt": "jibar", "de": "halsen"},
+          "def": {
+            "fr": "Empanner consiste à faire passer l'arrière du bateau par le vent, ce qui envoie la bôme brusquement de l'autre côté.",
+            "en": "Gybing means turning the stern of the boat through the wind, which swings the boom suddenly across to the other side.",
+            "it": "Strambare significa far passare la poppa della barca attraverso il vento, così il boma passa di colpo dall'altra parte.",
+            "es": "Trasluchar consiste en pasar la popa del barco por el viento, de modo que la botavara cambia de lado de golpe.",
+            "pt": "Jibar consiste em passar a popa do barco pelo vento, de modo que a retranca muda de lado de repente.",
+            "de": "Halsen heißt, das Heck des Bootes durch den Wind zu drehen, sodass der Baum plötzlich auf die andere Seite schwingt."
+          }
+        },
+        {
+          "cle": "affaler",
+          "mot": {"fr": "affaler", "en": "douse", "it": "ammainare", "es": "arriar", "pt": "arriar", "de": "bergen"},
+          "def": {
+            "fr": "Affaler consiste à faire descendre une voile en relâchant sa drisse, si bien qu'elle cesse aussitôt de prendre le vent.",
+            "en": "To douse a sail means to let go its halyard so that it comes down and stops catching the wind.",
+            "it": "Ammainare significa far scendere una vela mollando la sua drizza, così che smette subito di prendere il vento.",
+            "es": "Arriar significa hacer bajar una vela soltando su driza, de modo que deja enseguida de recibir el viento.",
+            "pt": "Arriar significa fazer descer uma vela largando a sua adriça, de modo que deixa logo de apanhar o vento.",
+            "de": "Bergen heißt, ein Segel herunterzulassen, indem man sein Fall losgibt, sodass es sofort keinen Wind mehr fängt."
+          }
+        },
+        {
+          "cle": "hisser",
+          "mot": {"fr": "hisser", "en": "hoist", "it": "issare", "es": "izar", "pt": "içar", "de": "setzen"},
+          "def": {
+            "fr": "Hisser consiste à monter une voile le long du mât en tirant sur sa drisse, afin qu'elle puisse prendre le vent.",
+            "en": "Hoisting a sail means hauling it up the mast on its halyard so that it can catch the wind.",
+            "it": "Issare significa portare una vela in alto lungo l'albero tirando la sua drizza, così che possa prendere il vento.",
+            "es": "Izar significa subir una vela a lo largo del mástil tirando de su driza, para que pueda recibir el viento.",
+            "pt": "Içar significa subir uma vela ao longo do mastro puxando a sua adriça, para que possa apanhar o vento.",
+            "de": "Setzen heißt, ein Segel am Mast hochzuziehen, indem man am Fall zieht, damit es den Wind fangen kann."
+          }
+        },
+        {
+          "cle": "choquer",
+          "mot": {"fr": "choquer", "en": "ease", "it": "lascare", "es": "lascar", "pt": "folgar", "de": "fieren"},
+          "def": {
+            "fr": "Choquer consiste à relâcher une écoute pour ouvrir la voile, ce qui diminue sa puissance et fait moins gîter le bateau.",
+            "en": "Easing means letting out a sheet to open the sail, which reduces its power and makes the boat heel less.",
+            "it": "Lascare significa mollare una scotta per aprire la vela, cosa che riduce la sua potenza e fa sbandare meno la barca.",
+            "es": "Lascar significa soltar una escota para abrir la vela, lo que reduce su potencia y hace escorar menos el barco.",
+            "pt": "Folgar significa soltar uma escota para abrir a vela, o que reduz a sua potência e faz adornar menos o barco.",
+            "de": "Fieren heißt, eine Schot zu lösen, um das Segel zu öffnen, was seine Kraft verringert und das Boot weniger krängen lässt."
+          }
+        },
+        {
+          "cle": "border",
+          "mot": {"fr": "border", "en": "sheet in", "it": "cazzare", "es": "cazar", "pt": "caçar", "de": "dichtholen"},
+          "def": {
+            "fr": "Border consiste à tirer sur une écoute pour rapprocher la voile de l'axe du bateau, ce qui augmente sa puissance.",
+            "en": "Sheeting in means pulling a sheet to bring the sail closer to the boat's centreline, which increases its power.",
+            "it": "Cazzare significa tirare una scotta per avvicinare la vela all'asse della barca, cosa che ne aumenta la potenza.",
+            "es": "Cazar significa tirar de una escota para acercar la vela al eje del barco, lo que aumenta su potencia.",
+            "pt": "Caçar significa puxar uma escota para aproximar a vela do eixo do barco, o que aumenta a sua potência.",
+            "de": "Dichtholen heißt, an einer Schot zu ziehen, um das Segel näher an die Bootsachse zu bringen, was seine Kraft erhöht."
+          }
+        },
+        {
+          "cle": "abattre",
+          "mot": {"fr": "abattre", "en": "bear away", "it": "poggiare", "es": "arribar", "pt": "arribar", "de": "abfallen"},
+          "def": {
+            "fr": "Abattre consiste à écarter l'avant du bateau du vent, ce qui amène une allure plus portante et moins de gîte.",
+            "en": "Bearing away means turning the bow away from the wind, which gives a freer point of sail and less heel.",
+            "it": "Poggiare significa allontanare la prua dal vento, cosa che porta a un'andatura più larga e riduce la sbandata.",
+            "es": "Arribar significa alejar la proa del barco del viento, lo que da un rumbo más abierto y reduce la escora.",
+            "pt": "Arribar significa afastar a proa do barco do vento, o que dá um rumo mais aberto e reduz a inclinação.",
+            "de": "Abfallen heißt, den Bug vom Wind wegzudrehen, wodurch das Boot einen raumeren Kurs fährt und weniger krängt."
+          }
+        },
+        {
+          "cle": "lofer",
+          "mot": {"fr": "lofer", "en": "luff up", "it": "orzare", "es": "orzar", "pt": "orçar", "de": "anluven"},
+          "def": {
+            "fr": "Lofer consiste à rapprocher l'avant du bateau du vent, ce qui permet de naviguer plus près de sa direction.",
+            "en": "Luffing means turning the bow of the boat towards the wind, which lets you sail closer to its direction.",
+            "it": "Orzare significa avvicinare la prua della barca al vento, cosa che permette di navigare più vicino alla sua direzione.",
+            "es": "Orzar significa acercar la proa del barco al viento, lo que permite navegar más cerca de su dirección.",
+            "pt": "Orçar significa aproximar a proa do barco do vento, o que permite navegar mais perto da sua direção.",
+            "de": "Anluven heißt, den Bug des Bootes zum Wind hin zu drehen, wodurch man näher an dessen Richtung segeln kann."
+          }
+        },
+        {
+          "cle": "prendre-un-ris",
+          "mot": {"fr": "prendre un ris", "en": "reef", "it": "prendere un terzarolo", "es": "tomar un rizo", "pt": "tomar um rizo", "de": "reffen"},
+          "def": {
+            "fr": "Prendre un ris consiste à réduire la surface d'une voile en la repliant en bas, pour mieux tenir le vent fort.",
+            "en": "Reefing means reducing a sail's area by folding part of it down, so the boat copes better in strong wind.",
+            "it": "Prendere un terzarolo significa ridurre la superficie di una vela ripiegandone la parte bassa, per tenere meglio il vento forte.",
+            "es": "Tomar un rizo significa reducir la superficie de una vela plegando su parte baja, para aguantar mejor el viento fuerte.",
+            "pt": "Tomar um rizo significa reduzir a superfície de uma vela dobrando a sua parte baixa, para aguentar melhor o vento forte.",
+            "de": "Reffen heißt, die Fläche eines Segels zu verkleinern, indem man einen Teil davon unten zusammenlegt, damit das Boot starken Wind besser aushält."
+          }
+        },
+        {
+          "cle": "mouiller",
+          "mot": {"fr": "mouiller", "en": "anchor", "it": "dare fondo", "es": "fondear", "pt": "fundear", "de": "ankern"},
+          "def": {
+            "fr": "Mouiller consiste à jeter l'ancre et à filer assez de chaîne pour que le bateau reste en place.",
+            "en": "To anchor means to drop the anchor and pay out enough chain so that the boat stays in place.",
+            "it": "Dare fondo significa calare l'ancora e filare abbastanza catena perché la barca resti ferma al suo posto.",
+            "es": "Fondear significa echar el ancla y filar suficiente cadena para que el barco se quede en su sitio.",
+            "pt": "Fundear significa lançar a âncora e largar corrente suficiente para que o barco fique no mesmo sítio.",
+            "de": "Ankern heißt, den Anker zu werfen und genug Kette auszugeben, damit das Boot an seinem Platz bleibt."
+          }
+        },
+        {
+          "cle": "accoster",
+          "mot": {"fr": "accoster", "en": "come alongside", "it": "accostare", "es": "atracar", "pt": "atracar", "de": "anlegen"},
+          "def": {
+            "fr": "Accoster consiste à amener le bateau contre un quai ou un ponton, pour que l'équipage puisse descendre ou embarquer.",
+            "en": "Coming alongside means bringing the boat against a quay or pontoon so that the crew can step off or come aboard.",
+            "it": "Accostare significa portare la barca contro una banchina o un pontile, perché l'equipaggio possa scendere o salire a bordo.",
+            "es": "Atracar significa llevar el barco contra un muelle o un pantalán para que la tripulación pueda bajar o subir a bordo.",
+            "pt": "Atracar significa conduzir o barco contra um cais ou um pontão para que a tripulação possa sair ou subir a bordo.",
+            "de": "Anlegen heißt, das Boot an einen Kai oder einen Steg zu bringen, damit die Crew aus- oder einsteigen kann."
+          }
+        },
+        {
+          "cle": "amarrer",
+          "mot": {"fr": "amarrer", "en": "moor", "it": "ormeggiare", "es": "amarrar", "pt": "amarrar", "de": "festmachen"},
+          "def": {
+            "fr": "Amarrer consiste à attacher le bateau au quai avec des cordages pour qu'il ne puisse plus dériver.",
+            "en": "Mooring means tying the boat to the quay with ropes so that it can no longer drift away.",
+            "it": "Ormeggiare significa legare la barca alla banchina con delle cime, perché non possa più andare alla deriva.",
+            "es": "Amarrar significa atar el barco al muelle con cabos para que ya no pueda irse a la deriva.",
+            "pt": "Amarrar significa prender o barco ao cais com cabos para que já não possa ir à deriva.",
+            "de": "Festmachen heißt, das Boot mit Leinen am Kai zu befestigen, damit es nicht mehr abtreiben kann."
+          }
+        },
+        {
+          "cle": "larguer-les-amarres",
+          "mot": {"fr": "larguer les amarres", "en": "cast off", "it": "mollare gli ormeggi", "es": "largar amarras", "pt": "largar amarras", "de": "ablegen"},
+          "def": {
+            "fr": "Larguer les amarres consiste à détacher les cordages qui retiennent le bateau au quai, pour pouvoir partir.",
+            "en": "Casting off means letting go the ropes that hold the boat to the quay, so that it can leave.",
+            "it": "Mollare gli ormeggi significa sciogliere le cime che trattengono la barca alla banchina, per poter partire.",
+            "es": "Largar amarras significa soltar los cabos que sujetan el barco al muelle, para poder salir.",
+            "pt": "Largar amarras significa soltar os cabos que prendem o barco ao cais, para poder partir.",
+            "de": "Ablegen heißt, die Leinen zu lösen, die das Boot am Kai halten, damit es losfahren kann."
+          }
+        },
+        {
+          "cle": "haler",
+          "mot": {"fr": "haler", "en": "haul", "it": "alare", "es": "halar", "pt": "alar", "de": "holen"},
+          "def": {
+            "fr": "Haler consiste à tirer sur un cordage à la main, bras après bras, pour le ramener ou le tendre.",
+            "en": "Hauling means pulling on a rope by hand, arm over arm, to bring it in or tighten it.",
+            "it": "Alare significa tirare un cavo a mano, braccio dopo braccio, per recuperarlo o metterlo in tensione.",
+            "es": "Halar significa tirar de un cabo a mano, brazada tras brazada, para recogerlo o ponerlo tenso.",
+            "pt": "Alar significa puxar um cabo à mão, braçada após braçada, para o recolher ou o esticar.",
+            "de": "Holen heißt, ein Tau von Hand Arm über Arm heranzuziehen, um es einzuholen oder zu spannen."
+          }
+        },
+        {
+          "cle": "ferler",
+          "mot": {"fr": "ferler", "en": "furl", "it": "serrare", "es": "aferrar", "pt": "ferrar", "de": "bändseln"},
+          "def": {
+            "fr": "Ferler consiste à plier une voile affalée et à l'attacher solidement pour qu'elle ne batte pas au vent.",
+            "en": "Furling means folding a lowered sail and tying it down firmly so that it does not flap in the wind.",
+            "it": "Serrare significa piegare una vela ammainata e legarla saldamente, perché non sbatta al vento.",
+            "es": "Aferrar significa plegar una vela arriada y atarla con firmeza para que no restalle con el viento.",
+            "pt": "Ferrar significa dobrar uma vela arriada e prendê-la com firmeza para que não bata ao vento.",
+            "de": "Bändseln heißt, ein geborgenes Segel zusammenzulegen und fest zu verzurren, damit es im Wind nicht schlägt."
+          }
+        },
+        {
+          "cle": "mettre-en-panne",
+          "mot": {"fr": "mettre en panne", "en": "heave to", "it": "mettersi in cappa", "es": "ponerse a la capa", "pt": "capear", "de": "beidrehen"},
+          "def": {
+            "fr": "Mettre en panne consiste à régler les voiles de façon contraire pour que le bateau s'arrête presque et reste sur place.",
+            "en": "Heaving to means setting the sails against each other so that the boat almost stops and stays in place.",
+            "it": "Mettersi in cappa significa regolare le vele in contrasto tra loro perché la barca si fermi quasi e resti sul posto.",
+            "es": "Ponerse a la capa significa oponer las velas entre sí para que el barco casi se pare y quede en su sitio.",
+            "pt": "Capear significa colocar as velas em oposição para que o barco quase pare e fique no mesmo sítio.",
+            "de": "Beidrehen heißt, die Segel gegeneinander zu stellen, damit das Boot fast stoppt und an Ort und Stelle bleibt."
+          }
+        },
+        {
+          "cle": "louvoyer",
+          "mot": {"fr": "louvoyer", "en": "beat", "it": "bordeggiare", "es": "barloventear", "pt": "bordejar", "de": "kreuzen"},
+          "def": {
+            "fr": "Louvoyer consiste à enchaîner des virements de bord en zigzag pour avancer vers un point situé face au vent.",
+            "en": "Beating means sailing a zigzag of tacks in order to make progress towards a point lying directly upwind.",
+            "it": "Bordeggiare significa navigare a zigzag con virate successive per avanzare verso un punto che si trova sopravvento.",
+            "es": "Barloventear significa navegar en zigzag con viradas sucesivas para avanzar hacia un punto situado contra el viento.",
+            "pt": "Bordejar significa navegar em ziguezague com viragens sucessivas para avançar até um ponto situado contra o vento.",
+            "de": "Kreuzen heißt, im Zickzack mit aufeinanderfolgenden Wenden zu segeln, um einen Punkt direkt gegen den Wind zu erreichen."
+          }
+        },
+        {
+          "cle": "noeud-de-chaise",
+          "mot": {"fr": "nœud de chaise", "en": "bowline", "it": "gassa d'amante", "es": "as de guía", "pt": "lais de guia", "de": "Palstek"},
+          "def": {
+            "fr": "Le nœud de chaise fait une boucle fixe qui ne se resserre pas et se défait facilement après une forte traction.",
+            "en": "The bowline makes a fixed loop that does not tighten and can be undone easily after a heavy pull.",
+            "it": "La gassa d'amante forma un anello fisso che non si stringe e si scioglie facilmente dopo un forte tiro.",
+            "es": "El as de guía forma una lazada fija que no se aprieta y se deshace con facilidad tras un fuerte tirón.",
+            "pt": "O lais de guia forma uma laçada fixa que não aperta e se desfaz com facilidade depois de uma forte tração.",
+            "de": "Der Palstek bildet eine feste Schlaufe, die sich nicht zuzieht und nach starker Belastung leicht wieder löst."
+          }
+        },
+        {
+          "cle": "noeud-de-cabestan",
+          "mot": {"fr": "nœud de cabestan", "en": "clove hitch", "it": "nodo parlato", "es": "ballestrinque", "pt": "volta de fiel", "de": "Webeleinstek"},
+          "def": {
+            "fr": "Le nœud de cabestan fixe rapidement un cordage autour d'un poteau ou d'une rambarde, et se règle facilement.",
+            "en": "The clove hitch quickly fixes a rope around a post or a railing, and is easy to adjust.",
+            "it": "Il nodo parlato fissa rapidamente una cima intorno a un palo o a una ringhiera, e si regola facilmente.",
+            "es": "El ballestrinque fija rápidamente un cabo alrededor de un poste o una barandilla y se ajusta con facilidad.",
+            "pt": "A volta de fiel prende rapidamente um cabo a um poste ou a uma balaustrada e ajusta-se com facilidade.",
+            "de": "Der Webeleinstek befestigt eine Leine schnell an einem Pfosten oder einer Reling und lässt sich leicht einstellen."
+          }
+        },
+        {
+          "cle": "noeud-de-huit",
+          "mot": {"fr": "nœud de huit", "en": "figure-of-eight knot", "it": "nodo a otto", "es": "nudo de ocho", "pt": "nó de oito", "de": "Achtknoten"},
+          "def": {
+            "fr": "Le nœud de huit forme un arrêt au bout d'un cordage pour l'empêcher de s'échapper d'une poulie.",
+            "en": "The figure-of-eight knot makes a stopper at the end of a rope to stop it slipping out of a block.",
+            "it": "Il nodo a otto forma un fermo all'estremità di una cima per impedirle di sfilarsi da un bozzello.",
+            "es": "El nudo de ocho forma un tope en el extremo de un cabo para impedir que se salga de un motón.",
+            "pt": "O nó de oito forma um topo na ponta de um cabo para impedir que ele saia de um moitão.",
+            "de": "Der Achtknoten bildet einen Stopper am Ende einer Leine, damit sie nicht aus einem Block herausrutscht."
+          }
+        },
+        {
+          "cle": "noeud-plat",
+          "mot": {"fr": "nœud plat", "en": "reef knot", "it": "nodo piano", "es": "nudo cuadrado", "pt": "nó direito", "de": "Kreuzknoten"},
+          "def": {
+            "fr": "Le nœud plat relie deux cordages de même diamètre et se défait facilement, mais il ne convient pas aux fortes charges.",
+            "en": "The reef knot joins two ropes of the same diameter and unties easily, but it is not suitable for heavy loads.",
+            "it": "Il nodo piano unisce due cime dello stesso diametro e si scioglie facilmente, ma non è adatto ai carichi forti.",
+            "es": "El nudo cuadrado une dos cabos del mismo diámetro y se deshace con facilidad, pero no sirve para cargas fuertes.",
+            "pt": "O nó direito une dois cabos do mesmo diâmetro e desfaz-se com facilidade, mas não serve para cargas fortes.",
+            "de": "Der Kreuzknoten verbindet zwei Leinen gleicher Dicke und lässt sich leicht lösen, eignet sich aber nicht für hohe Lasten."
+          }
+        },
+        {
+          "cle": "noeud-d-ecoute",
+          "mot": {"fr": "nœud d'écoute", "en": "sheet bend", "it": "nodo di scotta", "es": "nudo de escota", "pt": "nó de escota", "de": "Schotstek"},
+          "def": {
+            "fr": "Le nœud d'écoute relie deux cordages de grosseurs différentes et tient bien même quand l'un est beaucoup plus gros.",
+            "en": "The sheet bend joins two ropes of different thickness and holds well even when one is much thicker.",
+            "it": "Il nodo di scotta unisce due cime di spessore diverso e tiene bene anche quando una è molto più grossa.",
+            "es": "El nudo de escota une dos cabos de grosor distinto y aguanta bien incluso cuando uno es mucho más grueso.",
+            "pt": "O nó de escota une dois cabos de espessura diferente e aguenta bem mesmo quando um é muito mais grosso.",
+            "de": "Der Schotstek verbindet zwei Leinen unterschiedlicher Dicke und hält gut, selbst wenn eine viel dicker ist."
+          }
+        },
+        {
+          "cle": "demi-cle",
+          "mot": {"fr": "demi-clé", "en": "half hitch", "it": "mezzo collo", "es": "medio nudo", "pt": "cote", "de": "halber Schlag"},
+          "def": {
+            "fr": "La demi-clé est un simple tour fait autour d'un anneau ou d'un cordage et sert à sécuriser un nœud.",
+            "en": "The half hitch is a simple turn made around a ring or a rope, used to secure another knot.",
+            "it": "Il mezzo collo è un semplice giro fatto intorno a un anello o a una cima e serve a fissare un nodo.",
+            "es": "El medio nudo es una simple vuelta hecha alrededor de una anilla o un cabo, y sirve para asegurar un nudo.",
+            "pt": "O cote é uma simples volta feita à volta de uma argola ou de um cabo, e serve para segurar um nó.",
+            "de": "Der halbe Schlag ist eine einfache Windung um einen Ring oder eine Leine und dient dazu, einen Knoten zu sichern."
+          }
+        },
+        {
+          "cle": "tour-mort-demi-cles",
+          "mot": {"fr": "tour mort et deux demi-clés", "en": "round turn and two half hitches", "it": "volta e due mezzi colli", "es": "vuelta redonda y dos medias llaves", "pt": "volta redonda e dois cotes", "de": "Rundtörn und zwei halbe Schläge"},
+          "def": {
+            "fr": "Le tour mort et deux demi-clés fixe un cordage à un anneau avec un nœud sûr et facile à défaire.",
+            "en": "The round turn and two half hitches secures a rope to a ring with a safe knot that is easy to undo.",
+            "it": "La volta e due mezzi colli fissa una cima a un anello con un nodo sicuro e facile da sciogliere.",
+            "es": "La vuelta redonda y dos medias llaves fija un cabo a una anilla con un nudo seguro y fácil de deshacer.",
+            "pt": "A volta redonda e dois cotes prende um cabo a uma argola com um nó seguro e fácil de desfazer.",
+            "de": "Rundtörn und zwei halbe Schläge befestigt eine Leine an einem Ring mit einem sicheren Knoten, der sich leicht lösen lässt."
+          }
+        },
+        {
+          "cle": "pare-a-virer",
+          "mot": {"fr": "paré à virer", "en": "ready about", "it": "pronti a virare", "es": "listos para virar", "pt": "prontos para virar", "de": "klar zur Wende"},
+          "def": {
+            "fr": "Paré à virer est l'ordre par lequel le barreur demande si chacun est à son poste avant le virement.",
+            "en": "Ready about is the order by which the helmsman asks whether everyone is at their station before tacking.",
+            "it": "Pronti a virare è l'ordine con cui il timoniere chiede se ognuno è al suo posto prima di virare.",
+            "es": "Listos para virar es la orden con la que el timonel pregunta si todos están en su puesto antes de virar.",
+            "pt": "Prontos para virar é a ordem com que o timoneiro pergunta se todos estão no seu posto antes de virar.",
+            "de": "Klar zur Wende ist der Befehl, mit dem der Rudergänger fragt, ob alle auf ihrem Posten sind, bevor gewendet wird."
+          }
+        },
+        {
+          "cle": "pare-a-empanner",
+          "mot": {"fr": "paré à empanner", "en": "prepare to gybe", "it": "pronti a strambare", "es": "listos para trasluchar", "pt": "prontos para jibar", "de": "klar zum Halsen"},
+          "def": {
+            "fr": "Paré à empanner est l'ordre par lequel le barreur demande si chacun est à son poste avant l'empannage.",
+            "en": "Prepare to gybe is the order by which the helmsman asks whether everyone is at their station before the gybe.",
+            "it": "Pronti a strambare è l'ordine con cui il timoniere chiede se ognuno è al suo posto prima di strambare.",
+            "es": "Listos para trasluchar es la orden con la que el timonel pregunta si todos están en su puesto antes de trasluchar.",
+            "pt": "Prontos para jibar é a ordem com que o timoneiro pergunta se todos estão no seu posto antes de jibar.",
+            "de": "Klar zum Halsen ist der Befehl, mit dem der Rudergänger fragt, ob alle auf ihrem Posten sind, bevor gehalst wird."
+          }
+        },
+        {
+          "cle": "homme-a-la-mer",
+          "mot": {"fr": "un homme à la mer", "en": "man overboard", "it": "uomo in mare", "es": "hombre al agua", "pt": "homem ao mar", "de": "Mann über Bord"},
+          "def": {
+            "fr": "Un homme à la mer est le cri qui prévient aussitôt l'équipage qu'une personne est tombée à l'eau.",
+            "en": "Man overboard is the cry that immediately warns the crew that a person has fallen into the water.",
+            "it": "Uomo in mare è il grido che avverte subito l'equipaggio che una persona è caduta in acqua.",
+            "es": "Hombre al agua es el grito que avisa de inmediato a la tripulación de que una persona ha caído al agua.",
+            "pt": "Homem ao mar é o grito que avisa de imediato a tripulação de que uma pessoa caiu à água.",
+            "de": "Mann über Bord ist der Ruf, der die Crew sofort warnt, dass eine Person ins Wasser gefallen ist."
+          }
+        },
+        {
+          "cle": "attention-a-la-bome",
+          "mot": {"fr": "attention à la bôme", "en": "watch the boom", "it": "attenzione al boma", "es": "cuidado con la botavara", "pt": "cuidado com a retranca", "de": "Achtung Baum"},
+          "def": {
+            "fr": "Attention à la bôme est le cri qui prévient l'équipage de baisser la tête, car la bôme va changer de côté.",
+            "en": "Watch the boom is the cry that warns the crew to duck because the boom is about to change sides.",
+            "it": "Attenzione al boma è il grido che avverte l'equipaggio di abbassare la testa, perché il boma sta per cambiare lato.",
+            "es": "Cuidado con la botavara es el grito que avisa a la tripulación de que debe agacharse porque la botavara va a cambiar de lado.",
+            "pt": "Cuidado com a retranca é o grito que avisa a tripulação para baixar a cabeça porque a retranca vai mudar de lado.",
+            "de": "Achtung Baum ist der Ruf, der die Crew warnt, den Kopf einzuziehen, weil der Baum gleich die Seite wechselt."
+          }
+        },
+        {
+          "cle": "appareiller",
+          "mot": {"fr": "appareiller", "en": "get under way", "it": "salpare", "es": "zarpar", "pt": "zarpar", "de": "auslaufen"},
+          "def": {
+            "fr": "Appareiller consiste à quitter le quai ou le mouillage et à se mettre en route, voiles hissées ou moteur en marche.",
+            "en": "Getting under way means leaving the quay or the anchorage and setting off, with the sails hoisted or the engine running.",
+            "it": "Salpare significa lasciare la banchina o l'ancoraggio e mettersi in rotta, con le vele issate o il motore acceso.",
+            "es": "Zarpar significa dejar el muelle o el fondeadero y ponerse en ruta, con las velas izadas o el motor en marcha.",
+            "pt": "Zarpar significa deixar o cais ou o fundeadouro e pôr-se a caminho, com as velas içadas ou o motor ligado.",
+            "de": "Auslaufen heißt, den Kai oder den Ankerplatz zu verlassen und Kurs zu nehmen, mit gesetzten Segeln oder laufendem Motor."
+          }
+        },
+        {
+          "cle": "lever-l-ancre",
+          "mot": {"fr": "lever l'ancre", "en": "weigh anchor", "it": "levare l'ancora", "es": "levar anclas", "pt": "levantar ferro", "de": "Anker lichten"},
+          "def": {
+            "fr": "Lever l'ancre consiste à remonter la chaîne pour arracher l'ancre du fond et laisser le bateau libre de repartir.",
+            "en": "Weighing anchor means hauling in the chain to break the anchor free of the bottom so the boat can leave.",
+            "it": "Levare l'ancora significa recuperare la catena per strappare l'ancora dal fondo e lasciare la barca libera di ripartire.",
+            "es": "Levar anclas significa recoger la cadena para arrancar el ancla del fondo y dejar el barco libre para partir.",
+            "pt": "Levantar ferro significa recolher a corrente para arrancar a âncora do fundo e deixar o barco livre para partir.",
+            "de": "Anker lichten heißt, die Kette einzuholen, um den Anker vom Grund zu lösen und das Boot zur Weiterfahrt freizugeben."
+          }
+        }
+      ]
+    },
+    {
+      "cle": "allures",
+      "nom": {"fr": "Les allures", "en": "Points of sail", "it": "Le andature", "es": "Los rumbos", "pt": "Os rumos", "de": "Die Kurse"},
+      "termes": [
+        {
+          "cle": "pres",
+          "mot": {"fr": "près", "en": "close-hauled", "it": "bolina", "es": "ceñida", "pt": "bolina", "de": "Am-Wind-Kurs"},
+          "def": {
+            "fr": "Le près est l'allure la plus proche du vent, où les voiles bordées à fond permettent de remonter vers l'endroit d'où il souffle.",
+            "en": "Close-hauled is the point of sail nearest the wind, where fully sheeted sails let the boat work up towards where the wind comes from.",
+            "it": "La bolina è l'andatura più vicina al vento, in cui le vele cazzate a fondo permettono di risalire verso il punto da cui soffia.",
+            "es": "La ceñida es el rumbo más cercano al viento, en el que las velas cazadas a fondo permiten remontar hacia el lugar de donde sopla.",
+            "pt": "A bolina é o rumo mais próximo do vento, em que as velas caçadas a fundo permitem subir para o lugar de onde sopra.",
+            "de": "Der Am-Wind-Kurs ist der Kurs nächst am Wind, auf dem voll dichtgeholte Segel es erlauben, dorthin voranzukommen, woher der Wind weht."
+          }
+        },
+        {
+          "cle": "bon-plein",
+          "mot": {"fr": "bon plein", "en": "close reach", "it": "bolina larga", "es": "bon plein", "pt": "bolina folgada", "de": "bon plein"},
+          "def": {
+            "fr": "Le bon plein est l'allure moins serrée que le près, où le bateau gagne en vitesse tout en remontant encore vers le vent.",
+            "en": "The close reach is the point of sail just freer than close-hauled, where the boat gains speed while still making ground towards the wind.",
+            "it": "La bolina larga è l'andatura appena meno stretta della bolina, in cui la barca guadagna velocità pur risalendo ancora verso il vento.",
+            "es": "El bon plein, palabra francesa sin equivalente español, es un rumbo menos cerrado que la ceñida, con más velocidad y todavía ganando barlovento.",
+            "pt": "A bolina folgada é o rumo menos cerrado do que a bolina, em que o barco ganha velocidade e ainda sobe para o vento.",
+            "de": "Bon plein, französisches Wort ohne deutsches Gegenstück, nennt einen Kurs etwas weiter vom Wind als am Wind, mit mehr Fahrt bei weiterem Höhegewinn."
+          }
+        },
+        {
+          "cle": "travers",
+          "mot": {"fr": "travers", "en": "beam reach", "it": "traverso", "es": "través", "pt": "través", "de": "Halbwind"},
+          "def": {
+            "fr": "Le travers est l'allure où le vent arrive perpendiculairement au bateau, ce qui donne une bonne vitesse avec les voiles à demi ouvertes.",
+            "en": "Beam reach is the point of sail where the wind blows square across the boat, giving good speed with the sails half open.",
+            "it": "Il traverso è l'andatura in cui il vento arriva perpendicolare alla barca, il che dà una buona velocità con le vele a metà aperte.",
+            "es": "El través es el rumbo en que el viento llega perpendicular al barco, lo que da buena velocidad con las velas medio abiertas.",
+            "pt": "O través é o rumo em que o vento chega perpendicular ao barco, o que dá boa velocidade com as velas meio abertas.",
+            "de": "Halbwind ist der Kurs, bei dem der Wind rechtwinklig zum Boot einfällt und die halb geöffneten Segel gute Fahrt ergeben."
+          }
+        },
+        {
+          "cle": "largue",
+          "mot": {"fr": "largue", "en": "broad reach", "it": "lasco", "es": "largo", "pt": "largo", "de": "Raumschots"},
+          "def": {
+            "fr": "Le largue est l'allure où le vent vient de l'arrière du travers, ce qui permet de filer vite avec les voiles bien ouvertes.",
+            "en": "Broad reach is the point of sail where the wind comes from behind the beam, letting the boat run fast with sails well open.",
+            "it": "Il lasco è l'andatura in cui il vento viene da dietro al traverso, il che permette di filare veloci con le vele ben aperte.",
+            "es": "El largo es el rumbo en que el viento viene de detrás del través, lo que permite navegar rápido con las velas bien abiertas.",
+            "pt": "O largo é o rumo em que o vento vem de trás do través, o que permite navegar depressa com as velas bem abertas.",
+            "de": "Raumschots ist der Kurs, bei dem der Wind von achterlicher als querab kommt und das Boot mit gut gefierten Segeln schnell läuft."
+          }
+        },
+        {
+          "cle": "vent-arriere",
+          "mot": {"fr": "vent arrière", "en": "running", "it": "poppa", "es": "empopada", "pt": "popa", "de": "vor dem Wind"},
+          "def": {
+            "fr": "Le vent arrière est l'allure où le vent souffle de l'arrière, ce qui pousse le bateau droit devant lui sans lui donner de gîte.",
+            "en": "Running is the point of sail where the wind blows from astern, pushing the boat straight ahead without making it heel.",
+            "it": "La poppa è l'andatura in cui il vento soffia da dietro, spingendo la barca dritta in avanti senza farla sbandare.",
+            "es": "La empopada es el rumbo en que el viento sopla desde atrás y empuja el barco recto hacia delante sin hacerlo escorar.",
+            "pt": "A popa é o rumo em que o vento sopra de trás e empurra o barco em frente sem o fazer adornar.",
+            "de": "Vor dem Wind ist der Kurs, bei dem der Wind von hinten weht und das Boot geradeaus schiebt, ohne dass es krängt."
+          }
+        },
+        {
+          "cle": "vent-debout",
+          "mot": {"fr": "vent debout", "en": "head to wind", "it": "prua al vento", "es": "proa al viento", "pt": "proa ao vento", "de": "gegen den Wind"},
+          "def": {
+            "fr": "Le vent debout désigne le vent qui souffle exactement de face, si bien que les voiles battent et que le bateau n'avance plus.",
+            "en": "Head to wind means the wind blows exactly from ahead, so the sails flap and the boat no longer makes way.",
+            "it": "Prua al vento significa che il vento soffia esattamente di fronte, perciò le vele sbattono e la barca non avanza più.",
+            "es": "Proa al viento significa que el viento sopla exactamente de frente, así que las velas restallan y el barco ya no avanza.",
+            "pt": "Proa ao vento significa que o vento sopra exatamente de frente, por isso as velas batem e o barco deixa de avançar.",
+            "de": "Gegen den Wind bedeutet, dass der Wind genau von vorn weht, sodass die Segel schlagen und das Boot keine Fahrt mehr macht."
+          }
+        },
+        {
+          "cle": "tribord-amures",
+          "mot": {"fr": "tribord amures", "en": "starboard tack", "it": "mure a dritta", "es": "amura a estribor", "pt": "amura a estibordo", "de": "Steuerbordbug"},
+          "def": {
+            "fr": "Tribord amures signifie que le vent frappe le côté droit du bateau, ce qui lui donne la priorité sur un bateau bâbord amures.",
+            "en": "Starboard tack means the wind hits the right side of the boat, which gives it right of way over a boat on port tack.",
+            "it": "Mure a dritta significa che il vento colpisce il lato destro della barca, il che le dà la precedenza su una barca mure a sinistra.",
+            "es": "Amura a estribor significa que el viento da en el lado derecho del barco, lo que le da preferencia sobre uno amurado a babor.",
+            "pt": "Amura a estibordo significa que o vento bate no lado direito do barco, o que lhe dá prioridade sobre um barco amurado a bombordo.",
+            "de": "Steuerbordbug bedeutet, dass der Wind die rechte Bootsseite trifft, was dem Boot Vorfahrt vor einem Boot auf Backbordbug gibt."
+          }
+        },
+        {
+          "cle": "babord-amures",
+          "mot": {"fr": "bâbord amures", "en": "port tack", "it": "mure a sinistra", "es": "amura a babor", "pt": "amura a bombordo", "de": "Backbordbug"},
+          "def": {
+            "fr": "Bâbord amures signifie que le vent frappe le côté gauche du bateau, ce qui l'oblige à céder le passage à un bateau tribord amures.",
+            "en": "Port tack means the wind hits the left side of the boat, which obliges it to give way to a boat on starboard tack.",
+            "it": "Mure a sinistra significa che il vento colpisce il lato sinistro della barca, che deve quindi dare la precedenza a chi ha mure a dritta.",
+            "es": "Amura a babor significa que el viento da en el lado izquierdo del barco, que debe ceder el paso a uno amurado a estribor.",
+            "pt": "Amura a bombordo significa que o vento bate no lado esquerdo do barco, que deve dar passagem a um barco amurado a estibordo.",
+            "de": "Backbordbug bedeutet, dass der Wind die linke Bootsseite trifft, weshalb das Boot einem Boot auf Steuerbordbug ausweichen muss."
+          }
+        },
+        {
+          "cle": "allure",
+          "mot": {"fr": "allure", "en": "point of sail", "it": "andatura", "es": "rumbo respecto al viento", "pt": "rumo ao vento", "de": "Kurs zum Wind"},
+          "def": {
+            "fr": "L'allure est l'angle que fait la route du bateau avec la direction du vent, et il détermine comment on règle les voiles.",
+            "en": "The point of sail is the angle between the boat's course and the wind direction, and it decides how the sails are set.",
+            "it": "L'andatura è l'angolo tra la rotta della barca e la direzione del vento, e determina come si regolano le vele.",
+            "es": "El rumbo respecto al viento es el ángulo entre la ruta del barco y la dirección del viento, y decide cómo se regulan las velas.",
+            "pt": "O rumo ao vento é o ângulo entre a rota do barco e a direção do vento, e decide como se regulam as velas.",
+            "de": "Der Kurs zum Wind ist der Winkel zwischen dem Kurs des Bootes und der Windrichtung und bestimmt, wie die Segel gefahren werden."
+          }
+        },
+        {
+          "cle": "au-vent",
+          "mot": {"fr": "au vent", "en": "windward", "it": "sopravvento", "es": "barlovento", "pt": "barlavento", "de": "Luv"},
+          "def": {
+            "fr": "Au vent désigne le côté d'où souffle le vent, le côté haut du bateau quand il gîte, où l'équipage se place pour équilibrer.",
+            "en": "Windward is the side the wind blows from, the high side of the boat when it heels, where the crew sits to balance it.",
+            "it": "Sopravvento è il lato da cui soffia il vento, il lato alto della barca quando sbanda, dove l'equipaggio si siede per bilanciarla.",
+            "es": "Barlovento es el lado de donde sopla el viento, el lado alto del barco cuando escora, donde se sienta la tripulación para equilibrarlo.",
+            "pt": "Barlavento é o lado de onde sopra o vento, o lado alto do barco quando adorna, onde a tripulação se senta para o equilibrar.",
+            "de": "Luv ist die Seite, von der der Wind weht, die hohe Seite des Bootes beim Krängen, auf der die Crew zum Ausbalancieren sitzt."
+          }
+        },
+        {
+          "cle": "sous-le-vent",
+          "mot": {"fr": "sous le vent", "en": "leeward", "it": "sottovento", "es": "sotavento", "pt": "sotavento", "de": "Lee"},
+          "def": {
+            "fr": "Sous le vent désigne le côté opposé à celui d'où souffle le vent, vers lequel le bateau est poussé quand il gîte et dérive.",
+            "en": "Leeward is the side opposite the one the wind blows from, towards which the boat is pushed when it heels and drifts.",
+            "it": "Sottovento è il lato opposto a quello da cui soffia il vento, verso cui la barca è spinta quando sbanda e scarroccia.",
+            "es": "Sotavento es el lado opuesto a aquel de donde sopla el viento, hacia el que el barco es empujado cuando escora y deriva.",
+            "pt": "Sotavento é o lado oposto àquele de onde sopra o vento, para o qual o barco é empurrado quando adorna e deriva.",
+            "de": "Lee ist die Seite, die dem Wind abgewandt ist, zu der das Boot gedrückt wird, wenn es krängt und abdriftet."
+          }
+        },
+        {
+          "cle": "zone-de-non-vent",
+          "mot": {"fr": "zone de non-vent", "en": "no-go zone", "it": "zona morta", "es": "zona muerta", "pt": "zona morta", "de": "No-go-Zone"},
+          "def": {
+            "fr": "La zone de non-vent est le secteur face au vent où les voiles ne portent plus et où le bateau ne peut avancer.",
+            "en": "The no-go zone is the sector facing the wind where the sails cannot drive and the boat cannot make way.",
+            "it": "La zona morta è il settore di fronte al vento in cui le vele non spingono più e la barca non può avanzare.",
+            "es": "La zona muerta es el sector frente al viento en el que las velas ya no empujan y el barco no puede avanzar.",
+            "pt": "A zona morta é o setor de frente para o vento em que as velas já não impulsionam e o barco não pode avançar.",
+            "de": "Die No-go-Zone ist der Sektor direkt gegen den Wind, in dem die Segel nicht mehr antreiben und das Boot nicht vorankommt."
+          }
+        },
+        {
+          "cle": "incidence",
+          "mot": {"fr": "incidence", "en": "angle of attack", "it": "incidenza", "es": "incidencia", "pt": "incidência", "de": "Anstellwinkel"},
+          "def": {
+            "fr": "L'incidence est l'angle entre la voile et le vent qui l'atteint, et elle règle la force que la voile produit.",
+            "en": "The angle of attack is the angle between the sail and the wind striking it, and it governs how much force the sail produces.",
+            "it": "L'incidenza è l'angolo tra la vela e il vento che la colpisce, e regola la forza prodotta dalla vela.",
+            "es": "La incidencia es el ángulo entre la vela y el viento que la golpea, y regula la fuerza que produce la vela.",
+            "pt": "A incidência é o ângulo entre a vela e o vento que a atinge, e regula a força que a vela produz.",
+            "de": "Der Anstellwinkel ist der Winkel zwischen Segel und anströmendem Wind und bestimmt, wie viel Kraft das Segel erzeugt."
+          }
+        },
+        {
+          "cle": "gite",
+          "mot": {"fr": "gîte", "en": "heel", "it": "sbandamento", "es": "escora", "pt": "adornamento", "de": "Krängung"},
+          "def": {
+            "fr": "La gîte est l'inclinaison du bateau sur le côté sous la poussée du vent, qu'on réduit en ouvrant les voiles.",
+            "en": "Heel is the sideways tilt of the boat under the push of the wind, which you reduce by opening the sails.",
+            "it": "Lo sbandamento è l'inclinazione laterale della barca sotto la spinta del vento, che si riduce aprendo le vele.",
+            "es": "La escora es la inclinación lateral del barco bajo el empuje del viento, que se reduce abriendo las velas.",
+            "pt": "O adornamento é a inclinação lateral do barco sob o empurrão do vento, que se reduz abrindo as velas.",
+            "de": "Die Krängung ist die seitliche Neigung des Bootes unter dem Winddruck, die man durch Fieren der Segel verringert."
+          }
+        },
+        {
+          "cle": "cap",
+          "mot": {"fr": "cap", "en": "heading", "it": "prua", "es": "rumbo", "pt": "rumo", "de": "Steuerkurs"},
+          "def": {
+            "fr": "Le cap est la direction dans laquelle pointe l'avant du bateau, mesurée par rapport au nord, et c'est elle qu'on suit au compas.",
+            "en": "The heading is the direction the bow of the boat points, measured from north, and it is what you follow on the compass.",
+            "it": "La prua è la direzione in cui punta la barca, misurata rispetto al nord, ed è quella che si segue con la bussola.",
+            "es": "El rumbo es la dirección hacia la que apunta la proa del barco, medida respecto al norte, que se sigue con el compás.",
+            "pt": "O rumo é a direção para onde aponta a proa do barco, medida em relação ao norte, e é a que se segue pela bússola.",
+            "de": "Der Steuerkurs ist die Richtung, in die der Bug des Bootes zeigt, gemessen von Nord, und man steuert ihn nach dem Kompass."
+          }
+        },
+        {
+          "cle": "vent-reel",
+          "mot": {"fr": "vent réel", "en": "true wind", "it": "vento reale", "es": "viento real", "pt": "vento real", "de": "wahrer Wind"},
+          "def": {
+            "fr": "Le vent réel est le vent tel qu'il souffle, sans tenir compte du mouvement du bateau, et c'est lui que donne la météo.",
+            "en": "True wind is the wind as it actually blows, ignoring the boat's own movement, and it is the one the forecast gives.",
+            "it": "Il vento reale è il vento così com'è davvero, senza tener conto del movimento della barca, ed è quello indicato dalle previsioni.",
+            "es": "El viento real es el viento tal como sopla de verdad, sin contar el movimiento del barco, y es el que da la previsión.",
+            "pt": "O vento real é o vento tal como sopra de facto, sem contar o movimento do barco, e é o que dá a previsão.",
+            "de": "Der wahre Wind ist der Wind, wie er tatsächlich weht, ohne die Eigenbewegung des Bootes, und ihn gibt die Vorhersage an."
+          }
+        },
+        {
+          "cle": "vent-apparent",
+          "mot": {"fr": "vent apparent", "en": "apparent wind", "it": "vento apparente", "es": "viento aparente", "pt": "vento aparente", "de": "scheinbarer Wind"},
+          "def": {
+            "fr": "Le vent apparent est le vent ressenti à bord, mélange du vent réel et de la vitesse du bateau, qui guide le réglage des voiles.",
+            "en": "Apparent wind is the wind felt on board, a mix of the true wind and the boat's speed, which guides how the sails are trimmed.",
+            "it": "Il vento apparente è il vento percepito a bordo, somma del vento reale e della velocità della barca, che guida la regolazione delle vele.",
+            "es": "El viento aparente es el viento sentido a bordo, mezcla del viento real y la velocidad del barco, que guía la regulación de las velas.",
+            "pt": "O vento aparente é o vento sentido a bordo, mistura do vento real e da velocidade do barco, que orienta a regulação das velas.",
+            "de": "Der scheinbare Wind ist der an Bord gespürte Wind, eine Mischung aus wahrem Wind und Bootsgeschwindigkeit, der die Segeleinstellung leitet."
+          }
+        },
+        {
+          "cle": "derive",
+          "mot": {"fr": "dérive", "en": "leeway", "it": "scarroccio", "es": "deriva", "pt": "deriva", "de": "Abdrift"},
+          "def": {
+            "fr": "La dérive est le glissement latéral du bateau sous la poussée du vent, qui l'écarte de la route qu'il vise.",
+            "en": "Leeway is the sideways slide of the boat under the push of the wind, which carries it off the course it aims for.",
+            "it": "Lo scarroccio è lo scivolamento laterale della barca sotto la spinta del vento, che la allontana dalla rotta voluta.",
+            "es": "La deriva es el deslizamiento lateral del barco bajo el empuje del viento, que lo aparta de la ruta que pretende seguir.",
+            "pt": "A deriva é o deslizamento lateral do barco sob o empurrão do vento, que o afasta da rota que pretende seguir.",
+            "de": "Die Abdrift ist das seitliche Wegrutschen des Bootes unter dem Winddruck, das es von dem angestrebten Kurs abbringt."
+          }
+        },
+        {
+          "cle": "adonner",
+          "mot": {"fr": "adonner", "en": "to free", "it": "allargare", "es": "abrirse", "pt": "folgar", "de": "raumen"},
+          "def": {
+            "fr": "Adonner se dit du vent qui tourne vers l'arrière du bateau, ce qui permet de choquer les voiles et de faire route plus librement.",
+            "en": "To free describes the wind turning towards the stern of the boat, which lets you ease the sails and steer a freer course.",
+            "it": "Allargare si dice del vento che gira verso poppa, il che permette di lascare le vele e di navigare più liberamente.",
+            "es": "Abrirse se dice del viento que gira hacia la popa, lo que permite lascar las velas y navegar con más libertad.",
+            "pt": "Folgar diz-se do vento que gira para a popa, o que permite soltar as velas e navegar com mais liberdade.",
+            "de": "Raumen sagt man vom Wind, der nach achtern dreht, sodass man die Segel fieren und freier segeln kann."
+          }
+        },
+        {
+          "cle": "refuser",
+          "mot": {"fr": "refuser", "en": "to head", "it": "stringere", "es": "escasear", "pt": "escassear", "de": "schralen"},
+          "def": {
+            "fr": "Refuser se dit du vent qui tourne vers l'avant du bateau, ce qui oblige à border les voiles ou à abattre.",
+            "en": "To head describes the wind turning towards the bow of the boat, which forces you to sheet in the sails or bear away.",
+            "it": "Stringere si dice del vento che gira verso prua, il che costringe a cazzare le vele o a poggiare.",
+            "es": "Escasear se dice del viento que gira hacia la proa, lo que obliga a cazar las velas o a arribar.",
+            "pt": "Escassear diz-se do vento que gira para a proa, o que obriga a caçar as velas ou a arribar.",
+            "de": "Schralen sagt man vom Wind, der nach vorn dreht, sodass man die Segel dichtholen oder abfallen muss."
+          }
+        },
+        {
+          "cle": "risee",
+          "mot": {"fr": "risée", "en": "puff", "it": "refolo", "es": "racha", "pt": "rajada", "de": "Windstoß"},
+          "def": {
+            "fr": "La risée est une brève hausse du vent qui ride la surface de l'eau et fait gîter un instant le bateau.",
+            "en": "A puff is a brief rise in the wind that ripples the water's surface and makes the boat heel for a moment.",
+            "it": "Il refolo è un breve aumento del vento che increspa la superficie dell'acqua e fa sbandare un istante la barca.",
+            "es": "La racha es un aumento breve del viento que riza la superficie del agua y hace escorar un instante al barco.",
+            "pt": "A rajada é um aumento breve do vento que encrespa a superfície da água e faz adornar por um instante o barco.",
+            "de": "Der Windstoß ist eine kurze Zunahme des Windes, die die Wasseroberfläche kräuselt und das Boot einen Moment krängen lässt."
+          }
+        },
+        {
+          "cle": "faseyer",
+          "mot": {"fr": "faseyer", "en": "to flap", "it": "fileggiare", "es": "flamear", "pt": "panejar", "de": "killen"},
+          "def": {
+            "fr": "Faseyer se dit d'une voile qui bat au vent parce qu'elle est trop choquée, ce qui prouve qu'elle ne pousse plus.",
+            "en": "To flap describes a sail that shakes in the wind because it is let out too far, showing it no longer drives the boat.",
+            "it": "Fileggiare si dice di una vela che sbatte al vento perché è lascata troppo, segno che non spinge più la barca.",
+            "es": "Flamear se dice de una vela que restalla al viento por estar demasiado lascada, señal de que ya no empuja el barco.",
+            "pt": "Panejar diz-se de uma vela que bate ao vento por estar demasiado folgada, sinal de que já não impulsiona o barco.",
+            "de": "Killen sagt man von einem Segel, das im Wind schlägt, weil es zu weit gefiert ist, ein Zeichen, dass es nicht mehr antreibt."
+          }
+        },
+        {
+          "cle": "devent",
+          "mot": {"fr": "dévent", "en": "wind shadow", "it": "ombra di vento", "es": "sombra de viento", "pt": "sombra de vento", "de": "Windschatten"},
+          "def": {
+            "fr": "Le dévent est la zone d'air perturbé derrière un autre bateau ou un obstacle, où le vent faiblit et le bateau ralentit.",
+            "en": "Wind shadow is the area of disturbed air behind another boat or an obstacle, where the wind weakens and the boat slows.",
+            "it": "L'ombra di vento è la zona d'aria disturbata dietro un'altra barca o un ostacolo, dove il vento cala e la barca rallenta.",
+            "es": "La sombra de viento es la zona de aire perturbado detrás de otro barco o un obstáculo, donde el viento flojea y el barco frena.",
+            "pt": "A sombra de vento é a zona de ar perturbado atrás de outro barco ou um obstáculo, onde o vento enfraquece e o barco abranda.",
+            "de": "Der Windschatten ist die Zone gestörter Luft hinter einem anderen Boot oder Hindernis, in der der Wind nachlässt und das Boot langsamer wird."
+          }
+        },
+        {
+          "cle": "grain",
+          "mot": {"fr": "grain", "en": "squall", "it": "groppo", "es": "turbonada", "pt": "turbonada", "de": "Böe"},
+          "def": {
+            "fr": "Le grain est un coup de vent violent, souvent accompagné de pluie, qui arrive vite et oblige à réduire la voilure.",
+            "en": "A squall is a violent burst of wind, often with rain, that arrives fast and forces the crew to reduce sail.",
+            "it": "Il groppo è una raffica violenta di vento, spesso accompagnata da pioggia, che arriva in fretta e costringe a ridurre la velatura.",
+            "es": "La turbonada es una ráfaga violenta de viento, a menudo con lluvia, que llega deprisa y obliga a reducir vela.",
+            "pt": "A turbonada é uma rajada violenta de vento, muitas vezes com chuva, que chega depressa e obriga a reduzir pano.",
+            "de": "Die Böe ist ein heftiger Windstoß, oft mit Regen, der schnell heranzieht und dazu zwingt, die Segelfläche zu verkleinern."
+          }
+        },
+        {
+          "cle": "bascule-du-vent",
+          "mot": {"fr": "bascule du vent", "en": "wind shift", "it": "salto di vento", "es": "cambio de viento", "pt": "mudança de vento", "de": "Winddrehung"},
+          "def": {
+            "fr": "La bascule du vent est un changement net de direction du vent, qu'il faut repérer pour adapter son cap et ses réglages.",
+            "en": "A wind shift is a clear change in the direction of the wind, which you must spot in order to adapt your heading and trim.",
+            "it": "Il salto di vento è un netto cambiamento della direzione del vento, da individuare per adattare la rotta e le regolazioni.",
+            "es": "El cambio de viento es una variación clara de la dirección del viento, que hay que detectar para adaptar el rumbo y la regulación.",
+            "pt": "A mudança de vento é uma variação clara da direção do vento, que é preciso detetar para adaptar o rumo e a regulação.",
+            "de": "Die Winddrehung ist eine deutliche Änderung der Windrichtung, die man erkennen muss, um Kurs und Segeleinstellung anzupassen."
+          }
+        },
+        {
+          "cle": "ardent",
+          "mot": {"fr": "ardent", "en": "weather helm", "it": "orziero", "es": "ardiente", "pt": "orçador", "de": "luvgierig"},
+          "def": {
+            "fr": "Un bateau ardent a tendance à remonter seul vers le vent, ce qui oblige le barreur à tenir la barre dans l'autre sens.",
+            "en": "A boat with weather helm tends to turn up into the wind by itself, which obliges the helmsman to hold the helm the other way.",
+            "it": "Una barca orziera tende a puntare da sola verso il vento, il che obbliga il timoniere a tenere la barra in senso contrario.",
+            "es": "Un barco ardiente tiende a orzar solo hacia el viento, lo que obliga al timonel a mantener la caña en sentido contrario.",
+            "pt": "Um barco orçador tende a orçar sozinho para o vento, o que obriga o timoneiro a manter a cana no sentido contrário.",
+            "de": "Ein luvgieriges Boot neigt dazu, von allein in den Wind zu drehen, sodass der Rudergänger die Pinne dagegenhalten muss."
+          }
+        },
+        {
+          "cle": "petole",
+          "mot": {"fr": "pétole", "en": "flat calm", "it": "bonaccia", "es": "calma chicha", "pt": "calmaria", "de": "Flaute"},
+          "def": {
+            "fr": "La pétole est une absence totale de vent qui laisse la mer lisse et les voiles pendantes, si bien que le bateau n'avance plus.",
+            "en": "A flat calm is a total absence of wind that leaves the sea smooth and the sails hanging, so the boat no longer moves.",
+            "it": "La bonaccia è un'assenza totale di vento che lascia il mare liscio e le vele flosce, così la barca non avanza più.",
+            "es": "La calma chicha es una ausencia total de viento que deja el mar liso y las velas colgando, así que el barco ya no avanza.",
+            "pt": "A calmaria é uma ausência total de vento que deixa o mar liso e as velas penduradas, por isso o barco já não avança.",
+            "de": "Die Flaute ist völlige Windstille, die das Meer glatt und die Segel schlaff lässt, sodass das Boot nicht mehr vorankommt."
+          }
+        },
+        {
+          "cle": "route-fond",
+          "mot": {"fr": "route fond", "en": "course over ground", "it": "rotta effettiva", "es": "rumbo efectivo", "pt": "rumo efetivo", "de": "Kurs über Grund"},
+          "def": {
+            "fr": "La route fond est le trajet réellement parcouru sur le fond, qui diffère du cap sous l'effet du courant et de la dérive.",
+            "en": "Course over ground is the path the boat really covers over the seabed, which differs from the heading because of current and leeway.",
+            "it": "La rotta effettiva è il percorso realmente compiuto dalla barca sul fondo, che differisce dalla prua per effetto di corrente e scarroccio.",
+            "es": "El rumbo efectivo es el trayecto realmente recorrido por el barco sobre el fondo, que difiere de la proa por la corriente y la deriva.",
+            "pt": "O rumo efetivo é o trajeto realmente percorrido pelo barco sobre o fundo, que difere da proa por causa da corrente e da deriva.",
+            "de": "Der Kurs über Grund ist der Weg, den das Boot tatsächlich über dem Meeresboden zurücklegt und der durch Strömung und Abdrift vom Steuerkurs abweicht."
+          }
+        },
+        {
+          "cle": "decrochage",
+          "mot": {"fr": "décrochage", "en": "stall", "it": "stallo", "es": "entrada en pérdida", "pt": "perda de sustentação", "de": "Strömungsabriss"},
+          "def": {
+            "fr": "Le décrochage survient quand la voile est trop bordée pour l'angle du vent, si bien que l'air se détache et qu'elle perd sa puissance.",
+            "en": "A stall happens when a sail is sheeted too far in for the wind angle, so the airflow detaches and it loses its power.",
+            "it": "Lo stallo avviene quando la vela è cazzata troppo per l'angolo del vento, così il flusso d'aria si stacca e perde potenza.",
+            "es": "La entrada en pérdida ocurre cuando la vela está cazada demasiado para el ángulo del viento, así que el flujo se desprende y pierde potencia.",
+            "pt": "A perda de sustentação ocorre quando a vela está demasiado caçada para o ângulo do vento, o fluxo solta-se e ela perde potência.",
+            "de": "Der Strömungsabriss tritt auf, wenn das Segel für den Windwinkel zu dicht geholt ist, sodass die Luft abreißt und es Kraft verliert."
+          }
+        },
+        {
+          "cle": "bord",
+          "mot": {"fr": "bord", "en": "leg", "it": "bordo", "es": "bordada", "pt": "bordada", "de": "Schlag"},
+          "def": {
+            "fr": "Un bord est la portion de route suivie avec le vent du même côté, entre deux passages du bateau par le vent.",
+            "en": "A leg is the stretch of course sailed with the wind on the same side, between two turns through the wind.",
+            "it": "Il bordo è il tratto di rotta percorso con il vento dallo stesso lato, tra due passaggi della barca attraverso il vento.",
+            "es": "La bordada es el tramo de ruta recorrido con el viento por el mismo lado, entre dos pasos del barco por el viento.",
+            "pt": "A bordada é o troço de rota percorrido com o vento do mesmo lado, entre duas passagens do barco pelo vento.",
+            "de": "Ein Schlag ist der Abschnitt der Strecke, der mit dem Wind von derselben Seite gesegelt wird, zwischen zwei Durchgängen durch den Wind."
+          }
+        }
+      ]
+    },
+    {
+      "cle": "meteo",
+      "nom": {"fr": "La météo", "en": "The weather", "it": "Il meteo", "es": "El tiempo", "pt": "O tempo", "de": "Das Wetter"},
+      "termes": [
+        {
+          "cle": "vent-etabli",
+          "mot": {"fr": "vent établi", "en": "steady wind", "it": "vento stabile", "es": "viento establecido", "pt": "vento estabelecido", "de": "stetiger Wind"},
+          "def": {
+            "fr": "Le vent établi souffle de façon régulière en force et en direction, ce qui permet de tenir un cap stable.",
+            "en": "Steady wind blows consistently in strength and direction, which makes it possible to hold a stable course.",
+            "it": "Il vento stabile soffia in modo regolare per forza e direzione, il che permette di mantenere una rotta costante.",
+            "es": "El viento establecido sopla de forma regular en fuerza y dirección, lo que permite mantener un rumbo estable.",
+            "pt": "O vento estabelecido sopra de forma regular em força e direção, o que permite manter um rumo estável.",
+            "de": "Der stetige Wind weht gleichmäßig in Stärke und Richtung, sodass man einen stabilen Kurs halten kann."
+          }
+        },
+        {
+          "cle": "noeud-vitesse",
+          "mot": {"fr": "nœud", "en": "knot", "it": "nodo", "es": "nudo", "pt": "nó", "de": "Knoten"},
+          "def": {
+            "fr": "Le nœud est l'unité de vitesse en mer, un mille nautique par heure, qui chiffre la force du vent.",
+            "en": "The knot is the unit of speed at sea, one nautical mile per hour, used to put a number on wind strength.",
+            "it": "Il nodo è l'unità di velocità in mare, un miglio nautico all'ora, che serve a quantificare la forza del vento.",
+            "es": "El nudo es la unidad de velocidad en el mar, una milla náutica por hora, que sirve para cuantificar la fuerza del viento.",
+            "pt": "O nó é a unidade de velocidade no mar, uma milha náutica por hora, que serve para quantificar a força do vento.",
+            "de": "Der Knoten ist die Geschwindigkeitseinheit auf See, eine Seemeile pro Stunde, mit der man die Windstärke beziffert."
+          }
+        },
+        {
+          "cle": "beaufort",
+          "mot": {"fr": "échelle de Beaufort", "en": "Beaufort scale", "it": "scala Beaufort", "es": "escala de Beaufort", "pt": "escala de Beaufort", "de": "Beaufortskala"},
+          "def": {
+            "fr": "L'échelle de Beaufort classe la force du vent de 0 à 12 et annonce l'état de mer qui en découle.",
+            "en": "The Beaufort scale ranks wind strength from 0 to 12 and tells you what sea state to expect as a result.",
+            "it": "La scala Beaufort classifica la forza del vento da 0 a 12 e indica lo stato del mare che ne risulta.",
+            "es": "La escala de Beaufort clasifica la fuerza del viento de 0 a 12 e indica el estado de la mar resultante.",
+            "pt": "A escala de Beaufort classifica a força do vento de 0 a 12 e indica o estado do mar resultante.",
+            "de": "Die Beaufortskala stuft die Windstärke von 0 bis 12 ein und zeigt den daraus folgenden Seegang an."
+          }
+        },
+        {
+          "cle": "houle",
+          "mot": {"fr": "houle", "en": "swell", "it": "onda lunga", "es": "mar de fondo", "pt": "ondulação", "de": "Dünung"},
+          "def": {
+            "fr": "La houle est la succession de longues vagues régulières venues de loin, qui soulèvent le bateau sans le secouer.",
+            "en": "Swell is the series of long, regular waves that come from far away and lift the boat without shaking it.",
+            "it": "L'onda lunga è la successione di onde lunghe e regolari che arrivano da lontano e sollevano la barca senza scuoterla.",
+            "es": "El mar de fondo es la sucesión de olas largas y regulares que llegan de lejos y levantan el barco sin sacudirlo.",
+            "pt": "A ondulação é a sucessão de ondas longas e regulares que chegam de longe e levantam o barco sem o sacudir.",
+            "de": "Die Dünung ist die Folge langer, gleichmäßiger Wellen, die von weit her kommen und das Boot anheben, ohne es zu schütteln."
+          }
+        },
+        {
+          "cle": "clapot",
+          "mot": {"fr": "clapot", "en": "chop", "it": "maretta", "es": "mar picada", "pt": "mar picado", "de": "Kabbelsee"},
+          "def": {
+            "fr": "Le clapot est une mer courte et désordonnée, levée par le vent local, qui secoue le bateau et ralentit sa progression.",
+            "en": "Chop is a short, disordered sea raised by local wind, which shakes the boat and slows its progress.",
+            "it": "La maretta è un mare corto e disordinato, sollevato dal vento locale, che scuote la barca e ne rallenta l'avanzamento.",
+            "es": "La mar picada es un oleaje corto y desordenado, levantado por el viento local, que sacude el barco y frena su avance.",
+            "pt": "O mar picado é feito de ondas curtas e desordenadas, levantadas pelo vento local, que sacodem o barco e travam o avanço.",
+            "de": "Die Kabbelsee ist ein kurzer, ungeordneter Seegang, vom örtlichen Wind aufgeworfen, der das Boot durchschüttelt und seine Fahrt bremst."
+          }
+        },
+        {
+          "cle": "deferlante",
+          "mot": {"fr": "déferlante", "en": "breaker", "it": "frangente", "es": "rompiente", "pt": "rebentação", "de": "Brecher"},
+          "def": {
+            "fr": "La déferlante est une vague dont la crête s'effondre en écume, assez puissante pour coucher ou retourner un petit bateau.",
+            "en": "A breaker is a wave whose crest collapses into foam, powerful enough to knock down or capsize a small boat.",
+            "it": "Il frangente è un'onda la cui cresta crolla in schiuma, abbastanza potente da sdraiare o rovesciare una piccola barca.",
+            "es": "La rompiente es una ola cuya cresta se derrumba en espuma, bastante potente para tumbar o volcar un barco pequeño.",
+            "pt": "A rebentação é uma onda cuja crista desaba em espuma, forte o bastante para deitar ou virar um barco pequeno.",
+            "de": "Der Brecher ist eine Welle, deren Kamm in Schaum zusammenstürzt, stark genug, um ein kleines Boot flachzulegen oder zu kentern."
+          }
+        },
+        {
+          "cle": "baine",
+          "mot": {"fr": "baïne", "en": "baïne", "it": "baïne", "es": "baïne", "pt": "baïne", "de": "Baïne"},
+          "def": {
+            "fr": "La baïne est une cuvette de plage reliée à la mer par un chenal où un fort courant entraîne vers le large.",
+            "en": "Baïne (French term without English equivalent) is a beach trough joined to the sea by a channel where a strong current drags seaward.",
+            "it": "La baïne (termine francese senza equivalente) è una conca di spiaggia unita al mare da un canale dove una forte corrente trascina al largo.",
+            "es": "La baïne (término francés sin equivalente) es una poza de playa unida al mar por un canal donde una fuerte corriente arrastra mar adentro.",
+            "pt": "A baïne (termo francês sem equivalente) é uma depressão de praia ligada ao mar por um canal onde uma forte corrente arrasta ao largo.",
+            "de": "Die Baïne (französischer Begriff ohne Entsprechung) ist eine Strandsenke, durch einen Kanal mit dem Meer verbunden, in dem eine starke Strömung aufs Meer hinauszieht."
+          }
+        },
+        {
+          "cle": "courant",
+          "mot": {"fr": "courant", "en": "current", "it": "corrente", "es": "corriente", "pt": "corrente", "de": "Strömung"},
+          "def": {
+            "fr": "Le courant est le déplacement de l'eau qui pousse le bateau et change sa route et sa vitesse réelles sur le fond.",
+            "en": "Current is the movement of water that pushes the boat and changes its real course and speed over the ground.",
+            "it": "La corrente è lo spostamento dell'acqua che spinge la barca e cambia la sua rotta e la sua velocità effettive sul fondo.",
+            "es": "La corriente es el desplazamiento del agua que empuja el barco y cambia su rumbo y su velocidad reales sobre el fondo.",
+            "pt": "A corrente é o deslocamento da água que empurra o barco e altera o seu rumo e a sua velocidade reais sobre o fundo.",
+            "de": "Die Strömung ist die Bewegung des Wassers, die das Boot versetzt und seinen tatsächlichen Kurs und seine Fahrt über Grund verändert."
+          }
+        },
+        {
+          "cle": "maree",
+          "mot": {"fr": "marée", "en": "tide", "it": "marea", "es": "marea", "pt": "maré", "de": "Gezeiten"},
+          "def": {
+            "fr": "La marée est la montée et la descente régulières de la mer, environ deux fois par jour, qui changent profondeur et courants.",
+            "en": "The tide is the regular rise and fall of the sea, about twice a day, which changes depth and currents.",
+            "it": "La marea è il regolare innalzarsi e abbassarsi del mare, circa due volte al giorno, che modifica profondità e correnti.",
+            "es": "La marea es la subida y bajada regulares del mar, unas dos veces al día, que cambian la profundidad y las corrientes.",
+            "pt": "A maré é a subida e descida regulares do mar, cerca de duas vezes por dia, que mudam a profundidade e as correntes.",
+            "de": "Die Gezeiten sind das regelmäßige Steigen und Fallen des Meeres, etwa zweimal täglich, das Wassertiefe und Strömungen verändert."
+          }
+        },
+        {
+          "cle": "flot",
+          "mot": {"fr": "flot", "en": "flood tide", "it": "flusso", "es": "flujo", "pt": "enchente", "de": "Flut"},
+          "def": {
+            "fr": "Le flot est la période où la mer monte, ce qui pousse l'eau vers la côte et donne plus de fond.",
+            "en": "The flood tide is the period when the sea rises, pushing water towards the coast and giving more depth.",
+            "it": "Il flusso è il periodo in cui il mare sale, spingendo l'acqua verso la costa e dando più fondale.",
+            "es": "El flujo es el periodo en que el mar sube, empujando el agua hacia la costa y dando más fondo.",
+            "pt": "A enchente é o período em que o mar sobe, empurrando a água para a costa e dando mais fundo.",
+            "de": "Die Flut ist die Zeit, in der das Meer steigt, das Wasser zur Küste drückt und mehr Wassertiefe gibt."
+          }
+        },
+        {
+          "cle": "jusant",
+          "mot": {"fr": "jusant", "en": "ebb tide", "it": "riflusso", "es": "reflujo", "pt": "vazante", "de": "Ebbe"},
+          "def": {
+            "fr": "Le jusant est la période où la mer descend, ce qui éloigne l'eau de la côte et réduit le fond disponible.",
+            "en": "The ebb tide is the period when the sea falls, drawing water away from the coast and reducing the available depth.",
+            "it": "Il riflusso è il periodo in cui il mare scende, allontanando l'acqua dalla costa e riducendo il fondale disponibile.",
+            "es": "El reflujo es el periodo en que el mar baja, alejando el agua de la costa y reduciendo el fondo disponible.",
+            "pt": "A vazante é o período em que o mar desce, afastando a água da costa e reduzindo o fundo disponível.",
+            "de": "Die Ebbe ist die Zeit, in der das Meer fällt, das Wasser von der Küste abzieht und die verfügbare Wassertiefe verringert."
+          }
+        },
+        {
+          "cle": "pleine-mer",
+          "mot": {"fr": "pleine mer", "en": "high water", "it": "alta marea", "es": "pleamar", "pt": "preia-mar", "de": "Hochwasser"},
+          "def": {
+            "fr": "La pleine mer est le moment où la mer atteint son niveau maximal, ce qui donne le plus de fond sous la quille.",
+            "en": "High water is the moment when the sea reaches its maximum level, giving the most depth under the keel.",
+            "it": "L'alta marea è il momento in cui il mare raggiunge il livello massimo, dando il maggior fondale sotto la chiglia.",
+            "es": "La pleamar es el momento en que el mar alcanza su nivel máximo, lo que da más fondo bajo la quilla.",
+            "pt": "A preia-mar é o momento em que o mar atinge o nível máximo, o que dá mais fundo debaixo da quilha.",
+            "de": "Das Hochwasser ist der Moment, in dem das Meer seinen höchsten Stand erreicht und die größte Wassertiefe unter dem Kiel gibt."
+          }
+        },
+        {
+          "cle": "basse-mer",
+          "mot": {"fr": "basse mer", "en": "low water", "it": "bassa marea", "es": "bajamar", "pt": "baixa-mar", "de": "Niedrigwasser"},
+          "def": {
+            "fr": "La basse mer est le moment où la mer atteint son niveau minimal, ce qui découvre les hauts-fonds et les bancs.",
+            "en": "Low water is the moment when the sea reaches its minimum level, which uncovers shoals and banks.",
+            "it": "La bassa marea è il momento in cui il mare raggiunge il livello minimo, e scopre secche e banchi.",
+            "es": "La bajamar es el momento en que el mar alcanza su nivel mínimo, lo que deja al descubierto bajos y bancos.",
+            "pt": "A baixa-mar é o momento em que o mar atinge o nível mínimo, o que deixa a descoberto baixios e bancos.",
+            "de": "Das Niedrigwasser ist der Moment, in dem das Meer seinen tiefsten Stand erreicht und Untiefen und Bänke freilegt."
+          }
+        },
+        {
+          "cle": "etale",
+          "mot": {"fr": "étale", "en": "slack water", "it": "stanca di marea", "es": "estoa", "pt": "estofo", "de": "Stillwasser"},
+          "def": {
+            "fr": "L'étale est le bref moment où le courant de marée s'arrête avant de s'inverser, idéal pour franchir un passage difficile.",
+            "en": "Slack water is the brief moment when the tidal current stops before reversing, ideal for crossing a difficult passage.",
+            "it": "La stanca è il breve momento in cui la corrente di marea si ferma prima di invertirsi, ideale per superare un passaggio difficile.",
+            "es": "La estoa es el breve momento en que la corriente de marea se detiene antes de invertirse, ideal para cruzar un paso difícil.",
+            "pt": "O estofo é o breve momento em que a corrente de maré para antes de se inverter, ideal para atravessar uma passagem difícil.",
+            "de": "Das Stillwasser ist der kurze Moment, in dem die Tidenströmung stoppt, bevor sie kentert, ideal zum Durchfahren einer schwierigen Passage."
+          }
+        },
+        {
+          "cle": "pression",
+          "mot": {"fr": "pression atmosphérique", "en": "atmospheric pressure", "it": "pressione atmosferica", "es": "presión atmosférica", "pt": "pressão atmosférica", "de": "Luftdruck"},
+          "def": {
+            "fr": "La pression atmosphérique est le poids de l'air, mesuré en hectopascals ; sa chute annonce le mauvais temps.",
+            "en": "Atmospheric pressure is the weight of the air, measured in hectopascals; its fall warns of bad weather.",
+            "it": "La pressione atmosferica è il peso dell'aria, misurato in ettopascal; il suo calo annuncia il maltempo.",
+            "es": "La presión atmosférica es el peso del aire, medido en hectopascales; su caída anuncia mal tiempo.",
+            "pt": "A pressão atmosférica é o peso do ar, medido em hectopascais; a sua queda anuncia mau tempo.",
+            "de": "Der Luftdruck ist das Gewicht der Luft, gemessen in Hektopascal; sein Fallen kündigt schlechtes Wetter an."
+          }
+        },
+        {
+          "cle": "bulletin-meteo",
+          "mot": {"fr": "bulletin météo marine", "en": "marine weather forecast", "it": "bollettino meteo marino", "es": "parte meteorológico", "pt": "boletim meteorológico", "de": "Seewetterbericht"},
+          "def": {
+            "fr": "Le bulletin météo marine annonce le vent, la mer et la visibilité attendus dans une zone, et aide à décider de partir.",
+            "en": "The marine weather forecast gives the wind, sea and visibility expected in an area, and helps you decide whether to leave.",
+            "it": "Il bollettino meteo marino indica vento, mare e visibilità previsti in una zona e aiuta a decidere se partire.",
+            "es": "El parte meteorológico marítimo indica el viento, el mar y la visibilidad previstos en una zona y ayuda a decidir si salir.",
+            "pt": "O boletim meteorológico marítimo indica o vento, o mar e a visibilidade previstos numa zona e ajuda a decidir a saída.",
+            "de": "Der Seewetterbericht nennt Wind, Seegang und Sicht, die in einem Gebiet erwartet werden, und hilft bei der Entscheidung zum Auslaufen."
+          }
+        },
+        {
+          "cle": "depression",
+          "mot": {"fr": "dépression", "en": "low", "it": "depressione", "es": "borrasca", "pt": "depressão", "de": "Tief"},
+          "def": {
+            "fr": "La dépression est une zone de basse pression où l'air monte en tournant, ce qui apporte vent, nuages et pluie.",
+            "en": "A low is an area of low pressure where air rises while rotating, which brings wind, cloud and rain.",
+            "it": "La depressione è una zona di bassa pressione in cui l'aria sale ruotando, e porta vento, nuvole e pioggia.",
+            "es": "La borrasca es una zona de baja presión donde el aire asciende girando, lo que trae viento, nubes y lluvia.",
+            "pt": "A depressão é uma zona de baixa pressão onde o ar sobe a rodar, o que traz vento, nuvens e chuva.",
+            "de": "Das Tief ist ein Gebiet niedrigen Luftdrucks, in dem die Luft rotierend aufsteigt und Wind, Wolken und Regen bringt."
+          }
+        },
+        {
+          "cle": "anticyclone",
+          "mot": {"fr": "anticyclone", "en": "high", "it": "anticiclone", "es": "anticiclón", "pt": "anticiclone", "de": "Hoch"},
+          "def": {
+            "fr": "L'anticyclone est une zone de haute pression où l'air descend, ce qui apporte en général un temps stable et peu de vent.",
+            "en": "A high is an area of high pressure where air sinks, which generally brings settled weather and little wind.",
+            "it": "L'anticiclone è una zona di alta pressione in cui l'aria scende, e porta in genere tempo stabile e poco vento.",
+            "es": "El anticiclón es una zona de alta presión donde el aire desciende, lo que suele traer tiempo estable y poco viento.",
+            "pt": "O anticiclone é uma zona de alta pressão onde o ar desce, o que costuma trazer tempo estável e pouco vento.",
+            "de": "Das Hoch ist ein Gebiet hohen Luftdrucks, in dem die Luft absinkt und meist stabiles Wetter mit wenig Wind bringt."
+          }
+        },
+        {
+          "cle": "front",
+          "mot": {"fr": "front", "en": "front", "it": "fronte", "es": "frente", "pt": "frente", "de": "Front"},
+          "def": {
+            "fr": "Le front est la ligne où l'air chaud rencontre l'air froid, et son passage fait tourner le vent.",
+            "en": "A front is the line where warm air meets cold air, and its passage makes the wind shift.",
+            "it": "Il fronte è la linea in cui l'aria calda incontra l'aria fredda, e il suo passaggio fa girare il vento.",
+            "es": "El frente es la línea donde el aire cálido se encuentra con el aire frío, y su paso hace girar el viento.",
+            "pt": "A frente é a linha onde o ar quente encontra o ar frio, e a sua passagem faz rodar o vento.",
+            "de": "Die Front ist die Linie, an der warme Luft auf kalte Luft trifft, und ihr Durchzug lässt den Wind drehen."
+          }
+        },
+        {
+          "cle": "brise-de-mer",
+          "mot": {"fr": "brise de mer", "en": "sea breeze", "it": "brezza di mare", "es": "brisa marina", "pt": "brisa marítima", "de": "Seewind"},
+          "def": {
+            "fr": "La brise de mer est le vent frais qui souffle de la mer vers la terre en journée, quand le sol chauffe.",
+            "en": "The sea breeze is the cool wind that blows from the sea towards the land by day, when the ground heats up.",
+            "it": "La brezza di mare è il vento fresco che soffia dal mare verso la terra di giorno, quando il suolo si scalda.",
+            "es": "La brisa marina es el viento fresco que sopla del mar hacia la tierra durante el día, cuando el suelo se calienta.",
+            "pt": "A brisa marítima é o vento fresco que sopra do mar para a terra durante o dia, quando o solo aquece.",
+            "de": "Der Seewind ist der kühle Wind, der tagsüber vom Meer zum Land weht, wenn sich der Boden erwärmt."
+          }
+        },
+        {
+          "cle": "brise-de-terre",
+          "mot": {"fr": "brise de terre", "en": "land breeze", "it": "brezza di terra", "es": "brisa terrestre", "pt": "brisa terrestre", "de": "Landwind"},
+          "def": {
+            "fr": "La brise de terre est le vent léger qui souffle de la terre vers la mer la nuit, quand le sol se refroidit.",
+            "en": "The land breeze is the light wind that blows from the land towards the sea at night, when the ground cools.",
+            "it": "La brezza di terra è il vento leggero che soffia dalla terra verso il mare di notte, quando il suolo si raffredda.",
+            "es": "La brisa terrestre es el viento suave que sopla de la tierra hacia el mar por la noche, cuando el suelo se enfría.",
+            "pt": "A brisa terrestre é o vento leve que sopra da terra para o mar durante a noite, quando o solo arrefece.",
+            "de": "Der Landwind ist der schwache Wind, der nachts vom Land zum Meer weht, wenn sich der Boden abkühlt."
+          }
+        },
+        {
+          "cle": "rafale",
+          "mot": {"fr": "rafale", "en": "gust", "it": "raffica", "es": "racha", "pt": "rajada", "de": "Böe"},
+          "def": {
+            "fr": "La rafale est un renforcement brutal et bref du vent, qui fait gîter le bateau et oblige à soulager les voiles.",
+            "en": "A gust is a sudden, brief increase in wind strength, which heels the boat over and forces you to ease the sails.",
+            "it": "La raffica è un aumento improvviso e breve della forza del vento, che fa sbandare la barca e costringe ad alleggerire le vele.",
+            "es": "La racha es un aumento brusco y breve de la fuerza del viento, que hace escorar el barco y obliga a aliviar las velas.",
+            "pt": "A rajada é um aumento brusco e breve da força do vento, que faz adornar o barco e obriga a aliviar as velas.",
+            "de": "Die Böe ist eine plötzliche, kurze Zunahme der Windstärke, die das Boot krängen lässt und dazu zwingt, die Segel zu entlasten."
+          }
+        },
+        {
+          "cle": "tempete",
+          "mot": {"fr": "tempête", "en": "storm", "it": "tempesta", "es": "tempestad", "pt": "tempestade", "de": "schwerer Sturm"},
+          "def": {
+            "fr": "La tempête est un vent violent, de force 10 ou plus, qui creuse une mer énorme et rend la navigation dangereuse.",
+            "en": "A storm is a violent wind of force 10 or more, which builds an enormous sea and makes sailing dangerous.",
+            "it": "La tempesta è un vento violento, di forza 10 o più, che solleva un mare enorme e rende pericolosa la navigazione.",
+            "es": "La tempestad es un viento violento, de fuerza 10 o más, que levanta una mar enorme y hace peligrosa la navegación.",
+            "pt": "A tempestade é um vento violento, de força 10 ou mais, que levanta um mar enorme e torna a navegação perigosa.",
+            "de": "Der schwere Sturm ist ein heftiger Wind der Stärke 10 oder mehr, der eine enorme See aufbaut und das Segeln gefährlich macht."
+          }
+        },
+        {
+          "cle": "brume",
+          "mot": {"fr": "brume", "en": "mist", "it": "foschia", "es": "neblina", "pt": "neblina", "de": "Dunst"},
+          "def": {
+            "fr": "La brume est un voile de fines gouttelettes en suspension qui réduit la visibilité entre un et cinq kilomètres.",
+            "en": "Mist is a veil of fine suspended droplets that reduces visibility to between one and five kilometres.",
+            "it": "La foschia è un velo di minute goccioline in sospensione che riduce la visibilità tra uno e cinque chilometri.",
+            "es": "La neblina es un velo de finas gotas en suspensión que reduce la visibilidad entre uno y cinco kilómetros.",
+            "pt": "A neblina é um véu de finas gotículas em suspensão que reduz a visibilidade entre um e cinco quilómetros.",
+            "de": "Der Dunst ist ein Schleier feiner schwebender Tröpfchen, der die Sicht auf ein bis fünf Kilometer verringert."
+          }
+        },
+        {
+          "cle": "brouillard",
+          "mot": {"fr": "brouillard", "en": "fog", "it": "nebbia", "es": "niebla", "pt": "nevoeiro", "de": "Nebel"},
+          "def": {
+            "fr": "Le brouillard est un nuage au ras de l'eau qui réduit la visibilité à moins d'un kilomètre et rend la navigation risquée.",
+            "en": "Fog is a cloud at water level that cuts visibility to under one kilometre and makes navigation risky.",
+            "it": "La nebbia è una nuvola a livello del mare che riduce la visibilità a meno di un chilometro e rende rischiosa la navigazione.",
+            "es": "La niebla es una nube a ras del agua que reduce la visibilidad a menos de un kilómetro y hace arriesgada la navegación.",
+            "pt": "O nevoeiro é uma nuvem rente à água que reduz a visibilidade a menos de um quilómetro e torna a navegação arriscada.",
+            "de": "Der Nebel ist eine Wolke dicht über dem Wasser, die die Sicht auf unter einen Kilometer senkt und die Navigation riskant macht."
+          }
+        },
+        {
+          "cle": "visibilite",
+          "mot": {"fr": "visibilité", "en": "visibility", "it": "visibilità", "es": "visibilidad", "pt": "visibilidade", "de": "Sicht"},
+          "def": {
+            "fr": "La visibilité est la distance à laquelle on distingue une côte ou un autre bateau, et elle conditionne la sécurité.",
+            "en": "Visibility is the distance at which you can make out a coast or another boat, and it governs safety.",
+            "it": "La visibilità è la distanza a cui si distingue una costa o un'altra barca, e condiziona la sicurezza.",
+            "es": "La visibilidad es la distancia a la que se distingue una costa u otro barco, y condiciona la seguridad.",
+            "pt": "A visibilidade é a distância a que se distingue uma costa ou outro barco, e condiciona a segurança.",
+            "de": "Die Sicht ist die Entfernung, in der man eine Küste oder ein anderes Boot erkennt, und sie bestimmt die Sicherheit."
+          }
+        },
+        {
+          "cle": "orage",
+          "mot": {"fr": "orage", "en": "thunderstorm", "it": "temporale", "es": "tormenta eléctrica", "pt": "trovoada", "de": "Gewitter"},
+          "def": {
+            "fr": "L'orage est une perturbation avec éclairs et tonnerre, qui apporte des rafales violentes et expose le mât à la foudre.",
+            "en": "A thunderstorm is a disturbance with lightning and thunder, which brings violent gusts and exposes the mast to lightning strikes.",
+            "it": "Il temporale è una perturbazione con lampi e tuoni, che porta raffiche violente ed espone l'albero ai fulmini.",
+            "es": "La tormenta eléctrica es una perturbación con relámpagos y truenos, que trae rachas violentas y expone el mástil al rayo.",
+            "pt": "A trovoada é uma perturbação com relâmpagos e trovões, que traz rajadas violentas e expõe o mastro aos raios.",
+            "de": "Das Gewitter ist eine Störung mit Blitz und Donner, die heftige Böen bringt und den Mast Blitzeinschlägen aussetzt."
+          }
+        },
+        {
+          "cle": "etat-de-la-mer",
+          "mot": {"fr": "état de la mer", "en": "sea state", "it": "stato del mare", "es": "estado de la mar", "pt": "estado do mar", "de": "Seegang"},
+          "def": {
+            "fr": "L'état de la mer décrit la hauteur et la forme des vagues, de calme à énorme, et conditionne le confort à bord.",
+            "en": "Sea state describes the height and shape of the waves, from calm to enormous, and determines comfort on board.",
+            "it": "Lo stato del mare descrive l'altezza e la forma delle onde, da calmo a enorme, e condiziona il comfort a bordo.",
+            "es": "El estado de la mar describe la altura y la forma de las olas, de calma a enorme, y condiciona la comodidad a bordo.",
+            "pt": "O estado do mar descreve a altura e a forma das ondas, de calmo a enorme, e condiciona o conforto a bordo.",
+            "de": "Der Seegang beschreibt Höhe und Form der Wellen, von ruhig bis enorm, und bestimmt den Komfort an Bord."
+          }
+        },
+        {
+          "cle": "creux",
+          "mot": {"fr": "creux", "en": "wave height", "it": "altezza dell'onda", "es": "altura de la ola", "pt": "altura da onda", "de": "Wellenhöhe"},
+          "def": {
+            "fr": "Le creux est la distance verticale entre le bas et la crête d'une vague, et détermine l'effort subi par le bateau.",
+            "en": "Wave height is the vertical distance between the bottom and the crest of a wave, and determines the strain on the boat.",
+            "it": "L'altezza dell'onda è la distanza verticale tra il fondo e la cresta di un'onda, e determina lo sforzo subito dalla barca.",
+            "es": "La altura de la ola es la distancia vertical entre el seno y la cresta, y determina el esfuerzo que sufre el barco.",
+            "pt": "A altura da onda é a distância vertical entre o cavado e a crista, e determina o esforço que o barco suporta.",
+            "de": "Die Wellenhöhe ist der senkrechte Abstand zwischen Wellental und Kamm und bestimmt die Belastung des Bootes."
+          }
+        },
+        {
+          "cle": "marnage",
+          "mot": {"fr": "marnage", "en": "tidal range", "it": "escursione di marea", "es": "amplitud de marea", "pt": "amplitude da maré", "de": "Tidenhub"},
+          "def": {
+            "fr": "Le marnage est l'écart de hauteur d'eau entre la pleine mer et la basse mer, et détermine la force des courants.",
+            "en": "Tidal range is the difference in water level between high water and low water, and determines the strength of the currents.",
+            "it": "L'escursione di marea è la differenza di livello dell'acqua tra alta e bassa marea, e determina la forza delle correnti.",
+            "es": "La amplitud de marea es la diferencia de nivel del agua entre la pleamar y la bajamar, y determina la fuerza de las corrientes.",
+            "pt": "A amplitude da maré é a diferença de nível da água entre a preia-mar e a baixa-mar, e determina a força das correntes.",
+            "de": "Der Tidenhub ist der Unterschied der Wasserhöhe zwischen Hochwasser und Niedrigwasser und bestimmt die Stärke der Strömungen."
+          }
+        }
+      ]
+    },
+    {
+      "cle": "course",
+      "nom": {"fr": "La course", "en": "Racing", "it": "La regata", "es": "La regata", "pt": "A regata", "de": "Das Rennen"},
+      "termes": [
+        {
+          "cle": "depart",
+          "mot": {"fr": "départ", "en": "start", "it": "partenza", "es": "salida", "pt": "partida", "de": "Start"},
+          "def": {
+            "fr": "Le départ est l'instant où la course commence, et une bonne position à ce moment donne souvent l'avantage.",
+            "en": "The start is the moment the race begins, and a good position at that moment often gives an advantage.",
+            "it": "La partenza è il momento in cui inizia la regata, e una buona posizione in quell'istante dà spesso un vantaggio.",
+            "es": "La salida es el momento en que empieza la regata, y una buena posición en ese instante da a menudo ventaja.",
+            "pt": "A partida é o momento em que a regata começa, e uma boa posição nesse instante dá muitas vezes vantagem.",
+            "de": "Der Start ist der Moment, in dem die Wettfahrt beginnt, und eine gute Position in diesem Augenblick bringt oft einen Vorteil."
+          }
+        },
+        {
+          "cle": "ligne-de-depart",
+          "mot": {"fr": "ligne de départ", "en": "starting line", "it": "linea di partenza", "es": "línea de salida", "pt": "linha de partida", "de": "Startlinie"},
+          "def": {
+            "fr": "La ligne de départ est la ligne imaginaire entre le bateau du comité et une bouée, à franchir après le signal.",
+            "en": "The starting line is the imaginary line between the committee boat and a buoy, to be crossed after the signal.",
+            "it": "La linea di partenza è la linea immaginaria tra la barca del comitato e una boa, da attraversare dopo il segnale.",
+            "es": "La línea de salida es la línea imaginaria entre el barco del comité y una boya, que se cruza tras la señal.",
+            "pt": "A linha de partida é a linha imaginária entre o barco da comissão e uma boia, que se cruza depois do sinal.",
+            "de": "Die Startlinie ist die gedachte Linie zwischen dem Startschiff und einer Tonne, die man nach dem Signal überquert."
+          }
+        },
+        {
+          "cle": "comite-de-course",
+          "mot": {"fr": "comité de course", "en": "race committee", "it": "comitato di regata", "es": "comité de regatas", "pt": "comissão de regata", "de": "Wettfahrtleitung"},
+          "def": {
+            "fr": "Le comité de course est l'équipe d'officiels qui organise la régate, choisit le parcours et donne les signaux.",
+            "en": "The race committee is the team of officials who run the regatta, choose the course and give the signals.",
+            "it": "Il comitato di regata è la squadra di ufficiali che organizza la regata, sceglie il percorso e dà i segnali.",
+            "es": "El comité de regatas es el equipo de oficiales que organiza la regata, elige el recorrido y da las señales.",
+            "pt": "A comissão de regata é a equipa de oficiais que organiza a regata, escolhe o percurso e dá os sinais.",
+            "de": "Die Wettfahrtleitung ist das Team von Offiziellen, das die Regatta ausrichtet, die Bahn wählt und die Signale gibt."
+          }
+        },
+        {
+          "cle": "parcours",
+          "mot": {"fr": "parcours", "en": "course", "it": "percorso", "es": "recorrido", "pt": "percurso", "de": "Bahn"},
+          "def": {
+            "fr": "Le parcours est le tracé que doivent suivre les bateaux, défini par une suite de bouées à contourner.",
+            "en": "The course is the route the boats must follow, set by a sequence of buoys that they have to round.",
+            "it": "Il percorso è il tracciato che le barche devono seguire, definito da una serie di boe da doppiare.",
+            "es": "El recorrido es el trazado que deben seguir los barcos, definido por una serie de boyas que hay que rodear.",
+            "pt": "O percurso é o traçado que os barcos devem seguir, definido por uma série de boias que é preciso contornar.",
+            "de": "Die Bahn ist die Strecke, die die Boote fahren müssen, festgelegt durch eine Folge von Tonnen, die sie runden müssen."
+          }
+        },
+        {
+          "cle": "marque-de-depart",
+          "mot": {"fr": "marque de départ", "en": "starting mark", "it": "boa di partenza", "es": "baliza de salida", "pt": "marca de partida", "de": "Startmarke"},
+          "def": {
+            "fr": "La marque de départ est la bouée qui limite une extrémité de la ligne et qu'il ne faut pas toucher.",
+            "en": "The starting mark is the buoy that marks one end of the line and must not be touched.",
+            "it": "La boa di partenza è la boa che delimita un'estremità della linea e che non va toccata.",
+            "es": "La baliza de salida es la boya que delimita un extremo de la línea y que no se debe tocar.",
+            "pt": "A marca de partida é a boia que delimita uma extremidade da linha e que não se deve tocar.",
+            "de": "Die Startmarke ist die Tonne, die ein Ende der Linie begrenzt und nicht berührt werden darf."
+          }
+        },
+        {
+          "cle": "bouee",
+          "mot": {"fr": "bouée", "en": "buoy", "it": "boa", "es": "boya", "pt": "boia", "de": "Tonne"},
+          "def": {
+            "fr": "La bouée est le flotteur ancré qui matérialise un point du parcours que les bateaux doivent contourner.",
+            "en": "The buoy is the anchored float that marks a point on the course which the boats have to round.",
+            "it": "La boa è il galleggiante ormeggiato che segna un punto del percorso che le barche devono doppiare.",
+            "es": "La boya es el flotador fondeado que señala un punto del recorrido que los barcos deben rodear.",
+            "pt": "A boia é o flutuador fundeado que assinala um ponto do percurso que os barcos devem contornar.",
+            "de": "Die Tonne ist der verankerte Schwimmkörper, der einen Punkt der Bahn markiert, den die Boote runden müssen."
+          }
+        },
+        {
+          "cle": "porte",
+          "mot": {"fr": "porte", "en": "gate", "it": "porta", "es": "puerta", "pt": "porta", "de": "Tor"},
+          "def": {
+            "fr": "La porte est un couple de bouées voisines, et chaque bateau contourne l'une ou l'autre à son choix.",
+            "en": "The gate is a pair of neighbouring buoys, and each boat rounds one or the other as it chooses.",
+            "it": "La porta è una coppia di boe vicine, e ogni barca doppia l'una o l'altra a sua scelta.",
+            "es": "La puerta es un par de boyas contiguas, y cada barco rodea una u otra a su elección.",
+            "pt": "A porta é um par de boias vizinhas, e cada barco contorna uma ou outra à sua escolha.",
+            "de": "Das Tor besteht aus zwei benachbarten Tonnen, und jedes Boot rundet eine von beiden nach eigener Wahl."
+          }
+        },
+        {
+          "cle": "zone",
+          "mot": {"fr": "zone", "en": "zone", "it": "zona", "es": "zona", "pt": "zona", "de": "Zone"},
+          "def": {
+            "fr": "La zone est le cercle de trois longueurs de coque autour d'une bouée, où le bateau extérieur doit céder la place.",
+            "en": "The zone is the circle of three hull lengths around a buoy, where the outside boat must give room.",
+            "it": "La zona è il cerchio di tre lunghezze di scafo intorno a una boa, dove la barca esterna deve dare spazio.",
+            "es": "La zona es el círculo de tres esloras alrededor de una boya, donde el barco exterior debe dar espacio.",
+            "pt": "A zona é o círculo de três comprimentos de casco em redor de uma boia, onde o barco exterior deve dar espaço.",
+            "de": "Die Zone ist der Kreis von drei Rumpflängen um eine Tonne, in dem das äußere Boot Raum geben muss."
+          }
+        },
+        {
+          "cle": "tribord",
+          "mot": {"fr": "tribord", "en": "starboard", "it": "dritta", "es": "estribor", "pt": "estibordo", "de": "Steuerbord"},
+          "def": {
+            "fr": "Tribord est le côté droit du bateau, et celui qui reçoit le vent de ce côté a priorité au croisement.",
+            "en": "Starboard is the boat's right side, and a boat taking the wind on that side has priority when crossing.",
+            "it": "Dritta è il lato destro della barca, e la barca che riceve il vento da quel lato ha la precedenza negli incroci.",
+            "es": "Estribor es el costado derecho del barco, y el barco que recibe el viento por ese lado tiene preferencia al cruzarse.",
+            "pt": "Estibordo é o lado direito do barco, e o barco que recebe o vento por esse lado tem prioridade num cruzamento.",
+            "de": "Steuerbord ist die rechte Seite des Bootes, und das Boot, das den Wind von dieser Seite bekommt, hat bei einer Begegnung Wegerecht."
+          }
+        },
+        {
+          "cle": "babord",
+          "mot": {"fr": "bâbord", "en": "port", "it": "sinistra", "es": "babor", "pt": "bombordo", "de": "Backbord"},
+          "def": {
+            "fr": "Bâbord est le côté gauche du bateau, et celui qui reçoit le vent de ce côté doit céder le passage au croisement.",
+            "en": "Port is the boat's left side, and a boat taking the wind on that side must keep clear when crossing.",
+            "it": "Sinistra è il lato sinistro della barca, e la barca che riceve il vento da quel lato deve dare la precedenza negli incroci.",
+            "es": "Babor es el costado izquierdo del barco, y el barco que recibe el viento por ese lado debe ceder el paso al cruzarse.",
+            "pt": "Bombordo é o lado esquerdo do barco, e o barco que recebe o vento por esse lado deve dar passagem num cruzamento.",
+            "de": "Backbord ist die linke Seite des Bootes, und das Boot, das den Wind von dieser Seite bekommt, muss bei einer Begegnung ausweichen."
+          }
+        },
+        {
+          "cle": "priorite",
+          "mot": {"fr": "priorité", "en": "right of way", "it": "diritto di rotta", "es": "preferencia", "pt": "prioridade", "de": "Wegerecht"},
+          "def": {
+            "fr": "La priorité est le droit d'un bateau de garder sa route, l'autre devant s'écarter pour éviter toute collision.",
+            "en": "Right of way is a boat's right to hold its course while the other boat must keep clear to avoid collision.",
+            "it": "Il diritto di rotta è il diritto di una barca di mantenere la rotta, mentre l'altra deve tenersi discosta per evitare la collisione.",
+            "es": "La preferencia es el derecho de un barco a mantener su rumbo mientras el otro debe apartarse para evitar el choque.",
+            "pt": "A prioridade é o direito de um barco manter o seu rumo, enquanto o outro deve afastar-se para evitar a colisão.",
+            "de": "Das Wegerecht ist das Recht eines Bootes, seinen Kurs zu halten, während das andere ausweichen muss, um eine Kollision zu vermeiden."
+          }
+        },
+        {
+          "cle": "penalite",
+          "mot": {"fr": "pénalité", "en": "penalty", "it": "penalità", "es": "penalización", "pt": "penalização", "de": "Strafe"},
+          "def": {
+            "fr": "La pénalité est la sanction qu'un bateau subit quand il enfreint une règle, et elle lui fait perdre des places.",
+            "en": "A penalty is the sanction a boat suffers when it breaks a rule, and it makes the boat lose places.",
+            "it": "La penalità è la sanzione che una barca subisce quando infrange una regola, e le fa perdere posizioni.",
+            "es": "La penalización es la sanción que sufre un barco cuando infringe una regla, y le hace perder puestos.",
+            "pt": "A penalização é a sanção que um barco sofre quando infringe uma regra, e faz com que perca posições.",
+            "de": "Die Strafe ist die Sanktion, die ein Boot erhält, wenn es eine Regel verletzt, und sie kostet es Plätze."
+          }
+        },
+        {
+          "cle": "tour-de-penalite",
+          "mot": {"fr": "tour de pénalité", "en": "penalty turn", "it": "giro di penalità", "es": "giro de penalización", "pt": "volta de penalização", "de": "Strafkringel"},
+          "def": {
+            "fr": "Le tour de pénalité est une rotation complète du bateau, avec un virement et un empannage, qui efface une faute.",
+            "en": "The penalty turn is a full rotation of the boat, with one tack and one gybe, that wipes out a foul.",
+            "it": "Il giro di penalità è una rotazione completa della barca, con una virata e una strambata, che cancella un'infrazione.",
+            "es": "El giro de penalización es una rotación completa del barco, con una virada y una trasluchada, que borra una falta.",
+            "pt": "A volta de penalização é uma rotação completa do barco, com uma viragem e uma jibada, que apaga uma falta.",
+            "de": "Der Strafkringel ist eine volle Drehung des Bootes, mit einer Wende und einer Halse, die einen Regelverstoß tilgt."
+          }
+        },
+        {
+          "cle": "temps-compense",
+          "mot": {"fr": "temps compensé", "en": "corrected time", "it": "tempo compensato", "es": "tiempo compensado", "pt": "tempo compensado", "de": "berechnete Zeit"},
+          "def": {
+            "fr": "Le temps compensé est le temps réel corrigé selon la vitesse théorique du bateau, pour comparer équitablement des bateaux différents.",
+            "en": "Corrected time is the real elapsed time adjusted for the boat's theoretical speed, so that different boats can be compared fairly.",
+            "it": "Il tempo compensato è il tempo reale corretto in base alla velocità teorica della barca, per confrontare equamente barche diverse.",
+            "es": "El tiempo compensado es el tiempo real corregido según la velocidad teórica del barco, para comparar con justicia barcos distintos.",
+            "pt": "O tempo compensado é o tempo real corrigido segundo a velocidade teórica do barco, para comparar com justiça barcos diferentes.",
+            "de": "Die berechnete Zeit ist die tatsächliche Zeit, korrigiert nach der theoretischen Geschwindigkeit des Bootes, damit verschiedene Boote fair verglichen werden."
+          }
+        },
+        {
+          "cle": "classement",
+          "mot": {"fr": "classement", "en": "results", "it": "classifica", "es": "clasificación", "pt": "classificação", "de": "Wertung"},
+          "def": {
+            "fr": "Le classement est la liste qui range les bateaux selon leur arrivée ou leur temps, et il désigne le vainqueur.",
+            "en": "The results are the list that ranks the boats by finishing order or by time, and they name the winner.",
+            "it": "La classifica è l'elenco che ordina le barche in base all'arrivo o al tempo, e designa il vincitore.",
+            "es": "La clasificación es la lista que ordena los barcos según su llegada o su tiempo, y designa al vencedor.",
+            "pt": "A classificação é a lista que ordena os barcos segundo a sua chegada ou o seu tempo, e designa o vencedor.",
+            "de": "Die Wertung ist die Liste, die die Boote nach Zieleinlauf oder Zeit ordnet und den Sieger bestimmt."
+          }
+        },
+        {
+          "cle": "protestation",
+          "mot": {"fr": "protestation", "en": "protest", "it": "protesta", "es": "protesta", "pt": "protesto", "de": "Protest"},
+          "def": {
+            "fr": "La protestation est la demande qu'un concurrent adresse au jury pour faire juger une infraction supposée aux règles.",
+            "en": "A protest is the request a competitor makes to the jury to have an alleged breach of the rules judged.",
+            "it": "La protesta è la richiesta che un concorrente rivolge alla giuria per far giudicare una presunta infrazione alle regole.",
+            "es": "La protesta es la solicitud que un concursante dirige al jurado para que juzgue una presunta infracción de las reglas.",
+            "pt": "O protesto é o pedido que um concorrente dirige ao júri para que julgue uma alegada infração às regras.",
+            "de": "Der Protest ist der Antrag, mit dem ein Teilnehmer die Jury bittet, einen mutmaßlichen Regelverstoß zu beurteilen."
+          }
+        },
+        {
+          "cle": "jury",
+          "mot": {"fr": "jury", "en": "protest committee", "it": "giuria", "es": "jurado", "pt": "júri", "de": "Jury"},
+          "def": {
+            "fr": "Le jury est le groupe d'arbitres qui entend les protestations après la course et décide des pénalités ou disqualifications.",
+            "en": "The protest committee is the group of judges that hears protests after the race and decides on penalties or disqualifications.",
+            "it": "La giuria è il gruppo di giudici che ascolta le proteste dopo la regata e decide su penalità o squalifiche.",
+            "es": "El jurado es el grupo de jueces que escucha las protestas después de la regata y decide sobre sanciones o descalificaciones.",
+            "pt": "O júri é o grupo de juízes que ouve os protestos depois da regata e decide sobre penalizações ou desqualificações.",
+            "de": "Die Jury ist die Gruppe von Schiedsrichtern, die Proteste nach dem Rennen anhört und über Strafen oder Disqualifikationen entscheidet."
+          }
+        },
+        {
+          "cle": "rappel-general",
+          "mot": {"fr": "rappel général", "en": "general recall", "it": "richiamo generale", "es": "llamada general", "pt": "chamada geral", "de": "allgemeiner Rückruf"},
+          "def": {
+            "fr": "Le rappel général est le signal qui annule un départ où trop de bateaux ont franchi la ligne trop tôt.",
+            "en": "A general recall is the signal that cancels a start when too many boats have crossed the line too early.",
+            "it": "Il richiamo generale è il segnale che annulla una partenza quando troppe barche hanno attraversato la linea troppo presto.",
+            "es": "La llamada general es la señal que anula una salida cuando demasiados barcos han cruzado la línea demasiado pronto.",
+            "pt": "A chamada geral é o sinal que anula uma partida quando demasiados barcos cruzaram a linha demasiado cedo.",
+            "de": "Der allgemeine Rückruf ist das Signal, das einen Start annulliert, wenn zu viele Boote die Linie zu früh überquert haben."
+          }
+        },
+        {
+          "cle": "faux-depart",
+          "mot": {"fr": "faux départ", "en": "premature start", "it": "partenza anticipata", "es": "salida anticipada", "pt": "partida antecipada", "de": "Frühstart"},
+          "def": {
+            "fr": "Un faux départ se produit quand un bateau franchit la ligne avant le signal et doit revenir en arrière pour repartir.",
+            "en": "A premature start happens when a boat crosses the line before the signal and has to go back to start again.",
+            "it": "Una partenza anticipata si ha quando una barca attraversa la linea prima del segnale e deve tornare indietro per ripartire.",
+            "es": "Una salida anticipada se produce cuando un barco cruza la línea antes de la señal y debe regresar para salir de nuevo.",
+            "pt": "Uma partida antecipada ocorre quando um barco cruza a linha antes do sinal e tem de voltar atrás para partir de novo.",
+            "de": "Ein Frühstart liegt vor, wenn ein Boot die Linie vor dem Signal überquert und zurückkehren muss, um erneut zu starten."
+          }
+        },
+        {
+          "cle": "signal-de-depart",
+          "mot": {"fr": "signal de départ", "en": "starting signal", "it": "segnale di partenza", "es": "señal de salida", "pt": "sinal de partida", "de": "Startsignal"},
+          "def": {
+            "fr": "Le signal de départ est le coup de canon ou de sifflet qui autorise les bateaux à franchir la ligne.",
+            "en": "The starting signal is the gun or whistle that allows the boats to cross the line.",
+            "it": "Il segnale di partenza è il colpo di cannone o di fischietto che autorizza le barche ad attraversare la linea.",
+            "es": "La señal de salida es el cañonazo o el silbato que autoriza a los barcos a cruzar la línea.",
+            "pt": "O sinal de partida é o tiro de canhão ou o apito que autoriza os barcos a cruzar a linha.",
+            "de": "Das Startsignal ist der Kanonenschuss oder Pfiff, der den Booten erlaubt, die Linie zu überqueren."
+          }
+        },
+        {
+          "cle": "classe",
+          "mot": {"fr": "classe", "en": "class", "it": "classe", "es": "clase", "pt": "classe", "de": "Klasse"},
+          "def": {
+            "fr": "La classe est le groupe de bateaux identiques ou semblables qui partent ensemble et sont classés entre eux.",
+            "en": "The class is the group of identical or similar boats that start together and are ranked against each other.",
+            "it": "La classe è il gruppo di barche identiche o simili che partono insieme e sono classificate tra loro.",
+            "es": "La clase es el grupo de barcos idénticos o similares que salen juntos y se clasifican entre sí.",
+            "pt": "A classe é o grupo de barcos idênticos ou semelhantes que partem juntos e são classificados entre si.",
+            "de": "Die Klasse ist die Gruppe identischer oder ähnlicher Boote, die gemeinsam starten und untereinander gewertet werden."
+          }
+        },
+        {
+          "cle": "bateau-comite",
+          "mot": {"fr": "bateau comité", "en": "committee boat", "it": "barca del comitato", "es": "barco del comité", "pt": "barco da comissão", "de": "Startschiff"},
+          "def": {
+            "fr": "Le bateau comité est le bateau ancré qui porte les officiels et matérialise une extrémité de la ligne de départ.",
+            "en": "The committee boat is the anchored boat that carries the officials and marks one end of the starting line.",
+            "it": "La barca del comitato è la barca ormeggiata che ospita gli ufficiali e segna un'estremità della linea di partenza.",
+            "es": "El barco del comité es el barco fondeado que lleva a los oficiales y señala un extremo de la línea de salida.",
+            "pt": "O barco da comissão é o barco fundeado que leva os oficiais e assinala uma extremidade da linha de partida.",
+            "de": "Das Startschiff ist das verankerte Boot, das die Offiziellen trägt und ein Ende der Startlinie markiert."
+          }
+        },
+        {
+          "cle": "bouee-au-vent",
+          "mot": {"fr": "bouée au vent", "en": "windward mark", "it": "boa di bolina", "es": "baliza de barlovento", "pt": "marca de barlavento", "de": "Luvtonne"},
+          "def": {
+            "fr": "La bouée au vent est la bouée placée du côté d'où vient le vent, que les bateaux atteignent au près.",
+            "en": "The windward mark is the buoy placed on the side the wind comes from, which the boats reach by beating.",
+            "it": "La boa di bolina è la boa posta dal lato da cui viene il vento, che le barche raggiungono di bolina.",
+            "es": "La baliza de barlovento es la boya situada del lado de donde viene el viento, que los barcos alcanzan ciñendo.",
+            "pt": "A marca de barlavento é a boia situada do lado de onde vem o vento, que os barcos alcançam de bolina.",
+            "de": "Die Luvtonne ist die Tonne auf der Seite, von der der Wind kommt, die die Boote kreuzend erreichen."
+          }
+        },
+        {
+          "cle": "bouee-sous-le-vent",
+          "mot": {"fr": "bouée sous le vent", "en": "leeward mark", "it": "boa di sottovento", "es": "baliza de sotavento", "pt": "marca de sotavento", "de": "Leetonne"},
+          "def": {
+            "fr": "La bouée sous le vent est la bouée placée du côté où va le vent, que les bateaux atteignent au portant.",
+            "en": "The leeward mark is the buoy placed on the side the wind blows towards, which the boats reach sailing downwind.",
+            "it": "La boa di sottovento è la boa posta dal lato verso cui soffia il vento, che le barche raggiungono di poppa.",
+            "es": "La baliza de sotavento es la boya situada del lado hacia donde sopla el viento, que los barcos alcanzan navegando en popa.",
+            "pt": "A marca de sotavento é a boia situada do lado para onde sopra o vento, que os barcos alcançam de popa.",
+            "de": "Die Leetonne ist die Tonne auf der Seite, zu der der Wind weht, die die Boote vor dem Wind erreichen."
+          }
+        },
+        {
+          "cle": "arrivee",
+          "mot": {"fr": "arrivée", "en": "finish", "it": "arrivo", "es": "llegada", "pt": "chegada", "de": "Ziel"},
+          "def": {
+            "fr": "L'arrivée est le moment où un bateau termine la course, et elle fixe son temps et sa place au classement.",
+            "en": "The finish is the moment a boat completes the race, and it fixes its time and its place in the results.",
+            "it": "L'arrivo è il momento in cui una barca termina la regata, e fissa il suo tempo e la sua posizione in classifica.",
+            "es": "La llegada es el momento en que un barco termina la regata, y fija su tiempo y su puesto en la clasificación.",
+            "pt": "A chegada é o momento em que um barco termina a regata, e fixa o seu tempo e o seu lugar na classificação.",
+            "de": "Das Ziel ist der Moment, in dem ein Boot die Wettfahrt beendet, wodurch seine Zeit und sein Platz feststehen."
+          }
+        },
+        {
+          "cle": "ligne-d-arrivee",
+          "mot": {"fr": "ligne d'arrivée", "en": "finish line", "it": "linea d'arrivo", "es": "línea de llegada", "pt": "linha de chegada", "de": "Ziellinie"},
+          "def": {
+            "fr": "La ligne d'arrivée est la ligne que chaque bateau franchit pour finir, tandis que le comité note l'heure de passage.",
+            "en": "The finish line is the line each boat crosses to finish, while the committee records the time of crossing.",
+            "it": "La linea d'arrivo è la linea che ogni barca attraversa per concludere, mentre il comitato registra l'ora di passaggio.",
+            "es": "La línea de llegada es la línea que cada barco cruza para terminar, mientras el comité anota la hora de paso.",
+            "pt": "A linha de chegada é a linha que cada barco cruza para terminar, enquanto a comissão regista a hora de passagem.",
+            "de": "Die Ziellinie ist die Linie, die jedes Boot zum Beenden überquert, während die Wettfahrtleitung den Zeitpunkt der Überquerung notiert."
+          }
+        },
+        {
+          "cle": "handicap",
+          "mot": {"fr": "handicap", "en": "handicap", "it": "handicap", "es": "hándicap", "pt": "handicap", "de": "Handicap"},
+          "def": {
+            "fr": "Le handicap est le coefficient attribué à un bateau d'après sa vitesse théorique, afin que des bateaux différents régatent ensemble.",
+            "en": "The handicap is the rating given to a boat according to its theoretical speed, so that different boats can race together.",
+            "it": "L'handicap è il coefficiente assegnato a una barca in base alla sua velocità teorica, perché barche diverse possano regatare insieme.",
+            "es": "El hándicap es el coeficiente asignado a un barco según su velocidad teórica, para que barcos distintos puedan competir juntos.",
+            "pt": "O handicap é o coeficiente atribuído a um barco segundo a sua velocidade teórica, para que barcos diferentes possam competir juntos.",
+            "de": "Das Handicap ist der Wert, der einem Boot nach seiner theoretischen Geschwindigkeit zugewiesen wird, damit verschiedene Boote gemeinsam Wettfahrten segeln können."
+          }
+        },
+        {
+          "cle": "regles-de-course",
+          "mot": {"fr": "règles de course", "en": "racing rules", "it": "regole di regata", "es": "reglas de regata", "pt": "regras de regata", "de": "Wettsegelregeln"},
+          "def": {
+            "fr": "Les règles de course sont le règlement international qui dit comment manœuvrer près des autres bateaux et quelles fautes sont punies.",
+            "en": "The racing rules are the international rulebook that says how to manoeuvre near other boats and which faults are penalised.",
+            "it": "Le regole di regata sono il regolamento internazionale che dice come manovrare vicino alle altre barche e quali errori sono puniti.",
+            "es": "Las reglas de regata son el reglamento internacional que indica cómo maniobrar cerca de otros barcos y qué faltas se sancionan.",
+            "pt": "As regras de regata são o regulamento internacional que indica como manobrar perto de outros barcos e que faltas são punidas.",
+            "de": "Die Wettsegelregeln sind das internationale Regelwerk, das festlegt, wie man in der Nähe anderer Boote manövriert und welche Verstöße bestraft werden."
+          }
+        },
+        {
+          "cle": "abandon",
+          "mot": {"fr": "abandon", "en": "retirement", "it": "ritiro", "es": "retirada", "pt": "desistência", "de": "Aufgabe"},
+          "def": {
+            "fr": "L'abandon est la décision d'un bateau de quitter la course avant l'arrivée, ce qui lui ôte tout classement.",
+            "en": "Retirement is a boat's decision to leave the race before finishing, which takes it out of the results.",
+            "it": "Il ritiro è la decisione di una barca di lasciare la regata prima dell'arrivo, cosa che la esclude dalla classifica.",
+            "es": "La retirada es la decisión de un barco de abandonar la regata antes de llegar, lo que lo excluye de la clasificación.",
+            "pt": "A desistência é a decisão de um barco de abandonar a regata antes de chegar, o que o exclui da classificação.",
+            "de": "Die Aufgabe ist die Entscheidung eines Bootes, die Wettfahrt vor dem Ziel zu verlassen, wodurch es aus der Wertung fällt."
+          }
+        },
+        {
+          "cle": "manche",
+          "mot": {"fr": "manche", "en": "race", "it": "prova", "es": "manga", "pt": "prova", "de": "Wettfahrt"},
+          "def": {
+            "fr": "Une manche est une course unique d'une série, dont le résultat s'additionne aux autres pour désigner le vainqueur final.",
+            "en": "A race is a single contest within a series, whose result is added to the others to decide the overall winner.",
+            "it": "Una prova è una singola gara all'interno di una serie, il cui risultato si somma agli altri per designare il vincitore finale.",
+            "es": "Una manga es una carrera única dentro de una serie, cuyo resultado se suma a los demás para designar al vencedor final.",
+            "pt": "Uma prova é uma corrida única dentro de uma série, cujo resultado se soma aos outros para designar o vencedor final.",
+            "de": "Eine Wettfahrt ist ein einzelnes Rennen innerhalb einer Serie, dessen Ergebnis zu den anderen addiert wird, um den Gesamtsieger zu ermitteln."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+[
+ {
+  "nom": "Bol d'Or Mirabaud",
+  "debut": "2027-06-11",
+  "fin": "2027-06-13",
+  "ville": "Genève",
+  "pays": "SUI",
+  "club": "Société Nautique de Genève",
+  "classes": ["SURP", "LACUSTRE", "M2", "TF35", "D35", "PS8"],
+  "lien": "https://boldorduleman.ch/",
+  "verifie": "2026-11-21",
+  "source_date": "boldorduleman.ch — « June 11, 12 & 13, 2027 »"
+ },
+ {
+  "nom": "5 Jours du Léman",
+  "debut": "2027-07-24",
+  "fin": "2027-07-31",
+  "ville": "Lausanne",
+  "pays": "SUI",
+  "club": "Cercle de la Voile de Vidy",
+  "classes": ["SURP", "double"],
+  "lien": "https://www.5jours.ch/",
+  "verifie": "2026-11-21",
+  "source_date": "5jours.ch — « 35e édition du 24 au 31 juillet 2027 »"
+ },
+ {
+  "nom": "Les Voiles de Saint-Tropez",
+  "debut": "2027-09-25",
+  "fin": "2027-10-03",
+  "ville": "Saint-Tropez",
+  "pays": "FRA",
+  "club": "Société Nautique de Saint-Tropez",
+  "classes": ["IRCC", "CLASSIQUES", "MAXI"],
+  "lien": "https://www.societe-nautique-saint-tropez.com/",
+  "verifie": "2026-11-21",
+  "source_date": "sainttropeztourisme.com — « du 25/09/2027 au 03/10/2027 »"
+ }
+]
