@@ -23,8 +23,16 @@ import shutil
 import datetime
 from pathlib import Path
 
+import marque
 import mer_louvoyage
 import site_blocks
+
+# Fourchette de prix des formules, lue dans `marque.py` (jamais écrite à la main dans les textes).
+# Espace ordinaire, comme dans les textes validés ; l'anglais met la virgule.
+_PMIN = f"{marque.PRIX_MIN:,}".replace(",", " ")
+_PMAX = f"{marque.PRIX_MAX:,}".replace(",", " ")
+_PMIN_EN = f"{marque.PRIX_MIN:,}"
+_PMAX_EN = f"{marque.PRIX_MAX:,}"
 
 RACINE = Path(os.environ.get("SITE_ROOT", "/opt/data"))
 CHIFFRES = RACINE / "cache/rhum/chiffres-stats.json"
@@ -50,7 +58,7 @@ TEXTES = {
         "reseaux": "Nos réseaux",
         "citations": "Ils l'ont dit avant nous",
         "concours_titre": "Le jeu concours",
-        "concours_texte": "Un jeu pour un annonceur, six jours de stories, un tirage le dimanche. Prochain départ : mardi {date}.",
+        "concours_texte": "Un jeu pour un annonceur, cinq jours de stories, du mardi au samedi, un tirage le dimanche. Prochain départ : mardi {date}.",
         "concours_bouton": "Voir le jeu",
         "abonnes": "abonnés",
         "contenus": "publications",
@@ -66,12 +74,37 @@ TEXTES = {
         "legende_bourses": "Trouvez un équipier — cliquez le bateau de votre océan.",
         "bulle_participants": "participants",
         "kit_titre": "Annonceurs",
-        "bloc_nom": "Le bloc de lancement",
-        "bloc_ce": "un mois, moitié jeu concours et moitié publications",
-        "bloc_detail_titre": "Ce que le bloc contient",
-        "bloc_detail": "1 jeu concours de 7 jours · sa feuille d'annonce · 1 story · 2 publications dédiées · le rapport de portée sous 72 h",
-        "tarif_notes": "Prix en euros HT. Rapport de portée et d'interactions sous 72 h, chiffres de Meta à l'appui. Mention « Partenariat rémunéré » et contrat écrit. Aucune portée garantie : on la mesure, et on l'écrit avant la signature.",
-        "kit_texte": "Un seul bloc pour commencer : un mois, moitié jeu concours et moitié publications, 500 €.",
+        "p1_nom": "Essai une semaine",
+        "p1_ce": "2 publications · 1 concours",
+        "p2_nom": "Présence un mois",
+        "p2_ce": "4 publications · 2 concours",
+        "p3_nom": "Parité un mois",
+        "p3_ce": "5 publications · 2 concours",
+        "p4_nom": "Trimestre",
+        "p4_ce": "12 publications · 6 concours",
+        "d1": "Publications dédiées, Facebook et Instagram",
+        "d2": "Jeux concours de 7 jours, avec votre lot et votre logo sur l'affiche",
+        "d3": "Stories pour annoncer le concours",
+        "d4": "Tirage au sort, et le gagnant annoncé",
+        "d5": "Rapport de portée sous 72 h, chiffres Meta",
+        "d6": "La mention « partenariat rémunéré »",
+        "d7": "Durée du pack",
+        "d8": "Une parution en plus, à l'unité",
+        "d_legende": "Une publication dédiée, c'est un post Facebook et un post Instagram sur votre marque, avec votre visuel et le lien que vous voulez. Le concours met votre lot en jeu, sur une affiche qui porte votre logo. La coche veut dire que c'est compris. Les images sont les nôtres ou les vôtres ; celle d'un tiers, seulement avec son accord écrit. Et le lot du concours vient de vous.",
+        "det_titre": "Le détail, formule par formule",
+        "h_titre": "Au-delà des quatre formules",
+        "h_intro": "Plus gros budget, saison entière, ou votre nom sur une série : dites la période et l'objectif, réponse chiffrée sous 48 h.",
+        "h2_nom": "Douze mois",
+        "h2_ce": "l'année entière, concours et publications répartis",
+        "h3_nom": "Sur mesure",
+        "h3_ce": "un budget plus gros, ou un événement : on écrit la formule ensemble",
+        "h4_nom": "Sponsoring d'un format",
+        "h4_ce": "votre nom sur une série qu'on produit, avec nos images ou les vôtres",
+        "h_note": "Prix avant signature. Prix HT.",
+        "bloc_detail_titre": "Chaque formule comprend",
+        "bloc_detail": "Dans chaque formule : le concours, son affiche, une story, et le rapport de portée sous 72 h.",
+        "tarif_notes": "Prix HT. Aucune portée garantie : on la mesure, et on l'écrit avant de signer.",
+        "kit_texte": "Quatre formules, du test d'une semaine au trimestre. Prix HT.",
         "kit_bouton": "Recevoir la grille",
         "kit_preuve": "Ces chiffres viennent de Meta, relevés ce mois-ci.",
         "kit_nom": "Votre nom",
@@ -79,13 +112,13 @@ TEXTES = {
         "kit_email": "Email",
         "kit_note": "Vos données servent seulement à vous répondre. Suppression sur demande.",
         "kit_ou": "Ou écrivez à",
-        "kit_lien": "l'adresse du blog",
+        "kit_lien": "notre adresse",
         "kit_rappel": "Annonceurs — recevoir la grille des tarifs",
         "hero_cta": "Annoncer sur Sailing More",
         "cookies_texte": "Aucun cookie de mesure ni de publicité : ce site n'en dépose aucun.",
         "cookies_lien": "En savoir plus",
         "cookies_bouton": "J'ai compris",
-        "ann_intro": "Sailing More parle aux voileux chaque soir. Un bloc de lancement, un mois, moitié jeu concours et moitié publications : 500 €."
+        "ann_intro": f"Sailing More publie tous les soirs à 18 h : les courses en cours, puis une vidéo un soir sur deux. Quatre formules pour y mettre votre marque : de {_PMIN} à {_PMAX} €, jeu concours compris.",
     },
     "en": {
         "surtitre": "The open sea, every evening.",
@@ -94,7 +127,7 @@ TEXTES = {
         "reseaux": "Our channels",
         "citations": "They said it before us",
         "concours_titre": "The giveaway",
-        "concours_texte": "One giveaway for an advertiser, six days of stories, a draw on Sunday. Next start: Tuesday {date}.",
+        "concours_texte": "One giveaway for an advertiser, five days of stories, Tuesday to Saturday, a draw on Sunday. Next start: Tuesday {date}.",
         "concours_bouton": "See the giveaway",
         "abonnes": "followers",
         "contenus": "posts",
@@ -110,12 +143,37 @@ TEXTES = {
         "legende_bourses": "Find crew — click the boat for your ocean.",
         "bulle_participants": "members",
         "kit_titre": "Advertisers",
-        "bloc_nom": "The launch block",
-        "bloc_ce": "one month, half giveaway and half posts",
-        "bloc_detail_titre": "What the block contains",
-        "bloc_detail": "1 seven-day giveaway · its announcement sheet · 1 story · 2 dedicated posts · the reach report within 72 h",
-        "tarif_notes": "Prices in EUR, excl. VAT. Reach and interaction report within 72 h, backed by Meta figures. “Paid partnership” label and written contract. No reach guaranteed: we measure it, and we say so before signing.",
-        "kit_texte": "One block to start: a month, half giveaway and half posts, €500.",
+        "p1_nom": "One-week trial",
+        "p1_ce": "2 posts · 1 giveaway",
+        "p2_nom": "One-month presence",
+        "p2_ce": "4 posts · 2 giveaways",
+        "p3_nom": "One-month parity",
+        "p3_ce": "5 posts · 2 giveaways",
+        "p4_nom": "Quarter",
+        "p4_ce": "12 posts · 6 giveaways",
+        "d1": "Dedicated posts, Facebook and Instagram",
+        "d2": "Seven-day giveaways, with your prize and your logo on the sheet",
+        "d3": "Stories to announce the giveaway",
+        "d4": "The draw, and the winner announced",
+        "d5": "Reach report within 72 h, Meta figures",
+        "d6": "The “paid partnership” line",
+        "d7": "How long the package runs",
+        "d8": "One extra post, priced alone",
+        "d_legende": "A dedicated post is one on Facebook and one on Instagram about your brand, with your visual and whatever link you want. The giveaway puts your prize up, on a sheet that carries your logo. The tick means it comes with the package. The footage is ours or yours; anyone else's only with their written permission. And the prize comes from you.",
+        "det_titre": "The detail, package by package",
+        "h_titre": "Beyond the four packages",
+        "h_intro": "Bigger spend, a whole season, or your name on a series: tell us the dates and what you are after, a priced answer comes back within 48 h.",
+        "h2_nom": "Twelve months",
+        "h2_ce": "the whole year, giveaways and posts spread out",
+        "h3_nom": "Custom",
+        "h3_ce": "bigger spend, a run of giveaways, an event: we write the package together",
+        "h4_nom": "Sponsoring a format",
+        "h4_ce": "your name on a series we make, with our footage or yours",
+        "h_note": "Price before signature. Prices excl. VAT.",
+        "bloc_detail_titre": "Every option includes",
+        "bloc_detail": "Every package has the giveaway, its announcement sheet, a story, and the reach report within 72 h.",
+        "tarif_notes": "Prices excl. VAT. No guaranteed reach: we measure it, and we write that down before you sign.",
+        "kit_texte": "Four packages, from a one-week trial to a quarter. Prices excl. VAT.",
         "kit_bouton": "Get the rate card",
         "kit_preuve": "Those figures come from Meta, measured this month.",
         "kit_nom": "Your name",
@@ -123,13 +181,13 @@ TEXTES = {
         "kit_email": "Email",
         "kit_note": "Your details are only used to reply to you. Deletion on request.",
         "kit_ou": "Or write to",
-        "kit_lien": "the blog address",
+        "kit_lien": "our address",
         "kit_rappel": "Advertisers — get the rate card",
         "hero_cta": "Advertise on Sailing More",
         "cookies_texte": "No analytics or advertising cookies: this site sets none.",
         "cookies_lien": "Learn more",
         "cookies_bouton": "Got it",
-        "ann_intro": "Sailing More speaks to sailors every evening. One launch block, a month, half giveaway and half posts: €500."
+        "ann_intro": f"Sailing More posts every evening at 6 pm: the races under way, then a video every other evening. Four packages to put your brand in front of it: €{_PMIN_EN} to €{_PMAX_EN}, giveaway included.",
     },
     "it": {
         "surtitre": "Il largo, ogni sera.",
@@ -138,7 +196,7 @@ TEXTES = {
         "reseaux": "I nostri canali",
         "citations": "L'hanno detto prima di noi",
         "concours_titre": "Il concorso",
-        "concours_texte": "Un concorso per un inserzionista, sei giorni di storie, un sorteggio la domenica. Prossima partenza: martedì {date}.",
+        "concours_texte": "Un concorso per un inserzionista, cinque giorni di storie, dal martedì al sabato, un sorteggio la domenica. Prossima partenza: martedì {date}.",
         "concours_bouton": "Vedi il concorso",
         "abonnes": "follower",
         "contenus": "pubblicazioni",
@@ -154,12 +212,37 @@ TEXTES = {
         "legende_bourses": "Trova un equipaggio — clicca la barca del tuo oceano.",
         "bulle_participants": "partecipanti",
         "kit_titre": "Inserzionisti",
-        "bloc_nom": "Il blocco di lancio",
-        "bloc_ce": "un mese, metà concorso e metà pubblicazioni",
-        "bloc_detail_titre": "Cosa contiene il blocco",
-        "bloc_detail": "1 concorso di 7 giorni · il suo foglio di annuncio · 1 story · 2 pubblicazioni dedicate · il rapporto di copertura entro 72 ore",
-        "tarif_notes": "Prezzi in euro, IVA esclusa. Rapporto su copertura e interazioni entro 72 ore, con i dati di Meta. Dicitura «Collaborazione retribuita» e contratto scritto. Nessuna copertura garantita: la misuriamo e lo scriviamo prima della firma.",
-        "kit_texte": "Un solo blocco per iniziare: un mese, metà concorso e metà pubblicazioni, 500 €.",
+        "p1_nom": "Prova una settimana",
+        "p1_ce": "2 pubblicazioni · 1 concorso",
+        "p2_nom": "Presenza un mese",
+        "p2_ce": "4 pubblicazioni · 2 concorsi",
+        "p3_nom": "Parità un mese",
+        "p3_ce": "5 pubblicazioni · 2 concorsi",
+        "p4_nom": "Trimestre",
+        "p4_ce": "12 pubblicazioni · 6 concorsi",
+        "d1": "Pubblicazioni dedicate, Facebook e Instagram",
+        "d2": "Concorsi di 7 giorni, con il vostro premio e il vostro logo sul foglio",
+        "d3": "Story per annunciare il concorso",
+        "d4": "L'estrazione, e il vincitore annunciato",
+        "d5": "Rapporto di copertura entro 72 ore, numeri di Meta",
+        "d6": "La menzione «partnership retribuita»",
+        "d7": "Quanto dura la formula",
+        "d8": "Una pubblicazione in più, da sola",
+        "d_legende": "Una pubblicazione dedicata è un post su Facebook e uno su Instagram sul vostro marchio, con il vostro visual e il link che preferite. Il concorso mette in palio il vostro premio, su un foglio che porta il vostro logo. La spunta vuol dire che è compreso. Le immagini sono le nostre o le vostre; quelle di altri solo con il loro consenso scritto. E il premio del concorso viene da voi.",
+        "det_titre": "Il dettaglio, formula per formula",
+        "h_titre": "Oltre le quattro formule",
+        "h_intro": "Budget più grande, una stagione intera, o il vostro nome su una serie: dite il periodo e l'obiettivo, risposta con i prezzi entro 48 ore.",
+        "h2_nom": "Dodici mesi",
+        "h2_ce": "l'anno intero, concorsi e pubblicazioni distribuiti",
+        "h3_nom": "Su misura",
+        "h3_ce": "budget più grande, serie di concorsi, evento: scriviamo la formula insieme",
+        "h4_nom": "Sponsorizzazione di un formato",
+        "h4_ce": "il vostro nome su una serie che produciamo, con le nostre immagini o le vostre",
+        "h_note": "Prezzo prima della firma. Prezzi IVA esclusa.",
+        "bloc_detail_titre": "Ogni formula comprende",
+        "bloc_detail": "In ogni formula: il concorso, il suo foglio di annuncio, una story e il rapporto di copertura entro 72 ore.",
+        "tarif_notes": "Prezzi IVA esclusa. Nessuna copertura garantita: la misuriamo, e lo mettiamo per iscritto prima della firma.",
+        "kit_texte": "Quattro formule, dalla prova di una settimana al trimestre. Prezzi IVA esclusa.",
         "kit_bouton": "Ricevere le tariffe",
         "kit_preuve": "Questi numeri vengono da Meta, rilevati questo mese.",
         "kit_nom": "Il tuo nome",
@@ -167,13 +250,13 @@ TEXTES = {
         "kit_email": "Email",
         "kit_note": "I tuoi dati servono solo per risponderti. Cancellazione su richiesta.",
         "kit_ou": "Oppure scrivi a",
-        "kit_lien": "l'indirizzo del blog",
+        "kit_lien": "il nostro indirizzo",
         "kit_rappel": "Inserzionisti — ricevere il listino",
         "hero_cta": "Pubblicizza su Sailing More",
         "cookies_texte": "Nessun cookie di analisi né pubblicitario: questo sito non ne usa.",
         "cookies_lien": "Scopri di più",
         "cookies_bouton": "Ho capito",
-        "ann_intro": "Sailing More parla ai velisti ogni sera. Un blocco di lancio, un mese, metà concorso e metà pubblicazioni: 500 €."
+        "ann_intro": f"Sailing More pubblica ogni sera alle 18: le regate in corso, poi un video una sera su due. Quattro formule per mettere il vostro marchio lì davanti: da {_PMIN} a {_PMAX} €, concorso incluso.",
     },
     "es": {
         "surtitre": "El mar abierto, cada noche.",
@@ -182,7 +265,7 @@ TEXTES = {
         "reseaux": "Nuestras redes",
         "citations": "Lo dijeron antes que nosotros",
         "concours_titre": "El sorteo",
-        "concours_texte": "Un sorteo para un anunciante, seis días de historias, un sorteo el domingo. Próxima salida: martes {date}.",
+        "concours_texte": "Un sorteo para un anunciante, cinco días de historias, de martes a sábado, un sorteo el domingo. Próxima salida: martes {date}.",
         "concours_bouton": "Ver el sorteo",
         "abonnes": "seguidores",
         "contenus": "publicaciones",
@@ -198,17 +281,37 @@ TEXTES = {
         "legende_bourses": "Encuentre tripulación — haga clic en el barco de su océano.",
         "bulle_participants": "participantes",
         "kit_titre": "Anunciantes",
-        "bloc_nom": "O bloco de lançamento",
-        "bloc_ce": "um mês, metade passatempo e metade publicações",
-        "bloc_detail_titre": "O que o bloco contém",
-        "bloc_detail": "1 passatempo de 7 dias · a sua folha de anúncio · 1 story · 2 publicações dedicadas · o relatório de alcance em 72 h",
-        "bloc_nom": "El bloque de lanzamiento",
-        "bloc_ce": "un mes, mitad sorteo y mitad publicaciones",
-        "bloc_detail_titre": "Qué contiene el bloque",
-        "bloc_detail": "1 sorteo de 7 días · su hoja de anuncio · 1 story · 2 publicaciones dedicadas · el informe de alcance en 72 h",
-        "tarif_notes": "Preços em euros, sem IVA. Relatório de alcance e interações em 72 h, com dados da Meta. Menção «Parceria paga» e contrato escrito. Sem alcance garantido: medimo-lo e dizemo-lo antes de assinar.",
-        "tarif_notes": "Precios en euros, sin IVA. Informe de alcance e interacciones en 72 h, con datos de Meta. Mención «Colaboración remunerada» y contrato escrito. Sin alcance garantizado: lo medimos y lo decimos antes de firmar.",
-        "kit_texte": "Un solo bloque para empezar: un mes, mitad sorteo y mitad publicaciones, 500 €.",
+        "p1_nom": "Prueba una semana",
+        "p1_ce": "2 publicaciones · 1 sorteo",
+        "p2_nom": "Presencia un mes",
+        "p2_ce": "4 publicaciones · 2 sorteos",
+        "p3_nom": "Paridad un mes",
+        "p3_ce": "5 publicaciones · 2 sorteos",
+        "p4_nom": "Trimestre",
+        "p4_ce": "12 publicaciones · 6 sorteos",
+        "d1": "Publicaciones dedicadas, Facebook e Instagram",
+        "d2": "Sorteos de 7 días, con tu premio y tu logo en la hoja",
+        "d3": "Stories para anunciar el sorteo",
+        "d4": "El sorteo, y el ganador anunciado",
+        "d5": "Informe de alcance en 72 h, cifras de Meta",
+        "d6": "La mención «colaboración pagada»",
+        "d7": "Cuánto dura la fórmula",
+        "d8": "Una publicación más, suelta",
+        "d_legende": "Una publicación dedicada es un post en Facebook y otro en Instagram sobre tu marca, con tu visual y el enlace que quieras. El sorteo pone en juego tu premio, en una hoja que lleva tu logo. La marca de visto significa que va incluido. Las imágenes son nuestras o tuyas; las de un tercero solo con su permiso escrito. Y el premio del sorteo viene de ti.",
+        "det_titre": "El detalle, fórmula por fórmula",
+        "h_titre": "Más allá de las cuatro fórmulas",
+        "h_intro": "Más presupuesto, una temporada entera, o tu nombre en una serie: dime las fechas y el objetivo, respuesta con precios en 48 h.",
+        "h2_nom": "Doce meses",
+        "h2_ce": "el año entero, sorteos y publicaciones repartidos",
+        "h3_nom": "A medida",
+        "h3_ce": "más presupuesto, una serie de sorteos, un evento: escribimos la fórmula juntos",
+        "h4_nom": "Patrocinio de un formato",
+        "h4_ce": "tu nombre en una serie que producimos, con nuestras imágenes o las tuyas",
+        "h_note": "Precio antes de firmar. Precios sin IVA.",
+        "bloc_detail_titre": "Cada fórmula incluye",
+        "bloc_detail": "En cada fórmula: el sorteo, su hoja de anuncio, una story y el informe de alcance en 72 h.",
+        "tarif_notes": "Precios sin IVA. No garantizamos alcance: lo medimos, y lo dejamos por escrito antes de firmar.",
+        "kit_texte": "Cuatro fórmulas, de la prueba de una semana al trimestre. Precios sin IVA.",
         "kit_bouton": "Recibir las tarifas",
         "kit_preuve": "Estas cifras vienen de Meta, medidas este mes.",
         "kit_nom": "Su nombre",
@@ -216,13 +319,13 @@ TEXTES = {
         "kit_email": "Correo",
         "kit_note": "Sus datos solo sirven para responderle. Supresión bajo petición.",
         "kit_ou": "O escriba a",
-        "kit_lien": "la dirección del blog",
+        "kit_lien": "nuestra dirección",
         "kit_rappel": "Anunciantes — recibir las tarifas",
         "hero_cta": "Anuncie en Sailing More",
         "cookies_texte": "Sin cookies de medición ni de publicidad: este sitio no instala ninguno.",
         "cookies_lien": "Saber más",
         "cookies_bouton": "Entendido",
-        "ann_intro": "Sailing More habla con los navegantes cada noche. Un bloque de lanzamiento, un mes, mitad sorteo y mitad publicaciones: 500 €."
+        "ann_intro": f"Sailing More publica cada noche a las 18 h: las regatas en curso, y un vídeo una noche de cada dos. Cuatro fórmulas para poner tu marca delante: de {_PMIN} a {_PMAX} €, sorteo incluido.",
     },
     "pt": {
         "surtitre": "O largo, todas as noites.",
@@ -231,7 +334,7 @@ TEXTES = {
         "reseaux": "As nossas redes",
         "citations": "Disseram-no antes de nós",
         "concours_titre": "O passatempo",
-        "concours_texte": "Um passatempo para um anunciante, seis dias de stories, um sorteio ao domingo. Próxima partida: terça-feira {date}.",
+        "concours_texte": "Um passatempo para um anunciante, cinco dias de stories, de terça a sábado, um sorteio ao domingo. Próxima partida: terça-feira {date}.",
         "concours_bouton": "Ver o passatempo",
         "abonnes": "seguidores",
         "contenus": "publicações",
@@ -247,7 +350,37 @@ TEXTES = {
         "legende_bourses": "Encontre tripulação — clique no barco do seu oceano.",
         "bulle_participants": "participantes",
         "kit_titre": "Anunciantes",
-        "kit_texte": "Um só bloco para começar: um mês, metade passatempo e metade publicações, 500 €.",
+        "p1_nom": "Teste uma semana",
+        "p1_ce": "2 publicações · 1 passatempo",
+        "p2_nom": "Presença um mês",
+        "p2_ce": "4 publicações · 2 passatempos",
+        "p3_nom": "Paridade um mês",
+        "p3_ce": "5 publicações · 2 passatempos",
+        "p4_nom": "Trimestre",
+        "p4_ce": "12 publicações · 6 passatempos",
+        "d1": "Publicações dedicadas, Facebook e Instagram",
+        "d2": "Passatempos de 7 dias, com o seu prémio e o seu logótipo na folha",
+        "d3": "Stories para anunciar o passatempo",
+        "d4": "O sorteio, e o vencedor anunciado",
+        "d5": "Relatório de alcance em 72 h, números da Meta",
+        "d6": "A menção «parceria paga»",
+        "d7": "Quanto dura a fórmula",
+        "d8": "Uma publicação a mais, avulsa",
+        "d_legende": "Uma publicação dedicada é um post no Facebook e outro no Instagram sobre a sua marca, com o seu visual e o link que quiser. O passatempo põe o seu prémio em jogo, numa folha que leva o seu logótipo. O visto quer dizer que vem incluído. As imagens são nossas ou suas; as de terceiros só com autorização escrita. E o prémio do passatempo vem de si.",
+        "det_titre": "O detalhe, fórmula a fórmula",
+        "h_titre": "Para lá das quatro fórmulas",
+        "h_intro": "Orçamento maior, uma época inteira, ou o seu nome numa série: diga as datas e o objectivo, resposta com preços em 48 h.",
+        "h2_nom": "Doze meses",
+        "h2_ce": "o ano inteiro, passatempos e publicações distribuídos",
+        "h3_nom": "Por medida",
+        "h3_ce": "orçamento maior, série de passatempos, evento: escrevemos a fórmula juntos",
+        "h4_nom": "Patrocínio de um formato",
+        "h4_ce": "o seu nome numa série que produzimos, com as nossas imagens ou as suas",
+        "h_note": "Preço antes da assinatura. Preços sem IVA.",
+        "bloc_detail_titre": "Cada fórmula inclui",
+        "bloc_detail": "Em cada fórmula: o passatempo, a sua folha de anúncio, uma story e o relatório de alcance em 72 h.",
+        "tarif_notes": "Preços sem IVA. Não garantimos alcance: medimo-lo, e escrevemo-lo antes de assinar.",
+        "kit_texte": "Quatro fórmulas, do teste de uma semana ao trimestre. Preços sem IVA.",
         "kit_bouton": "Receber a tabela de preços",
         "kit_preuve": "Estes números vêm da Meta, medidos este mês.",
         "kit_nom": "O seu nome",
@@ -255,13 +388,13 @@ TEXTES = {
         "kit_email": "Email",
         "kit_note": "Os seus dados servem apenas para lhe responder. Eliminação a pedido.",
         "kit_ou": "Ou escreva para",
-        "kit_lien": "o endereço do blog",
+        "kit_lien": "o nosso endereço",
         "kit_rappel": "Anunciantes — receber a tabela de preços",
         "hero_cta": "Anuncie na Sailing More",
         "cookies_texte": "Sem cookies de medição nem de publicidade: este site não instala nenhum.",
         "cookies_lien": "Saber mais",
         "cookies_bouton": "Entendi",
-        "ann_intro": "A Sailing More fala com os velejadores todas as noites. Um bloco de lançamento, um mês, metade passatempo e metade publicações: 500 €."
+        "ann_intro": f"A Sailing More publica todas as noites às 18 h: as regatas em curso e, uma noite sim, uma noite não, um vídeo. Quatro fórmulas para pôr a sua marca à frente: de {_PMIN} a {_PMAX} €, passatempo incluído.",
     },
     "de": {
         "surtitre": "Die Weite, jeden Abend.",
@@ -270,7 +403,7 @@ TEXTES = {
         "reseaux": "Unsere Kanäle",
         "citations": "Sie sagten es vor uns",
         "concours_titre": "Das Gewinnspiel",
-        "concours_texte": "Ein Gewinnspiel für einen Werbepartner, sechs Tage Stories, Ziehung am Sonntag. Nächster Start: Dienstag, {date}.",
+        "concours_texte": "Ein Gewinnspiel für einen Werbepartner, fünf Tage Stories von Dienstag bis Samstag, Ziehung am Sonntag. Nächster Start: Dienstag, {date}.",
         "concours_bouton": "Zum Gewinnspiel",
         "abonnes": "Follower",
         "contenus": "Beiträge",
@@ -286,12 +419,37 @@ TEXTES = {
         "legende_bourses": "Crew finden — klicken Sie auf das Boot Ihres Ozeans.",
         "bulle_participants": "Teilnehmer",
         "kit_titre": "Werbekunden",
-        "bloc_nom": "Das Startpaket",
-        "bloc_ce": "ein Monat, halb Gewinnspiel und halb Beiträge",
-        "bloc_detail_titre": "Was das Paket enthält",
-        "bloc_detail": "1 Gewinnspiel über 7 Tage · sein Ankündigungsblatt · 1 Story · 2 eigene Beiträge · der Reichweitenbericht binnen 72 Stunden",
-        "tarif_notes": "Preise in Euro zzgl. MwSt. Reichweiten- und Interaktionsbericht binnen 72 Stunden, mit Zahlen von Meta. Hinweis „Bezahlte Partnerschaft“ und schriftlicher Vertrag. Keine garantierte Reichweite: wir messen sie und sagen es vor der Unterschrift.",
-        "kit_texte": "Ein Startpaket für den Anfang: ein Monat, halb Gewinnspiel und halb Beiträge, 500 €.",
+        "p1_nom": "Probewoche",
+        "p1_ce": "2 Beiträge · 1 Gewinnspiel",
+        "p2_nom": "Präsenz einen Monat",
+        "p2_ce": "4 Beiträge · 2 Gewinnspiele",
+        "p3_nom": "Parität einen Monat",
+        "p3_ce": "5 Beiträge · 2 Gewinnspiele",
+        "p4_nom": "Quartal",
+        "p4_ce": "12 Beiträge · 6 Gewinnspiele",
+        "d1": "Eigene Beiträge, Facebook und Instagram",
+        "d2": "Gewinnspiele über 7 Tage, Ihr Preis und Ihr Logo auf dem Blatt",
+        "d3": "Stories, die das Gewinnspiel ankündigen",
+        "d4": "Die Auslosung, und der Gewinner wird bekannt gegeben",
+        "d5": "Reichweitenbericht binnen 72 Stunden, Meta-Zahlen",
+        "d6": "Der Hinweis «bezahlte Partnerschaft»",
+        "d7": "Wie lange das Paket läuft",
+        "d8": "Ein Beitrag extra, einzeln",
+        "d_legende": "Ein eigener Beitrag ist ein Post auf Facebook und einer auf Instagram über Ihre Marke, mit Ihrem Motiv und dem Link, den Sie wollen. Das Gewinnspiel spielt Ihren Preis aus, auf einem Blatt mit Ihrem Logo. Das Häkchen heißt: ist dabei. Das Material ist unseres oder Ihres; fremdes nur mit schriftlicher Erlaubnis. Und der Gewinn kommt von Ihnen.",
+        "det_titre": "Das Detail, Paket für Paket",
+        "h_titre": "Über die vier Pakete hinaus",
+        "h_intro": "Mehr Budget, eine ganze Saison, oder Ihr Name auf einer Serie: nennen Sie Zeitraum und Ziel, Antwort mit Preis binnen 48 Stunden.",
+        "h2_nom": "Zwölf Monate",
+        "h2_ce": "das ganze Jahr, Gewinnspiele und Beiträge verteilt",
+        "h3_nom": "Nach Maß",
+        "h3_ce": "mehr Budget, eine Gewinnspielserie, ein Event: wir schreiben das Paket zusammen",
+        "h4_nom": "Sponsoring eines Formats",
+        "h4_ce": "Ihr Name auf einer Serie, die wir machen, mit unserem Material oder Ihrem",
+        "h_note": "Preis vor der Unterschrift. Preise ohne MwSt.",
+        "bloc_detail_titre": "Jedes Paket enthält",
+        "bloc_detail": "In jedem Paket: das Gewinnspiel, sein Ankündigungsblatt, eine Story und der Reichweitenbericht binnen 72 Stunden.",
+        "tarif_notes": "Preise ohne MwSt. Keine garantierte Reichweite: wir messen sie und schreiben das vor der Unterschrift hin.",
+        "kit_texte": "Vier Pakete, von der Probewoche bis zum Quartal. Preise ohne MwSt.",
         "kit_bouton": "Preisliste erhalten",
         "kit_preuve": "Diese Zahlen kommen von Meta, in diesem Monat erhoben.",
         "kit_nom": "Ihr Name",
@@ -299,13 +457,13 @@ TEXTES = {
         "kit_email": "E-Mail",
         "kit_note": "Ihre Daten dienen nur der Antwort. Löschung auf Anfrage.",
         "kit_ou": "Oder schreiben Sie an",
-        "kit_lien": "die Blog-Adresse",
+        "kit_lien": "unsere Adresse",
         "kit_rappel": "Werbekunden — Preisliste erhalten",
         "hero_cta": "Werben auf Sailing More",
         "cookies_texte": "Keine Mess- oder Werbe-Cookies: diese Seite setzt keine.",
         "cookies_lien": "Mehr erfahren",
         "cookies_bouton": "Verstanden",
-        "ann_intro": "Sailing More spricht jeden Abend mit Seglern. Ein Startpaket, ein Monat, halb Gewinnspiel und halb Beiträge: 500 €."
+        "ann_intro": f"Sailing More veröffentlicht jeden Abend um 18 Uhr: die laufenden Regatten, dazu jeden zweiten Abend ein Video. Vier Pakete, um Ihre Marke davorzusetzen: {_PMIN} bis {_PMAX} €, Gewinnspiel inklusive.",
     }
 }
 MOIS = {
@@ -385,25 +543,13 @@ def prochain_jeu() -> str:
 
 
 # Les quatre réseaux, aux vraies couleurs, sans cadre ni chiffre.
-RESEAUX = [
-    ("instagram", "https://www.instagram.com/sailingmorehere/",
-     '<svg viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="ig" x1="0" y1="1" x2="1" y2="0">'
-     '<stop offset="0" stop-color="#feda75"/><stop offset=".35" stop-color="#fa7e1e"/>'
-     '<stop offset=".65" stop-color="#d62976"/><stop offset="1" stop-color="#962fbf"/></linearGradient></defs>'
-     '<path fill="url(#ig)" fill-rule="evenodd" d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.9.3 2.4.5.6.2 1 .5 1.5 1 .5.5.8.9 1 1.5.2.5.4 1.2.5 2.4.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.9-.5 2.4-.2.6-.5 1-1 1.5-.5.5-.9.8-1.5 1-.5.2-1.2.4-2.4.5-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.9-.3-2.4-.5-.6-.2-1-.5-1.5-1-.5-.5-.8-.9-1-1.5-.2-.5-.4-1.2-.5-2.4C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.9.5-2.4.2-.6.5-1 1-1.5.5-.5.9-.8 1.5-1 .5-.2 1.2-.4 2.4-.5 1.3-.1 1.7-.1 4.9-.1zm0 3.2c-3.1 0-3.5 0-4.7.1-1 .1-1.4.2-1.7.4-.4.2-.7.4-1 .7-.3.3-.5.6-.7 1-.2.3-.3.7-.4 1.7-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 1 .2 1.4.4 1.7.2.4.4.7.7 1 .3.3.6.5 1 .7.3.2.7.3 1.7.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1-.1 1.4-.2 1.7-.4.4-.2.7-.4 1-.7.3-.3.5-.6.7-1 .2-.3.3-.7.4-1.7.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1-.2-1.4-.4-1.7-.2-.4-.4-.7-.7-1-.3-.3-.6-.5-1-.7-.3-.2-.7-.3-1.7-.4-1.2-.1-1.6-.1-4.7-.1zm0 3.1a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 3.2a2.3 2.3 0 1 0 0 4.6 2.3 2.3 0 0 0 0-4.6zm5.7-3.5a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6z"/></svg>'),
-    ("facebook", "https://www.facebook.com/SailingMore",
-     '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#1877f2" d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.7-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg>'),
-    ("youtube", "https://www.youtube.com/@SailingMore",
-     '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#ff0000" d="M23 7.5a3 3 0 0 0-2.1-2.1C19 4.9 12 4.9 12 4.9s-7 0-8.9.5A3 3 0 0 0 1 7.5 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.5a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 23.5 12 31 31 0 0 0 23 7.5zM9.8 15.4V8.6L15.7 12z"/></svg>'),
-    ("telegram", "https://t.me/sailingmorehere",
-     '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#29a9eb" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.6 6.6-1.6 7.6c-.1.5-.4.6-.8.4l-2.3-1.7-1.1 1.1c-.1.1-.2.2-.4.2l.2-2.5 4.6-4.1c.2-.2 0-.3-.3-.1l-5.7 3.6-2.4-.8c-.5-.2-.5-.5.1-.7l9.4-3.6c.4-.2.8 0 .6.6z"/></svg>'),
-    ("x", "https://x.com/SailingMore",
-     '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#ffffff" d="M18.9 2H22l-6.8 7.8L23 22h-6.3l-4.9-6.4L6.2 22H3l7.3-8.3L2.4 2h6.4l4.5 5.9L18.9 2zm-1.1 18h1.7L7.4 3.7H5.6L17.8 20z"/></svg>'),
-]
-# Telegram passe à gauche d'Instagram (Nicolas, 19/11/2026) : on échange les deux entrées.
-_i = next(k for k, r in enumerate(RESEAUX) if r[0] == "instagram")
-_t = next(k for k, r in enumerate(RESEAUX) if r[0] == "telegram")
-RESEAUX[_i], RESEAUX[_t] = RESEAUX[_t], RESEAUX[_i]
+# Les données viennent de `marque.RESEAUX` ; ici on ne garde que l'ordre d'affichage du site.
+# Telegram passe à gauche d'Instagram (Nicolas, 19/11/2026) : l'ordre du site est donc
+# Telegram, Facebook, YouTube, Instagram, X (celui des feuilles : Facebook, Instagram, YouTube, Telegram, X).
+# Le format (clé, lien, svg) reste celui que lit `logos_reseaux.py`.
+_ORDRE_SITE = ["telegram", "facebook", "youtube", "instagram", "x"]
+_PAR_CLE = {r["cle"]: r for r in marque.RESEAUX}
+RESEAUX = [(_PAR_CLE[c]["cle"], _PAR_CLE[c]["url"], _PAR_CLE[c]["svg"]) for c in _ORDRE_SITE]
 
 
 # Les cinq grands chiffres — ceux des feuilles et du kit annonceur.
@@ -488,7 +634,7 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
     grands = "".join(
         f'<div class="grand{" rouge" if (cle, lab) in rouges else ""}">'
         f'<b>{("≈\u2009" if estime else "")}{espace(cle if isinstance(cle, int) else c.get(cle, 0))}</b>'
-        f'<span data-t="{lab}">{lab}</span></div>'
+        f'<span data-t="{lab}">{TEXTES["fr"].get(lab, lab)}</span></div>'
         for cle, lab, estime in GRANDS)
 
     # La mer prend tout l'écran du héros : plus de cadre, le bateau navigue sur la page.
@@ -510,6 +656,7 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
 <meta name="description" content="Sailing More, média indépendant de voile et de course au large : stories quotidiennes, vidéos et régates, sur Instagram et Facebook.">
 <meta property="og:title" content="Sailing More">
 <meta property="og:description" content="La voile et la course au large, en images.">
+<link rel="canonical" href="https://sailingmore.fr/">
 <meta property="og:url" content="https://sailingmore.fr/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_FR">
@@ -537,6 +684,11 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
     padding:.7rem 1.2rem;background:rgba(6,16,32,.72);backdrop-filter:blur(10px);
     border-bottom:1px solid rgba(126,214,214,.14)}}
   .entete .nom{{font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.82rem;color:var(--gris)}}
+  .entete .menu{{margin-left:auto;margin-right:1.1rem;font-size:.78rem;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--creme);border-bottom:1px solid rgba(226,58,62,.55);
+    padding-bottom:1px}}
+  .entete .menu:hover{{color:#fff;border-bottom-color:var(--rouge)}}
+  @media (max-width:520px){{.entete .menu{{font-size:.7rem;margin-right:.6rem}}}}
   .langues{{display:flex;gap:.15rem;align-items:center}}
   .langues button{{background:none;border:0;color:var(--gris);font:inherit;font-size:.76rem;
     letter-spacing:.09em;text-transform:uppercase;padding:.28rem .45rem;border-radius:.35rem;cursor:pointer}}
@@ -664,6 +816,7 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
   .cookies a{{color:var(--eau);text-decoration:none;margin-left:.35rem}}
   .cookies button{{background:var(--eau);color:#06202a;border:0;border-radius:.55rem;
     padding:.45rem .85rem;font:inherit;font-weight:600;cursor:pointer;white-space:nowrap}}
+  .cookies[hidden]{{display:none}}
   body:has(#cookies:not([hidden])) footer{{padding-bottom:6rem}}
   footer{{border-top:1px solid rgba(126,214,214,.14);margin-top:6.5rem;padding:2.4rem 1.4rem 2.4rem;
     display:flex;flex-wrap:wrap;gap:.6rem 1.3rem;justify-content:center;color:var(--gris);font-size:.84rem}}
@@ -686,6 +839,8 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
 <div class="contenu">
 <header class="entete">
   <span class="nom">Sailing More</span>
+  <a class="menu" href="regates.html">Calendrier des régates</a>
+  <a class="menu" href="lexique.html">Lexique</a>
   <div class="langues" id="langues" aria-label="Language">
     <button data-lang="auto" aria-pressed="true">Auto</button>
     {"".join(f'<button data-lang="{l}" aria-pressed="false">{l.upper()}</button>' for l in LANGUES)}
@@ -903,7 +1058,8 @@ def page_jeu(jeu: str) -> str:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Le jeu concours — Sailing More</title>
-<meta name="description" content="Le jeu concours Sailing More : six jours de stories, un tirage le dimanche.">
+<link rel="canonical" href="https://sailingmore.fr/jeux.html">
+<meta name="description" content="Le jeu concours Sailing More : cinq jours de stories, du mardi au samedi, un tirage le dimanche.">
 <style>
   body{{margin:0;background:#071c31;
     color:{CREME};font-family:system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
@@ -932,7 +1088,7 @@ def page_jeu(jeu: str) -> str:
   <a class="retour" href="index.html">← Sailing More</a>
   <h1>Le jeu <span>concours</span></h1>
   <div class="filet"></div>
-  <p>Un jeu par mois, offert à un annonceur : une place dans nos stories du soir pendant six jours,
+  <p>Un jeu par mois, offert à un annonceur : une place dans nos stories du soir pendant cinq jours,
   du mardi au samedi, puis un tirage le dimanche à 18&nbsp;h.</p>
   <p class="date">Prochain départ : {date_longue(jeu)}</p>
   <ul>
@@ -978,7 +1134,7 @@ def publier(fichiers: list[str]) -> None:
 
     for nom in fichiers:
         chemin = SORTIE / nom
-        brut = chemin.read_bytes() if chemin.suffix.lower() in {".jpg", ".jpeg", ".png"} else chemin.read_text().encode()
+        brut = lire_brut(chemin)
         s, d = appel(f"/repos/{depot}/contents/{nom}")
         sha = d["sha"] if s == 200 and isinstance(d, dict) else None
         corps = {"message": f"accueil : {nom}",
@@ -987,6 +1143,26 @@ def publier(fichiers: list[str]) -> None:
             corps["sha"] = sha
         s2, r2 = appel(f"/repos/{depot}/contents/{nom}", "PUT", corps)
         print(f"{nom} → {s2}" + ("" if s2 < 300 else f" {r2}"))
+
+
+BINAIRES = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".ico", ".woff", ".woff2",
+            ".mp4", ".mov", ".webm", ".pdf", ".zip"}
+
+
+def lire_brut(chemin):
+    """Le contenu d'un fichier tel quel : le texte en UTF-8, le reste en octets.
+
+    Corrigé le 20/11/2026 : une police `.woff` était lue comme du texte et son premier octet non UTF-8
+    cassait l'envoi (« UnicodeDecodeError: 0xc9 »), après la préparation des 73 fichiers. La liste des
+    binaires est explicite, et un fichier texte qui ne se décode pas passe quand même en octets plutôt
+    que d'arrêter la publication.
+    """
+    if chemin.suffix.lower() in BINAIRES:
+        return chemin.read_bytes()
+    try:
+        return chemin.read_text(encoding="utf-8").encode()
+    except UnicodeDecodeError:
+        return chemin.read_bytes()
 
 
 def publier_en_un_seul_envoi(fichiers: list[str], message: str = "accueil : mise à jour") -> None:
@@ -1025,10 +1201,17 @@ def publier_en_un_seul_envoi(fichiers: list[str], message: str = "accueil : mise
         print("commit illisible", s, commit)
         return
 
+    if "--repetition" in sys.argv:
+        total = sum((SORTIE / n).stat().st_size for n in fichiers)
+        for n in fichiers:
+            print(f"répétition · {n} · {(SORTIE / n).stat().st_size} o")
+        print(f"répétition : {len(fichiers)} fichier(s), {total} octets — rien n'a été envoyé")
+        return
+
     arbre = []
     for nom in fichiers:
         chemin = SORTIE / nom
-        brut = chemin.read_bytes() if chemin.suffix.lower() in {".jpg", ".jpeg", ".png"} else chemin.read_text().encode()
+        brut = lire_brut(chemin)
         s, blob = appel(f"/repos/{depot}/git/blobs", "POST",
                         {"content": base64.b64encode(brut).decode(), "encoding": "base64"})
         if s not in (200, 201):
@@ -1054,6 +1237,40 @@ def publier_en_un_seul_envoi(fichiers: list[str], message: str = "accueil : mise
 
 
 
+def fichiers_a_publier() -> list[str]:
+    """Ce que le site envoie, à un seul endroit.
+
+    Deux listes pour un même site, c'est ce qui a ramené l'ancien gabarit en ligne le 20/11 : la
+    génération et la publication doivent lire la même liste, et elle est ici.
+    """
+    pages = [n for n in ("index.html", "jeux.html", "annonceurs.html", "merci.html",
+                         "regates.html", "lexique.html",
+                         "mentions-legales.html", "confidentialite.html", "delete.html",
+                         "sitemap.xml")
+             if (SITE / n).exists()]
+    images = [n for n in ("og-image.jpg", "icon-512.png", "icon-180.png", "favicon-32.png",
+                          "carte-monde.png") if (SITE / n).exists()]
+    medias = sorted(p.relative_to(SITE).as_posix() for d in ("stories", "reels", "drapeaux")
+                    for p in (SITE / d).glob("*") if p.suffix.lower() in {".jpg", ".png"})
+    polices = sorted(p.relative_to(SITE).as_posix() for p in (SITE / "fonts").glob("*.woff"))
+    return [*pages, *images, *medias, *polices]
+
+
+def miroir_vers_sortie(liste: list[str] | None = None) -> int:
+    """Copie dans `cache/rhum/site` ce que le site publie — la publication ne lit que là.
+
+    C'est la pièce qui manquait le 20/11 : `--site` écrivait le bon site dans `projets/…/site` et
+    la publication envoyait l'ancien `cache/rhum/site`, resté en arrière. Les deux sortent
+    maintenant de la même génération, à l'octet près.
+    """
+    liste = liste or fichiers_a_publier()
+    for nom in liste:
+        dst = SORTIE / nom
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(SITE / nom, dst)
+    return len(liste)
+
+
 SITE = RACINE / "projets/sailingmore/site"
 
 
@@ -1077,7 +1294,7 @@ def page_accueil(jeu: str, blocs: str = "") -> str:
         globals().update(depart)
 
 
-def sortir_le_site(jeu: str, blocs: str) -> int:
+def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
     """Écrit le site complet dans projets/sailingmore/site, habillé en Signal B « CAP ».
 
     Le dossier cache/rhum/site — celui que la publication envoie — n'est pas touché : rien ne part
@@ -1105,6 +1322,13 @@ def sortir_le_site(jeu: str, blocs: str) -> int:
     (SITE / "jeux.html").write_text(concours)
     (SITE / "merci.html").write_text(merci)
     (SITE / "annonceurs.html").write_text(annonceurs)
+    # Le calendrier des régates suit le même chemin que les autres pages (21/11/2026) : il est
+    # construit ici, avant la mer et l'équilibre, sinon une reconstruction du site l'effacerait.
+    try:
+        import regates_page
+        print(f"calendrier des régates : {regates_page.ecrire_page(SITE)} épreuves")
+    except SystemExit as e:
+        print(f"calendrier des régates non écrit : {e}")
     for nom in ("mentions-legales.html", "confidentialite.html", "delete.html"):
         if (SORTIE / nom).exists():
             (SITE / nom).write_text(habillage_pages_legales((SORTIE / nom).read_text()))
@@ -1121,8 +1345,49 @@ def sortir_le_site(jeu: str, blocs: str) -> int:
                 shutil.copy2(f, SITE / dossier / f.name)
     n = poser_mer_partout()
     print(f"mer posée sur {n} page(s) supplémentaire(s)")
+    print(f"équilibre posé sur {poser_equilibre(SITE)} page(s)")
     print(f"site écrit dans {SITE} — {len(list(SITE.rglob('*')))} entrées")
+    liste = fichiers_a_publier()
+    # `--page` ne recopie que la page demandée : recopier tout `cache/rhum/site` depuis un cron
+    # faisait croire à l'atelier que chaque fichier avait changé, et il republiait le site entier
+    # reconstruit par ce cron — c'est le chemin qui a effacé les correctifs du 20/11.
+    if miroir_complet:
+        print(f"{miroir_vers_sortie(liste)} fichier(s) prêts pour l'envoi")
+    if "--publier" in sys.argv:
+        publier_en_un_seul_envoi(liste, "accueil : le site du jour")
     return 0
+
+
+# ---------------------------------------------------------------------------
+# Rééquilibrage design (20/11/2026, validé par Nicolas : « fais les modifications pour tout
+# rééquilibrer »). Une seule feuille, `equilibre.css`, posée en dernier dans le <head> de chaque
+# page : police Inter hébergée sur le site, couleurs et coins de la charte, rien sous 12 px,
+# bandeau cookies qui ne cache plus les chiffres. Pour revenir en arrière : vider equilibre.css.
+# ---------------------------------------------------------------------------
+ICI = Path(__file__).resolve().parent
+EQUILIBRE = ICI / "equilibre.css"
+POLICES = ICI / "fonts"
+
+
+def poser_equilibre(dossier: Path) -> int:
+    """Pose la feuille d'équilibre dans chaque page du dossier et y copie les polices."""
+    if not EQUILIBRE.exists():
+        return 0
+    css = EQUILIBRE.read_text(encoding="utf-8")
+    bloc = '<style id="equilibre">\n' + css + '</style>'
+    fait = 0
+    for page in sorted(dossier.glob("*.html")):
+        html = page.read_text(encoding="utf-8")
+        html = re.sub(r'<style id="equilibre">.*?</style>\n?', "", html, flags=re.S)
+        if "</head>" not in html:
+            continue
+        page.write_text(html.replace("</head>", bloc + "\n</head>", 1), encoding="utf-8")
+        fait += 1
+    if POLICES.exists():
+        (dossier / "fonts").mkdir(parents=True, exist_ok=True)
+        for f in POLICES.glob("*.woff"):
+            shutil.copy2(f, dossier / "fonts" / f.name)
+    return fait
 
 
 DECOR_MER = (
@@ -1278,8 +1543,9 @@ def page_annonceurs() -> str:
     return ("<!doctype html>\n<html lang=\"fr\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
             "<title>Annonceurs — Sailing More</title>"
-            "<meta name=\"description\" content=\"Le bloc de lancement de Sailing More : un mois, moitie "
-            "jeu concours et moitie publications, 500 EUR, rapport de portee sous 72 h.\">"
+            "<link rel=\"canonical\" href=\"https://sailingmore.fr/annonceurs.html\">"
+            f"<meta name=\"description\" content=\"Les formules annonceurs de Sailing More : de {_PMIN} à "
+            f"{_PMAX} €, jeu concours et publications dédiées, rapport de portée sous 72 h.\">"
             + CSS_LEGAL.replace("</style>", site_blocks.CSS + CSS_BOUTON + "</style>"
                               + "<style>.page.page-annonceurs{max-width:64rem}"
                               # Nicolas, 20/11/2026 : les espaces de cette page sautaient de 15 px à
@@ -1290,16 +1556,16 @@ def page_annonceurs() -> str:
                                 "color:#9db2c6;margin:3.4rem 0 1rem}</style>") +
             "</head><body><div class=\"page page-annonceurs\"><a class=\"retour\" href=\"index.html\">← Sailing More</a>"
             "<h1 data-t=\"kit_titre\">Annonceurs</h1>"
-            "<p data-t=\"ann_intro\">Sailing More parle aux voileux chaque soir. Un bloc de lancement, "
-            "un mois, moitié jeu concours et moitié publications : 500 €.</p>"
-            "<p class=\"kit-preuve\" data-t=\"kit_preuve\">Ces chiffres viennent de Meta, relevés ce "
-            "mois-ci.</p>"
+            + f"<p data-t=\"ann_intro\">{TEXTES['fr']['ann_intro']}</p>"
             "<div class=\"carte-kit\">"
-            + site_blocks.tarifs() +
+            + site_blocks.tarifs(TEXTES['fr']) +
+            site_blocks.hors_grille(TEXTES['fr']) +
             site_blocks.formulaire_kit() +
             "</div>"
-            "<p class=\"ann-carte\" data-t=\"ann_carte\">Où sont les lecteurs</p>"
+            '<details class="plis plis-carte"><summary data-t="ann_carte">Où sont les lecteurs</summary>'
             + site_blocks.html_carte() +
+            "<p class=\"kit-preuve\" data-t=\"kit_preuve\">Ces chiffres viennent de Meta, relevés ce "
+            "mois-ci.</p></details>"
             "</div></body></html>\n")
 
 
@@ -1313,7 +1579,7 @@ def page_merci() -> str:
             "</head><body><div class=\"page\"><a class=\"retour\" href=\"index.html\">← Sailing More</a>"
             "<h1>Merci.</h1>"
             "<p>Votre demande est partie. Je réponds moi-même, sous 24 heures, du lundi au vendredi.</p>"
-            "<p>En attendant, la grille est là : trois packs, du post seul au trimestre partenaire.</p>"
+            "<p>En attendant, la grille est là : quatre formules, de l'essai d'une semaine au trimestre.</p>"
             "<p><a href=\"index.html#annonceurs\">Revenir à la page des annonceurs</a></p>"
             "</div></body></html>\n")
 
@@ -1328,12 +1594,25 @@ def main() -> int:
     ])
     # la carte passe après les chiffres, pas au milieu des stories (Nicolas, 19/11/2026)
     carte = site_blocks.html_carte()
-    if "--site" in sys.argv:
+    # Un seul chemin : ce qui part est ce que `--site` vient d'écrire, et rien d'autre. Sans cette
+    # ligne, `--publier` seul reprenait l'ancien gabarit resté dans SORTIE et l'envoyait — le retour
+    # en arrière du 20/11 à 17 h 20, et le motif du cron `site_du_jour` qui ne publiait plus rien
+    # (`--site` sortait avant la publication).
+    if "--page" in sys.argv:
+        nom = sys.argv[sys.argv.index("--page") + 1]
+        sortir_le_site(jeu, blocs, miroir_complet=False)
+        if not (SITE / nom).exists():
+            print(f"page absente après génération : {nom}")
+            return 1
+        print(f"{miroir_vers_sortie([nom])} page copiée dans {SORTIE} : {nom}")
+        return 0
+    if "--site" in sys.argv or "--publier" in sys.argv:
         return sortir_le_site(jeu, blocs)
-    (SORTIE / "index.html").write_text(page(jeu, blocs, carte, kit=site_blocks.html_kit()))
+    (SORTIE / "index.html").write_text(page(jeu, blocs, carte, kit=site_blocks.html_kit(fr=TEXTES['fr'])))
     (SORTIE / "jeux.html").write_text(page_jeu(jeu))
     print(f"écrit {SORTIE / 'index.html'} · {SORTIE / 'jeux.html'}")
     print(f"chiffres au {chiffres().get('maj')} · prochain jeu {jeu} · {len(citations())} citations")
+    poser_equilibre(SORTIE)
     if "--publier" in sys.argv:
         images = [n for n in ("og-image.jpg", "icon-512.png", "icon-180.png", "favicon-32.png")
                   if (SORTIE / n).exists()]
@@ -1343,7 +1622,8 @@ def main() -> int:
             medias.append("carte-monde.png")
         pages = [n for n in ("mentions-legales.html", "confidentialite.html", "delete.html")
                  if (SORTIE / n).exists()]
-        publier_en_un_seul_envoi(["index.html", "jeux.html", *pages, *images, *medias])
+        polices = sorted(str(p.relative_to(SORTIE)) for p in (SORTIE / "fonts").glob("*.woff"))
+        publier_en_un_seul_envoi(["index.html", "jeux.html", *pages, *images, *medias, *polices])
     return 0
 
 
