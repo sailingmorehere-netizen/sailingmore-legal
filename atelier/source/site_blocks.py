@@ -488,6 +488,9 @@ CARTE_CSS = """
 MENU_PAGES = [
     ("index.html", "Accueil", ""),
     ("regates.html", "Calendrier des régates", ""),
+    ("regles-de-course.html", "Règles de course", ""),
+    ("stages.html", "Stages de voile", ""),
+    ("cours.html", "Cours théoriques", ""),
     ("jeux.html", "Jeux", ""),
     ("lexique.html", "Lexique", ""),
     ("annonceurs.html", "Annonceurs", ""),

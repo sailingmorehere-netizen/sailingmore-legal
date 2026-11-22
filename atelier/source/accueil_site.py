@@ -1253,7 +1253,7 @@ def fichiers_a_publier() -> list[str]:
     génération et la publication doivent lire la même liste, et elle est ici.
     """
     pages = [n for n in ("index.html", "jeux.html", "annonceurs.html", "merci.html",
-                         "regates.html", "lexique.html",
+                         "regates.html", "regles-de-course.html", "lexique.html", "stages.html",
                          "mentions-legales.html", "confidentialite.html", "delete.html",
                          "sitemap.xml")
              if (SITE / n).exists()]
@@ -1341,9 +1341,25 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         print(f"calendrier des régates : {regates_page.ecrire_page(SITE)} épreuves")
     except SystemExit as e:
         print(f"calendrier des régates non écrit : {e}")
+    # Règles de course (22/11/2026) : même chemin ; ecrire_page() rend 0 sans rien écrire tant que
+    # regles.json n'est pas « complet » et validé (voir regles_page.py --verifier).
+    try:
+        import regles_page
+        print(f"règles de course : {regles_page.ecrire_page(SITE)} entrées")
+    except SystemExit as e:
+        print(f"règles de course non écrites : {e}")
+    # Stages et cours de voile (22/11/2026) : même chemin que le calendrier, jamais d'écriture à la main.
+    try:
+        import stages_page
+        print(f"stages et cours : {stages_page.ecrire_page(SITE)} offre(s) publiable(s)")
+    except Exception as e:  # noqa: BLE001
+        print(f"stages et cours non écrits : {e}")
     for nom in ("mentions-legales.html", "confidentialite.html", "delete.html"):
         if (SORTIE / nom).exists():
-            (SITE / nom).write_text(habillage_pages_legales((SORTIE / nom).read_text()))
+            brut = (SORTIE / nom).read_text()
+            if nom == "confidentialite.html":
+                brut = avec_section_alertes(brut)
+            (SITE / nom).write_text(habillage_pages_legales(brut))
     for nom in ("carte-monde.png", "favicon-32.png", "icon-180.png", "icon-512.png", "og-image.jpg"):
         if (SORTIE / nom).exists():
             shutil.copy2(SORTIE / nom, SITE / nom)
@@ -1431,6 +1447,77 @@ def _sans_commandes(html: str) -> str:
     return html
 
 
+# Le lexique commande le bateau en fond (Nicolas, 22/11/2026). Un clic sur une entrée = UN appel à
+# `window.merManoeuvre` (mer_louvoyage.py) : l'état change une fois, aucun calcul par image, aucun
+# observateur de défilement. Les entrées absentes de la table ne déclenchent rien (nœuds : schémas,
+# pas de bateau). a = allure en degrés au vent ('P' = au plus près), flip = changer d'amure.
+LEXIQUE_MANOEUVRES = {
+    "virer": {"flip": 1, "k": "virer"}, "pare-a-virer": {"flip": 1, "k": "virer"},
+    "bord": {"flip": 1, "k": "virer"},
+    "louvoyer": {"flip": 1, "a": "P", "k": "pres"},
+    "empanner": {"flip": 1, "a": 150, "k": "empanner"}, "pare-a-empanner": {"flip": 1, "a": 150, "k": "empanner"},
+    "attention-a-la-bome": {"a": 150, "k": "empanner"},
+    "lofer": {"a": "P", "k": "pres"}, "pres": {"a": "P", "k": "pres"}, "ardent": {"a": "P", "k": "pres"},
+    "au-vent": {"a": "P", "k": "pres"}, "zone-de-non-vent": {"a": "P", "k": "pres"},
+    "vent-debout": {"a": "P", "k": "pres"}, "faseyer": {"a": "P", "k": "pres"},
+    "decrochage": {"a": "P", "k": "pres"}, "mettre-en-panne": {"a": "P", "k": "pres"},
+    "border": {"a": "P", "k": "pres"}, "gite": {"a": "P", "k": "gite"},
+    "mouiller": {"a": "P", "k": "ancre"}, "ancre": {"a": "P", "k": "ancre"},
+    "bon-plein": {"a": 60, "k": "bonplein"}, "travers": {"a": 90, "k": "travers"},
+    "largue": {"a": 120, "k": "largue"}, "choquer": {"a": 120, "k": "largue"},
+    "abattre": {"a": 130, "k": "largue"}, "refuser": {"a": 130, "k": "largue"},
+    "vent-arriere": {"a": 150, "k": "arriere"}, "spinnaker": {"a": 150, "k": "spi"},
+}
+LEXIQUE_LEGENDES = {
+    "virer": {"fr": "Le bateau vire de bord : l'avant passe face au vent.", "en": "The boat tacks: the bow turns through the wind.",
+              "de": "Das Boot wendet: der Bug geht durch den Wind.", "it": "La barca vira: la prua passa attraverso il vento.",
+              "es": "El barco vira: la proa pasa por el viento.", "pt": "O barco vira: a proa passa pelo vento."},
+    "empanner": {"fr": "Empannage : l'arrière passe dans le vent, la bôme change de côté.", "en": "Gybe: the stern passes through the wind, the boom swings across.",
+                 "de": "Halse: das Heck geht durch den Wind, der Baum schlägt über.", "it": "Abbattuta: la poppa passa nel vento, il boma cambia lato.",
+                 "es": "Trasluchada: la popa pasa por el viento, la botavara cambia de lado.", "pt": "Jibe: a popa passa pelo vento, a retranca muda de lado."},
+    "pres": {"fr": "Au plus près : le bateau remonte vers le vent, voiles bordées.", "en": "Close-hauled: the boat points as high as it can, sails sheeted in.",
+             "de": "Am Wind: das Boot läuft so hoch wie möglich, Segel dicht.", "it": "Di bolina: la barca stringe il vento, vele cazzate.",
+             "es": "De ceñida: el barco navega lo más cerca del viento, velas cazadas.", "pt": "De bolina: o barco navega o mais junto ao vento, velas cingidas."},
+    "gite": {"fr": "La gîte : au plus près, le bateau penche le plus.", "en": "Heel: close-hauled, the boat leans the most.",
+             "de": "Krängung: am Wind neigt sich das Boot am stärksten.", "it": "Sbandamento: di bolina la barca si inclina di più.",
+             "es": "Escora: de ceñida el barco se inclina más.", "pt": "Adernamento: de bolina o barco inclina-se mais."},
+    "ancre": {"fr": "Vent debout, bateau qui ralentit — comme avant de mouiller. L'ancre elle-même n'est pas dessinée.", "en": "Head to wind, boat slowing — as before anchoring. The anchor itself is not drawn.",
+              "de": "Gegen den Wind, das Boot wird langsamer — wie vor dem Ankern. Der Anker selbst ist nicht gezeichnet.", "it": "Prua al vento, la barca rallenta — come prima di ancorare. L'ancora non è disegnata.",
+              "es": "Proa al viento, el barco frena — como antes de fondear. El ancla no está dibujada.", "pt": "Proa ao vento, o barco abranda — como antes de fundear. A âncora não está desenhada."},
+    "bonplein": {"fr": "Bon plein : un peu plus ouvert que le près.", "en": "Close reach: a little freer than close-hauled.",
+                 "de": "Raumer Wind: etwas offener als am Wind.", "it": "Bolina larga: un po' più aperta della bolina.",
+                 "es": "Ceñida abierta: algo más abierto que de ceñida.", "pt": "Bolina folgada: um pouco mais aberta que a bolina."},
+    "travers": {"fr": "Au travers : le vent vient de côté.", "en": "Beam reach: the wind comes from the side.",
+                "de": "Halbwind: der Wind kommt von der Seite.", "it": "Al traverso: il vento arriva di lato.",
+                "es": "Al largo: el viento viene de costado.", "pt": "Través: o vento vem de lado."},
+    "largue": {"fr": "Le bateau s'écarte du vent : voiles choquées.", "en": "The boat bears away: sails eased.",
+               "de": "Das Boot fällt ab: Segel gefiert.", "it": "La barca poggia: vele lasche.",
+               "es": "El barco se abre del viento: velas amolladas.", "pt": "O barco arriba: velas folgadas."},
+    "arriere": {"fr": "Vent arrière : le vent vient de derrière.", "en": "Running: the wind comes from astern.",
+                "de": "Vor dem Wind: der Wind kommt von achtern.", "it": "In poppa: il vento arriva da dietro.",
+                "es": "Viento en popa: el viento viene de detrás.", "pt": "Vento em popa: o vento vem de trás."},
+    "spi": {"fr": "Allure de spi (vent arrière). Le spi n'est montré que si le modèle du bateau en porte un.", "en": "Spinnaker point of sail (running). The spinnaker shows only if the boat model carries one.",
+            "de": "Spi-Kurs (vor dem Wind). Der Spi erscheint nur, wenn das Bootsmodell einen hat.", "it": "Andatura da spi (in poppa). Lo spi si vede solo se il modello lo ha.",
+            "es": "Rumbo de spi (en popa). El spi sólo se ve si el modelo del barco lo lleva.", "pt": "Rumo de spi (em popa). O spi só aparece se o modelo do barco o tiver."},
+}
+SCRIPT_LEXIQUE = """<script>(function(){
+var M=%s, L=%s, T=null, el=null;
+function lg(){ var l=(document.documentElement.lang||'fr').slice(0,2); return /^(fr|en|de|it|es|pt)$/.test(l)?l:'fr' }
+function dire(k){
+  if(!el){ el=document.createElement('div'); el.setAttribute('role','status'); el.setAttribute('aria-live','polite');
+    el.style.cssText='position:fixed;left:50%%;bottom:1.2rem;transform:translateX(-50%%);max-width:min(32rem,92vw);padding:.7rem 1.1rem;background:rgba(10,26,43,.94);color:#eef3f7;border-left:3px solid #e23a3e;font-size:.85rem;line-height:1.4;z-index:50;opacity:0;transition:opacity .25s;pointer-events:none';
+    document.body.appendChild(el) }
+  el.textContent=L[k][lg()]; el.style.opacity=1; clearTimeout(T); T=setTimeout(function(){ el.style.opacity=0 },5200);
+}
+var liste=document.getElementById('liste-termes'); if(!liste) return;
+liste.addEventListener('click',function(e){
+  var a=e.target.closest&&e.target.closest('article.terme'); if(!a) return;
+  var m=M[a.id]; if(!m||!window.merManoeuvre) return;
+  if(window.merManoeuvre(m)) dire(m.k);
+});
+})();</script>"""
+
+
 def poser_mer_partout() -> int:
     """Le bateau en fond sur toutes les pages, posé par la construction elle-même.
 
@@ -1469,10 +1556,16 @@ def poser_mer_partout() -> int:
         # `404.html` en portait 22, `concours.html` 3.
         html = _sans_commandes(html)
         html = re.sub(r'(<body[^>]*>)', lambda m: m.group(1) + reserve, html, count=1)
+        bloc_page = bloc
+        if page.name == "lexique.html":
+            import json
+            bloc_page = bloc.replace("<!--mer-fin-->", SCRIPT_LEXIQUE % (
+                json.dumps(LEXIQUE_MANOEUVRES, ensure_ascii=False),
+                json.dumps(LEXIQUE_LEGENDES, ensure_ascii=False)) + "<!--mer-fin-->")
         if "</body>" in html:
-            html = html.replace("</body>", bloc + "\n</body>", 1)
+            html = html.replace("</body>", bloc_page + "\n</body>", 1)
         else:
-            html += bloc
+            html += bloc_page
         page.write_text(html)
         fait += 1
     return fait
@@ -1524,6 +1617,43 @@ CSS_LEGAL = """<style>
   th{color:#9db2c6;font-weight:500;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase}
   strong{color:#fff;font-weight:500}
 </style>"""
+
+
+SECTION_ALERTES = """<!--alertes-regates-->
+<h2>Alertes régates et actualité · Race alerts and news</h2>
+<p><b>Finalités.</b> Si vous saisissez votre e-mail dans le calendrier des régates, vous cochez
+deux cases distinctes, jamais pré-cochées : (1) <i>être alerté des nouvelles régates</i>, obligatoire
+pour s'inscrire ; (2) <i>recevoir aussi l'actualité de Sailing More</i>, facultative. Votre adresse
+n'est utilisée que pour ces finalités.</p>
+<p><b>Données.</b> Votre adresse e-mail, la langue de la page, le filtre choisi (lieu, type, classe,
+horizon), vos deux choix de consentement et la date de confirmation. Votre position n'est jamais
+collectée : « près de moi » se calcule dans votre navigateur, et le texte de votre recherche n'est pas transmis.</p>
+<p><b>Base légale.</b> Votre consentement (art. 6.1.a RGPD), confirmé par un e-mail de validation
+(double opt-in) ; sans clic sur le lien, l'adresse n'est pas inscrite.</p>
+<p><b>Prestataire.</b> L'envoi est assuré par Brevo (Sendinblue SAS, France), sous-traitant au sens du RGPD,
+avec hébergement dans l'Union européenne. <b>Durée.</b> Jusqu'à votre désinscription, puis suppression
+sous 30 jours ; une liste inactive depuis trois ans est purgée.</p>
+<p><b>Désinscription.</b> Chaque envoi contient, en pied, le lien de désinscription de sa liste. Les deux
+listes sont indépendantes : quitter l'actualité ne vous retire pas des alertes, et l'inverse. Vous pouvez aussi
+demander l'accès, la rectification ou l'effacement de vos données via la page « Suppression de données ».</p>
+<p><b>Cartographie.</b> Les coordonnées des villes proviennent d'OpenStreetMap (Nominatim), interrogé une
+fois par ville lors de la mise à jour du calendrier, jamais depuis votre navigateur. © contributeurs OpenStreetMap, licence ODbL.</p>
+<p lang="en"><b>English.</b> If you enter your email in the race calendar you tick two separate, unticked-by-default
+boxes: (1) be alerted to new races (required), (2) also receive Sailing More news (optional). Double opt-in by email;
+processed by Brevo (EU). Every email has an unsubscribe link for its own list; the two lists are independent.
+Your location never leaves your browser. Contact us via the data deletion page for access, correction or erasure.</p>
+"""
+
+
+def avec_section_alertes(html: str) -> str:
+    """Ajoute à la politique de confidentialité la section sur les alertes (une seule fois)."""
+    if "<!--alertes-regates-->" in html:
+        return html
+    fin = html.rfind("</body>")
+    i = html.rfind("</div>", 0, fin if fin >= 0 else len(html))  # avant le </div> de fermeture de la page
+    if i < 0:
+        i = fin if fin >= 0 else len(html)
+    return html[:i] + SECTION_ALERTES + html[i:]
 
 
 def habillage_pages_legales(html: str) -> str:

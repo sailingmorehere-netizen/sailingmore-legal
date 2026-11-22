@@ -17,6 +17,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 from datetime import date, datetime
 from pathlib import Path
 
@@ -43,6 +44,108 @@ PAYS_FR = {"FRA": "France", "SUI": "Suisse", "ITA": "Italie", "GER": "Allemagne"
            "AUS": "Australie", "NZL": "Nouvelle-Zélande", "JPN": "Japon", "CHN": "Chine",
            "CAN": "Canada", "BRA": "Brésil", "ARG": "Argentine", "TUR": "Turquie",
            "GRE": "Grèce", "CRO": "Croatie", "POL": "Pologne", "IRL": "Irlande"}
+
+# ── Position des épreuves, pour « près de moi » ─────────────────────────────────────────────────
+# regates.json ne porte pas de coordonnées : on les déduit ici de la ville (table ci-dessous), à
+# défaut du centre du pays (marqué approximatif, « ~ » dans la page). Une ville inconnue n'a pas
+# de position : l'épreuve reste dans la liste, sans distance. Pour ajouter un port : une entrée
+# « nom lat lon » (nom sans accent, en minuscules).
+_LIEUX_TXT = """
+nyon 46.383 6.239;rolle 46.459 6.337;cully 46.488 6.727;la tour-de-peilz 46.452 6.857;lausanne 46.519 6.633;
+villeneuve 46.397 6.927;morges 46.508 6.498;pully 46.510 6.665;cologny 46.216 6.187;geneve 46.204 6.143;
+clarens 46.435 6.893;montreux 46.433 6.911;vevey 46.463 6.843;evian 46.401 6.589;thonon 46.371 6.479;
+thun 46.758 7.628;spiez 46.686 7.680;oberhofen 46.732 7.667;neuchatel 46.992 6.931;la neuveville 47.066 7.091;
+twann 47.093 7.160;biel 47.137 7.247;zurich 47.376 8.541;thalwil 47.294 8.565;stafa 47.239 8.727;
+nuolen 47.200 8.870;arbon 47.516 9.434;kreuzlingen 47.650 9.178;bottighofen 47.636 9.231;steckborn 47.669 8.980;
+radolfzell 47.742 8.968;singen 47.759 8.840;friedrichshafen 47.654 9.479;lugano 46.004 8.953;ascona 46.157 8.772;
+brissago 46.121 8.718;stansstad 46.977 8.340;beinwil 47.275 8.200;annecy 45.899 6.129;aix-les-bains 45.689 5.915;
+cannes 43.552 7.017;concarneau 47.875 -3.920;la trinite-sur-mer 47.586 -3.030;lorient 47.748 -3.366;
+saint raphael 43.425 6.768;saint-tropez 43.272 6.640;marseille 43.296 5.370;la rochelle 46.160 -1.151;
+brest 48.390 -4.486;moisson 49.070 1.680;lubeck 53.866 10.687;travemunde 53.960 10.870;berlin 52.520 13.405;
+munchen 48.137 11.575;kiel 54.323 10.123;starnberg 47.994 11.340;diessen 47.950 11.103;hamburg 53.551 9.994;
+bremen 53.079 8.802;bremerhaven 53.540 8.581;dusseldorf 51.228 6.774;essen 51.456 7.012;krefeld 51.339 6.585;
+frankfurt 50.110 8.682;nurnberg 49.452 11.077;stuttgart 48.776 9.183;tegernsee 47.710 11.758;prien 47.856 12.346;
+chiemsee 47.870 12.400;bernau 47.805 12.373;breitbrunn 47.880 12.410;tutzing 47.909 11.277;herrsching 47.994 11.178;
+utting 48.000 11.070;inning 48.030 11.120;potsdam 52.396 13.058;magdeburg 52.131 11.639;munster 51.961 7.628;
+steinhude 52.450 9.340;wunstorf 52.420 9.440;damme 52.520 8.200;bad zwischenahn 53.190 8.000;duisburg 51.435 6.763;
+bochum 51.482 7.216;hagen 51.360 7.470;erfurt 50.978 11.029;attendorn 51.120 7.900;huckeswagen 51.150 7.340;
+kempen 51.365 6.419;dormagen 51.095 6.840;bautzen 51.180 14.420;ribnitz-damgarten 54.240 12.450;
+mohnesee 51.490 8.140;worth am rhein 49.050 8.260;bobenheim-roxheim 49.620 8.370;biblis 49.700 8.470;
+langen 50.000 8.660;hochheim am main 50.000 8.350;brandenburg 52.410 12.560;zeuthen 52.350 13.620;
+furstenwalde 52.360 14.060;arendsee 52.860 11.470;edertal 51.180 9.070;hungen 50.470 8.900;lemwerder 53.170 8.620;
+borgwedel 54.500 9.600;nohfelden 49.580 7.130;elchesheim-illingen 48.900 8.300;wackersdorf 49.320 12.150;
+simssee 47.870 12.250;dorf mecklenburg 53.820 11.500;hohen viecheln 53.800 11.600;am mellensee 52.200 13.400;
+zulpich 50.700 6.650;erftstadt 50.810 6.800;haltern 51.740 7.180;delft 52.011 4.358;oslo 59.913 10.752;
+moss 59.430 10.660;sandefjord 59.130 10.220;gressvik 59.250 10.980;porsgrunn 59.140 9.660;grimstad 58.340 8.590;
+arendal 58.460 8.770;hundvag 58.990 5.760;hjellestad 60.300 5.300;asgardstrand 59.350 10.460;
+skovshoved 55.760 12.590;vedbaek 55.850 12.560;hellerup 55.730 12.570;rungsted 55.890 12.540;niva 55.930 12.500;
+aarhus 56.157 10.211;kerteminde 55.450 10.660;kolding 55.490 9.470;horsens 55.860 9.850;djursholm 59.400 18.090;
+uppsala 59.858 17.639;vasteras 59.610 16.550;huskvarna 57.790 14.300;tampere 61.498 23.760;helsinki 60.170 24.940;
+tallinn 59.437 24.754;vosu 59.580 26.050;antwerpen 51.220 4.400;ranst 51.190 4.570;mechelen 51.030 4.480;
+hombeek 51.000 4.500;zemst 50.980 4.460;heusden 51.030 5.280;harelbeke 50.860 3.310;froidchapelle 50.200 4.300;
+roelofarendsveen 52.200 4.630;ter aar 52.170 4.720;loosdrecht 52.200 5.070;muiden 52.330 5.070;warmond 52.200 4.500;
+sneek 53.030 5.660;medemblik 52.770 5.110;lelystad 52.520 5.470;reeuwijk 52.050 4.730;vinkeveen 52.200 4.930;
+ouddorp 51.810 3.930;naples 40.850 14.270;napoli 40.850 14.270;malcesine 45.760 10.810;arco 45.920 10.890;
+torbole 45.870 10.870;nago-torbole 45.870 10.870;cremia 46.100 9.280;cesenatico 44.200 12.400;
+riva di traiano 42.100 11.800;portoroz 45.510 13.590;punat 45.020 14.630;cowes 50.760 -1.300;
+barcelona 41.385 2.170;garraf 41.260 1.900;mar menor 37.700 -0.800;lanzarote 29.000 -13.600;
+antigua 17.070 -61.800;english harbour 17.000 -61.760;dubai 25.200 55.270;perth -31.950 115.860;
+auckland -36.850 174.760;sydney -33.870 151.210;manly -33.800 151.290;hong kong 22.320 114.170;
+rio de janeiro -22.900 -43.200;arue -17.530 -149.500
+"""
+# Centre approximatif des pays, quand la ville est absente de la table. Marqué « ~ » dans la page.
+_PAYS_CENTRE = {"FRA": (46.6, 2.5), "SUI": (46.8, 8.2), "ITA": (42.5, 12.5), "GER": (51.0, 10.3),
+                "ESP": (40.2, -3.7), "BEL": (50.6, 4.6), "NED": (52.2, 5.3), "GBR": (53.0, -1.5),
+                "POR": (39.6, -8.0), "DEN": (56.0, 10.0), "SWE": (60.0, 15.0), "NOR": (60.5, 8.5),
+                "FIN": (62.5, 26.0), "AUT": (47.5, 14.5), "MON": (43.74, 7.42), "CRO": (45.1, 15.2),
+                "GRE": (39.0, 22.0), "IRL": (53.3, -8.0), "POL": (52.0, 19.0), "TUR": (39.0, 35.0)}
+
+
+def _sans_accent(s: str) -> str:
+    s = unicodedata.normalize("NFD", (s or "").lower().replace("ß", "ss").replace("ø", "o").replace("æ", "ae"))
+    return "".join(c for c in s if not unicodedata.combining(c))
+
+
+_LIEUX = {}
+for _e in _LIEUX_TXT.replace("\n", "").split(";"):
+    if _e.strip():
+        _n, _la, _lo = _e.strip().rsplit(" ", 2)
+        _LIEUX[_n] = (float(_la), float(_lo))
+_LIEUX_RE = re.compile(r"(?<![a-z])(" + "|".join(re.escape(k) for k in sorted(_LIEUX, key=len, reverse=True)) + r")(?![a-z])")
+
+
+_COORDS_OSM: dict | None = None
+
+
+def regates_lieux_cle(ville: str) -> str:
+    """Même clé que `regates_lieux.cle` : minuscules, sans accent, espaces simples."""
+    return " ".join(_sans_accent(ville or "").split())
+
+
+def _coords_osm() -> dict:
+    """Coordonnées géocodées à la collecte (Nominatim, une requête par ville) et lues dans le cache
+    du projet. La page ne contacte jamais Nominatim : elle ne fait que lire ce fichier."""
+    global _COORDS_OSM
+    if _COORDS_OSM is None:
+        try:
+            d = json.loads((ICI / "cache/rhum/villes-pays.json").read_text())
+            _COORDS_OSM = {k: v for k, v in (d.get("coords") or {}).items() if len(v) == 2}
+        except Exception:  # noqa: BLE001 — pas de cache = table locale seulement
+            _COORDS_OSM = {}
+    return _COORDS_OSM
+
+
+def position(e: dict) -> tuple[float, float, bool] | None:
+    """(lat, lon, approximative) d'une épreuve, ou None. Ville connue = précis ; sinon centre du pays."""
+    m = _LIEUX_RE.search(_sans_accent(e.get("ville", "")))
+    if m:
+        return (*_LIEUX[m.group(1)], False)
+    c = _coords_osm().get(regates_lieux_cle(e.get("ville", "")))
+    if c:
+        return (c[0], c[1], False)
+    c = _PAYS_CENTRE.get(e.get("pays") or "")
+    return (*c, True) if c else None
+
 
 CSS = """
 :root{--nuit:#0a1a2b;--panneau:#0f2438;--ivoire:#eef3f7;--gris:#9db2c6;--rouge:#e23a3e}
@@ -117,6 +220,9 @@ a{color:#fff;text-decoration:none}
 .cles a{font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gris);
   border-bottom:1px solid rgba(226,58,62,.55);padding-bottom:1px}
 .cles a:hover{color:#fff}
+.btn-ics{font:inherit;font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gris);
+  background:none;border:0;border-bottom:1px solid rgba(226,58,62,.55);padding:0 0 1px;cursor:pointer}
+.btn-ics:hover{color:#fff}
 .vide{padding:3rem 0;color:var(--gris);font-size:.9rem}
 .pied{margin-top:3.6rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,.09);
   color:#6f8598;font-size:.72rem;line-height:1.8}
@@ -156,6 +262,32 @@ a{color:#fff;text-decoration:none}
 .alerte button[type=submit]{font:inherit;font-size:.78rem;color:#fff;background:var(--rouge);border:0;
   border-radius:2px;padding:.5rem 1rem;margin-top:.5rem;cursor:pointer}
 .alerte .msg{margin:.6rem 0 0;color:#fff}
+.alerte .note{font-size:.68rem;color:#8196a9;margin:.5rem 0 0;line-height:1.5}
+.alerte .note a{text-decoration:underline;color:var(--gris)}
+
+/* ── près de moi ───────────────────────────────────────────────────── */
+.btn-proche{font:inherit;font-size:.72rem;letter-spacing:.04em;color:#fff;background:var(--panneau);
+  border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:.34rem .7rem;cursor:pointer}
+.btn-proche:hover{border-color:rgba(255,255,255,.4)}
+.btn-proche.actif{border-color:var(--rouge);background:rgba(226,58,62,.14)}
+.proche-msg{margin:.6rem 0 0;font-size:.74rem;color:var(--gris)}
+.proche-msg[hidden]{display:none}
+.proche-msg b{color:#fff;font-weight:500}
+.dist{display:block;color:#fff;font-size:.68rem;letter-spacing:.06em;margin-top:.15rem;white-space:nowrap}
+
+/* ── la carte des épreuves (fond = carte-monde.png, pastilles posées par le JS) ── */
+.carte-regates{margin:.8rem 0 .4rem}
+.carte-regates h2{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gris);
+  font-weight:500;margin:0 0 .5rem}
+.carte-regates svg{display:block;width:100%;height:auto;aspect-ratio:2/1;background:#071c31;
+  border:1px solid rgba(255,255,255,.09);border-radius:2px}
+.carte-regates .pt{fill:var(--rouge);fill-opacity:.8;stroke:#fff;stroke-opacity:.8;cursor:pointer}
+.carte-regates .pt.champ{fill:#e8c468}
+.carte-regates .pt.ap{fill-opacity:.35}
+.carte-regates .pt:hover,.carte-regates .pt:focus,.carte-regates .pt.sel{fill:#fff;outline:none}
+.carte-info{min-height:2.6rem;margin:.5rem 0 0;font-size:.78rem;color:var(--gris)}
+.carte-info b{color:#fff;font-weight:500}
+.carte-info a{text-decoration:underline;text-decoration-color:rgba(226,58,62,.6)}
 
 @media (max-width:640px){
   .ligne-recherche{flex-direction:column}
@@ -178,7 +310,7 @@ JS = r"""
   var liste = document.getElementById('liste');
   var menus = Array.prototype.slice.call(document.querySelectorAll('select[data-groupe]'));
   var effacer = document.getElementById('effacer');
-  var etat = {region:'tout', type:'tout', quand:'venir', texte:'', classe:'tous'};
+  var etat = {region:'tout', type:'tout', quand:'venir', texte:'', classe:'tous', moi:null};
 
   // Les mots ajoutés par ce chantier existent dans les six langues ; la langue est celle de <html lang>.
   var T = {
@@ -197,6 +329,34 @@ JS = r"""
   };
   var lang = (document.documentElement.lang || 'fr').slice(0,2);
   var L = T[lang] || T.fr;
+  // « Près de moi » : textes dans les six langues. {n} = nom de l'épreuve, {d} = distance.
+  var GT = {
+    fr:{btn:'Près de moi', stop:'Quitter « près de moi »', tri:'Du plus proche au plus lointain', attente:'Recherche de votre position…',
+        plus:'La plus proche : {n}, à {d} km.', aucune:'Aucune épreuve avec une position ne correspond à ces filtres.',
+        refus:'Position refusée ou indisponible : la liste reste par date.', note:'Votre position reste dans votre navigateur ; elle n\'est ni envoyée ni enregistrée. « ~ » = distance approximative (centre du pays).'},
+    de:{btn:'In meiner Nähe', stop:'« In meiner Nähe » beenden', tri:'Vom nächsten zum entferntesten', attente:'Standort wird ermittelt…',
+        plus:'Am nächsten: {n}, {d} km entfernt.', aucune:'Keine Veranstaltung mit Standort passt zu diesen Filtern.',
+        refus:'Standort verweigert oder nicht verfügbar: die Liste bleibt nach Datum sortiert.', note:'Ihr Standort bleibt in Ihrem Browser; er wird weder gesendet noch gespeichert. „~“ = ungefähre Entfernung (Landesmitte).'},
+    en:{btn:'Near me', stop:'Leave “near me”', tri:'Nearest first', attente:'Finding your position…',
+        plus:'Nearest: {n}, {d} km away.', aucune:'No race with a known position matches these filters.',
+        refus:'Position denied or unavailable: the list stays in date order.', note:'Your position stays in your browser; it is neither sent nor stored. “~” = approximate distance (country centre).'},
+    it:{btn:'Vicino a me', stop:'Esci da «vicino a me»', tri:'Dal più vicino al più lontano', attente:'Ricerca della tua posizione…',
+        plus:'La più vicina: {n}, a {d} km.', aucune:'Nessuna regata con posizione nota corrisponde a questi filtri.',
+        refus:'Posizione negata o non disponibile: l\'elenco resta in ordine di data.', note:'La tua posizione resta nel tuo browser; non viene inviata né salvata. «~» = distanza approssimativa (centro del paese).'},
+    es:{btn:'Cerca de mí', stop:'Salir de «cerca de mí»', tri:'De la más cercana a la más lejana', attente:'Buscando tu posición…',
+        plus:'La más cercana: {n}, a {d} km.', aucune:'Ninguna regata con posición conocida coincide con estos filtros.',
+        refus:'Posición denegada o no disponible: la lista sigue por fecha.', note:'Tu posición se queda en tu navegador; no se envía ni se guarda. «~» = distancia aproximada (centro del país).'},
+    pt:{btn:'Perto de mim', stop:'Sair de «perto de mim»', tri:'Da mais próxima à mais distante', attente:'A procurar a tua posição…',
+        plus:'A mais próxima: {n}, a {d} km.', aucune:'Nenhuma regata com posição conhecida corresponde a estes filtros.',
+        refus:'Posição recusada ou indisponível: a lista continua por data.', note:'A tua posição fica no teu navegador; não é enviada nem guardada. «~» = distância aproximada (centro do país).'}
+  };
+  var G = GT[lang] || GT.fr;
+  function km(a, b){
+    var R = 6371, r = Math.PI / 180;
+    var dl = (b.lat - a.lat) * r, dn = (b.lon - a.lon) * r;
+    var h = Math.sin(dl/2) * Math.sin(dl/2) + Math.cos(a.lat*r) * Math.cos(b.lat*r) * Math.sin(dn/2) * Math.sin(dn/2);
+    return 2 * R * Math.asin(Math.sqrt(h));
+  }
   var CADRE = {'régate':'t-regate','championnat':'t-champ','club':'t-club','course au large':'t-large'};
   var ICONE = {'régate':'i-regate','championnat':'i-champ','club':'i-club','course au large':'i-large'};
   var jauges = data.jauges;
@@ -256,16 +416,27 @@ JS = r"""
 
   function dessine(){
     var gardes = data.epreuves.filter(passe);
+    // « Près de moi » : la position reste dans le navigateur (jamais envoyée, jamais stockée) ;
+    // la liste passe en ordre de distance, les épreuves sans position à la fin.
+    if(etat.moi){
+      gardes.forEach(function(e){ e.km = (e.lat === undefined) ? null : km(etat.moi, e); });
+      gardes = gardes.slice().sort(function(a,b){
+        if(a.km === null) return b.km === null ? 0 : 1;
+        if(b.km === null) return -1;
+        return a.km - b.km;
+      });
+    }
     var groupes = [], vus = {};
     gardes.forEach(function(e){
-      var k = moisCle(e.debut);
+      var k = etat.moi ? 'proche' : moisCle(e.debut);
       if(!vus[k]){vus[k]=[];groupes.push(k);}
       vus[k].push(e);
     });
+    gardesCourantes = gardes;
     var html = '';
     groupes.forEach(function(k){
       var l = vus[k];
-      html += '<section class="mois"><h2>' + moisLisible(k) + ' <span>' + l.length + (l.length>1?' épreuves':' épreuve') + '</span></h2>';
+      html += '<section class="mois"><h2>' + (etat.moi ? G.tri : moisLisible(k)) + ' <span>' + l.length + (l.length>1?' épreuves':' épreuve') + '</span></h2>';
       l.forEach(function(e){
         var an = e.debut.slice(0,4) !== data.aujourdhui.slice(0,4) || etat.quand === 'tout';
         var dates = (e.fin && e.fin !== e.debut) ? jour(e.debut, an) + ' → ' + jour(e.fin, an) : jour(e.debut, an);
@@ -278,20 +449,141 @@ JS = r"""
         else tags += '<span class="sans-classe">' + L.sans + '</span>';
         if(e.annulee) tags += '<span class="tag rouge">Annulée</span>';
         var dr = drapeau(e);
+        var dist = (etat.moi && e.km !== null && e.km !== undefined) ? '<span class="dist">' + (e.ap ? '~' : '') + Math.round(e.km) + ' km</span>' : '';
         html += '<article class="epreuve ' + (CADRE[e.type] || '') + '">'
-             + '<div class="quand"><span class="j">' + dates + '</span></div>'
+             + '<div class="quand"><span class="j">' + dates + '</span>' + dist + '</div>'
              + '<div><div class="titre">' + casse(e.nom) + '</div>'
              + ((dr || lieu) ? '<div class="ou">' + dr + (lieu ? '<span class="vil">' + casse(lieu) + '</span>' : '') + '</div>' : '')
              + (tags ? '<div class="tags">' + tags + '</div>' : '')
              + '</div>'
-             + '<div class="cles">' + (e.lien ? '<a href="' + e.lien + '" target="_blank" rel="noopener">' + (e.lien_quoi||'site') + ' →</a>' : '') + '</div>'
+             + '<div class="cles"><button class="btn-ics" type="button" data-ics="' + gardesCourantes.indexOf(e) + '" title="' + echappe(I.titre) + '">+ ' + I.un + '</button>' + (e.lien ? '<a href="' + e.lien + '" target="_blank" rel="noopener">' + (e.lien_quoi||'site') + ' →</a>' : '') + '</div>'
              + '</article>';
       });
       html += '</section>';
     });
     liste.innerHTML = html || '<p class="vide">Aucune épreuve ne correspond à ces filtres.</p>';
+    dessineCarte(gardes);
+    var nIcs = gardes.filter(function(e){ return !e.annulee; }).length;
+    btnIcsTout.hidden = !nIcs;
+    btnIcsTout.textContent = I.tout + ' · ' + nIcs;
     compte.innerHTML = '<span><b>' + gardes.length + '</b> épreuve' + (gardes.length>1?'s':'') + '</span>'
-      + (etat.quand==='venir' && gardes.length ? '<span>la prochaine : <b>' + casse(gardes[0].nom) + '</b></span>' : '');
+      + (etat.quand==='venir' && gardes.length && !etat.moi ? '<span>la prochaine : <b>' + casse(gardes[0].nom) + '</b></span>' : '');
+    if(etat.moi){
+      var p = gardes[0];
+      msgProche.hidden = false;
+      msgProche.innerHTML = (p && p.km !== null)
+        ? G.plus.replace('{n}', '<b>' + echappe(casse(p.nom)) + '</b>').replace('{d}', (p.ap ? '~' : '') + Math.round(p.km)) + ' <span>' + G.note + '</span>'
+        : G.aucune + ' <span>' + G.note + '</span>';
+    }
+  }
+  // ── Carte : les épreuves filtrées posées sur carte-monde.png (équirectangulaire : x = lon+180, y = 90-lat).
+  // Le cadre se resserre sur les épreuves affichées ; clic ou Entrée sur une pastille = nom, dates, lien.
+  var CT = {
+    fr:{titre:'Les épreuves sur la carte', aide:'Touchez une pastille pour voir l\'épreuve.', ap:'position approximative (centre du pays)', sans:'Aucune position à afficher.'},
+    de:{titre:'Die Veranstaltungen auf der Karte', aide:'Punkt antippen, um die Veranstaltung zu sehen.', ap:'ungefähre Position (Landesmitte)', sans:'Keine Position anzuzeigen.'},
+    en:{titre:'Races on the map', aide:'Tap a dot to see the race.', ap:'approximate position (country centre)', sans:'No position to show.'},
+    it:{titre:'Le regate sulla mappa', aide:'Tocca un punto per vedere la regata.', ap:'posizione approssimativa (centro del paese)', sans:'Nessuna posizione da mostrare.'},
+    es:{titre:'Las regatas en el mapa', aide:'Toca un punto para ver la regata.', ap:'posición aproximada (centro del país)', sans:'Ninguna posición que mostrar.'},
+    pt:{titre:'As regatas no mapa', aide:'Toca num ponto para ver a regata.', ap:'posição aproximada (centro do país)', sans:'Nenhuma posição a mostrar.'}
+  };
+  var C = CT[lang] || CT.fr;
+  var carteSvg = document.getElementById('carte-svg');
+  var carteInfo = document.getElementById('carte-info');
+  var carteLiens = [];
+  document.getElementById('carte-titre').textContent = C.titre;
+  function dessineCarte(liste){
+    var pts = liste.filter(function(e){ return e.lat !== undefined; });
+    carteLiens = pts;
+    var x0 = 0, y0 = 0, w = 360, h = 180;
+    if(pts.length){
+      var la = pts.map(function(e){return e.lat;}), lo = pts.map(function(e){return e.lon;});
+      var mnLa = Math.min.apply(null,la), mxLa = Math.max.apply(null,la);
+      var mnLo = Math.min.apply(null,lo), mxLo = Math.max.apply(null,lo);
+      w = Math.max((mxLo - mnLo) * 1.3, 8); h = Math.max((mxLa - mnLa) * 1.3, 4);
+      if(w < 2*h) w = 2*h; else h = w/2;
+      if(w > 360){ w = 360; h = 180; }
+      x0 = Math.min(Math.max((mnLo + mxLo)/2 + 180 - w/2, 0), 360 - w);
+      y0 = Math.min(Math.max(90 - (mnLa + mxLa)/2 - h/2, 0), 180 - h);
+    }
+    carteSvg.setAttribute('viewBox', x0 + ' ' + y0 + ' ' + w + ' ' + h);
+    var r = Math.max(w * 0.007, 0.25);
+    var s = '<image href="carte-monde.png" x="0" y="0" width="360" height="180" preserveAspectRatio="none"/>';
+    pts.forEach(function(e, i){
+      s += '<circle class="pt' + (e.type === 'championnat' ? ' champ' : '') + (e.ap ? ' ap' : '') + '" data-i="' + i
+        + '" cx="' + (e.lon + 180) + '" cy="' + (90 - e.lat) + '" r="' + r + '" stroke-width="' + (r * 0.25)
+        + '" tabindex="0" role="button" aria-label="' + echappe(casse(e.nom)) + '"/>';
+    });
+    carteSvg.innerHTML = s;
+    carteInfo.innerHTML = pts.length ? C.aide : C.sans;
+  }
+  function choisitPoint(el){
+    var e = carteLiens[parseInt(el.getAttribute('data-i'), 10)];
+    if(!e) return;
+    Array.prototype.forEach.call(carteSvg.querySelectorAll('.sel'), function(n){ n.classList.remove('sel'); });
+    el.classList.add('sel');
+    var an = e.debut.slice(0,4) !== data.aujourdhui.slice(0,4);
+    var dates = (e.fin && e.fin !== e.debut) ? jour(e.debut, an) + ' → ' + jour(e.fin, an) : jour(e.debut, an);
+    carteInfo.innerHTML = '<b>' + echappe(casse(e.nom)) + '</b> — ' + dates
+      + (e.ville ? ' · ' + echappe(casse(e.ville)) : '') + (e.ap ? ' <i>(' + C.ap + ')</i>' : '')
+      + (e.lien ? ' · <a href="' + echappe(e.lien) + '" target="_blank" rel="noopener">' + echappe(e.lien_quoi || 'site') + ' →</a>' : '');
+  }
+  carteSvg.addEventListener('click', function(ev){ if(ev.target.classList && ev.target.classList.contains('pt')) choisitPoint(ev.target); });
+  carteSvg.addEventListener('keydown', function(ev){
+    if((ev.key === 'Enter' || ev.key === ' ') && ev.target.classList && ev.target.classList.contains('pt')){ ev.preventDefault(); choisitPoint(ev.target); }
+  });
+  // Fuseau horaire → pays (codes de regates.json). Seulement ce que le navigateur sait déjà : aucun envoi.
+  var FUSEAU = {'Europe/Paris':'FRA','Europe/Zurich':'SUI','Europe/Rome':'ITA','Europe/Berlin':'GER','Europe/Madrid':'ESP',
+    'Europe/Brussels':'BEL','Europe/Amsterdam':'NED','Europe/London':'GBR','Europe/Lisbon':'POR','Europe/Copenhagen':'DEN',
+    'Europe/Stockholm':'SWE','Europe/Oslo':'NOR','Europe/Helsinki':'FIN','Europe/Vienna':'AUT','Europe/Monaco':'MON',
+    'Europe/Zagreb':'CRO','Europe/Athens':'GRE','Europe/Dublin':'IRL','Europe/Warsaw':'POL','Europe/Istanbul':'TUR'};
+  var FZ = {
+    fr:'Position estimée d\'après votre fuseau horaire (pays) ; précisez avec le menu « Lieu ».',
+    de:'Standort aus Ihrer Zeitzone geschätzt (Land); verfeinern Sie mit dem Menü „Lieu“.',
+    en:'Position estimated from your time zone (country); refine with the “Lieu” (place) menu.',
+    it:'Posizione stimata dal tuo fuso orario (paese); affina con il menu «Lieu».',
+    es:'Posición estimada por tu zona horaria (país); afina con el menú «Lieu».',
+    pt:'Posição estimada pelo teu fuso horário (país); afina com o menu «Lieu».'
+  };
+  function paysDuFuseau(){
+    try { return FUSEAU[Intl.DateTimeFormat().resolvedOptions().timeZone] || ''; } catch(x){ return ''; }
+  }
+  var msgProche = document.getElementById('proche-msg');
+  var btnProche = document.getElementById('btn-proche');
+  function quitteProche(){
+    etat.moi = null;
+    msgProche.hidden = true;
+    btnProche.classList.remove('actif');
+    btnProche.textContent = G.btn;
+  }
+  // Le navigateur ne demande la position que sur clic : c'est l'accord du visiteur.
+  if(btnProche && 'geolocation' in navigator){
+    btnProche.hidden = false;
+    btnProche.textContent = G.btn;
+    btnProche.addEventListener('click', function(){
+      if(etat.moi){ quitteProche(); dessine(); return; }
+      btnProche.disabled = true;
+      msgProche.hidden = false;
+      msgProche.textContent = G.attente;
+      navigator.geolocation.getCurrentPosition(function(pos){
+        btnProche.disabled = false;
+        etat.moi = {lat: pos.coords.latitude, lon: pos.coords.longitude};
+        btnProche.classList.add('actif');
+        btnProche.textContent = G.stop;
+        dessine();
+      }, function(){
+        btnProche.disabled = false;
+        // Position refusée : le pays se déduit du fuseau horaire (rien ne sort du navigateur) ;
+        // le resserrage fin se fait avec le menu « Lieu ».
+        var c = paysDuFuseau();
+        if(c && data.centres[c]){
+          etat.moi = {lat: data.centres[c][0], lon: data.centres[c][1]};
+          btnProche.classList.add('actif');
+          btnProche.textContent = G.stop;
+          dessine();
+          msgProche.innerHTML += ' <span>' + (FZ[lang] || FZ.fr) + '</span>';
+        } else msgProche.textContent = G.refus;
+      }, {enableHighAccuracy:false, timeout:15000, maximumAge:600000});
+    });
   }
 
   // Filtres : quatre menus déroulants (lieu, type, bateau, quand). Le bateau est rempli ici parce
@@ -334,10 +626,78 @@ JS = r"""
     marque();
     dessine();
   });
+  // ── Export agenda (.ics) ─────────────────────────────────────────────────────
+  // Fichier fabriqué dans le navigateur à partir des données embarquées : rien n'est envoyé.
+  // Épreuve = événement « journée entière » (dates du calendrier, sans heure inventée).
+  // Mention Sailing More : seulement le PRODID (invisible) et une dernière ligne de la description
+  // (« Via sailingmore.fr ») ; jamais dans le titre ni le lieu, que l'internaute garde propre.
+  var IC = {
+    fr:{un:'Agenda', tout:'Tout ajouter à mon agenda (.ics)', titre:'Ajouter cette épreuve à mon agenda (fichier .ics)', via:'Via'},
+    de:{un:'Kalender', tout:'Alle in meinen Kalender (.ics)', titre:'Diese Veranstaltung in meinen Kalender übernehmen (.ics-Datei)', via:'Über'},
+    en:{un:'Calendar', tout:'Add all to my calendar (.ics)', titre:'Add this race to my calendar (.ics file)', via:'Via'},
+    it:{un:'Agenda', tout:'Aggiungi tutte alla mia agenda (.ics)', titre:'Aggiungi questa regata alla mia agenda (file .ics)', via:'Tramite'},
+    es:{un:'Agenda', tout:'Añadir todas a mi agenda (.ics)', titre:'Añadir esta regata a mi agenda (archivo .ics)', via:'Vía'},
+    pt:{un:'Agenda', tout:'Adicionar todas à minha agenda (.ics)', titre:'Adicionar esta regata à minha agenda (ficheiro .ics)', via:'Via'}
+  };
+  var I = IC[lang] || IC.fr;
+  var gardesCourantes = [];
+  function icsTexte(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n'); }
+  function icsPlie(l){
+    var out = [];
+    while(l.length > 70){ out.push(l.slice(0,70)); l = ' ' + l.slice(70); }
+    out.push(l);
+    return out.join('\r\n');
+  }
+  function icsJour(d){ return d.replace(/-/g,''); }
+  function icsLendemain(d){
+    var t = d.split('-'), x = new Date(Date.UTC(+t[0], +t[1]-1, +t[2]+1));
+    return x.getUTCFullYear() + ('0'+(x.getUTCMonth()+1)).slice(-2) + ('0'+x.getUTCDate()).slice(-2);
+  }
+  function icsEvt(e, stamp){
+    var fin = e.fin || e.debut;
+    var lieu = [e.ville, e.club, e.pays_fr].filter(Boolean).join(', ');
+    var desc = [];
+    if(e.classes && e.classes.length) desc.push(e.classes.slice(0,4).map(nomClasse).join(' · '));
+    if(e.lien) desc.push(e.lien);
+    desc.push(I.via + ' sailingmore.fr/regates.html');
+    var uid = normalise(e.nom + '-' + e.debut).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') + '@sailingmore.fr';
+    var l = ['BEGIN:VEVENT', 'UID:' + uid, 'DTSTAMP:' + stamp,
+      'DTSTART;VALUE=DATE:' + icsJour(e.debut), 'DTEND;VALUE=DATE:' + icsLendemain(fin),
+      'SUMMARY:' + icsTexte(casse(e.nom))];
+    if(lieu) l.push('LOCATION:' + icsTexte(casse(lieu)));
+    l.push('DESCRIPTION:' + icsTexte(desc.join('\n')));
+    if(e.lien) l.push('URL:' + e.lien);
+    if(e.annulee) l.push('STATUS:CANCELLED');
+    l.push('END:VEVENT');
+    return l.map(icsPlie).join('\r\n');
+  }
+  function icsTelecharge(liste, nom){
+    var d = new Date(), p = function(n){ return ('0'+n).slice(-2); };
+    var stamp = d.getUTCFullYear() + p(d.getUTCMonth()+1) + p(d.getUTCDate()) + 'T' + p(d.getUTCHours()) + p(d.getUTCMinutes()) + p(d.getUTCSeconds()) + 'Z';
+    var txt = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Sailing More//Calendrier des regates//FR\r\nCALSCALE:GREGORIAN\r\n'
+      + liste.map(function(e){ return icsEvt(e, stamp); }).join('\r\n') + '\r\nEND:VCALENDAR\r\n';
+    var blob = new Blob([txt], {type:'text/calendar;charset=utf-8'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = nom + '.ics';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+  liste.addEventListener('click', function(ev){
+    var b = ev.target.closest ? ev.target.closest('button[data-ics]') : null;
+    if(!b) return;
+    var e = gardesCourantes[parseInt(b.getAttribute('data-ics'), 10)];
+    if(e) icsTelecharge([e], normalise(e.nom).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60) || 'regate');
+  });
+  var btnIcsTout = document.getElementById('btn-ics-tout');
+  btnIcsTout.addEventListener('click', function(){
+    var l = gardesCourantes.filter(function(e){ return !e.annulee; });
+    if(l.length) icsTelecharge(l, 'regates-sailingmore');
+  });
   dessineClasses();
   champ.addEventListener('input', function(){ etat.texte = champ.value; dessine(); });
   effacer.addEventListener('click', function(){
-    etat = {region:'tout', type:'tout', quand:'venir', texte:'', classe:'tous'};
+    etat = {region:'tout', type:'tout', quand:'venir', texte:'', classe:'tous', moi:null};
+    if(btnProche) quitteProche();
     champ.value = '';
     marque();
     dessine();
@@ -350,22 +710,28 @@ JS = r"""
   // jamais le texte tapé dans la recherche.
   var A = {
     fr:{btn:'M\'alerter pour ce filtre', tout:'tous les filtres', email:'Votre e-mail', h:'Horizon', h30:'1 mois', h90:'3 mois', h365:'1 an', htout:'toutes les épreuves à venir',
-        c1:'Je veux recevoir un résumé chaque lundi des nouvelles épreuves correspondant à ce filtre.', c2:'Je veux aussi recevoir les offres de Sailing More (facultatif).',
+        c1:'Être alerté des nouvelles régates (obligatoire)', c2:'Recevoir aussi l\'actualité de Sailing More (facultatif)',
+        note:'Chaque envoi contient un lien de désinscription pour chacune de ces deux listes, indépendantes l\'une de l\'autre. Un e-mail de confirmation vous sera envoyé.', conf:'Confidentialité',
         ok:'Envoyer', recu:'Un e-mail de confirmation vous a été envoyé : cliquez sur le lien pour activer l\'alerte.', err:'Échec de l\'envoi, réessayez plus tard.', pour:'Alerte pour :'},
     de:{btn:'Für diesen Filter benachrichtigen', tout:'alle Filter', email:'Ihre E-Mail', h:'Zeitraum', h30:'1 Monat', h90:'3 Monate', h365:'1 Jahr', htout:'alle kommenden Regatten',
-        c1:'Ich möchte jeden Montag eine Zusammenfassung neuer Regatten zu diesem Filter erhalten.', c2:'Ich möchte außerdem Angebote von Sailing More erhalten (freiwillig).',
+        c1:'Über neue Regatten benachrichtigt werden (erforderlich)', c2:'Außerdem Neuigkeiten von Sailing More erhalten (freiwillig)',
+        note:'Jede Sendung enthält einen Abmeldelink für jede dieser beiden voneinander unabhängigen Listen. Sie erhalten eine Bestätigungs-E-Mail.', conf:'Datenschutz',
         ok:'Senden', recu:'Eine Bestätigungs-E-Mail wurde gesendet: Klicken Sie auf den Link, um die Benachrichtigung zu aktivieren.', err:'Senden fehlgeschlagen, bitte später erneut versuchen.', pour:'Benachrichtigung für:'},
     en:{btn:'Alert me for this filter', tout:'all filters', email:'Your email', h:'Horizon', h30:'1 month', h90:'3 months', h365:'1 year', htout:'all upcoming races',
-        c1:'I want a Monday summary of new races matching this filter.', c2:'I also want to receive Sailing More offers (optional).',
+        c1:'Be alerted to new races (required)', c2:'Also receive Sailing More news (optional)',
+        note:'Every email carries an unsubscribe link for each of these two independent lists. A confirmation email will be sent to you.', conf:'Privacy',
         ok:'Send', recu:'A confirmation email has been sent: click the link to activate the alert.', err:'Sending failed, please try again later.', pour:'Alert for:'},
     it:{btn:'Avvisami per questo filtro', tout:'tutti i filtri', email:'La tua e-mail', h:'Orizzonte', h30:'1 mese', h90:'3 mesi', h365:'1 anno', htout:'tutte le regate in programma',
-        c1:'Voglio ricevere ogni lunedì un riepilogo delle nuove regate che corrispondono a questo filtro.', c2:'Voglio ricevere anche le offerte di Sailing More (facoltativo).',
+        c1:'Essere avvisato delle nuove regate (obbligatorio)', c2:'Ricevere anche le novità di Sailing More (facoltativo)',
+        note:'Ogni invio contiene un link di annullamento per ciascuna di queste due liste indipendenti. Riceverai un\'e-mail di conferma.', conf:'Privacy',
         ok:'Invia', recu:'Ti abbiamo inviato un\'e-mail di conferma: clicca sul link per attivare l\'avviso.', err:'Invio non riuscito, riprova più tardi.', pour:'Avviso per:'},
     es:{btn:'Avisarme para este filtro', tout:'todos los filtros', email:'Tu correo', h:'Horizonte', h30:'1 mes', h90:'3 meses', h365:'1 año', htout:'todas las regatas próximas',
-        c1:'Quiero recibir cada lunes un resumen de las nuevas regatas que coincidan con este filtro.', c2:'También quiero recibir las ofertas de Sailing More (opcional).',
+        c1:'Recibir avisos de nuevas regatas (obligatorio)', c2:'Recibir también las novedades de Sailing More (opcional)',
+        note:'Cada envío incluye un enlace de baja para cada una de estas dos listas independientes. Recibirás un correo de confirmación.', conf:'Privacidad',
         ok:'Enviar', recu:'Te hemos enviado un correo de confirmación: haz clic en el enlace para activar el aviso.', err:'Error al enviar, inténtalo más tarde.', pour:'Aviso para:'},
     pt:{btn:'Avisar-me para este filtro', tout:'todos os filtros', email:'O teu e-mail', h:'Horizonte', h30:'1 mês', h90:'3 meses', h365:'1 ano', htout:'todas as regatas futuras',
-        c1:'Quero receber à segunda-feira um resumo das novas regatas que correspondem a este filtro.', c2:'Quero também receber as ofertas da Sailing More (opcional).',
+        c1:'Ser avisado das novas regatas (obrigatório)', c2:'Receber também as novidades da Sailing More (opcional)',
+        note:'Cada envio inclui um link de cancelamento para cada uma destas duas listas independentes. Receberás um e-mail de confirmação.', conf:'Privacidade',
         ok:'Enviar', recu:'Foi enviado um e-mail de confirmação: clica no link para ativar o alerta.', err:'Falha no envio, tenta mais tarde.', pour:'Alerta para:'}
   };
   var AL = A[lang] || A.fr;
@@ -392,6 +758,7 @@ JS = r"""
       + '<label class="case"><input type="checkbox" name="alerte" required><span>' + AL.c1 + '</span></label>'
       + '<label class="case"><input type="checkbox" name="promo"><span>' + AL.c2 + '</span></label>'
       + '<input class="hp" type="text" name="site" tabindex="-1" autocomplete="off" aria-hidden="true">'
+      + '<p class="note">' + AL.note + ' <a href="confidentialite.html">' + AL.conf + '</a></p>'
       + '<button type="submit">' + AL.ok + '</button><p class="msg" id="al-msg" role="status"></p>';
     btnA.addEventListener('click', function(){
       formA.hidden = !formA.hidden;
@@ -462,7 +829,10 @@ def epreuves_pour_page(d: dict) -> list[dict]:
         if not affichable(e):
             continue
         lien_quoi = "inscription" if "manage2sail" in e.get("lien", "") else "site"
+        pos = position(e)
         out.append({
+            # Position pour « près de moi » : lat/lon arrondis, `ap` = centre du pays faute de ville connue.
+            **({"lat": round(pos[0], 2), "lon": round(pos[1], 2), "ap": pos[2]} if pos else {}),
             "nom": e["nom"],
             "debut": e["debut"],
             "fin": e["fin"],
@@ -502,6 +872,7 @@ def construire(d: dict) -> str:
         "aujourdhui": date.today().isoformat(),
         # URL publique du relais d'alertes ; vide = le bouton « m'alerter » reste caché.
         "alertes_url": os.environ.get("ALERTES_BASE_URL", ""),
+        "centres": {c: list(v) for c, v in _PAYS_CENTRE.items()},
         "mois": MOIS_FR[1:],
         "epreuves": epreuves,
         "prochaine": prochaine,
@@ -544,7 +915,10 @@ def construire(d: dict) -> str:
         ' aria-label="Classe de bateau"></select></div>'
         '<div class="groupe"><span class="etiq">Quand</span>'
         + menu("quand", "Quand", [("venir", "À venir"), ("tout", "Toutes les dates")], "venir")
-        + "</div></div>"
+        + "</div>"
+        # Le bouton est caché sans navigateur capable de géolocaliser ; le texte est posé par le JS (six langues).
+        '<div class="groupe"><button class="btn-proche" id="btn-proche" type="button" hidden></button></div>'
+        '</div><p class="proche-msg" id="proche-msg" role="status" hidden></p>'
     )
 
     maj = d.get("maj", "")[:10]
@@ -593,14 +967,20 @@ def construire(d: dict) -> str:
         '<form class="alerte" id="alerte" hidden></form>'
         "</div>"
         '<div class="compte"><span id="compte"></span>'
-        '<button class="lien-effacer" id="effacer" type="button">Tout effacer</button></div>'
+        '<span><button class="lien-effacer" id="btn-ics-tout" type="button" hidden></button> '
+        '<button class="lien-effacer" id="effacer" type="button">Tout effacer</button></span></div>'
+        '<div class="carte-regates"><h2 id="carte-titre" class="etiq"></h2>'
+        '<svg id="carte-svg" viewBox="0 0 360 180" role="group" aria-label="Carte des épreuves"></svg>'
+        '<p class="carte-info" id="carte-info" role="status"></p></div>'
         '<div id="liste"></div>'
         "</div>"
         '<p class="pied">Calendrier relevé le ' + (maj_lisible or "—") + " depuis "
         + ", ".join(noms_source.get(s, s) for s in sources) + ". "
         "Une épreuve peut apparaître plusieurs fois chez les organisateurs : "
         "les doublons sont fusionnés, pas recopiés. "
-        '<a href="annonceurs.html">Un événement à signaler&nbsp;?</a></p>'
+        '<a href="annonceurs.html">Un événement à signaler&nbsp;?</a> '
+        'Positions des villes : données © <a href="https://www.openstreetmap.org/copyright" '
+        'target="_blank" rel="noopener">OpenStreetMap</a> contributors (ODbL).</p>'
         "</div>"
         '<script type="application/json" id="donnees">'
         + json.dumps(donnees, ensure_ascii=False, separators=(",", ":"))

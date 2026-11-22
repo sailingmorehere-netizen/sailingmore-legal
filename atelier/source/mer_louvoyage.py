@@ -168,6 +168,21 @@ def extrait_js() -> str:
   },{passive:true});
   window.addEventListener('touchmove',function(e){ var t=e.touches&&e.touches[0]; if(!t) return; if(dernierY!==null) pousse(t.clientY-dernierY); dernierY=t.clientY },{passive:true});
 })();
+/* ---- manoeuvre commandée de l'extérieur (lexique, 22/11/2026) : UN changement d'état par clic
+        (allure et/ou amure), la boucle existante fait le reste — aucun coût par image ajouté. */
+(function(){
+  var retour=null;
+  window.merManoeuvre=function(o){
+    if(!S || S.mode!=='route') return false;
+    if(o.flip){ S.amure=-S.amure; S.dernierVirement=S.t }
+    if(o.a!=null){
+      S.allure = o.a==='P' ? ((B&&B.pres)||40)*DEG : o.a*DEG;
+      clearTimeout(retour);
+      retour=setTimeout(function(){ S.allure=90*DEG },o.tenir||5000);
+    }
+    return true;
+  };
+})();
 """ + js[i:]
 
 
