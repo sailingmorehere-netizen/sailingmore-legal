@@ -134,8 +134,6 @@ input[type=search]{grid-column:span 2}
 .compte{color:var(--doux);font-size:.9rem;margin:.2rem 0 1rem}
 .liste{display:grid;gap:.8rem}
 .offre{background:var(--carte);border:1px solid var(--trait);border-radius:14px;padding:.9rem 1rem;display:grid;grid-template-columns:1fr auto;gap:.5rem .9rem;align-items:start}
-.offre .tete{display:flex;gap:.65rem;align-items:flex-start}
-.badge{flex:0 0 auto;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:.8rem;letter-spacing:.02em;color:#dff3ef}
 .offre h2{font-size:1.02rem;margin:0 0 .2rem;line-height:1.3}
 .offre .ecole{color:var(--doux);font-size:.86rem}
 .offre .bas{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap;padding-top:.55rem;border-top:1px solid var(--trait);font-size:.86rem;color:var(--doux)}
@@ -223,9 +221,6 @@ var L='fr';try{L=localStorage.getItem('lang')||(navigator.language||'fr').slice(
 if(!U[L])L='en';
 function t(k){return (U[L]&&U[L][k])||U.fr[k]||k}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-function sigle(nom){var m=(nom||'?').replace(/[^\p{L} ]/gu,'').split(/\s+/).filter(Boolean);
-  return m.length>1?(m[0][0]+m[1][0]).toUpperCase():((m[0]||'?').slice(0,2).toUpperCase())}
-function teinte(s){var h=0;s=s||'';for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%360;return h}
 function dt(s){if(!s)return '';var p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0].slice(2)}
 function sym(d){return {EUR:'€',GBP:'£',CHF:'CHF',USD:'$',NOK:'NOK',SEK:'SEK',DKK:'DKK'}[d]||d}
 /* langue et pays proposés par défaut : ceux du navigateur, quand des offres y répondent */
@@ -293,9 +288,8 @@ function dessiner(){
     var ou=o.lieu?(o.lieu===o.pays_nom?o.lieu:o.lieu+' · '+o.pays_nom):(o.region||o.pays_nom);
     var lng=o.langue?(D.langues[o.langue]||o.langue.toUpperCase()):'—';
     var marque=o.langue&&o.langue_src==='pays'?' <span class="marque" title="'+esc(t('langue_supposee'))+'">?</span>':'';
-    return '<article class="offre"><div class="tete"><span class="badge" style="background:hsl('+teinte(o.ecole_slug)+',38%,22%);border:1px solid hsl('+teinte(o.ecole_slug)+',45%,34%)">'+esc(sigle(o.ecole))+'</span>'
-      +'<div><h2>'+esc(o.titre)+'</h2>'
-      +'<div class="ecole">'+esc(o.ecole)+(o.ecole_pays_nom?' · '+esc(o.ecole_pays_nom):'')+'</div></div></div>' 
+    return '<article class="offre"><div><h2>'+esc(o.titre)+'</h2>'
+      +'<div class="ecole">'+esc(o.ecole)+(o.ecole_pays_nom?' · '+esc(o.ecole_pays_nom):'')+'</div></div>'
       +'<div class="prix">'+(o.prix!=null?o.prix.toLocaleString(L)+' '+sym(o.devise):'<span style="font-weight:400;font-size:.85rem">'+t('prix_vide')+'</span>')+'</div>' 
       +'<div class="ligne"><span>'+esc(ou)+'</span><span>'+dates+'</span>'
       +(o.duree_jours?'<span>'+o.duree_jours+' '+t('jours')+'</span>':'')
