@@ -872,6 +872,14 @@ FRANCE_DOTS = (
 )
 
 
+def _dans_france(b: dict) -> bool:
+    """Ce groupe est-il dans la fenêtre de la mini-carte ? Il y est alors dessiné, pas sur la grande."""
+    if b.get("lat") is None or b.get("lon") is None:
+        return False
+    lon0, lon1, lat0, lat1 = FRANCE_BOITE
+    return lon0 <= float(b["lon"]) <= lon1 and lat0 <= float(b["lat"]) <= lat1
+
+
 def encart_france(items: list[dict] | None = None) -> str:
     """Le dézoom sur la France : six groupes y tiennent en trois pixels sur la carte du monde.
 
@@ -883,9 +891,7 @@ def encart_france(items: list[dict] | None = None) -> str:
     """
     items = bourses() if items is None else items
     lon0, lon1, lat0, lat1 = FRANCE_BOITE
-    dedans = [b for b in items if b.get("lat") is not None and b.get("lon") is not None
-              and lon0 <= float(b["lon"]) <= lon1 and lat0 <= float(b["lat"]) <= lat1
-              and b.get("carte") is not False]
+    dedans = [b for b in items if _dans_france(b) and b.get("carte") is not False]
     if not dedans:
         return ""
     # Un repère immobile garde son point exact ; ceux qui se promènent s'écartent, sinon deux d'entre
@@ -993,6 +999,9 @@ def marques_bourses(items: list[dict] | None = None) -> str:
     # Une bourse peut être retirée de la carte (Virtual Regatta, jeu en ligne sans mer) : elle garde
     # alors son lien dans la légende, sous la carte.
     items = [b for b in items if b.get("carte") is not False]
+    # Les groupes français sont dans la mini-carte : les garder ici aussi faisait une grappe
+    # illisible au-dessus de la France (Nicolas, 22/11/2026 : « oui »).
+    items = [b for b in items if not _dans_france(b)]
     sortie, liens = [], []
     for b, px, py, dx, ty in _espace(items):
         gens = _participants(b.get("membres"))
