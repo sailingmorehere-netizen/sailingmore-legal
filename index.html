@@ -167,6 +167,7 @@
   .cookies a{color:var(--eau);text-decoration:none;margin-left:.35rem}
   .cookies button{background:var(--eau);color:#06202a;border:0;border-radius:.55rem;
     padding:.45rem .85rem;font:inherit;font-weight:600;cursor:pointer;white-space:nowrap}
+  body #cookies[hidden]{display:none!important}
   body:has(#cookies:not([hidden])) footer{padding-bottom:6rem}
   footer{border-top:1px solid rgba(126,214,214,.14);margin-top:6.5rem;padding:2.4rem 1.4rem 2.4rem;
     display:flex;flex-wrap:wrap;gap:.6rem 1.3rem;justify-content:center;color:var(--gris);font-size:.84rem}
@@ -632,6 +633,7 @@ figcaption strong,figcaption span:not(.siecle),.retour,.ann-carte,.page h2,.date
   width:max-content;max-width:calc(100% - 1.2rem)!important;margin:0!important;display:flex!important;align-items:center;gap:.9rem;
   padding:.45rem .55rem .45rem .9rem!important;font-size:12px!important;line-height:1.35;background:#0f2438!important;
   border:1px solid rgba(244,239,228,.15)!important;border-left:2px solid #e23a3e!important;box-shadow:none!important;animation:none!important}
+.cookies[hidden]{display:none!important}
 .cookies p{margin:0!important}
 .cookies button{flex:none;background:transparent!important;color:#f4efe4!important;border:1px solid #e23a3e!important;
   padding:.35rem .8rem!important;font-size:12px!important;margin:0!important}
