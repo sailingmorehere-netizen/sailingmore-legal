@@ -26,7 +26,11 @@ SOURCE = {"accueil_site.py", "site_blocks.py", "mer_louvoyage.py", "carte_site.p
           # s'arrête sur « No module named regates_classes » et plus rien ne se publie.
           "regates_classes.py", "regates_drapeaux.py",
           # Page des règles de course et sa source de données (22/11/2026).
-          "regles_page.py", "regles.json"}
+          "regles_page.py", "regles.json",
+          # Schémas « avant / pendant / après » et vidéo, sur la page des règles (22/11/2026).
+          "regles_schemas.py",
+          # Page des stages : le générateur et sa source de données, relevée sur les sites des écoles.
+          "stages_page.py", "stages.json"}
 
 
 def appel(chemin: str, methode: str = "GET", corps: dict | None = None):
