@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Stages et cours de voile — Sailing More</title><link rel="canonical" href="https://sailingmore.fr/stages.html"><meta name="description" content="Stages et cours de voile des écoles et clubs en France et en Suisse : lieu, âge, niveau, date, prix, lien vers l'école."><style>
+:root{--nuit:#0a1a2b;--panneau:#0f2438;--ivoire:#eef3f7;--gris:#9db2c6;--rouge:#e23a3e}
+*{box-sizing:border-box}
+body{margin:0;background:#071c31;color:var(--ivoire);font-family:ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+.page{max-width:56rem;margin:0 auto;padding:3.6rem 1.4rem 5rem}
+.haut{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+a.retour{color:var(--gris);text-decoration:none;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+.langues button{background:none;border:1px solid #27425b;color:var(--gris);font-size:.64rem;padding:.25rem .5rem;margin-left:.2rem;cursor:pointer;border-radius:3px}
+.langues button[aria-pressed=true]{color:var(--ivoire);border-color:var(--rouge)}
+h1{font-size:2rem;margin:2rem 0 .4rem}
+.chapo{color:var(--gris)}
+.filtres{display:flex;flex-wrap:wrap;gap:.8rem;margin:1.4rem 0 .6rem}
+.filtres label{display:flex;flex-direction:column;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gris);gap:.25rem}
+.filtres select,.filtres input{background:var(--panneau);color:var(--ivoire);border:1px solid #27425b;border-radius:3px;padding:.4rem .5rem;font-size:.85rem;min-width:8rem}
+.compte{color:var(--gris);font-size:.8rem;margin:.4rem 0 1rem}
+.offre{background:var(--panneau);border-left:3px solid var(--rouge);padding:.9rem 1.2rem;margin:.8rem 0;border-radius:3px}
+.offre h2{font-size:1.05rem;margin:0 0 .2rem}
+.offre .ecole{color:var(--gris);font-size:.8rem}
+.offre .ligne{display:flex;flex-wrap:wrap;gap:.3rem 1.2rem;font-size:.88rem;margin:.4rem 0}
+.offre .prix{font-weight:600}
+.offre .verif{color:var(--gris);font-size:.74rem}
+.offre a{color:var(--ivoire)}
+.vide,.pied{color:var(--gris);font-size:.88rem;margin-top:2rem}
+a{color:var(--ivoire)}
+</style><style id="equilibre">
+/* Rééquilibrage design — 20/11/2026. Posé en dernier dans chaque page : il l'emporte sur les styles d'origine. */
+
+/* 1. Une police de marque, la même sur tous les appareils (Inter, licence SIL OFL, hébergée sur le site) */
+@font-face{font-family:"Inter SM";src:url(fonts/inter-light.woff) format("woff");font-weight:300;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-regular.woff) format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-semibold.woff) format("woff");font-weight:500 700;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-black.woff) format("woff");font-weight:800 900;font-display:swap}
+body,button,input,textarea,select{font-family:"Inter SM",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+
+/* 2. Les couleurs de la charte : marine, panneaux, crème, rouge. Le turquoise et l'or rentrent dans le rang. */
+:root{--eau:#f4efe4;--ambre:#f4efe4}
+.grand b{color:#f4efe4!important}
+
+/* 3. « Le rouge souligne, il n'écrit pas » */
+.accroche .rouge{color:inherit!important;text-decoration:underline;text-decoration-color:#e23a3e;
+  text-decoration-thickness:2px;text-underline-offset:.24em}
+.bulle i,.bulle i span{color:#f4efe4!important}
+.bulle{border-left:2px solid #e23a3e!important}
+
+/* 4. « Filets droits, rien de franchement arrondi » */
+.cadre,.carte-kit,.planisphere,.bulle,.carte-jeu,.cookies,.cookies button,.langues button,
+.anneau,.anneau img,.vignette img{border-radius:0!important}
+.cadre,.carte-kit,.carte-jeu{background-image:none!important;background-color:#0f2438!important;
+  border:1px solid rgba(244,239,228,.12)!important;box-shadow:none!important}
+.anneau{background:rgba(244,239,228,.22)!important}
+
+/* 5. Rien sous 12 px : le cœur de cible a souvent plus de 50 ans */
+.grand span,.tarif-ce,.tarif-notes,.kit-note,label span,.bulle b,.bulle i,.bulle i span,
+figcaption strong,figcaption span:not(.siecle),.retour,.ann-carte,.page h2,.date,.geste,.bouton span{font-size:12px!important}
+.siecle{font-size:11px!important;color:rgba(195,214,230,.75)!important}
+
+/* 6. Réseaux en crème, couleur d'origine au survol */
+.reseau svg{filter:grayscale(1) brightness(2.4);transition:filter .2s}
+.reseau:hover svg,.reseau:focus-visible svg{filter:none}
+
+/* 7. Bandeau cookies : une ligne fine sous l'en-tête, dans le vide du haut de page, qui ne cache plus les chiffres */
+.cookies{top:3.4rem!important;bottom:auto!important;left:50%!important;right:auto!important;transform:translateX(-50%);
+  width:max-content;max-width:calc(100% - 1.2rem)!important;margin:0!important;display:flex!important;align-items:center;gap:.9rem;
+  padding:.45rem .55rem .45rem .9rem!important;font-size:12px!important;line-height:1.35;background:#0f2438!important;
+  border:1px solid rgba(244,239,228,.15)!important;border-left:2px solid #e23a3e!important;box-shadow:none!important;animation:none!important}
+.cookies[hidden]{display:none!important}
+.cookies p{margin:0!important}
+.cookies button{flex:none;background:transparent!important;color:#f4efe4!important;border:1px solid #e23a3e!important;
+  padding:.35rem .8rem!important;font-size:12px!important;margin:0!important}
+.cookies a{text-decoration:underline;text-decoration-color:#e23a3e}
+body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
+
+/* 8. En-tête mobile : le nom sur une ligne */
+.entete .nom{white-space:nowrap}
+@media (max-width:480px){
+  .entete .nom{font-size:.72rem;letter-spacing:.1em}
+  .langues button{padding-left:.3rem!important;padding-right:.3rem!important}
+  .accroche{padding:0 1.2rem}
+  .cookies{top:auto!important;bottom:.6rem!important;left:.6rem!important;right:.6rem!important;transform:none;width:auto;
+    max-width:none!important;gap:.6rem;padding:.4rem .45rem .4rem .7rem!important;font-size:11.5px!important}
+  .cookies button{padding:.3rem .6rem!important}
+}
+
+/* 9. Un seul style de titre pour les pages secondaires */
+.page h1{font-weight:300;text-transform:uppercase;letter-spacing:.02em}
+</style>
+</head><body><div class="mer-fond mer-fond-commandes">
+  <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
+</div><div class="page"><div class="haut"><a class="retour" href="index.html" data-t="retour">← Sailing More</a><div class="langues" id="langues"><button type="button" data-lang="fr">FR</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="it">IT</button><button type="button" data-lang="es">ES</button><button type="button" data-lang="pt">PT</button><button type="button" data-lang="de">DE</button></div></div><h1 data-t="titre">Stages et cours de voile</h1><p class="chapo" data-t="chapo">Les stages et cours proposés par les écoles de voile et les clubs, en France et en Suisse. Chaque offre renvoie vers l'école, qui fait foi : prix et dates se confirment chez elle.</p><div class="filtres"><label><span id="e-lieu">Lieu</span><select id="f-lieu"></select></label><label><span id="e-age">Âge</span><input id="f-age" type="number" min="3" max="99" inputmode="numeric"></label><label><span id="e-niveau">Niveau</span><select id="f-niveau"></select></label><label><span id="e-quand">Date</span><select id="f-quand"></select></label><label><span id="e-prix">Prix max.</span><input id="f-prix" type="number" min="0" step="10" inputmode="numeric"></label></div><div class="compte" id="compte" role="status"></div><div id="liste"></div><p class="pied"><span data-t="pied">Liste tenue à la main, école par école, sans reprise de base de données tierce. Un stage manque ou un prix a changé ?</span> <a href="annonceurs.html">Contact</a></p></div><script type="application/json" id="donnees">{"ui":{"fr":{"titre":"Stages et cours de voile","retour":"← Sailing More","chapo":"Les stages et cours proposés par les écoles de voile et les clubs, en France et en Suisse. Chaque offre renvoie vers l'école, qui fait foi : prix et dates se confirment chez elle.","lieu":"Lieu","age":"Âge","niveau":"Niveau","quand":"Date","prix":"Prix max.","tous":"Tous","tout_age":"Tout âge","avenir":"À venir","mois":"Ce mois-ci","debutant":"Débutant","intermediaire":"Intermédiaire","confirme":"Confirmé","FRA":"France","SUI":"Suisse","verifie":"vérifié le","voir":"Voir l'offre","du":"du","au":"au","ans":"ans","n_offres":"offres","aucune":"Aucune offre ne correspond à ces filtres.","vide":"Aucune offre n'est publiée pour le moment : la liste se remplit à la main depuis les sites des écoles, et chaque offre est retirée seule une fois passée.","pied":"Liste tenue à la main, école par école, sans reprise de base de données tierce. Un stage manque ou un prix a changé ?"},"en":{"titre":"Sailing courses and camps","retour":"← Sailing More","chapo":"Courses and camps offered by sailing schools and clubs in France and Switzerland. Each offer links to the school, which is the authority: confirm prices and dates there.","lieu":"Place","age":"Age","niveau":"Level","quand":"Date","prix":"Max. price","tous":"All","tout_age":"Any age","avenir":"Upcoming","mois":"This month","debutant":"Beginner","intermediaire":"Intermediate","confirme":"Advanced","FRA":"France","SUI":"Switzerland","verifie":"checked on","voir":"See the offer","du":"from","au":"to","ans":"years","n_offres":"offers","aucune":"No offer matches these filters.","vide":"No offer is published yet: the list is filled by hand from the schools' own sites, and each offer drops off by itself once it has passed.","pied":"Hand-kept list, school by school, no third-party database reused. A course missing or a price changed?"},"it":{"titre":"Corsi e stage di vela","retour":"← Sailing More","chapo":"Corsi e stage proposti da scuole di vela e circoli in Francia e Svizzera. Ogni offerta rimanda alla scuola, che fa fede: prezzi e date si confermano da loro.","lieu":"Luogo","age":"Età","niveau":"Livello","quand":"Data","prix":"Prezzo max.","tous":"Tutti","tout_age":"Ogni età","avenir":"In arrivo","mois":"Questo mese","debutant":"Principiante","intermediaire":"Intermedio","confirme":"Esperto","FRA":"Francia","SUI":"Svizzera","verifie":"verificato il","voir":"Vedi l'offerta","du":"dal","au":"al","ans":"anni","n_offres":"offerte","aucune":"Nessuna offerta corrisponde ai filtri.","vide":"Nessuna offerta è ancora pubblicata: l'elenco si compila a mano dai siti delle scuole e ogni offerta sparisce da sola una volta passata.","pied":"Elenco tenuto a mano, scuola per scuola, senza riuso di banche dati di terzi. Manca un corso o un prezzo è cambiato?"},"es":{"titre":"Cursos y estancias de vela","retour":"← Sailing More","chapo":"Cursos y estancias que ofrecen escuelas de vela y clubes en Francia y Suiza. Cada oferta remite a la escuela, que es la que manda: precios y fechas se confirman allí.","lieu":"Lugar","age":"Edad","niveau":"Nivel","quand":"Fecha","prix":"Precio máx.","tous":"Todos","tout_age":"Cualquier edad","avenir":"Próximos","mois":"Este mes","debutant":"Principiante","intermediaire":"Intermedio","confirme":"Avanzado","FRA":"Francia","SUI":"Suiza","verifie":"verificado el","voir":"Ver la oferta","du":"del","au":"al","ans":"años","n_offres":"ofertas","aucune":"Ninguna oferta coincide con los filtros.","vide":"Todavía no hay ofertas publicadas: la lista se rellena a mano desde las webs de las escuelas y cada oferta desaparece sola al pasar.","pied":"Lista hecha a mano, escuela por escuela, sin reutilizar bases de datos de terceros. ¿Falta un curso o ha cambiado un precio?"},"pt":{"titre":"Cursos e estágios de vela","retour":"← Sailing More","chapo":"Cursos e estágios propostos por escolas de vela e clubes em França e na Suíça. Cada oferta remete para a escola, que é quem decide: preços e datas confirmam-se aí.","lieu":"Local","age":"Idade","niveau":"Nível","quand":"Data","prix":"Preço máx.","tous":"Todos","tout_age":"Qualquer idade","avenir":"Próximos","mois":"Este mês","debutant":"Iniciante","intermediaire":"Intermédio","confirme":"Avançado","FRA":"França","SUI":"Suíça","verifie":"verificado em","voir":"Ver a oferta","du":"de","au":"a","ans":"anos","n_offres":"ofertas","aucune":"Nenhuma oferta corresponde aos filtros.","vide":"Ainda não há ofertas publicadas: a lista é preenchida à mão a partir dos sites das escolas e cada oferta sai sozinha depois de passar.","pied":"Lista feita à mão, escola por escola, sem reutilizar bases de dados de terceiros. Falta um curso ou mudou um preço?"},"de":{"titre":"Segelkurse und Segelcamps","retour":"← Sailing More","chapo":"Kurse und Camps von Segelschulen und Clubs in Frankreich und der Schweiz. Jedes Angebot führt zur Schule, die massgebend ist: Preise und Termine dort bestätigen.","lieu":"Ort","age":"Alter","niveau":"Niveau","quand":"Datum","prix":"Max. Preis","tous":"Alle","tout_age":"Jedes Alter","avenir":"Kommende","mois":"Diesen Monat","debutant":"Anfänger","intermediaire":"Fortgeschritten","confirme":"Erfahren","FRA":"Frankreich","SUI":"Schweiz","verifie":"geprüft am","voir":"Angebot ansehen","du":"vom","au":"bis","ans":"Jahre","n_offres":"Angebote","aucune":"Kein Angebot passt zu diesen Filtern.","vide":"Noch kein Angebot veröffentlicht: die Liste wird von Hand nach den Seiten der Schulen gefüllt, jedes Angebot verschwindet nach Ablauf von selbst.","pied":"Von Hand geführte Liste, Schule für Schule, ohne Übernahme fremder Datenbanken. Ein Kurs fehlt oder ein Preis hat sich geändert?"}},"offres":[],"lieux":[],"niveaux":[]}</script><script>
+(function(){
+var D=JSON.parse(document.getElementById('donnees').textContent),U=D.ui,L='fr';
+var $=function(i){return document.getElementById(i)};
+var MOIS={fr:'fr-FR',en:'en-GB',it:'it-IT',es:'es-ES',pt:'pt-PT',de:'de-DE'};
+function dt(iso){return new Date(iso+'T12:00:00').toLocaleDateString(MOIS[L],{day:'numeric',month:'short',year:'numeric'})}
+function t(k){return (U[L]&&U[L][k])||U.fr[k]||k}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function futur(o){var auj=new Date().toISOString().slice(0,10);return (o.fin||o.debut)>=auj}
+function remplir(){
+  var v={lieu:$('f-lieu').value,niveau:$('f-niveau').value,quand:$('f-quand').value};
+  var l=$('f-lieu');l.innerHTML='<option value="">'+t('tous')+'</option>'+D.lieux.map(function(x){return '<option>'+esc(x)+'</option>'}).join('');l.value=v.lieu;
+  var n=$('f-niveau');n.innerHTML='<option value="">'+t('tous')+'</option>'+D.niveaux.map(function(x){return '<option value="'+x+'">'+t(x)+'</option>'}).join('');n.value=v.niveau;
+  var q=$('f-quand');q.innerHTML='<option value="avenir">'+t('avenir')+'</option><option value="mois">'+t('mois')+'</option>';q.value=v.quand||'avenir';
+  ['lieu','age','niveau','quand','prix'].forEach(function(k){$('e-'+k).textContent=t(k)});
+}
+function ok(o){
+  var lieu=$('f-lieu').value,niv=$('f-niveau').value,age=$('f-age').value,prix=$('f-prix').value,q=$('f-quand').value;
+  if(!futur(o))return false;
+  if(lieu&&o.lieu!==lieu)return false;
+  if(niv&&o.niveau!==niv)return false;
+  if(age!==''){var a=+age;if(o.age_min!=null&&a<o.age_min)return false;if(o.age_max!=null&&a>o.age_max)return false}
+  if(prix!==''&&o.prix!=null&&o.prix>+prix)return false;
+  if(q==='mois'){var m=new Date().toISOString().slice(0,7);if(o.debut.slice(0,7)>m||(o.fin||o.debut).slice(0,7)<m)return false}
+  return true;
+}
+function carte(o){
+  var ages=o.age_min!=null?(o.age_max!=null?o.age_min+'–'+o.age_max:o.age_min+'+')+' '+t('ans'):t('tout_age');
+  var dates=o.fin&&o.fin!==o.debut?t('du')+' '+dt(o.debut)+' '+t('au')+' '+dt(o.fin):dt(o.debut);
+  var prix=o.prix!=null?o.prix.toLocaleString(MOIS[L])+' '+(o.devise==='CHF'?'CHF':'€'):'—';
+  return '<div class="offre"><h2>'+esc(o.titre)+'</h2><div class="ecole">'+esc(o.ecole)+'</div>'
+   +'<div class="ligne"><span>'+esc(o.lieu)+' · '+t(o.pays)+'</span><span>'+dates+'</span><span>'+ages+'</span>'
+   +(o.niveau?'<span>'+t(o.niveau)+'</span>':'')+'<span class="prix">'+prix+'</span></div>'
+   +'<div class="verif">'+t('verifie')+' '+dt(o.verifie)+' · <a href="'+esc(o.lien)+'" rel="noopener" target="_blank">'+t('voir')+' →</a></div></div>';
+}
+function dessiner(){
+  var r=D.offres.filter(ok);
+  $('compte').textContent=r.length+' '+t('n_offres');
+  $('liste').innerHTML=r.length?r.map(carte).join(''):'<p class="vide">'+(D.offres.filter(futur).length?t('aucune'):t('vide'))+'</p>';
+}
+function langue(l){L=l;document.documentElement.lang=l;
+  document.querySelectorAll('#langues button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.lang===l)});
+  document.querySelectorAll('[data-t]').forEach(function(e){e.textContent=t(e.dataset.t)});
+  $('f-age').placeholder=t('tout_age');remplir();dessiner();try{localStorage.setItem('lang',l)}catch(e){}}
+['f-lieu','f-niveau','f-quand','f-age','f-prix'].forEach(function(i){$(i).addEventListener('input',dessiner)});
+document.querySelectorAll('#langues button').forEach(function(b){b.addEventListener('click',function(){langue(b.dataset.lang)})});
+var l0='fr';try{l0=localStorage.getItem('lang')||(navigator.language||'fr').slice(0,2)}catch(e){}
+langue(U[l0]?l0:'fr');
+})();
+</script><!--mer-debut-->
+<div class="mer-fond" id="cadre">
+
+  <canvas id="mer" aria-hidden="true"></canvas>
+  <div class="mer-ombre" aria-hidden="true"></div>
+  
+  <button class="rejouer" id="rejouer" type="button" hidden>Rejouer</button>
+  <div class="vent">
+    <div class="cadran" id="cadran" role="slider" tabindex="0" aria-label="Direction d'où vient le vent"
+      aria-valuemin="0" aria-valuemax="359" aria-valuenow="0" aria-valuetext="Vent du 000 degrés">
+      <svg viewBox="0 0 104 104" aria-hidden="true">
+        <circle cx="52" cy="52" r="44" fill="none" stroke="#f4f7fa" stroke-opacity=".28" stroke-width="1"/>
+        <g id="rose" stroke="#f4f7fa" stroke-opacity=".5" stroke-width="1">
+          <line x1="52" y1="8" x2="52" y2="15"/><line x1="96" y1="52" x2="89" y2="52"/>
+          <line x1="52" y1="96" x2="52" y2="89"/><line x1="8" y1="52" x2="15" y2="52"/>
+        </g>
+        <g id="fleche">
+          <line x1="52" y1="10" x2="52" y2="66" stroke="#f4f7fa" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M52 76 L44.5 61 L52 65 L59.5 61 Z" fill="#f4f7fa"/>
+          <circle cx="52" cy="10" r="4.2" fill="#E2232E"/>
+        </g>
+      </svg>
+    </div>
+    <span class="valeur" id="ventValeur">Vent du 000°</span>
+    <span class="geste">Faites-le tourner</span>
+  </div>
+</div>
+<style>
+/* ---- la mer en fond : fixe, derrière tout le contenu (Nicolas, 19/11/2026) ---- */
+.mer-fond{position:fixed;inset:0;z-index:0;overflow:hidden;background:#071c31;
+  isolation:isolate;pointer-events:none}
+.mer-fond canvas{position:absolute;inset:0;width:100%;height:100%;display:block;
+  opacity:0;transition:opacity 1.1s cubic-bezier(.23,1,.32,1);cursor:grab;pointer-events:auto}
+.mer-fond.pret canvas{opacity:1}
+.mer-fond.fondu canvas{opacity:0;transition-duration:.22s}
+/* voile : l'eau reste visible comme fond, le texte reste lisible par-dessus */
+.mer-fond .mer-ombre{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(120% 85% at 50% 28%,rgba(5,16,30,.20) 0%,rgba(5,16,30,.34) 55%,rgba(5,16,30,.52) 100%),
+             linear-gradient(180deg,rgba(6,18,33,.30) 0%,rgba(6,18,33,.12) 30%,rgba(6,18,33,.40) 78%,rgba(5,15,28,.62) 100%)}
+.contenu{position:relative;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,18,33,0) 0,rgba(6,18,33,0) 62vh,
+    rgba(6,18,33,.55) 96vh,rgba(6,18,33,.55) 100%)}
+
+/* les commandes de la scène : posées sur la mer, elles s'effacent dès qu'on descend */
+.mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{
+  transition:opacity .45s ease,transform .45s ease}
+.mer-fond.loin .heure,.mer-fond.loin .choix,.mer-fond.loin .vent,.mer-fond.loin .legende,
+.mer-fond.loin .rejouer{opacity:0;pointer-events:none;transform:translateY(-6px)}
+
+/* Le tableau de bord détaché des pages annexes : mêmes commandes, hors de la couche du fond
+   (z-index -1) qui les rendrait invisibles et incliquables. */
+.mer-fond.mer-fond-commandes{position:relative;inset:auto;height:auto;width:100%;max-width:100%;
+  background:none;overflow:visible;z-index:60;pointer-events:none;display:flex;flex-direction:column;
+  align-items:flex-start;gap:.55rem;padding:1rem 1.1rem .2rem}
+.mer-fond.mer-fond-commandes .heure,.mer-fond.mer-fond-commandes .choix{position:relative!important;
+  left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
+  margin:0!important;pointer-events:auto}
+.mer-fond .heure{position:absolute;left:14px;top:80px;z-index:4;height:46px;padding:0 8px 0 14px;
+  display:flex;align-items:center;gap:10px;border-radius:999px;width:min(360px,calc(100% - 28px));
+  background:rgba(6,18,33,.66);color:var(--creme,#f4efe4);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto}
+.mer-fond .heure .lue{flex:none;min-width:4.6em;font-size:14px;font-weight:600;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.mer-fond .heure .piste{flex:1 1 auto;min-width:0;height:42px;margin:0;background:transparent;
+  cursor:pointer;-webkit-appearance:none;appearance:none;touch-action:none;outline:none}
+.mer-fond .heure .piste::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:linear-gradient(90deg,#0b1730 0%,#0b1730 21%,#d9879a 27%,#f2c48a 31%,#6fb1e6 42%,#3f97e6 56%,#7fb6e0 72%,#f5b56b 81%,#d9694f 85%,#3a2c55 89%,#0b1730 93%,#0b1730 100%)}
+.mer-fond .heure .piste::-moz-range-track{height:8px;border-radius:4px;background:linear-gradient(90deg,#0b1730 0%,#0b1730 21%,#d9879a 27%,#f2c48a 31%,#6fb1e6 42%,#3f97e6 56%,#7fb6e0 72%,#f5b56b 81%,#d9694f 85%,#3a2c55 89%,#0b1730 93%,#0b1730 100%)}
+.mer-fond .heure .piste::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;
+  margin-top:-7px;border-radius:50%;background:var(--creme,#f4efe4);border:0;box-shadow:0 1px 5px rgba(0,0,0,.5)}
+.mer-fond .heure .piste::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--creme,#f4efe4);
+  border:0;box-shadow:0 1px 5px rgba(0,0,0,.5)}
+.mer-fond .heure .auto{flex:none;display:flex;align-items:center;gap:6px;height:34px;padding:0 11px 0 9px;
+  border-radius:999px;font:600 12.5px/1 system-ui,sans-serif;color:var(--creme,#f4efe4);
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);cursor:pointer}
+.mer-fond .heure .auto .pastille{width:8px;height:8px;border-radius:50%;background:#93a8bc}
+.mer-fond .heure .auto[aria-checked="true"]{background:var(--creme,#f4efe4);color:#08162a;border-color:var(--creme,#f4efe4)}
+.mer-fond .heure .auto[aria-checked="true"] .pastille{background:var(--rouge,#e23a3e)}
+
+/* le choix du bateau */
+.mer-fond .choix{position:absolute;left:14px;top:80px;z-index:4;display:flex;flex-direction:column;
+  align-items:stretch;gap:4px;padding:4px;border-radius:22px;background:rgba(6,18,33,.66);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto;width:max-content}
+.mer-fond .choix button{font:600 13px/1 system-ui,sans-serif;color:#e8eff5;background:transparent;
+  border:0;border-radius:18px;min-height:36px;padding:0 14px;cursor:pointer;white-space:nowrap;
+  text-align:left;transition:background-color .15s ease,color .15s ease}
+.mer-fond .choix button[aria-checked="true"]{background:var(--creme,#f4efe4);color:#08162a}
+.mer-fond .choix button:focus-visible{outline:3px solid var(--rouge,#e23a3e);outline-offset:2px}
+
+/* plus de girouette : le vent ne se règle plus à la main (Nicolas, 19/11/2026) */
+.mer-fond .vent{display:none!important}
+/* le cadran du vent, en bas à droite */
+.mer-fond .vent{position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:4;width:104px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--creme,#f4efe4);text-align:center;
+  pointer-events:auto}
+.mer-fond .vent .cadran{width:96px;height:96px;border-radius:50%;background:rgba(6,18,33,.62);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);touch-action:none;cursor:grab;outline:none;
+  -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.mer-fond .vent .cadran:active{cursor:grabbing}
+.mer-fond .vent svg{display:block;width:100%;height:100%}
+.mer-fond .vent .valeur{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;
+  text-shadow:0 1px 4px rgba(0,0,0,.85)}
+.mer-fond .vent .geste{font-size:10.5px;color:#c3d2e0;text-shadow:0 1px 4px rgba(0,0,0,.85)}
+
+/* la légende de la manœuvre, en bas à gauche */
+.mer-fond .legende{position:absolute;left:14px;bottom:14px;z-index:4;width:min(330px,calc(100% - 150px));
+  background:rgba(6,18,33,.66);color:var(--creme,#f4efe4);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-radius:12px;padding:12px 14px 10px;display:flex;flex-direction:column;gap:4px;text-align:left;
+  pointer-events:auto}
+.mer-fond .legende .oeil{margin:0;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#a8bccc}
+.mer-fond .legende .phase{margin:0;font-weight:700;font-size:17px;line-height:1.2;min-height:1.2em}
+.mer-fond .legende .detail{margin:0;font-size:12.5px;line-height:1.35;color:#b9cbdc;min-height:2.7em}
+.mer-fond .instruments{display:flex;gap:16px;margin:5px 0 0;padding:7px 0 0;
+  border-top:1px solid rgba(255,255,255,.16)}
+.mer-fond .instruments div{display:flex;flex-direction:column;min-width:0}
+.mer-fond .instruments dt{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#a8bccc}
+.mer-fond .instruments dd{margin:0;font-variant-numeric:tabular-nums;font-size:16px;font-weight:600;white-space:nowrap}
+.mer-fond .instruments dd small{font-size:10.5px;font-weight:500;color:#a8bccc;margin-left:2px}
+
+.mer-fond .rejouer{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:4;
+  font:600 13.5px/1 system-ui,sans-serif;color:#08162a;background:var(--creme,#f4efe4);border:0;border-radius:999px;
+  padding:10px 17px;min-height:42px;cursor:pointer;pointer-events:auto}
+.mer-fond .rejouer:active{transform:translateX(-50%) scale(.97)}
+.mer-fond .secours{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:24px;text-align:center;color:var(--creme,#f4efe4);z-index:2}
+
+/* le héros : plus qu'un texte posé sur l'eau */
+.hero.hero-mer{position:relative;max-width:none;margin:0;padding:0;text-align:center;
+  min-height:100svh;display:flex;align-items:center;justify-content:center;background:transparent;pointer-events:none}
+.hero-mer .hero-texte{position:relative;z-index:3;padding:2rem 1.4rem 7.75rem;pointer-events:none}
+.contenu a,.contenu button,.contenu input,.contenu select,.contenu textarea,
+.contenu summary,.contenu [tabindex],.contenu video,.contenu audio{pointer-events:auto}
+
+@media (max-width:820px){
+  .mer-fond .choix{left:10px;top:64px}
+  .mer-fond .legende{display:none}
+  .mer-fond .vent{top:auto;bottom:150px;left:8px;right:auto;transform:none;width:84px}
+  .mer-fond .vent .cadran{width:78px;height:78px}
+  .mer-fond .rejouer{bottom:12px}
+  .hero.hero-mer{align-items:flex-start}
+  .hero-mer .hero-texte{padding:13.2rem 1.2rem .5rem}
+  .hero-mer .reseaux-barre{gap:1.3rem;flex-wrap:wrap;margin-top:2.2rem}
+}
+@media (prefers-reduced-motion: reduce){
+  .mer-fond canvas{transition-duration:.2s}
+  .mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{transition:none}
+}
+</style>
+<script src="mer-louvoyage.js?v=e57f262e" defer></script>
+<script>
+/* les commandes de la scène s'effacent dès qu'on a quitté le haut de la page */
+(function(){
+  var m=document.getElementById('cadre'); if(!m) return;
+  function maj(){ var s=window.scrollY||window.pageYOffset||0;
+    m.classList.toggle('loin', s > window.innerHeight*0.72); }
+  window.addEventListener('scroll', maj, {passive:true});
+  window.addEventListener('resize', maj); maj();
+})();
+</script>
+<style>.mer-fond{z-index:-1}.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer,.mer-fond .geste{display:none!important}</style><!--mer-fin-->
+</body></html>
