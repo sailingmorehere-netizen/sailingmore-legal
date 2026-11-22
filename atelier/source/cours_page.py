@@ -208,6 +208,13 @@ def page_cours() -> str:
             f'<script>{JS}</script>\n</body></html>\n')
 
 
+def ecrire_page(dossier: Path = SITE) -> str:
+    """Écrit `cours.html` dans `dossier` — appelé par `accueil_site.sortir_le_site`."""
+    dossier.mkdir(parents=True, exist_ok=True)
+    (dossier / "cours.html").write_text(page_cours(), encoding="utf-8")
+    return "cours.html"
+
+
 def main() -> int:
     if "--ecrire" not in sys.argv:
         print(__doc__)

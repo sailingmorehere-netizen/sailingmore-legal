@@ -1254,7 +1254,7 @@ def fichiers_a_publier() -> list[str]:
     """
     pages = [n for n in ("index.html", "jeux.html", "annonceurs.html", "merci.html",
                          "regates.html", "regles-de-course.html", "lexique.html", "stages.html",
-                         "mentions-legales.html", "confidentialite.html", "delete.html",
+                         "cours.html", "mentions-legales.html", "confidentialite.html", "delete.html",
                          "sitemap.xml")
              if (SITE / n).exists()]
     images = [n for n in ("og-image.jpg", "icon-512.png", "icon-180.png", "favicon-32.png",
@@ -1354,6 +1354,12 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         print(f"stages et cours : {stages_page.ecrire_page(SITE)} offre(s) publiable(s)")
     except Exception as e:  # noqa: BLE001
         print(f"stages et cours non écrits : {e}")
+    # Cours théoriques (22/11/2026) : même chemin ; cours_page.py est la source unique, rien à la main.
+    try:
+        import cours_page
+        print(f"cours théoriques : {cours_page.ecrire_page(SITE)}")
+    except Exception as e:  # noqa: BLE001
+        print(f"cours théoriques non écrits : {e}")
     for nom in ("mentions-legales.html", "confidentialite.html", "delete.html"):
         if (SORTIE / nom).exists():
             brut = (SORTIE / nom).read_text()

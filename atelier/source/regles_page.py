@@ -752,7 +752,11 @@ def page_regles(d: dict | None = None) -> str:
 def ecrire_page(dossier: Path) -> int:
     """Appelée par `accueil_site.py` à côté de `regates_page.ecrire_page(SITE)` : écrit la page et rend le
     nombre de règles, ou 0 sans rien écrire si le JSON est refusé (incomplet, ou contrôle en échec)."""
-    d = charger()
+    try:
+        d = charger()
+    except (ValueError, OSError, SystemExit) as e:  # JSON invalide : on n'écrit rien, on ne casse pas le build
+        print(f"page des règles non écrite : regles.json illisible ({e})", file=sys.stderr)
+        return 0
     pb = verifier(d)
     if d.get("complet") is not True:
         pb.append("regles.json porte « complet »: false — la page n'est pas publiable")
