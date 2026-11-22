@@ -96,6 +96,33 @@ UI = {
            "pied": "Von Hand geführte Liste, Schule für Schule, ohne Übernahme fremder Datenbanken. Ein Kurs fehlt oder ein Preis hat sich geändert?"},
 }
 
+# Textes corrigés le 22/11/2026 : la page ne parle plus d'une liste tenue à la main ni de la seule
+# France et Suisse — elle reprend un relevé fait sur les sites des écoles, y compris aux Antilles.
+UI["fr"].update({"chapo": "Les stages et cours que vendent des écoles de voile européennes, sur leurs propres eaux comme aux Antilles, en Atlantique ou en mer du Nord. Chaque offre renvoie vers la fiche de l'école, qui fait foi : prix et dates se confirment chez elle.",
+                 "pied": "Relevé sur les sites des écoles, offre par offre, sans reprise de base de données tierce. Une offre sans prix affiché n'est pas reprise ; un stage manque ou un prix a changé ?",
+                 "vide": "Aucune offre n'est publiée pour le moment : le relevé se fait sur les sites des écoles et chaque offre est retirée seule une fois passée.",
+                 "dates_ecole": "dates chez l'école"})
+UI["en"].update({"chapo": "Courses and camps sold by European sailing schools, on their own waters and far from them — Antilles, Atlantic, North Sea. Each offer links to the school's own page, which is the authority: confirm prices and dates there.",
+                 "pied": "Read off the schools' own sites, offer by offer, no third-party database reused. An offer without a published price is not listed; a course missing or a price changed?",
+                 "vide": "No offer is published yet: the list is read from the schools' sites, and each offer drops off by itself once it has passed.",
+                 "dates_ecole": "dates at the school"})
+UI["it"].update({"chapo": "Corsi e stage venduti da scuole di vela europee, nelle proprie acque come alle Antille, in Atlantico o nel Mare del Nord. Ogni offerta rimanda alla pagina della scuola, che fa fede: prezzi e date si confermano da loro.",
+                 "pied": "Letto dai siti delle scuole, offerta per offerta, senza riuso di banche dati di terzi. Un'offerta senza prezzo pubblicato non è ripresa; manca un corso o un prezzo è cambiato?",
+                 "vide": "Nessuna offerta è ancora pubblicata: l'elenco si legge dai siti delle scuole e ogni offerta sparisce da sola una volta passata.",
+                 "dates_ecole": "date presso la scuola"})
+UI["es"].update({"chapo": "Cursos y estancias que venden escuelas de vela europeas, en sus propias aguas y también en Antillas, Atlántico o mar del Norte. Cada oferta remite a la ficha de la escuela, que es la que manda: precios y fechas se confirman allí.",
+                 "pied": "Leído en las webs de las escuelas, oferta por oferta, sin reutilizar bases de datos de terceros. Una oferta sin precio publicado no se recoge; ¿falta un curso o ha cambiado un precio?",
+                 "vide": "Todavía no hay ofertas publicadas: la lista se lee de las webs de las escuelas y cada oferta desaparece sola al pasar.",
+                 "dates_ecole": "fechas en la escuela"})
+UI["pt"].update({"chapo": "Cursos e estágios vendidos por escolas de vela europeias, nas suas próprias águas e também nas Antilhas, no Atlântico ou no Mar do Norte. Cada oferta remete para a página da escola, que é quem decide: preços e datas confirmam-se aí.",
+                 "pied": "Lido nos sites das escolas, oferta por oferta, sem reutilizar bases de dados de terceiros. Uma oferta sem preço publicado não é recolhida; falta um curso ou mudou um preço?",
+                 "vide": "Ainda não há ofertas publicadas: a lista é lida dos sites das escolas e cada oferta sai sozinha depois de passar.",
+                 "dates_ecole": "datas na escola"})
+UI["de"].update({"chapo": "Kurse und Camps von europäischen Segelschulen, auf eigenen Gewässern wie in der Karibik, im Atlantik oder in der Nordsee. Jedes Angebot führt zur Seite der Schule, die massgebend ist: Preise und Termine dort bestätigen.",
+                 "pied": "Von den Seiten der Schulen gelesen, Angebot für Angebot, ohne Übernahme fremder Datenbanken. Ein Angebot ohne veröffentlichten Preis wird nicht aufgenommen; ein Kurs fehlt oder ein Preis hat sich geändert?",
+                 "vide": "Noch kein Angebot veröffentlicht: die Liste wird von den Seiten der Schulen gelesen, jedes Angebot verschwindet nach Ablauf von selbst.",
+                 "dates_ecole": "Termine bei der Schule"})
+
 CSS = """
 :root{--nuit:#0a1a2b;--panneau:#0f2438;--ivoire:#eef3f7;--gris:#9db2c6;--rouge:#e23a3e}
 *{box-sizing:border-box}
@@ -130,7 +157,7 @@ var MOIS={fr:'fr-FR',en:'en-GB',it:'it-IT',es:'es-ES',pt:'pt-PT',de:'de-DE'};
 function dt(iso){return new Date(iso+'T12:00:00').toLocaleDateString(MOIS[L],{day:'numeric',month:'short',year:'numeric'})}
 function t(k){return (U[L]&&U[L][k])||U.fr[k]||k}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function futur(o){var auj=new Date().toISOString().slice(0,10);return (o.fin||o.debut)>=auj}
+function futur(o){if(!o.debut)return true;var auj=new Date().toISOString().slice(0,10);return (o.fin||o.debut)>=auj}
 function remplir(){
   var v={lieu:$('f-lieu').value,niveau:$('f-niveau').value,quand:$('f-quand').value};
   var l=$('f-lieu');l.innerHTML='<option value="">'+t('tous')+'</option>'+D.lieux.map(function(x){return '<option>'+esc(x)+'</option>'}).join('');l.value=v.lieu;
@@ -145,15 +172,16 @@ function ok(o){
   if(niv&&o.niveau!==niv)return false;
   if(age!==''){var a=+age;if(o.age_min!=null&&a<o.age_min)return false;if(o.age_max!=null&&a>o.age_max)return false}
   if(prix!==''&&o.prix!=null&&o.prix>+prix)return false;
-  if(q==='mois'){var m=new Date().toISOString().slice(0,7);if(o.debut.slice(0,7)>m||(o.fin||o.debut).slice(0,7)<m)return false}
+  if(q==='mois'){if(!o.debut)return false;var m=new Date().toISOString().slice(0,7);if(o.debut.slice(0,7)>m||(o.fin||o.debut).slice(0,7)<m)return false}
   return true;
 }
 function carte(o){
   var ages=o.age_min!=null?(o.age_max!=null?o.age_min+'–'+o.age_max:o.age_min+'+')+' '+t('ans'):t('tout_age');
-  var dates=o.fin&&o.fin!==o.debut?t('du')+' '+dt(o.debut)+' '+t('au')+' '+dt(o.fin):dt(o.debut);
-  var prix=o.prix!=null?o.prix.toLocaleString(MOIS[L])+' '+(o.devise==='CHF'?'CHF':'€'):'—';
+  var dates=!o.debut?t('dates_ecole'):(o.fin&&o.fin!==o.debut?t('du')+' '+dt(o.debut)+' '+t('au')+' '+dt(o.fin):dt(o.debut));
+  var sym={EUR:'€',CHF:'CHF',GBP:'£',USD:'$',NOK:'NOK',SEK:'SEK',DKK:'DKK'};
+  var prix=o.prix!=null?o.prix.toLocaleString(MOIS[L])+' '+(sym[o.devise]||o.devise):'—';
   return '<div class="offre"><h2>'+esc(o.titre)+'</h2><div class="ecole">'+esc(o.ecole)+'</div>'
-   +'<div class="ligne"><span>'+esc(o.lieu)+' · '+t(o.pays)+'</span><span>'+dates+'</span><span>'+ages+'</span>'
+   +'<div class="ligne"><span>'+esc(o.lieu===o.pays_nom?o.lieu:o.lieu+' · '+o.pays_nom)+'</span><span>'+dates+'</span><span>'+ages+'</span>'
    +(o.niveau?'<span>'+t(o.niveau)+'</span>':'')+'<span class="prix">'+prix+'</span></div>'
    +'<div class="verif">'+t('verifie')+' '+dt(o.verifie)+' · <a href="'+esc(o.lien)+'" rel="noopener" target="_blank">'+t('voir')+' →</a></div></div>';
 }
@@ -184,16 +212,16 @@ def affichable(o: dict, aujourdhui: date | None = None) -> bool:
     """Une offre se publie si elle a ce qu'il faut pour être vérifiée, n'est pas passée et n'est pas périmée."""
     aujourdhui = aujourdhui or date.today()
     try:
-        debut = date.fromisoformat(o["debut"])
-        fin = date.fromisoformat(o.get("fin") or o["debut"])
+        debut = date.fromisoformat(o["debut"]) if o.get("debut") else None
+        fin = date.fromisoformat(o.get("fin") or o["debut"]) if o.get("debut") else None
         verifie = date.fromisoformat(o["verifie"])
     except (KeyError, ValueError):
         return False
     if not (o.get("titre") and o.get("ecole") and o.get("lieu") and str(o.get("lien", "")).startswith("https://")):
         return False
-    if o.get("pays") not in ("FRA", "SUI"):
+    if not (isinstance(o.get("pays"), str) and len(o["pays"]) == 3 and o["pays"].isalpha()):
         return False
-    if fin < aujourdhui or fin < debut:
+    if fin and (fin < aujourdhui or fin < debut):
         return False
     return verifie >= aujourdhui - timedelta(days=PEREMPTION_JOURS)
 
@@ -201,7 +229,7 @@ def affichable(o: dict, aujourdhui: date | None = None) -> bool:
 def construire(d: dict | None = None) -> str:
     d = d if d is not None else charger()
     offres = sorted((o for o in d.get("offres", []) if affichable(o)),
-                    key=lambda o: (o["debut"], o["ecole"].lower()))
+                    key=lambda o: (o.get("debut") or "9999-12-31", o["ecole"].lower()))
     donnees = {
         "ui": UI, "offres": offres,
         "lieux": sorted({o["lieu"] for o in offres}),
