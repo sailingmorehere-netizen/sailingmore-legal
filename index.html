@@ -1245,6 +1245,11 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
 </div>
 
 <footer>
+  <a href="regates.html" target="_blank" rel="noopener">Régates · Regattas</a>
+  <a href="regles-de-course.html" target="_blank" rel="noopener">Règles · Rules</a>
+  <a href="stages.html" target="_blank" rel="noopener">Stages · Courses</a>
+  <a href="cours.html" target="_blank" rel="noopener">Cours · Lessons</a>
+  <a href="lexique.html" target="_blank" rel="noopener">Lexique · Glossary</a>
   <a href="mentions-legales.html" target="_blank" rel="noopener">Mentions légales · Legal notice</a>
   <a href="confidentialite.html" target="_blank" rel="noopener">Confidentialité · Privacy</a>
   <a href="delete.html" target="_blank" rel="noopener">Suppression de données · Data deletion</a>
@@ -1302,6 +1307,16 @@ function choisir() {
 function appliquer(l) {
   const d = T[l];
   document.documentElement.lang = l;
+  // Titre et description suivent la langue, à partir des chaînes déjà dans T (surtitre, accroche).
+  const md = document.querySelector('meta[name="description"]');
+  window.__fr = window.__fr || { t: document.title, d: md ? md.getAttribute("content") : "" };
+  if (l === "fr") {
+    document.title = window.__fr.t;
+    if (md) md.setAttribute("content", window.__fr.d);
+  } else if (d.surtitre) {
+    document.title = "Sailing More — " + d.surtitre;
+    if (md && d.accroche) md.setAttribute("content", "Sailing More — " + d.accroche.replace(/<[^>]+>/g, ""));
+  }
   document.querySelectorAll("[data-t]").forEach(el => {
     const cle = el.dataset.t;
     if (!d[cle]) return;
