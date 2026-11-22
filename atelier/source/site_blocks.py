@@ -600,6 +600,19 @@ BATEAU = ('<svg viewBox="0 0 32 32" aria-hidden="true">'
           '<path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/>'
           '</svg>')
 
+# Un groupe de vente n'est pas un équipage : on ne cherche pas à embarquer, on vend du matériel ou
+# un bateau, et ça s'expédie. Même coque que la charte, mais un colis arrimé sur le pont à la place
+# des voiles (Nicolas, 22/11/2026 : « mets plutôt un logo d'un bateau qui transporte un colis »).
+BATEAU_COLIS = ('<svg viewBox="0 0 32 32" aria-hidden="true">'
+                '<path d="M16 3.4v8.2" stroke="#08131f" stroke-width="1.6" stroke-linecap="round"/>'
+                '<g stroke="#08131f" stroke-width="1" stroke-linejoin="round">'
+                '<path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/>'
+                '<rect x="8.4" y="11.6" width="15.2" height="10.6" rx=".7" fill="#c8873f"/>'
+                '<path d="M8.4 15.2h15.2" stroke-width=".8"/>'
+                '</g>'
+                '<path d="M14.9 11.6h2.4v10.6h-2.4z" fill="#f2f5f8"/>'
+                '</svg>')
+
 def _participants(n) -> str:
     """« ≈ 138 K », ou rien quand le nombre n'est pas connu (Facebook ne le donne pas).
 
@@ -717,6 +730,9 @@ def marques_bourses(items: list[dict] | None = None) -> str:
         elif b.get("logo"):
             icone = f'<img src="{b["logo"]}" alt="{b["groupe"]}" width="20" height="20" loading="lazy">'
             classe = "pt-b icone"
+        elif b.get("colis"):
+            # Un groupe de vente : la coque de la charte, un colis arrimé sur le pont à la place des voiles.
+            icone, classe = BATEAU_COLIS, "pt-b"
         else:
             icone, classe = BATEAU, "pt-b"
         if px < 260:
@@ -844,7 +860,7 @@ def formulaire_kit(adresse: str = "hello.sailingmore@gmail.com") -> str:
             'Suppression sur demande.</p>'
             f'<p class="kit-ou"><span data-t="kit_ou">Ou écrivez à</span> '
             f'<a class="courriel" href="mailto:{adresse}" data-a="{local}" data-b="{domaine}" '
-            f'data-t="kit_lien">l\'adresse du blog</a>.</p>'
+            f'data-t="kit_lien">notre adresse</a>.</p>'
             "<noscript><p class=\"kit-ou\">Sans JavaScript, écrivez à "
             "<a href=\"mailto:hello.sailingmore@gmail.com\">hello.sailingmore@gmail.com</a> — "
             "la grille part le jour même.</p></noscript>"
@@ -858,44 +874,129 @@ def formulaire_kit(adresse: str = "hello.sailingmore@gmail.com") -> str:
 
 
 PACKS = (
-    ("bloc_nom", "Le bloc de lancement", "un mois, moitié jeu concours et moitié publications", "500 €"),
+    ("p1_nom", "p1_ce", "440 €", "Essai une semaine", "2 publications · 1 concours", 2, 1, "7 j"),
+    ("p2_nom", "p2_ce", "890 €", "Présence un mois", "4 publications · 2 concours", 4, 2, "30 j"),
+    ("p3_nom", "p3_ce", "1 390 €", "Parité un mois", "5 publications · 2 concours", 5, 2, "30 j"),
+    ("p4_nom", "p4_ce", "3 900 €", "Trimestre", "12 publications · 6 concours", 12, 6, "90 j"),
 )
 """
-Le bloc de lancement remplace toute la grille precedente (Nicolas, 20/11/2026 : « on part pour un
-premier pack a 500 euros. Les autres packs tu les degages »). Le detail des contenus est ecrit une seule
-fois, ici : 1 concours de sept jours, sa feuille d'annonce, 1 story, 2 publications dediees, le rapport de
-portee sous 72 h.
+Les quatre blocs de la grille (Nicolas, 20/11/2026, 21 h 40 : « 1 » — les quatre blocs aux prix du
+document, le bloc à 500 € disparaît). Le bloc unique de lancement est donc retiré, pas complété :
+`blocs-parite-2026-11-20.md` fait foi pour les prix et les contenus.
+
+Le cinquième champ de chaque ligne est le texte français écrit dans la page, pour qu'elle reste lisible
+quand le script de traduction ne tourne pas. Les mêmes contenus vivent dans `accueil_site.py` pour les
+six langues, sous les clés `p1_nom` à `p4_ce`.
 """
 
 
-def tarifs() -> str:
-    """La bande du prix : une seule bande ouverte par un filet rouge et refermee par un filet blanc."""
-    nom, ce, prix, cle = PACKS[0][1], PACKS[0][2], PACKS[0][3], PACKS[0][0]
+def detail_packs(fr: dict | None = None) -> str:
+    """Ce que chaque formule contient, ligne par ligne (Nicolas, 20/11/2026 : « détaillé plus »).
+
+    Les quantités viennent de `PACKS` et du document `3-offre/blocs-parite-2026-11-20.md`. Les cellules
+    qui ne dépendent d'aucune langue restent des nombres, un ✓ ou un tiret : seuls les intitulés de
+    ligne passent par le dictionnaire (`d1` … `d8`, `d_legende`).
+    """
+    P, C, D = 5, 6, 7
+    fr = fr or {}
+    lignes = [
+        ("d1", "Publications dédiées, Facebook et Instagram",
+         [str(p[P]) for p in PACKS]),
+        ("d2", "Jeux concours de 7 jours, avec votre lot et votre logo sur l'affiche",
+         [str(p[C]) for p in PACKS]),
+        ("d3", "Stories pour annoncer le concours", [str(p[C]) for p in PACKS]),
+        ("d4", "Tirage au sort, et le gagnant annoncé", ["oui"] * 4),
+        ("d5", "Rapport de portée sous 72 h, chiffres Meta", ["oui"] * 4),
+        ("d6", "La mention « partenariat rémunéré »", ["oui"] * 4),
+        ("d7", "Durée du pack", [p[D] for p in PACKS]),
+        ("d8", "Une parution en plus, à l'unité", ["", "150 €", "200 €", ""]),
+    ]
+    tete = "".join(f'<th data-t="{p[0]}">{p[3]}</th>' for p in PACKS)
+    corps = ""
+    for cle, intitule, cellules in lignes:
+        tds = ""
+        for v in cellules:
+            if v == "oui":
+                tds += '<td class="det-oui">✓</td>'
+            elif v == "":
+                tds += '<td class="det-vide">—</td>'
+            else:
+                tds += f"<td>{v}</td>"
+        corps += f'<tr><td class="det-intitule" data-t="{cle}">{intitule}</td>{tds}</tr>'
+    return ('<details class="plis plis-detail"><summary data-t="det_titre">Le détail, formule par '
+            'formule</summary>'
+            '<table class="detail-packs"><thead><tr><th></th>' + tete + '</tr></thead>'
+            '<tbody>' + corps + '</tbody></table>'
+            '<p class="tarif-notes" data-t="d_legende">Une publication dédiée, c\'est un post '
+            'Facebook et un post Instagram sur votre marque, avec votre visuel et le lien que vous '
+            'voulez. Le concours met votre lot en jeu, sur une affiche qui porte votre logo. La coche '
+            'veut dire que c\'est compris. Les images sont les nôtres ou les vôtres ; celle d\'un '
+            'tiers, seulement avec son accord écrit. Et le lot du concours vient de vous.</p>'
+            '</details>')
+
+
+# Nicolas, 21/11/2026 : l'engagement six mois disparaît, et l'année passe de 8 900 à 6 000 €.
+HORS_GRILLE = (
+    ("h2_nom", "h2_ce", "6 000 €", "Douze mois",
+     "l'année entière, concours et publications répartis"),
+    ("h3_nom", "h3_ce", "sur devis", "Sur mesure",
+     "un budget plus gros, ou un événement : on écrit la formule ensemble"),
+    ("h4_nom", "h4_ce", "sur devis", "Sponsoring d'un format",
+     "votre nom sur une série qu'on produit, avec nos images ou les vôtres"),
+)
+"""Au-delà de la grille (Nicolas, 20/11/2026 : « ou genre des partenaires de long terme ou sponsors ? »).
+
+Les engagements 6 et 12 mois reprennent les prix déjà écrits dans `blocs-parite-2026-11-20.md` (4 700 €
+et 8 900 €, inchangés) : on n'invente aucun tarif, et le sur-mesure reste « sur devis » plutôt que
+chiffré au hasard. Le contenu exact d'un engagement se cale avec l'annonceur — la page le dit.
+"""
+
+
+def hors_grille(fr: dict | None = None) -> str:
+    """La porte ouverte au-dessus des quatre formules : engagement long, sur-mesure, sponsoring."""
+    lignes = "".join(
+        f'<div class="tarif-ligne"><span class="tarif-nom" data-t="{kn}">'
+        f'{(fr or {}).get(kn, fr_nom)}</span>'
+        f'<span class="tarif-ce" data-t="{kc}">{(fr or {}).get(kc, fr_ce)}</span>'
+        f'<span class="tarif-prix">{prix}</span></div>'
+        for kn, kc, prix, fr_nom, fr_ce in HORS_GRILLE
+    )
+    fr = fr or {}
+    return ('<h2 class="hors-titre" data-t="h_titre">'
+            + fr.get("h_titre", "Au-delà des quatre formules") + '</h2>'
+            '<p class="hors-intro" data-t="h_intro">'
+            + fr.get("h_intro", "Plus gros budget, saison entière, ou votre nom sur une série.") +
+            '</p>'
+            '<div class="tarifs hors">' + lignes + '</div>'
+            '<p class="tarif-notes" data-t="h_note">'
+            + fr.get("h_note", "Prix avant signature. Prix HT.") + '</p>')
+
+
+def tarifs(fr: dict | None = None) -> str:
+    """La bande des prix : quatre formules, un filet rouge ouvert et refermé par un filet blanc."""
+    lignes = "".join(
+        f'<div class="tarif-ligne"><span class="tarif-nom" data-t="{cle_nom}">{fr_nom}</span>'
+        f'<span class="tarif-ce" data-t="{cle_ce}">{fr_ce}</span>'
+        f'<span class="tarif-prix">{prix}</span></div>'
+        for cle_nom, cle_ce, prix, fr_nom, fr_ce, *_ in PACKS
+    )
     return ('<div class="tarifs">'
-            f'<div class="tarif-ligne"><span class="tarif-nom" data-t="{cle}">{nom}</span>'
-            f'<span class="tarif-ce" data-t="bloc_ce">{ce}</span>'
-            f'<span class="tarif-prix">{prix}</span></div>'
-            '<div class="tarif-ligne tarif-long"><span class="tarif-nom" data-t="bloc_detail_titre">'
-            'Ce que le bloc contient</span><span class="tarif-ce" data-t="bloc_detail">'
-            '1 jeu concours de 7 jours · sa feuille d\'annonce · 1 story · 2 publications dédiées · '
-            'le rapport de portée sous 72 h</span></div>'
+            + lignes +
             '</div>'
-            '<p class="tarif-notes" data-t="tarif_notes">Prix en euros HT. Rapport de portée et '
-            'd\'interactions sous 72 h, chiffres de Meta à l\'appui. Mention « Partenariat rémunéré » '
-            'et contrat écrit. Aucune portée garantie : on la mesure, et on l\'écrit avant la '
-            'signature.</p>')
+            '<p class="tarif-notes" data-t="tarif_notes">Prix HT. Aucune portée garantie : on la '
+            'mesure, et on l\'écrit avant de signer.</p>'
+            + detail_packs(fr))
 
 
-def html_kit(adresse: str = "hello.sailingmore@gmail.com") -> str:
+def html_kit(adresse: str = "hello.sailingmore@gmail.com", fr: dict | None = None) -> str:
     """Le bloc annonceurs de l'accueil : la promesse, les prix, puis le formulaire."""
     local, _, domaine = adresse.partition("@")
     return ('<section class="kit-bloc" id="annonceurs"><div class="carte-kit">'
             '<h3 data-t="kit_titre">Annonceurs</h3>'
-            '<p data-t="kit_texte">Un seul bloc pour commencer : un mois, moitié jeu concours et moitié '
-            'publications, 500 €.</p>'
+            '<p data-t="kit_texte">Quatre formules, du test d\'une semaine au trimestre. Prix HT.</p>'
             '<p class="kit-preuve" data-t="kit_preuve">Ces chiffres viennent de Meta, relevés ce '
             'mois-ci.</p>'
-            + tarifs() +
+            + tarifs(fr) +
             formulaire_kit(adresse) +
             '</div></section>')
 
@@ -1010,6 +1111,30 @@ CSS = """
   color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
 .tarif-long .tarif-prix{font-size:1rem}
 .tarif-notes{margin:1rem 0 0;font-size:.72rem;line-height:1.6;color:rgba(238,241,244,.55);text-align:left}
+.detail-packs{width:100%;border-collapse:collapse;margin:1.5rem 0 0;font-size:.76rem;color:#fff}
+.detail-packs th{padding:.5rem .35rem;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+  color:#9db2c6;font-weight:400;text-align:center;line-height:1.3}
+.detail-packs th:first-child{text-align:left}
+.detail-packs td{padding:.62rem .35rem;border-top:1px solid rgba(255,255,255,.10);text-align:center;
+  font-weight:300}
+.detail-packs .det-intitule{text-align:left;color:rgba(238,241,244,.8);line-height:1.45;
+  font-size:.74rem;padding-right:.8rem}
+.detail-packs .det-oui{color:#e23a3e;font-weight:600}
+.detail-packs .det-vide{color:rgba(238,241,244,.22)}
+@media (max-width:520px){.detail-packs{font-size:.7rem}.detail-packs td{padding:.5rem .2rem}
+  .detail-packs th{font-size:.55rem}.detail-packs .det-intitule{font-size:.68rem}}
+.plis{margin:1.2rem 0 0;border-top:1px solid rgba(255,255,255,.14)}
+.plis>summary{cursor:pointer;list-style:none;padding:.9rem 0;font-size:.7rem;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(238,241,244,.72)}
+.plis>summary::-webkit-details-marker{display:none}
+.plis>summary::after{content:"+";float:right;color:#e23a3e;font-size:.9rem;letter-spacing:0}
+.plis[open]>summary::after{content:"–"}
+.plis>summary:hover{color:#fff}
+.hors-titre{margin:2rem 0 .4rem;font-size:.9rem;letter-spacing:.14em;text-transform:uppercase;
+  color:#fff;font-weight:400}
+.hors-intro{margin:0;font-size:.78rem;line-height:1.6;color:rgba(238,241,244,.7)}
+.tarifs.hors{border-bottom:0;margin-top:1.1rem}
+.tarifs.hors .tarif-prix{font-size:1rem;color:#fff}
 @media (max-width:520px){.tarif-prix{font-size:1.02rem}.tarif-long .tarif-prix{font-size:.9rem}}
 
 .tarifs{margin:1.6rem 0 .4rem;border-top:3px solid #e23a3e;border-bottom:1px solid rgba(255,255,255,.30)}
@@ -1022,6 +1147,30 @@ CSS = """
   color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
 .tarif-long .tarif-prix{font-size:1rem}
 .tarif-notes{margin:1rem 0 0;font-size:.72rem;line-height:1.6;color:rgba(238,241,244,.55);text-align:left}
+.detail-packs{width:100%;border-collapse:collapse;margin:1.5rem 0 0;font-size:.76rem;color:#fff}
+.detail-packs th{padding:.5rem .35rem;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+  color:#9db2c6;font-weight:400;text-align:center;line-height:1.3}
+.detail-packs th:first-child{text-align:left}
+.detail-packs td{padding:.62rem .35rem;border-top:1px solid rgba(255,255,255,.10);text-align:center;
+  font-weight:300}
+.detail-packs .det-intitule{text-align:left;color:rgba(238,241,244,.8);line-height:1.45;
+  font-size:.74rem;padding-right:.8rem}
+.detail-packs .det-oui{color:#e23a3e;font-weight:600}
+.detail-packs .det-vide{color:rgba(238,241,244,.22)}
+@media (max-width:520px){.detail-packs{font-size:.7rem}.detail-packs td{padding:.5rem .2rem}
+  .detail-packs th{font-size:.55rem}.detail-packs .det-intitule{font-size:.68rem}}
+.plis{margin:1.2rem 0 0;border-top:1px solid rgba(255,255,255,.14)}
+.plis>summary{cursor:pointer;list-style:none;padding:.9rem 0;font-size:.7rem;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(238,241,244,.72)}
+.plis>summary::-webkit-details-marker{display:none}
+.plis>summary::after{content:"+";float:right;color:#e23a3e;font-size:.9rem;letter-spacing:0}
+.plis[open]>summary::after{content:"–"}
+.plis>summary:hover{color:#fff}
+.hors-titre{margin:2rem 0 .4rem;font-size:.9rem;letter-spacing:.14em;text-transform:uppercase;
+  color:#fff;font-weight:400}
+.hors-intro{margin:0;font-size:.78rem;line-height:1.6;color:rgba(238,241,244,.7)}
+.tarifs.hors{border-bottom:0;margin-top:1.1rem}
+.tarifs.hors .tarif-prix{font-size:1rem;color:#fff}
 @media (max-width:520px){.tarif-prix{font-size:1.02rem}.tarif-long .tarif-prix{font-size:.9rem}}
 
 .carte-kit .kit-preuve{font-size:.86rem;color:rgba(238,241,244,.86);margin:.2rem 0 0}
