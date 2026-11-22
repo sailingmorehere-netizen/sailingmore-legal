@@ -859,6 +859,37 @@ def epreuves_pour_page(d: dict) -> list[dict]:
     return out
 
 
+LD_MAX = 100  # plafond de l'ItemList : au-delà, le bloc pèse plus que la page n'y gagne
+
+
+def _ld_regates(epreuves: list[dict]) -> str:
+    """JSON-LD : fil d'Ariane + ItemList des épreuves de la saison en cours (année civile du jour),
+    non annulées, avec un lieu, dans l'ordre des dates, LD_MAX au plus. Aucun prix, aucune note."""
+    import jsonld
+    annee = str(date.today().year)
+    items = []
+    for e in epreuves:
+        if not e["debut"].startswith(annee) or e["annulee"] or not e["ville"]:
+            continue
+        ev = {"@type": "SportsEvent", "name": e["nom"], "startDate": e["debut"],
+              "endDate": e["fin"] or e["debut"],
+              "location": {"@type": "Place", "name": e["ville"],
+                           "address": {"@type": "PostalAddress", "addressLocality": e["ville"],
+                                       "addressCountry": e["pays_fr"] or e["pays"]}}}
+        if e["club"]:
+            ev["organizer"] = {"@type": "Organization", "name": e["club"]}
+        if e["lien"]:
+            ev["url"] = e["lien"]
+        items.append(ev)
+        if len(items) >= LD_MAX:
+            break
+    liste = {"@type": "ItemList", "name": f"Régates de la saison {annee}",
+             "numberOfItems": len(items),
+             "itemListElement": [{"@type": "ListItem", "position": i, "item": ev}
+                                 for i, ev in enumerate(items, 1)]}
+    return jsonld.bloc(jsonld.fil("regates.html", "Calendrier des régates"), liste)
+
+
 def construire(d: dict) -> str:
     epreuves = epreuves_pour_page(d)
     regions = [r for r in REGIONS if any(e["region"] == r for e in epreuves)]
@@ -947,6 +978,7 @@ def construire(d: dict) -> str:
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         "<title>Calendrier des régates — Sailing More</title>"
         '<link rel="canonical" href="https://sailingmore.fr/regates.html">'
+        + _ld_regates(epreuves) +
         '<meta name="description" content="Toutes les régates de voile : Léman, France, Suisse et '
         'monde. Dates, lieux, clubs, classes, inscriptions. Recherche et filtres.">'
         "<style>" + CSS + "</style></head><body>" + sprite +

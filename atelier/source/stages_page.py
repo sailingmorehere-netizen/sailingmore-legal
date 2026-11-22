@@ -214,6 +214,7 @@ def _html(d: dict) -> str:
              "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
              f"<title>{H.escape(UI['fr']['titre'])} — Sailing More</title>"
              "<link rel=\"canonical\" href=\"https://sailingmore.fr/stages.html\">"
+             f"{__import__('jsonld').page_simple('stages.html', UI['fr']['titre'])}"
              "<meta name=\"description\" content=\"Stages et cours de voile vendus par des écoles "
              "européennes : prix publiés, destination, langue, lien direct vers la fiche de l'école.\">"
              f"<style>{CSS}</style></head><body><main class=\"page\">"
@@ -293,6 +294,10 @@ function remplir(){
   if(fl.value===''){fl.value=mem('langue', D.langues_presentes.indexOf(navLang)>=0?navLang:'');if(fl.value==='')fl.value='';}
   var fp=document.getElementById('f-pays');
   if(fp.value===''){var d=mem('pays',D.pays.some(function(p){return p[0]===defPays})?defPays:'');fp.value=d;}
+  /* les défauts se relâchent si le couple langue + destination ne laisse aucune offre */
+  var qp=fp.value,ql=fl.value;
+  function reste(lg,py){return D.offres.some(function(o){return (!lg||o.langue===lg)&&(!py||o.pays===py)})}
+  if(!reste(ql,qp)){if(reste('',qp))fl.value='';else if(reste(ql,''))fp.value='';else{fl.value='';fp.value=''}}
   var l=document.getElementById('langues');
   l.innerHTML=Object.keys(U).map(function(c){return '<button data-l="'+c+'" style="background:none;border:0;color:'+(c===L?'#5fd3c4':'#9db2c7')+';font:inherit;font-size:.8rem;cursor:pointer;padding:.1rem .25rem">'+c.toUpperCase()+'</button>'}).join('');
   [].forEach.call(l.querySelectorAll('button'),function(b){b.onclick=function(){L=b.dataset.l;try{localStorage.setItem('lang',L)}catch(e){}remplir();dessiner()}});
@@ -339,13 +344,16 @@ function dessiner(){
     if(q){var s=(o.titre+' '+o.ecole+' '+o.lieu+' '+o.pays_nom+' '+o.region).toLowerCase();if(s.indexOf(q)<0)return false}
     return true;
   });
-  var ordre=document.getElementById('f-tri').value;garde('tri',ordre);
+  var ordre=document.getElementById('f-tri').value;
   var sansPos=function(o){return (!POS||o.lat==null)?1:0};
+  var chezNous=function(o){return (defPays&&o.pays===defPays)?0:1};
   vus.sort(function(a,b){
     if(ordre==='prix')return ((a.prix_eur!=null?a.prix_eur:1e9)-(b.prix_eur!=null?b.prix_eur:1e9));
     if(ordre==='date')return ((a.debut||'9999')<(b.debut||'9999')?-1:(a.debut||'9999')>(b.debut||'9999')?1:0);
+    if(!POS){var ca=chezNous(a),cb=chezNous(b);if(ca!==cb)return ca-cb;
+      return ((a.debut||'9999')<(b.debut||'9999')?-1:(a.debut||'9999')>(b.debut||'9999')?1:0)}
     var sp=sansPos(a),sb=sansPos(b);if(sp!==sb)return sp-sb;
-    return (distance(a)||1e9)-(distance(b)||1e9);
+    var da=distance(a),db=distance(b);return (da==null?1e9:da)-(db==null?1e9:db);
   });
   var html=vus.map(function(o){
     var dates=!o.debut?t('dates_ecole'):(o.fin&&o.fin!==o.debut?t('du')+' '+dt(o.debut)+' '+t('au')+' '+dt(o.fin):dt(o.debut));
@@ -353,9 +361,9 @@ function dessiner(){
     var lng=o.langue?(D.langues[o.langue]||o.langue.toUpperCase()):'—';
     var d=distance(o);
     var loin=(d==null?'':(o.precision==='pays'?' · ~':' · ')+Math.round(d).toLocaleString(L)+' km');
-    var marque=o.langue&&o.langue_src==='pays'?' <span class="marque" title="'+esc(t('langue_supposee'))+'">?</span>':'';
+    var marque=o.langue&&(o.langue_src==='pays'||o.langue_src==='ecole')?' <span class="marque" title="'+esc(t('langue_supposee'))+'">?</span>':'';
     return '<article class="offre">'
-      +(o.image?'<img class="ph" loading="lazy" src="'+esc(o.image)+'" alt="">':'')
+      +(o.image?'<a class="phl" href="'+esc(o.lien)+'" rel="noopener nofollow" target="_blank" style="grid-column:1/-1"><img class="ph" loading="lazy" src="'+esc(o.image)+'" alt="'+esc(o.titre+' — '+o.ecole)+'"></a>':'')
       +'<div class="tete"><span class="badge" style="background:hsl('+teinte(o.ecole_slug)+',38%,22%);border:1px solid hsl('+teinte(o.ecole_slug)+',45%,34%)">'+esc(sigle(o.ecole))+'</span>'
       +'<div><h2>'+esc(o.titre)+'</h2>'
       +'<div class="ecole">'+esc(o.ecole)+(o.ecole_pays_nom?' · '+esc(o.ecole_pays_nom):'')+'</div></div></div>'
@@ -394,6 +402,7 @@ function dessiner(){
 }
 ['f-q','f-langue','f-pays','f-pays-ecole','f-ecole','f-type','f-niveau','f-quand','f-prix','f-tri'].forEach(function(i){
   var e=document.getElementById(i);if(e){e.addEventListener('input',dessiner);e.addEventListener('change',dessiner)}});
+document.getElementById('f-tri').addEventListener('change',function(){garde('tri',this.value)});
 remplir();dessiner();poserPosition();
 """
 
@@ -401,6 +410,106 @@ SITE = ICI / "projets/sailingmore/site"
 
 
 IMAGES = ICI / "projets/sailingmore/stages-img"
+
+
+TEXTES_BLOC = {
+    "fr": {"titre": "Stages près de chez vous", "tous": "Tous les stages →", "prix": "prix non publié", "dist": "km"},
+    "en": {"titre": "Courses near you", "tous": "All courses →", "prix": "price not published", "dist": "km"},
+    "de": {"titre": "Kurse in Ihrer Nähe", "tous": "Alle Kurse →", "prix": "Preis nicht veröffentlicht", "dist": "km"},
+    "it": {"titre": "Corsi vicino a te", "tous": "Tutti i corsi →", "prix": "prezzo non pubblicato", "dist": "km"},
+    "es": {"titre": "Cursos cerca de ti", "tous": "Todos los cursos →", "prix": "precio no publicado", "dist": "km"},
+    "pt": {"titre": "Cursos perto de si", "tous": "Todos os cursos →", "prix": "preço não publicado", "dist": "km"},
+}
+
+# Bloc « stages près de chez vous » : un script autonome, chargé en `defer`, qui ne télécharge le JSON compact
+# que lorsque le bloc entre dans l'écran. Même ordre de position que stages.html ; rien n'est conservé ni envoyé.
+JS_BLOC = r"""(function(){
+var T=__TEXTES__;
+var host=document.getElementById('stages-proches');if(!host)return;
+var L='fr';try{L=localStorage.getItem('lang')||document.documentElement.lang||(navigator.language||'fr')}catch(e){}
+L=String(L).slice(0,2).toLowerCase();if(!T[L])L='en';var X=T[L];
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function hav(a,b,c,d){var r=Math.PI/180,p=(c-a)*r,q=(d-b)*r,h=Math.sin(p/2)*Math.sin(p/2)+Math.cos(a*r)*Math.cos(c*r)*Math.sin(q/2)*Math.sin(q/2);return 12742*Math.asin(Math.sqrt(h))}
+function teinte(s){var h=0;s=s||'';for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%360;return h}
+function sigle(n){var m=(n||'?').replace(/[^\p{L} ]/gu,'').split(/\s+/).filter(Boolean);return m.length>1?(m[0][0]+m[1][0]).toUpperCase():((m[0]||'?').slice(0,2).toUpperCase())}
+var ISO={FR:'FRA',DE:'DEU',NL:'NLD',GB:'GBR',IE:'IRL',ES:'ESP',IT:'ITA',PT:'PRT',GR:'GRC',HR:'HRV',TR:'TUR',BE:'BEL',CH:'CHE',AT:'AUT',DK:'DNK',SE:'SWE',NO:'NOR',FI:'FIN',PL:'POL',SI:'SVN',MT:'MLT',CY:'CYP'};
+var m=(navigator.language||'').match(/[-_]([A-Za-z]{2})$/),navPays=m?ISO[m[1].toUpperCase()]||'':'';
+var DATA=null,POS=null,posFaite=false,vu=false;
+function position(fin){
+  function ip(){fetch('https://ipwho.is/?fields=latitude,longitude,success').then(function(r){return r.json()})
+    .then(function(d){if(d&&d.success&&d.latitude!=null)POS=[d.latitude,d.longitude]}).catch(function(){}).then(fin)}
+  if(!navigator.geolocation){ip();return}
+  navigator.geolocation.getCurrentPosition(function(p){POS=[p.coords.latitude,p.coords.longitude];fin()},ip,{timeout:6000,maximumAge:600000});
+}
+function dessiner(){
+  var a=new Date().toISOString().slice(0,10);
+  var l=DATA.o.filter(function(o){return !o[7]||o[7]>=a});
+  l=l.map(function(o){return {o:o,d:POS?hav(POS[0],POS[1],o[0],o[1]):null}});
+  l.sort(function(x,y){
+    if(POS)return x.d-y.d;
+    var cx=navPays&&x.o[12]===navPays?0:1,cy=navPays&&y.o[12]===navPays?0:1;if(cx!==cy)return cx-cy;
+    return (x.o[7]||'9999')<(y.o[7]||'9999')?-1:1});
+  var vus=[],ecoles={};
+  l.forEach(function(x){if(vus.length<4&&!ecoles[x.o[4]]){ecoles[x.o[4]]=1;vus.push(x)}});
+  host.innerHTML='<h2 style="font-size:1.1rem;margin:0 0 .6rem">'+esc(X.titre)+'</h2><div style="display:grid;gap:.6rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))">'
+   +vus.map(function(x){var o=x.o,loin=x.d==null?'':((o[2]?'~':'')+Math.round(x.d).toLocaleString(L)+' '+X.dist+' · ');
+     var vis=o[11]?'<img src="/'+esc(o[11])+'" alt="'+esc(o[3]+' — '+o[4])+'" loading="lazy" width="400" height="150" style="width:100%;height:96px;object-fit:cover;border-radius:8px;display:block;margin-bottom:.4rem">'
+       :'<span style="display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;font-weight:700;font-size:.75rem;margin-bottom:.4rem;background:hsl('+teinte(o[4])+',38%,22%);color:#dff3ef">'+esc(sigle(o[4]))+'</span>';
+     return '<a href="'+esc(o[10])+'" rel="noopener nofollow" target="_blank" style="display:block;text-decoration:none;color:inherit;border:1px solid rgba(157,178,199,.3);border-radius:10px;padding:.7rem">'
+       +vis+'<b style="display:block;font-size:.95rem">'+esc(o[3])+'</b><span style="font-size:.82rem;opacity:.8">'+esc(o[4])+'</span><br><span style="font-size:.82rem;opacity:.8">'
+       +loin+esc(o[5]||o[6])+' · '+(o[8]!=null?o[8].toLocaleString(L)+' '+esc(o[9]):esc(X.prix))+'</span></a>'}).join('')
+   +'</div><p style="margin:.6rem 0 0"><a href="/stages.html">'+esc(X.tous)+'</a></p>';
+  host.hidden=!vus.length;
+}
+function charger(){
+  fetch('/stages-proches.json').then(function(r){return r.json()}).then(function(d){DATA=d;
+    position(function(){dessiner()})}).catch(function(){host.hidden=true});
+}
+host.hidden=true;
+if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){if(es[0].isIntersecting&&!vu){vu=true;io.disconnect();charger()}},{rootMargin:'200px'});io.observe(host)}
+else charger();
+})();
+"""
+
+MARQUE_BLOC = "<!--stages-proches-->"
+BLOC_HTML = (MARQUE_BLOC + '<section id="stages-proches" style="max-width:60rem;margin:2rem auto;padding:0 1.2rem" hidden></section>'
+             '<script src="/stages-proches.js" defer></script>')
+PAGES_BLOC = ("index.html", "regates.html", "regles-de-course.html", "lexique.html", "cours.html", "bateaux.html")
+
+
+def ecrire_bloc(dossier: Path, offres: list[dict]) -> int:
+    """JSON compact + script du bloc « près de chez vous », à côté de stages.html. Une ligne par offre :
+    [lat, lon, approx(0/1), titre, école, lieu, pays, début, prix, devise, lien, image, pays ISO3]."""
+    lignes = []
+    for o in offres:
+        o = _avec_position(o)
+        if o.get("lat") is None or o.get("lon") is None or not o.get("lien"):
+            continue
+        lignes.append([round(o["lat"], 2), round(o["lon"], 2), 1 if o.get("precision") != "ville" else 0,
+                       o.get("titre") or "", o.get("ecole") or "", o.get("lieu") or "", o.get("pays_nom") or "",
+                       o.get("debut") or "", o.get("prix"), o.get("devise") or "", o["lien"],
+                       o.get("image") or "", o.get("pays") or ""])
+    (dossier / "stages-proches.json").write_text(
+        json.dumps({"maj": date.today().isoformat(), "o": lignes}, ensure_ascii=False, separators=(",", ":")),
+        encoding="utf-8")
+    (dossier / "stages-proches.js").write_text(
+        JS_BLOC.replace("__TEXTES__", json.dumps(TEXTES_BLOC, ensure_ascii=False)), encoding="utf-8")
+    return len(lignes)
+
+
+def injecter_bloc(dossier: Path = SITE) -> list[str]:
+    """Ajoute (une seule fois) le bloc avant `</body>` des autres pages. Idempotent : repéré par sa marque."""
+    faites = []
+    for nom in PAGES_BLOC:
+        p = dossier / nom
+        if not p.exists():
+            continue
+        h = p.read_text(encoding="utf-8")
+        if MARQUE_BLOC in h or "</body>" not in h:
+            continue
+        p.write_text(h.replace("</body>", BLOC_HTML + "</body>", 1), encoding="utf-8")
+        faites.append(nom)
+    return faites
 
 
 def ecrire_page(dossier: Path = SITE) -> int:
@@ -422,6 +531,7 @@ def ecrire_page(dossier: Path = SITE) -> int:
             src, dst = IMAGES / nom, cible / nom
             if src.exists() and (not dst.exists() or dst.stat().st_size != src.stat().st_size):
                 dst.write_bytes(src.read_bytes())
+    ecrire_bloc(dossier, [o for o in d.get("offres", []) if affichable(o)])
     return sum(1 for o in d.get("offres", []) if affichable(o))
 
 

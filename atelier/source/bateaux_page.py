@@ -157,6 +157,13 @@ def json_ld_images(mots) -> str:
     return json.dumps(objets, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 
 
+def _ld_bateaux(mots) -> str:
+    """Un seul bloc : fil d'Ariane + les ImageObject (sans leur @context propre, il est dans le @graph)."""
+    import jsonld
+    images = [{k: v for k, v in o.items() if k != "@context"} for o in json.loads(json_ld_images(mots))]
+    return jsonld.bloc(jsonld.fil("bateaux.html", "Nomenclature des bateaux"), *images)
+
+
 # ──────────────────────────────────────────────────────────────────────────── lexique
 def _lexique() -> dict:
     return json.loads(LEXIQUE.read_text(encoding="utf-8"))
@@ -956,7 +963,7 @@ def page(mots, mises) -> str:
         f'<meta property="og:url" content="{URL}/bateaux.html"><meta property="og:image" content="{og}">'
         f'<meta property="og:image:alt" content="{_html.escape(_alt(BATEAUX[0], mots, "fr"), quote=True)}">'
         f'<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{og}">'
-        f'<script type="application/ld+json">{json_ld_images(mots)}</script>'
+        f'{_ld_bateaux(mots)}'
         f'<style>{site_blocks.ENTETE_CSS}{CSS}{CSS_SVG}</style></head><body>\n'
         f'{site_blocks.entete_site("bateaux.html", LANGUES)}\n<div class="page">\n'
         f'<h1 data-t="titre">{ui["titre"]}</h1><p class="chapo" data-t="chapo">{ui["chapo"]}</p>\n'

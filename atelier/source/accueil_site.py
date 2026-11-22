@@ -659,6 +659,7 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
 <meta property="og:title" content="Sailing More">
 <meta property="og:description" content="La voile et la course au large, en images.">
 <link rel="canonical" href="https://sailingmore.fr/">
+{__import__("jsonld").bloc(__import__("jsonld").site_web(), __import__("jsonld").organisation())}
 <meta property="og:url" content="https://sailingmore.fr/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_FR">
@@ -1068,6 +1069,7 @@ def page_jeu(jeu: str) -> str:
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Le jeu concours — Sailing More</title>
 <link rel="canonical" href="https://sailingmore.fr/jeux.html">
+{__import__("jsonld").page_simple("jeux.html", "Le jeu concours")}
 <meta name="description" content="Le jeu concours Sailing More : cinq jours de stories, du mardi au samedi, un tirage le dimanche.">
 <style>
   body{{margin:0;background:#071c31;
@@ -1254,7 +1256,7 @@ def fichiers_a_publier() -> list[str]:
     """
     pages = [n for n in ("index.html", "jeux.html", "annonceurs.html", "merci.html",
                          "regates.html", "regles-de-course.html", "lexique.html", "stages.html",
-                         "cours.html", "bateaux.html", "bateaux.json", "mentions-legales.html",
+                         "cours.html", "bateaux.html", "bateaux.json", "stages-proches.json", "mentions-legales.html",
                          "confidentialite.html", "delete.html", "sitemap.xml")
              if (SITE / n).exists()]
     images = [n for n in ("og-image.jpg", "icon-512.png", "icon-180.png", "favicon-32.png",
@@ -1387,6 +1389,12 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         for f in src.iterdir():
             if f.is_file():
                 shutil.copy2(f, SITE / dossier / f.name)
+    # Bloc « stages près de chez vous » (22/11/2026) : posé quand toutes les pages sont écrites, une seule fois par page.
+    try:
+        import stages_page
+        print(f"stages près de chez vous posé sur : {stages_page.injecter_bloc(SITE)}")
+    except Exception as e:  # noqa: BLE001
+        print(f"bloc stages non posé : {e}")
     n = poser_mer_partout()
     print(f"mer posée sur {n} page(s) supplémentaire(s)")
     print(f"équilibre posé sur {poser_equilibre(SITE)} page(s)")
@@ -1724,7 +1732,25 @@ def page_annonceurs() -> str:
             + site_blocks.html_carte() +
             "<p class=\"kit-preuve\" data-t=\"kit_preuve\">Ces chiffres viennent de Meta, relevés ce "
             "mois-ci.</p></details>"
-            "</div></body></html>\n")
+            "</div>" + _script_langue_annonceurs() + "</body></html>\n")
+
+
+def _script_langue_annonceurs() -> str:
+    """La page portait 56 `data-t` sans aucune table ni script : elle restait en français pour tous.
+    Mesure du 22/11/2026 (scripts/etude_six_langues.py). On reprend les chaînes déjà dans TEXTES (celles
+    de l'accueil), même choix de langue que l'accueil (sm-langue, sinon navigator.languages), et le
+    titre et la description suivent la langue à partir de `kit_titre` et `ann_intro`."""
+    table = json.dumps(TEXTES, ensure_ascii=False)
+    return ("<script>(function(){var T=" + table + ";"
+            "function choisir(){var f=null;try{f=localStorage.getItem('sm-langue')}catch(e){}"
+            "if(f&&f!=='auto'&&T[f])return f;"
+            "var p=(navigator.languages||[navigator.language||'en']).map(function(x){return String(x).toLowerCase()});"
+            "for(var i=0;i<p.length;i++){var b=p[i].slice(0,2);if(T[b])return b}return 'en'}"
+            "var l=choisir();if(l==='fr')return;var d=T[l];document.documentElement.lang=l;"
+            "document.querySelectorAll('[data-t]').forEach(function(el){var v=d[el.dataset.t];if(v)el.textContent=v});"
+            "if(d.kit_titre)document.title=d.kit_titre+' \\u2014 Sailing More';"
+            "var m=document.querySelector('meta[name=\"description\"]');"
+            "if(m&&d.ann_intro)m.setAttribute('content',d.ann_intro)})();</script>")
 
 
 def page_merci() -> str:

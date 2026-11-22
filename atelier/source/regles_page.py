@@ -827,6 +827,19 @@ def liste_statique(d: dict, lang: str = "fr") -> str:
     return "".join(sortie)
 
 
+def _ld_regles(d: dict) -> str:
+    """JSON-LD : fil d'Ariane + Article. Pas de FAQPage : regles.json n'a aucune question/réponse
+    (les questions de révision sont sur cours.html, pas ici)."""
+    import jsonld
+    url = f"{jsonld.SITE}/regles-de-course.html"
+    article = {"@type": "Article", "headline": "Règles de course à la voile", "inLanguage": "fr",
+               "description": f"Les règles de course à la voile (RRS {d['edition']['libelle']}) : numéro, "
+                              "intitulé, résumé et exemple concret pour chaque règle.",
+               "mainEntityOfPage": url, "url": url,
+               "author": {"@id": jsonld.ORG_ID}, "publisher": {"@id": jsonld.ORG_ID}}
+    return jsonld.bloc(jsonld.fil("regles-de-course.html", "Règles de course"), article, jsonld.organisation())
+
+
 def page_regles(d: dict | None = None) -> str:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     import site_blocks  # la barre du site : un seul endroit
@@ -857,6 +870,7 @@ def page_regles(d: dict | None = None) -> str:
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         "<title>Règles de course à la voile — Sailing More</title>"
         '<link rel="canonical" href="https://sailingmore.fr/regles-de-course.html">'
+        + _ld_regles(d) +
         '<meta name="description" content="Les règles de course à la voile (RRS 2025-2028) : numéro, '
         'intitulé, résumé et exemple concret pour chaque règle, avec recherche et filtres, en français, '
         'anglais, italien, espagnol, portugais et allemand.">'

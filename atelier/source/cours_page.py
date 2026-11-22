@@ -1207,6 +1207,14 @@ def _langue(lang: str) -> str:
             f'<p class="note">{_e(t["note"]).replace("{lien}", lien)}</p>\n</div>')
 
 
+def _ld_cours(desc: str) -> str:
+    """JSON-LD : fil d'Ariane + Course (nom, description, fournisseur). Ni prix, ni note."""
+    import jsonld
+    cours = {"@type": "Course", "name": TEXTES["fr"]["titre"], "description": desc, "inLanguage": "fr",
+             "url": f"{jsonld.SITE}/cours.html", "provider": {"@id": jsonld.ORG_ID}}
+    return jsonld.bloc(jsonld.fil("cours.html", TEXTES["fr"]["titre"]), cours, jsonld.organisation())
+
+
 def page_cours() -> str:
     import regles_page
     import site_blocks  # la barre du site et le menu : un seul endroit
@@ -1218,6 +1226,7 @@ def page_cours() -> str:
             f'<meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>{TEXTES["fr"]["titre"]} — Sailing More</title>'
             f'<link rel="canonical" href="https://sailingmore.fr/cours.html">'
+            f'{_ld_cours(desc)}'
             f'<meta name="description" content="{_html.escape(desc)}">'
             f'<style>{site_blocks.ENTETE_CSS}{CSS}{_css_schemas()}</style></head><body>\n'
             f'{site_blocks.entete_site("cours.html", LANGUES)}{regles_page.SPRITE}\n<div class="page">\n{corps}\n</div>\n'
