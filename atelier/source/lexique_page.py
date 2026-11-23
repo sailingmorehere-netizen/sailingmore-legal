@@ -309,8 +309,8 @@ def page_lexique(d: dict | None = None) -> str:
     donnees = {"langues": LANGUES, "ui": UI, "themes": themes}
     # `</` dans un JSON embarqué fermerait le <script> : on l'échappe.
     brut = json.dumps(donnees, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
-    boutons_langue = '<button data-lang="auto" aria-pressed="true">Auto</button>' + "".join(
-        f'<button data-lang="{l}" aria-pressed="false">{l.upper()}</button>' for l in LANGUES)
+    # La barre du site (nom, menu, langues) vient d'un seul endroit : site_blocks (23/11/2026).
+    import site_blocks as _sb  # noqa: PLC0415
     themes_html = (
         f'<span class="etiq">{ui["theme"]}</span>'
         '<button class="puce" type="button" data-theme="tous" aria-pressed="true">'
@@ -331,9 +331,8 @@ def page_lexique(d: dict | None = None) -> str:
             "Le lexique de voile : les mots du bateau, du gréement et des voiles, expliqués en une phrase "
             "et traduits en six langues.") +
         "<style>" + CSS + "</style></head><body>"
+        + _sb.barre_autonome("lexique.html", LANGUES) +
         '<div class="page">'
-        '<div class="haut"><a class="retour" href="index.html" data-t="retour">' + ui["retour"] + "</a>"
-        '<div class="langues" id="langues" aria-label="Language">' + boutons_langue + "</div></div>"
         '<h1 data-t="titre">' + ui["titre"] + "</h1>"
         '<p class="chapo" data-t="chapo">' + ui["chapo"] + "</p>"
         '<div class="panneau">'
