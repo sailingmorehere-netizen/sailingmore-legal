@@ -184,6 +184,28 @@ a{color:#fff;text-decoration:none}
 .filtres select{font:inherit;font-size:.78rem;color:#eef3f7;background:#0a1f33;
   border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:.3rem .5rem;width:auto;max-width:100%}
 .filtres select:focus{border-color:rgba(226,58,62,.7);outline:none}
+/* Le numéro se choisit sur un tableau, plus dans une liste de 113 lignes (23/11/2026) : une ligne
+   par partie, des carrés de la taille d'un pouce, tout visible d'un coup. */
+.numf{position:relative;max-width:100%}
+.numf-b{font:inherit;font-size:.78rem;color:#eef3f7;background:#0a1f33;cursor:pointer;
+  border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:.3rem .8rem .3rem .5rem;
+  display:inline-flex;align-items:center;gap:.45rem;max-width:100%}
+.numf-b b{font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.numf-b i{flex:0 0 auto;width:.36rem;height:.36rem;margin-top:-.18rem;opacity:.7;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
+.numf-b:hover{border-color:rgba(255,255,255,.4)}
+.numf-b[aria-expanded="true"]{border-color:rgba(226,58,62,.7)}
+.numf-p{position:absolute;left:0;top:calc(100% + .35rem);z-index:40;width:min(30rem,92vw);
+  max-height:min(60vh,26rem);overflow:auto;background:#0a1f33;border:1px solid rgba(255,255,255,.16);
+  border-radius:3px;box-shadow:0 18px 40px rgba(0,0,0,.45);padding:.5rem .6rem}
+.numf-r{display:grid;grid-template-columns:4.6rem minmax(0,1fr);gap:.45rem;align-items:start;padding:.16rem 0}
+.numf-l{font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:#8aa0b4;padding-top:.35rem}
+.numf-c{display:flex;flex-wrap:wrap;gap:.2rem}
+.numf-c button{font:inherit;font-size:.72rem;min-width:2.1rem;height:1.9rem;color:#dbe6ef;cursor:pointer;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:2px;
+  font-variant-numeric:tabular-nums}
+.numf-c button:hover{color:#fff;border-color:rgba(226,58,62,.8);background:rgba(226,58,62,.12)}
+.numf-c button[aria-pressed="true"]{color:#fff;border-color:#e23a3e;background:rgba(226,58,62,.22);font-weight:600}
 .puce{font:inherit;font-size:.72rem;letter-spacing:.04em;color:var(--gris);background:none;
   border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:.28rem .6rem;cursor:pointer}
 .puce:hover{color:#fff;border-color:rgba(255,255,255,.4)}
@@ -273,6 +295,9 @@ svg.sc{display:block;width:100%;height:auto;background:#071c31;border:1px solid 
   .recherche{padding:.7rem 0 .8rem}
   .filtres .etiq{width:100%}
   .filtres select{width:100%}
+  .numf,.numf-b{width:100%}
+  .numf-b{justify-content:space-between}
+  .numf-p{width:100%}
   .regle{padding-left:.6rem;scroll-margin-top:calc(var(--h-entete) + 12rem)}
   .regle .num{display:block;min-width:0}
 }
@@ -285,7 +310,8 @@ JS = r"""
   var champ = document.getElementById('champ-q');
   var liste = document.getElementById('liste-regles');
   var compte = document.getElementById('compte-regles');
-  var selRegle = document.getElementById('sel-regle');
+  var numfB = document.getElementById('numf-b'), numfP = document.getElementById('numf-p'),
+      numfVal = document.getElementById('numf-val');
   var selTheme = document.getElementById('sel-theme');
   var zoneActifs = document.getElementById('actifs');
   var etat = {regle:'', theme:'tous', texte:''};
@@ -343,16 +369,28 @@ JS = r"""
       REGLES.forEach(function(r){ if(r.partie === k) h += opt(r.cle, libRegle(r), etat.regle === r.cle); });
       h += '</optgroup>';
     });
-    selRegle.innerHTML = h;
     var t = opt('tous', u.tous_m, etat.theme === 'tous');
     THEMES.forEach(function(th){ t += opt(th.cle, th.nom[lang], etat.theme === th.cle); });
     selTheme.innerHTML = t;
     document.getElementById('lib-regle').textContent = u.regles_lib;
     document.getElementById('lib-theme').textContent = u.themes_lib;
-    selRegle.setAttribute('aria-label', u.regles_lib);
     selTheme.setAttribute('aria-label', u.themes_lib);
+    numfB.setAttribute('aria-label', u.regles_lib);
+    majNumf();
   }
-  function selectsDefaut(){ selRegle.value = ''; selTheme.value = 'tous'; }
+
+  // Ce que dit le bouton : « Toutes les règles » ou le numéro choisi, et rien de plus.
+  function majNumf(){
+    if(!numfVal) return;
+    var r = etat.regle && parRegle[etat.regle];
+    numfVal.textContent = r ? etiquette(r) : UI[lang].toutes_regles;
+    numfP.querySelectorAll('button[data-cle]').forEach(function(b){
+      if(b.getAttribute('data-cle') === etat.regle) b.setAttribute('aria-pressed','true');
+      else b.removeAttribute('aria-pressed');
+    });
+  }
+  function fermerNumf(){ numfP.hidden = true; numfB.setAttribute('aria-expanded','false'); }
+  function selectsDefaut(){ etat.regle = ''; selTheme.value = 'tous'; majNumf(); }
 
   function actifs(){
     var u = UI[lang], h = '';
@@ -433,6 +471,7 @@ JS = r"""
   }
 
   function dessine(){
+    majNumf();                       /* le bouton dit toujours le numéro filtré */
     var u = UI[lang], q = normalise(etat.texte).trim(), total = 0, h = '';
     var trouvees = cherche(q);
     ORDRE.forEach(function(k){
@@ -478,12 +517,26 @@ JS = r"""
       lang = choisir(); traduit();
     });
   });
-  selRegle.addEventListener('change', function(){ etat.regle = selRegle.value; dessine(); });
+  numfB.addEventListener('click', function(){
+    var ouvert = numfP.hidden;
+    numfP.hidden = !ouvert;
+    numfB.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+  });
+  numfP.addEventListener('click', function(e){
+    var b = e.target.closest('button[data-cle]');
+    if(!b) return;
+    var cle = b.getAttribute('data-cle');
+    etat.regle = (etat.regle === cle) ? '' : cle;   // retoucher le même numéro le retire
+    fermerNumf();
+    dessine();
+  });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') fermerNumf(); });
+  document.addEventListener('click', function(e){ if(!e.target.closest('.numf')) fermerNumf(); });
   selTheme.addEventListener('change', function(){ etat.theme = selTheme.value; dessine(); });
   zoneActifs.addEventListener('click', function(ev){
     var b = ev.target.closest('button'); if(!b) return;
     var k = b.dataset.retire;
-    if(k === 'regle' || k === 'tout'){ etat.regle = ''; selRegle.value = ''; }
+    if(k === 'regle' || k === 'tout'){ etat.regle = ''; majNumf(); }
     if(k === 'theme' || k === 'tout'){ etat.theme = 'tous'; selTheme.value = 'tous'; }
     if(k === 'texte' || k === 'tout'){ etat.texte = ''; champ.value = ''; }
     dessine();
@@ -863,18 +916,28 @@ def page_regles(d: dict | None = None) -> str:
     def opt(val: str, texte: str) -> str:
         return f'<option value="{e(val)}">{e(texte)}</option>'
 
-    groupes = []
+    # Le numéro ne se choisit plus dans une liste de 113 lignes (Nicolas, 23/11/2026 : « le menu
+    # déroulant est très long ») mais sur un tableau de numéros, une ligne par partie : tout tient
+    # sous les yeux, un numéro se touche du pouce, et le panneau se referme après le choix.
+    lignes = []
     for k in ORDRE_PARTIES:
         rs = [r for r in d["regles"] if r["partie"] == k]
         if not rs:
             continue
         lib = ui["defs"] if k == "defs" else ui["app"] if k == "app" else f'{ui["partie"]} {k}'
-        groupes.append(f'<optgroup label="{e(lib)}">' + "".join(
-            opt(r["cle"], r["titre"]["fr"] if k == "defs" else f'{r["titre"]["fr"]} — {r["num"]}')
-            for r in rs) + "</optgroup>")
+        puces = []
+        for i, r in enumerate(rs):
+            marque = f"D{i + 1}" if k == "defs" else str(r["num"])
+            puces.append(f'<button type="button" data-cle="{e(r["cle"])}">{e(marque)}</button>')
+        lignes.append(f'<div class="numf-r"><span class="numf-l">{e(lib)}</span>'
+                      f'<div class="numf-c">{"".join(puces)}</div></div>')
     f_regles = (f'<span class="etiq" id="lib-regle">{e(ui["regles_lib"])}</span>'
-                f'<select id="sel-regle" aria-label="{e(ui["regles_lib"])}">'
-                + opt("", ui["toutes_regles"]) + "".join(groupes) + "</select>")
+                '<div class="numf"><button type="button" class="numf-b" id="numf-b" '
+                'aria-expanded="false" aria-controls="numf-p" '
+                f'aria-label="{e(ui["regles_lib"])}">'
+                f'<b id="numf-val">{e(ui["toutes_regles"])}</b>'
+                '<i aria-hidden="true"></i></button>'
+                '<div class="numf-p" id="numf-p" hidden>' + "".join(lignes) + "</div></div>")
     f_themes = (f'<span class="etiq" id="lib-theme">{e(ui["themes_lib"])}</span>'
                 f'<select id="sel-theme" aria-label="{e(ui["themes_lib"])}">'
                 + opt("tous", ui["tous_m"]) + "".join(opt(t["cle"], t["nom"]["fr"]) for t in d["themes"])
