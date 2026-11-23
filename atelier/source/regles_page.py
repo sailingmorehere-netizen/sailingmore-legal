@@ -49,6 +49,7 @@ UI = {
            "retour": "← Sailing More", "placeholder": "Un numéro (10), un mot (bâbord), une situation (collision)…",
            "aria": "Rechercher dans les règles", "tous": "Toutes", "tous_m": "Tous",
            "partie": "Partie", "themes_lib": "Ce que je cherche", "regles_lib": "Numéro de règle", "toutes_regles": "Toutes les règles",
+           "sommaire": "Sommaire",
            "un": "règle", "n": "règles", "aucun": "Aucune règle ne correspond à cette recherche.",
            "defs": "Définitions", "app": "Appendices", "regle": "Règle", "def": "Définition",
            "appendice": "Appendice", "exemple": "Exemple", "issue": "Issue", "voir": "Voir aussi",
@@ -65,6 +66,7 @@ UI = {
            "retour": "← Sailing More", "placeholder": "A number (10), a word (port), a situation (collision)…",
            "aria": "Search the rules", "tous": "All", "tous_m": "All",
            "partie": "Part", "themes_lib": "What I am looking for", "regles_lib": "Rule number", "toutes_regles": "All rules",
+           "sommaire": "Contents",
            "un": "rule", "n": "rules", "aucun": "No rule matches this search.",
            "defs": "Definitions", "app": "Appendices", "regle": "Rule", "def": "Definition",
            "appendice": "Appendix", "exemple": "Example", "issue": "Outcome", "voir": "See also",
@@ -81,6 +83,7 @@ UI = {
            "retour": "← Sailing More", "placeholder": "Un numero (10), una parola (mura a sinistra), una situazione (collisione)…",
            "aria": "Cerca nelle regole", "tous": "Tutte", "tous_m": "Tutti",
            "partie": "Parte", "themes_lib": "Cosa cerco", "regles_lib": "Numero di regola", "toutes_regles": "Tutte le regole",
+           "sommaire": "Indice",
            "un": "regola", "n": "regole", "aucun": "Nessuna regola corrisponde a questa ricerca.",
            "defs": "Definizioni", "app": "Appendici", "regle": "Regola", "def": "Definizione",
            "appendice": "Appendice", "exemple": "Esempio", "issue": "Esito", "voir": "Vedi anche",
@@ -97,6 +100,7 @@ UI = {
            "retour": "← Sailing More", "placeholder": "Un número (10), una palabra (babor), una situación (colisión)…",
            "aria": "Buscar en las reglas", "tous": "Todas", "tous_m": "Todos",
            "partie": "Parte", "themes_lib": "Lo que busco", "regles_lib": "Número de regla", "toutes_regles": "Todas las reglas",
+           "sommaire": "Índice",
            "un": "regla", "n": "reglas", "aucun": "Ninguna regla coincide con esta búsqueda.",
            "defs": "Definiciones", "app": "Apéndices", "regle": "Regla", "def": "Definición",
            "appendice": "Apéndice", "exemple": "Ejemplo", "issue": "Resultado", "voir": "Ver también",
@@ -113,6 +117,7 @@ UI = {
            "retour": "← Sailing More", "placeholder": "Um número (10), uma palavra (bombordo), uma situação (colisão)…",
            "aria": "Pesquisar nas regras", "tous": "Todas", "tous_m": "Todos",
            "partie": "Parte", "themes_lib": "O que procuro", "regles_lib": "Número de regra", "toutes_regles": "Todas as regras",
+           "sommaire": "Índice",
            "un": "regra", "n": "regras", "aucun": "Nenhuma regra corresponde a esta pesquisa.",
            "defs": "Definições", "app": "Apêndices", "regle": "Regra", "def": "Definição",
            "appendice": "Apêndice", "exemple": "Exemplo", "issue": "Resultado", "voir": "Ver também",
@@ -129,6 +134,7 @@ UI = {
            "retour": "← Sailing More", "placeholder": "Eine Nummer (10), ein Wort (Backbord), eine Situation (Kollision)…",
            "aria": "In den Regeln suchen", "tous": "Alle", "tous_m": "Alle",
            "partie": "Teil", "themes_lib": "Was ich suche", "regles_lib": "Regelnummer", "toutes_regles": "Alle Regeln",
+           "sommaire": "Inhalt",
            "un": "Regel", "n": "Regeln", "aucun": "Keine Regel passt zu dieser Suche.",
            "defs": "Definitionen", "app": "Anhänge", "regle": "Regel", "def": "Definition",
            "appendice": "Anhang", "exemple": "Beispiel", "issue": "Ergebnis", "voir": "Siehe auch",
@@ -178,7 +184,19 @@ a{color:#fff;text-decoration:none}
   font-family:inherit;min-width:0}
 .champ input::placeholder{color:#7d92a6}
 .champ svg{flex:0 0 auto;opacity:.55}
-.filtres{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;margin-top:.7rem}
+.filtres{position:relative;display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;margin-top:.7rem}
+/* Le sommaire : la même idée que le « Table of Contents » du site officiel — on montre les parties,
+   on ne cache pas les règles. Un bouton, une liste de neuf lignes, un saut. (23/11/2026) */
+.som-p{position:absolute;left:0;top:calc(100% + .3rem);z-index:45;min-width:min(22rem,92vw);
+  background:#0a1f33;border:1px solid rgba(255,255,255,.16);border-radius:3px;padding:.35rem;
+  box-shadow:0 18px 40px rgba(0,0,0,.45);display:grid;gap:.1rem}
+.som-p a{display:flex;justify-content:space-between;gap:1rem;color:#dbe6ef;font-size:.8rem;
+  padding:.42rem .5rem;border-radius:2px}
+.som-p a:hover,.som-p a:focus-visible{background:rgba(255,255,255,.08);color:#fff}
+.som-p a b{font-weight:500}
+.som-p a span{color:#8aa0b4;font-variant-numeric:tabular-nums;font-size:.74rem}
+.puce.som{border-color:rgba(226,58,62,.55);color:#fff}
+.puce.som[aria-expanded="true"]{background:rgba(226,58,62,.18);border-color:var(--rouge)}
 .filtres .etiq{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:#8aa0b4;
   margin-right:.2rem}
 .filtres select{font:inherit;font-size:.78rem;color:#eef3f7;background:#0a1f33;
@@ -203,7 +221,7 @@ a{color:#fff;text-decoration:none}
 .compte{color:var(--gris);font-size:.72rem;letter-spacing:.06em;margin:.9rem 0 .2rem}
 .compte b{color:#fff;font-weight:500}
 
-.groupe{margin:0 0 2.2rem}
+.groupe{margin:0 0 2.2rem;scroll-margin-top:calc(var(--h-entete) + 8.5rem)}
 .groupe h2{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gris);
   font-weight:500;margin:0 0 .2rem;padding-top:1rem;border-top:1px solid rgba(226,58,62,.22)}
 .groupe h2 span{color:#8aa0b4;letter-spacing:.1em;margin-left:.5rem}
@@ -348,6 +366,24 @@ JS = r"""
     }
     majThemes();
   }
+  // Le sommaire : neuf entrées, la partie et ses numéros, un saut — rien à dérouler.
+  var somB = document.getElementById('som-b'), somP = document.getElementById('som-p');
+  function remplirSom(){
+    if(!somB || !somP) return;
+    var h = '';
+    ORDRE.forEach(function(k){
+      var rs = REGLES.filter(function(r){ return r.partie === k; });
+      if(!rs.length) return;
+      var bornes = (k === 'defs' || k === 'app') ? String(rs.length)
+                 : (rs[0].num + '–' + rs[rs.length - 1].num);
+      h += '<a href="#p' + esc(k) + '"><b>' + esc(nomPartie(k)) + '</b><span>' + esc(bornes) + '</span></a>';
+    });
+    somP.innerHTML = h;
+    somB.textContent = UI[lang].sommaire;
+    somB.setAttribute('aria-label', UI[lang].sommaire);
+  }
+  function fermerSom(){ if(somP){ somP.hidden = true; somB.setAttribute('aria-expanded', 'false'); } }
+
   function majThemes(){
     var bs = zoneThemes.querySelectorAll('button[data-theme]');
     for(var i = 0; i < bs.length; i++){
@@ -442,7 +478,7 @@ JS = r"""
       var g = trouvees.filter(function(r){ return r.partie === k; });
       if(!g.length) return;
       total += g.length;
-      h += '<section class="groupe"><h2>' + esc(nomPartie(k)) + '<span>' + g.length + '</span></h2>'
+      h += '<section class="groupe" id="p' + esc(k) + '"><h2>' + esc(nomPartie(k)) + '<span>' + g.length + '</span></h2>'
         + g.map(carte).join('') + '</section>';
     });
     liste.innerHTML = h || '<p class="vide">' + esc(u.aucun) + '</p>';
@@ -461,6 +497,7 @@ JS = r"""
     document.querySelectorAll('#langues button').forEach(function(b){
       b.setAttribute('aria-pressed', String(b.dataset.lang === actif)); });
     remplirThemes();
+    remplirSom();
     dessine();
   }
 
@@ -481,6 +518,14 @@ JS = r"""
       lang = choisir(); traduit();
     });
   });
+  if(somB) somB.addEventListener('click', function(){
+    var ouvert = somP.hidden;
+    somP.hidden = !ouvert;
+    somB.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+  });
+  if(somP) somP.addEventListener('click', function(e){ if(e.target.closest('a')) fermerSom(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') fermerSom(); });
+  document.addEventListener('click', function(e){ if(!e.target.closest('#som-b') && !e.target.closest('#som-p')) fermerSom(); });
   zoneThemes.addEventListener('click', function(e){
     var b = e.target.closest('button[data-theme]');
     if(!b) return;
@@ -835,7 +880,7 @@ def liste_statique(d: dict, lang: str = "fr") -> str:
         groupe = [r for r in d["regles"] if r["partie"] == k]
         if not groupe:
             continue
-        sortie.append(f'<section class="groupe"><h2>{_html.escape(nom_partie(d, k, lang))}'
+        sortie.append(f'<section class="groupe" id="p{k}"><h2>{_html.escape(nom_partie(d, k, lang))}'
                       f'<span>{len(groupe)}</span></h2>'
                       + "".join(carte_statique(d, r, par_cle, lang) for r in groupe) + "</section>")
     return "".join(sortie)
@@ -905,7 +950,10 @@ def page_regles(d: dict | None = None) -> str:
         '<path d="M10.6 10.6 14 14" stroke="#eef3f7" stroke-width="1.4"/></svg>'
         f'<input id="champ-q" type="search" placeholder="{e(ui["placeholder"])}" '
         f'aria-label="{e(ui["aria"])}" autocomplete="off"></div>'
-        '<div class="filtres" id="themes">' + f_themes + "</div>"
+        '<div class="filtres" id="themes">'
+        '<button type="button" class="puce som" id="som-b" aria-expanded="false" '
+        f'aria-controls="som-p">{e(ui["sommaire"])}</button>'
+        '<div class="som-p" id="som-p" hidden></div>' + f_themes + "</div>"
         '<div class="actifs" id="actifs"></div></div>'
         f'<div class="compte" id="compte-regles" role="status" aria-live="polite">'
         f'<b>{total}</b> {ui["n"] if total > 1 else ui["un"]}</div>'
