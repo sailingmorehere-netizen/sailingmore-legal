@@ -654,6 +654,21 @@ _BARRE_CSS = """<style>
 .entete .menu-d>nav a[aria-current="page"]{color:#fff;box-shadow:inset 2px 0 0 #e23a3e}
 body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:flex-start}
 @media (max-width:520px){.entete{padding:.45rem .6rem;gap:.4rem}.entete .nom{font-size:.68rem}}
+/* Téléphone : le panneau du menu en une colonne, texte de 16 px et lignes de 48 px (23/11/2026 :
+   « refais le menu il est illisible sur tel »). Cette feuille sert les pages hors feuille d'accueil
+   (stages, lexique, jeux, mentions légales) : elles avaient le même panneau serré en deux colonnes. */
+@media (max-width:600px){
+  .entete .menu-d>summary{font-size:.78rem;min-height:44px;display:flex;align-items:center;
+    padding:0 .15rem}
+  .entete .menu-d>nav{left:.4rem;right:.4rem;top:calc(100% + .3rem);width:auto;min-width:0;
+    grid-template-columns:1fr;gap:.1rem;padding:.45rem;background:#081624;
+    max-height:calc(100vh - 3.6rem);overflow-y:auto}
+  .entete .menu-d>nav a{display:flex;align-items:center;min-height:48px;
+    padding:.6rem .8rem;font-size:1rem;line-height:1.25}
+  .entete .menu-d>nav a.legal{min-height:42px;font-size:.9rem;padding:.5rem .8rem}
+  .entete .menu-d>nav a.legal:first-of-type{margin-top:.35rem;
+    border-top:1px solid rgba(238,243,247,.14);padding-top:.7rem}
+}
 </style>"""
 
 
