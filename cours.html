@@ -166,12 +166,45 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
 </head><body><div class="mer-fond mer-fond-commandes">
   <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
 </div>
-<header class="entete"><a class="nom" href="index.html">Sailing More</a><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="index.html">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html">Règles de course</a><a href="stages.html">Stages de voile</a><a href="cours.html" aria-current="page">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="lexique.html">Lexique</a><a href="annonceurs.html">Annonceurs</a><a href="mentions-legales.html" class="legal">Mentions légales</a><a href="confidentialite.html" class="legal">Confidentialité</a><a href="delete.html" class="legal">Supprimer mes données</a></nav></details><div class="langues" id="langues" aria-label="Language"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button><button data-lang="de" aria-pressed="false">DE</button></div></header><script>
+<header class="entete"><a class="nom" href="index.html">Sailing More</a><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="index.html">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html">Règles de course</a><a href="stages.html">Stages de voile</a><a href="cours.html" aria-current="page">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="lexique.html">Lexique</a><a href="annonceurs.html">Annonceurs</a><a href="mentions-legales.html" class="legal">Mentions légales</a><a href="confidentialite.html" class="legal">Confidentialité</a><a href="delete.html" class="legal">Supprimer mes données</a></nav></details><label class="lg"><span hidden>Langue</span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto</option><option value="fr">Français</option><option value="en">English</option><option value="it">Italiano</option><option value="es">Español</option><option value="pt">Português</option><option value="de">Deutsch</option></select></label><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button><button data-lang="de" aria-pressed="false">DE</button></div></header><style>
+.lg{position:relative;display:inline-flex;align-items:center}
+.lg select{appearance:none;-webkit-appearance:none;background:transparent;color:inherit;
+  font:inherit;font-size:.76rem;letter-spacing:.04em;padding:.32rem 1.5rem .32rem .55rem;
+  border:1px solid rgba(255,255,255,.34);border-radius:.4rem;cursor:pointer;min-height:32px}
+.lg select:hover{border-color:rgba(255,255,255,.62)}
+.lg select:focus-visible{outline:2px solid #e23a3e;outline-offset:2px}
+.lg option{color:#10161f;background:#fff}
+.lg::after{content:"";position:absolute;right:.55rem;width:.42rem;height:.42rem;pointer-events:none;
+  border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;
+  transform:rotate(45deg);margin-top:-.2rem;opacity:.75}
+@media (max-width:520px){.lg select{font-size:.72rem}}
+@media (pointer:coarse){.lg select{min-height:44px;padding-right:1.6rem}}
+</style><script>
 (function(){
   var d = document.querySelector('.entete .menu-d');
   if(!d) return;
   document.addEventListener('click', function(e){ if(!d.contains(e.target)) d.open = false; });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') d.open = false; });
+})();
+</script><script>
+(function(){
+  var sel = document.getElementById("langue-sel"), zone = document.getElementById("langues");
+  if(!sel || !zone) return;
+  function lire(){ try{ return localStorage.getItem("sm-langue") || "auto"; }catch(e){ return "auto"; } }
+  function poser(){
+    var v = lire(), o = sel.options;
+    for(var i = 0; i < o.length; i++){ if(o[i].value === v){ sel.value = v; return; } }
+    sel.value = "auto";
+  }
+  sel.addEventListener("change", function(){
+    var v = sel.value, bs = zone.querySelectorAll("button[data-lang]");
+    for(var i = 0; i < bs.length; i++){
+      if(bs[i].getAttribute("data-lang") === v){ bs[i].click(); return; }
+    }
+  });
+  poser();
+  addEventListener("load", poser);
+  setTimeout(poser, 400);
 })();
 </script><svg width='0' height='0' style='position:absolute' aria-hidden='true' focusable='false'><defs><g id='sc-bat'><path d='M0,-10 C5,-4 5,6 3,10 L-3,10 C-5,6 -5,-4 0,-10Z' fill='currentColor'/><path d='M0,-6 L0,7' stroke='#0a1f33' stroke-width='1.2'/></g><g id='sc-vent'><path class='sc-v' d='M22,10 L22,38 M16,31 L22,38 L28,31'/></g></defs></svg>
 <div class="page">
@@ -467,7 +500,7 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
   .mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{transition:none}
 }
 </style>
-<script src="mer-louvoyage.js?v=e57f262e" defer></script>
+<script src="mer-louvoyage.js?v=2641daef" defer></script>
 <script>
 /* les commandes de la scène s'effacent dès qu'on a quitté le haut de la page */
 (function(){

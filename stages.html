@@ -296,9 +296,12 @@ function remplir(){
   var qp=fp.value,ql=fl.value;
   function reste(lg,py){return D.offres.some(function(o){return (!lg||o.langue===lg)&&(!py||o.pays===py)})}
   if(!reste(ql,qp)){if(reste('',qp))fl.value='';else if(reste(ql,''))fp.value='';else{fl.value='';fp.value=''}}
+  /* Le choix de langue de la page en menu déroulant, comme la barre du site (Nicolas, 23/11/2026). */
+  var NOMS={fr:'Français',en:'English',de:'Deutsch',it:'Italiano',es:'Español',pt:'Português'};
   var l=document.getElementById('langues');
-  l.innerHTML=Object.keys(U).map(function(c){return '<button data-l="'+c+'" style="background:none;border:0;color:'+(c===L?'#5fd3c4':'#9db2c7')+';font:inherit;font-size:.8rem;cursor:pointer;padding:.1rem .25rem">'+c.toUpperCase()+'</button>'}).join('');
-  [].forEach.call(l.querySelectorAll('button'),function(b){b.onclick=function(){L=b.dataset.l;try{localStorage.setItem('lang',L)}catch(e){}remplir();dessiner()}});
+  l.innerHTML='<select id="lng-sel" aria-label="Langue de la page" style="background:transparent;color:inherit;font:inherit;font-size:.8rem;border:1px solid rgba(255,255,255,.34);border-radius:.4rem;padding:.5rem .6rem;min-height:38px;cursor:pointer">'
+    +Object.keys(U).map(function(c){return '<option value="'+c+'"'+(c===L?' selected':'')+'>'+(NOMS[c]||c.toUpperCase())+'</option>'}).join('')+'</select>';
+  l.querySelector('select').onchange=function(){L=this.value;try{localStorage.setItem('lang',L)}catch(e){}remplir();dessiner()};
 }
 /* Position du visiteur : le navigateur d'abord (il demande l'accord), l'adresse IP ensuite si elle
    est refusée ou indisponible. Aucune position n'est envoyée ni conservée : elle sert à trier. */
@@ -549,7 +552,7 @@ remplir();dessiner();poserPosition();
   .mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{transition:none}
 }
 </style>
-<script src="mer-louvoyage.js?v=e57f262e" defer></script>
+<script src="mer-louvoyage.js?v=2641daef" defer></script>
 <script>
 /* les commandes de la scène s'effacent dès qu'on a quitté le haut de la page */
 (function(){
