@@ -166,7 +166,7 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
 </head><body><div class="mer-fond mer-fond-commandes">
   <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
 </div>
-<header class="entete"><a class="nom" href="index.html">Sailing More</a><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="index.html">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html">Règles de course</a><a href="stages.html">Stages de voile</a><a href="cours.html" aria-current="page">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="lexique.html">Lexique</a><a href="annonceurs.html">Annonceurs</a><a href="mentions-legales.html" class="legal">Mentions légales</a><a href="confidentialite.html" class="legal">Confidentialité</a><a href="delete.html" class="legal">Supprimer mes données</a></nav></details><label class="lg"><span hidden>Langue</span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto</option><option value="fr">Français</option><option value="en">English</option><option value="it">Italiano</option><option value="es">Español</option><option value="pt">Português</option><option value="de">Deutsch</option></select></label><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button><button data-lang="de" aria-pressed="false">DE</button></div></header><style>
+<header class="entete"><a class="nom" href="index.html">Sailing More</a><label class="lg"><span hidden>Langue</span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto</option><option value="fr">Français</option><option value="en">English</option><option value="it">Italiano</option><option value="es">Español</option><option value="pt">Português</option><option value="de">Deutsch</option></select></label><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button><button data-lang="de" aria-pressed="false">DE</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="index.html">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html">Règles de course</a><a href="stages.html">Stages de voile</a><a href="cours.html" aria-current="page">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="lexique.html">Lexique</a><a href="annonceurs.html">Annonceurs</a><a href="mentions-legales.html" class="legal">Mentions légales</a><a href="confidentialite.html" class="legal">Confidentialité</a><a href="delete.html" class="legal">Supprimer mes données</a></nav></details></header><style>
 .lg{position:relative;display:inline-flex;align-items:center}
 .lg select{appearance:none;-webkit-appearance:none;background:transparent;color:inherit;
   font:inherit;font-size:.76rem;letter-spacing:.04em;padding:.32rem 1.5rem .32rem .55rem;
@@ -188,6 +188,13 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
 })();
 </script><script>
 (function(){
+  /* La carte plein écran se cale sous la barre du site : elle en mesure la hauteur réelle.
+     Avant tout le reste — une page sans menu de langues a quand même une carte à caler. */
+  function caler(){
+    var b = document.querySelector(".entete"), c = document.querySelector(".cl.m-carte");
+    if(b && c) document.documentElement.style.setProperty("--barre", b.offsetHeight + "px");
+  }
+  caler(); addEventListener("load", caler); addEventListener("resize", caler); setTimeout(caler, 300);
   var sel = document.getElementById("langue-sel"), zone = document.getElementById("langues");
   if(!sel || !zone) return;
   function lire(){ try{ return localStorage.getItem("sm-langue") || "auto"; }catch(e){ return "auto"; } }
@@ -205,6 +212,7 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
   poser();
   addEventListener("load", poser);
   setTimeout(poser, 400);
+
 })();
 </script><svg width='0' height='0' style='position:absolute' aria-hidden='true' focusable='false'><defs><g id='sc-bat'><path d='M0,-10 C5,-4 5,6 3,10 L-3,10 C-5,6 -5,-4 0,-10Z' fill='currentColor'/><path d='M0,-6 L0,7' stroke='#0a1f33' stroke-width='1.2'/></g><g id='sc-vent'><path class='sc-v' d='M22,10 L22,38 M16,31 L22,38 L28,31'/></g></defs></svg>
 <div class="page">
