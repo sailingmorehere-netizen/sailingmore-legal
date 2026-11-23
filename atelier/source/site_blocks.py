@@ -1486,7 +1486,7 @@ MENU_CSS = """
     .entete .menu-d{position:static;margin-right:.4rem}
     .entete .menu-d summary{font-size:.78rem;min-height:44px;padding:0 .15rem}
     .entete .menu-d nav{left:.4rem;right:.4rem;top:calc(100% + .3rem);width:auto;
-      grid-template-columns:1fr;gap:.1rem;padding:.45rem}
+      grid-template-columns:1fr;gap:.1rem;padding:.45rem;background:#081624}
     .entete .menu-d nav a{display:flex;align-items:center;min-height:48px;
       padding:.6rem .8rem;font-size:1rem;line-height:1.25}
     .entete .menu-d nav a.legal{min-height:42px;font-size:.9rem;padding:.5rem .8rem}
