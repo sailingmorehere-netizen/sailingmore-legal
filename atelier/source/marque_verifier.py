@@ -13,6 +13,10 @@ for p in marque_fichier.images_a_nous():
         if p.suffix.lower() == ".png":
             ok = "Copyright" in im.text and "Credit" in im.text
             detail = im.text.get("Credit", "")
+        elif p.suffix.lower() == ".webp":
+            ex = im.getexif()
+            ok = bool(ex.get(315)) and bool(ex.get(33432))
+            detail = ex.get(315, "")
         else:
             ex = im.getexif()
             ip = IptcImagePlugin.getiptcinfo(im) or {}

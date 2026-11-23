@@ -37,7 +37,8 @@ JSON = Path(__file__).resolve().parent / "regles.json"
 TXT = ICI / "regles/rrs-2025-2028.txt"
 PDF = ICI / "regles/RRS-2025-2028.pdf"
 SITE = ICI / "projets/sailingmore/site"
-LANGUES = ["fr", "en", "it", "es", "pt", "de"]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from site_blocks import LANGUES  # noqa: E402  (une seule liste pour toutes les pages)
 APPENDICES = list("ABCDEFGHJMNPRST")  # vérifié dans le PDF : ni I, ni K, ni L, ni O, ni Q
 DEUX_EXEMPLES = {str(n) for n in range(10, 20)} | {"31", "42", "44", "61"}
 MIN_MOTS_RESUME = 25
@@ -313,7 +314,7 @@ JS = r"""
     var force = stocke();
     if(force !== 'auto' && UI[force]) return force;
     var pref = (navigator.languages || [navigator.language || 'en']).map(function(x){return String(x).toLowerCase();});
-    for(var i=0;i<pref.length;i++){ var b = pref[i].slice(0,2); if(UI[b]) return b; }
+    for(var i=0;i<pref.length;i++){ var b = pref[i].slice(0,2); if(b === 'br') return 'fr'; if(UI[b]) return b; }
     return 'en';
   }
   var lang = choisir();
@@ -930,9 +931,8 @@ def page_regles(d: dict | None = None) -> str:
         "<title>Règles de course à la voile — Sailing More</title>"
         '<link rel="canonical" href="https://sailingmore.fr/regles-de-course.html">'
         + _ld_regles(d) +
-        '<meta name="description" content="Les règles de course à la voile (RRS 2025-2028) : numéro, '
-        'intitulé, résumé et exemple concret pour chaque règle, avec recherche et filtres, en français, '
-        'anglais, italien, espagnol, portugais et allemand.">'
+        '<meta name="description" content="Les règles de course à la voile (RRS 2025-2028) : résumé et '
+        'exemple pour chaque règle, avec recherche et filtres, en six langues.">'
         + __import__("jsonld").social(
             "regles-de-course.html", "Règles de course à la voile — Sailing More",
             f"Les règles de course à la voile (RRS {ed['libelle']}) : numéro, intitulé, résumé et exemple "
@@ -940,7 +940,7 @@ def page_regles(d: dict | None = None) -> str:
         "<style>" + site_blocks.ENTETE_CSS + CSS + "</style>"
         "<noscript><style>.recherche{display:none}</style></noscript></head><body>"
         + site_blocks.entete_site("regles-de-course.html", LANGUES) + SPRITE +
-        '<div class="page">'
+        '<main class="page">'
         '<h1 data-t="titre">' + ui["titre"] + "</h1>"
         '<p class="chapo" data-t="chapo">' + ui["chapo"] + "</p>"
         '<div class="panneau">'
@@ -963,7 +963,7 @@ def page_regles(d: dict | None = None) -> str:
         f'<a href="{e(ed["pdf"])}" rel="noopener" data-t="pdf">{e(ui["pdf"])}</a><br>'
         f'<span data-t="edition">{e(ui["edition"])}</span> {e(ed["libelle"])} · '
         f'<span data-t="corr">{e(ui["corr"])}</span> {e(ed["corrections"])}</p>'
-        "</div>"
+        "</main>"
         '<script type="application/json" id="donnees-regles">' + brut + "</script>"
         "<script>" + JS + "</script>"
         "</body></html>\n"

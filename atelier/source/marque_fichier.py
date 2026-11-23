@@ -108,6 +108,34 @@ def _png(data: bytes) -> bytes:
     return b"".join(sortie)
 
 
+def _webp(data: bytes) -> bytes:
+    """Insère un chunk EXIF dans le conteneur RIFF, sans ré-encoder l'image (aucune perte)."""
+    import io
+    from PIL import Image
+    if data[:4] != b"RIFF" or data[8:12] != b"WEBP":
+        raise ValueError("pas un WebP")
+    with Image.open(io.BytesIO(data)) as im:
+        w, h = im.size
+        alpha = "A" in im.getbands()
+    i, chunks = 12, []
+    while i + 8 <= len(data):
+        typ = data[i:i + 4]
+        n = struct.unpack("<I", data[i + 4:i + 8])[0]
+        chunks.append((typ, data[i + 8:i + 8 + n]))
+        i += 8 + n + (n & 1)
+    chunks = [c for c in chunks if c[0] != b"EXIF"]
+    if chunks and chunks[0][0] == b"VP8X":
+        fl = bytearray(chunks[0][1])
+        fl[0] |= 0x08
+        chunks[0] = (b"VP8X", bytes(fl))
+    else:
+        fl = 0x08 | (0x10 if alpha else 0)
+        chunks.insert(0, (b"VP8X", bytes([fl, 0, 0, 0]) + (w - 1).to_bytes(3, "little") + (h - 1).to_bytes(3, "little")))
+    chunks.append((b"EXIF", _exif_tiff()))
+    corps = b"".join(t + struct.pack("<I", len(c)) + c + (b"\x00" if len(c) & 1 else b"") for t, c in chunks)
+    return b"RIFF" + struct.pack("<I", 4 + len(corps)) + b"WEBP" + corps
+
+
 def marquer(chemin) -> bool:
     p = Path(chemin)
     data = p.read_bytes()
@@ -116,6 +144,8 @@ def marquer(chemin) -> bool:
         neuf = _jpeg(data)
     elif suf == ".png":
         neuf = _png(data)
+    elif suf == ".webp":
+        neuf = _webp(data)
     else:
         return False
     if neuf == data:

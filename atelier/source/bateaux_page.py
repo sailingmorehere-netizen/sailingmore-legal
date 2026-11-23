@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Construit `bateaux.html` : la nomenclature illustrée de dix bateaux, avec filtre, deux niveaux et renvoi au lexique.
+"""Construit `bateaux.html` : la nomenclature illustrée de neuf bateaux, avec filtre, deux niveaux et renvoi au lexique.
 
 Sources uniques : `bateaux_dessins.py` / `bateaux_dessins2.py` (formes et pièces), `bateaux_mots.py` (44 mots
 ajoutés au lexique), `projets/sailingmore/lexique.json` (les noms dans six langues : l'étiquette se traduit
@@ -8,8 +8,8 @@ comme le reste du site, rien n'est écrit en double dans le SVG). Rien n'est éc
 Sorties :
   · site/bateaux.html          la page (SVG en ligne, étiquettes = liens vers lexique.html#ancre, nouvel onglet) ;
   · site/bateaux.json          la correspondance mot → ancres de la page, lue par `lexique_page.py` ;
-  · site/sitemap.xml           la page et ses dix images (image:loc, image:title, image:caption) ;
-  · projets/sailingmore/images-src/bateaux/*.svg   les dix sources des WebP ;
+  · site/sitemap.xml           la page et ses neuf images (image:loc, image:title, image:caption) ;
+  · projets/sailingmore/images-src/bateaux/*.svg   les neuf sources des WebP ;
   · bateaux-images.json (racine) la liste que Hermes lit pour rendre les WebP.
 
     python3 scripts/bateaux_page.py --lexique   # range les mots manquants dans lexique.json (idempotent)
@@ -39,14 +39,14 @@ LEXIQUE = PROJET / "lexique.json"
 SRC_IMG = PROJET / "images-src" / "bateaux"
 MANIFESTE = RACINE / "bateaux-images.json"
 URL = "https://sailingmore.fr"
-LANGUES = ["fr", "en", "it", "es", "pt", "de"]
+from site_blocks import LANGUES  # noqa: E402  (une seule liste pour toutes les pages)
 BATEAUX = BATEAUX_1 + BATEAUX_2
 
 W = 480            # largeur du repère local ; le dessin est posé à (260, 40) dans un cadre de 1000
 DX, DY = 260, 40
 GAP = 30           # écart minimal entre deux étiquettes (police 16)
 OBST = {"c", "s", "m", "o", "h"}   # formes pleines : un trait de repère ne les traverse pas
-VEDETTE = {"surprise": "quille", "x35": "quille", "hobie16": "spinnaker", "laser": "derive-mobile", "49er": "aile-de-rappel",
+VEDETTE = {"x35": "quille", "hobie16": "spinnaker", "laser": "derive-mobile", "49er": "aile-de-rappel",
            "iqfoil": "foil", "kite": "aile-de-kite", "wing": "aile-de-wing", "imoca": "foil", "ultim": "foil"}
 
 # Seconds noms : uniquement un nom ATTESTÉ encore employé (Nicolas, 22/11/2026).
@@ -108,7 +108,6 @@ UI = {
            "m": "m", "sch": "Skizze"},
 }
 NOMS = {
-        "surprise": ["Surprise", "Surprise 25", "Surprise 25", "Surprise 25", "Surprise 25", "Surprise 25"],
     "x35": ["Voilier Habitable X35", "X35 cruiser-racer", "Barca da crociera X35", "Velero de crucero X35", "Veleiro de cruzeiro X35", "Fahrtenyacht X35"],
     "hobie16": ["Catamaran Hobie 16 avec spi", "Hobie 16 catamaran with spinnaker", "Catamarano Hobie 16 con spi", "Catamarán Hobie 16 con spi", "Catamarã Hobie 16 com spi", "Katamaran Hobie 16 mit Spi"],
     "laser": ["Dériveur Laser", "Laser dinghy", "Deriva Laser", "Deriva Laser", "Dinghy Laser", "Jolle Laser"],
@@ -119,7 +118,7 @@ NOMS = {
     "imoca": ["IMOCA", "IMOCA", "IMOCA", "IMOCA", "IMOCA", "IMOCA"],
     "ultim": ["Ultim", "Ultim", "Ultim", "Ultim", "Ultim", "Ultim"],
 }
-COURT = {"surprise": "Surprise", "x35": "X35", "hobie16": "Hobie 16", "laser": "Laser", "49er": "49er", "iqfoil": "iQFOiL",
+COURT = {"x35": "X35", "hobie16": "Hobie 16", "laser": "Laser", "49er": "49er", "iqfoil": "iQFOiL",
          "kite": "Formula Kite", "wing": "Wing", "imoca": "IMOCA", "ultim": "Ultim"}
 CREW = {
     "1": ["1 personne", "1 person", "1 persona", "1 persona", "1 pessoa", "1 Person"],
@@ -685,7 +684,7 @@ JS = r"""
 
   function stocke(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function range(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
-  function auto(){ var n = (navigator.language || 'fr').slice(0,2); return L.indexOf(n) >= 0 ? n : 'en'; }
+  function auto(){ var n = (navigator.language || 'fr').slice(0,2); if(n === 'br') return 'fr'; return L.indexOf(n) >= 0 ? n : 'en'; }
   function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function idx(){ return L.indexOf(etat.lang); }
   function u(k){ return UI[etat.lang][k]; }
@@ -949,7 +948,7 @@ def page(mots, mises) -> str:
     brut = json.dumps(donnees, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     corps = "".join(_section(b, m, mots) for b, m in zip(BATEAUX, mises))
     ui = UI["fr"]
-    desc = ("Nomenclature illustrée de dix bateaux de voile — Surprise 25, voilier habitable X35, Hobie 16, Laser, 49er, planche iQFOiL, "
+    desc = ("Nomenclature illustrée de neuf bateaux de voile — voilier habitable X35, Hobie 16, Laser, 49er, planche iQFOiL, "
             "Formula Kite, wingfoil, IMOCA, Ultim : chaque pièce nommée et reliée à sa définition du lexique.")
     og = f"{URL}/images/bateaux/{_nom_fichier(BATEAUX[0])}"
     filtres = "".join(f'<button type="button" class="puce" data-cat="{c}" aria-pressed="{"true" if c == "tous" else "false"}">{ui[c]}</button>' for c in CATS)

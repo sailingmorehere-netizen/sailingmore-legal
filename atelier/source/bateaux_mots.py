@@ -9,7 +9,10 @@ Traductions écrites de mémoire par Claude (nuit du 22/11/2026) : à faire reli
 """
 from __future__ import annotations
 
-LANGUES = ["fr", "en", "it", "es", "pt", "de"]
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+from site_blocks import LANGUES  # noqa: E402  (une seule liste pour toutes les pages)
 
 # clé : (mots[6], définitions[6])
 T: dict[str, tuple[list[str], list[str]]] = {

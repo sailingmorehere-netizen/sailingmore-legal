@@ -48,7 +48,7 @@ ROUGE = "#e23a3e"
 AMBRE = "#e8b04b"
 TOILE = "#f2f7fb"
 
-LANGUES = ["fr", "en", "it", "es", "pt", "de"]
+LANGUES = site_blocks.LANGUES      # une seule liste, celle de site_blocks (le breton s'y ajoute au sélecteur)
 
 TEXTES = {
     "fr": {
@@ -938,6 +938,7 @@ function choisir() {{
   const pref = (navigator.languages || [navigator.language || "en"]).map(x => String(x).toLowerCase());
   for (const p of pref) {{
     const base = p.slice(0, 2);
+    if (base === "br") return "fr";   // le breton n'a pas de bloc : texte français, encart posé par la barre
     if (Object.keys(T).includes(base)) return base;
   }}
   return "en";
@@ -1812,7 +1813,7 @@ def _script_langue_annonceurs() -> str:
             "function choisir(){var f=null;try{f=localStorage.getItem('sm-langue')}catch(e){}"
             "if(f&&f!=='auto'&&T[f])return f;"
             "var p=(navigator.languages||[navigator.language||'en']).map(function(x){return String(x).toLowerCase()});"
-            "for(var i=0;i<p.length;i++){var b=p[i].slice(0,2);if(T[b])return b}return 'en'}"
+            "for(var i=0;i<p.length;i++){var b=p[i].slice(0,2);if(b==='br')return 'fr';if(T[b])return b}return 'en'}"
             "var l=choisir();if(l==='fr')return;var d=T[l];document.documentElement.lang=l;"
             "document.querySelectorAll('[data-t]').forEach(function(el){var v=d[el.dataset.t];if(v)el.textContent=v});"
             "if(d.kit_titre)document.title=d.kit_titre+' \\u2014 Sailing More';"

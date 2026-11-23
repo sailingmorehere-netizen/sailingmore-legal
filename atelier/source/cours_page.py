@@ -15,6 +15,7 @@ intitulés repris de regles.json ; COLREG 1972, intitulés du texte anglais offi
 from __future__ import annotations
 
 import html as _html
+import json
 import os
 import re
 import sys
@@ -24,7 +25,7 @@ RACINE = Path(os.environ.get("SITE_ROOT", str(Path(__file__).resolve().parent.pa
 SITE = RACINE / "projets" / "sailingmore" / "site"
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-LANGUES = ["fr", "en", "it", "es", "pt", "de"]
+from site_blocks import LANGUES  # noqa: E402  (une seule liste pour toutes les pages)
 URL_RRS = "https://sailing.org/inside-world-sailing/rules-regulations/racingrules/"
 
 # ── Le plan : l'ordre est la progression. Chaque chapitre ne suppose que les précédents. ──────────────
@@ -1063,8 +1064,8 @@ a.haut-lien{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:v
 
 JS = """
 (function(){
-  var L=["fr","en","it","es","pt","de"];
-  function auto(){var n=(navigator.language||"fr").slice(0,2);return L.indexOf(n)>=0?n:"en"}
+  var L=__LANGUES__;
+  function auto(){var n=(navigator.language||"fr").slice(0,2);if(n==="br")return "fr";return L.indexOf(n)>=0?n:"en"}
   var s=null,a=true;
   try{s=localStorage.getItem("sm-langue")}catch(e){}
   if(L.indexOf(s)>=0){a=false}else{s=auto()}
@@ -1230,7 +1231,7 @@ def page_cours() -> str:
             f'<meta name="description" content="{_html.escape(desc)}">'
             f'<style>{site_blocks.ENTETE_CSS}{CSS}{_css_schemas()}</style></head><body>\n'
             f'{site_blocks.entete_site("cours.html", LANGUES)}{regles_page.SPRITE}\n<div class="page">\n{corps}\n</div>\n'
-            f'<script>{JS}</script>\n</body></html>\n')
+            f'<script>{JS.replace("__LANGUES__", json.dumps(LANGUES))}</script>\n</body></html>\n')
 
 
 def ecrire_page(dossier: Path = SITE) -> str:

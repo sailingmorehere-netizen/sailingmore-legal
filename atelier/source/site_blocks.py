@@ -537,7 +537,32 @@ _MENU_JS = """<script>
 
 
 NOMS_LANGUES = {"fr": "Français", "en": "English", "it": "Italiano", "es": "Español",
-                "pt": "Português", "de": "Deutsch", "nl": "Nederlands"}
+                "pt": "Português", "de": "Deutsch", "nl": "Nederlands", "bzh": "Brezhoneg"}
+
+# UNE SEULE liste des langues du site (23/11/2026) : les pages l'importent, aucune ne la recopie.
+# LANGUES = les six langues dont les pages ont un texte complet. BZH s'y ajoute dans le sélecteur
+# (sept entrées partout) mais n'a aucun bloc de texte : tant qu'un brittophone n'a pas relu une page,
+# elle s'affiche en français avec un encart (jamais de breton produit par un modèle). La valeur
+# interne et `?lang=bzh` sont « bzh » ; la balise `lang` et le `hreflang` valent « br » (BCP-47).
+LANGUES = ["fr", "en", "it", "es", "pt", "de"]
+LANGUE_BZH = "bzh"
+LANGUES_INTERFACE = LANGUES + [LANGUE_BZH]
+BALISE_LANG = {"bzh": "br"}
+# Pages dont le breton a été écrit ET relu : seules elles déclarent `hreflang="br"` et se passent de
+# l'encart. Vide aujourd'hui : déclarer une traduction qui est du français fabriquerait un doublon.
+PAGES_BZH: set[str] = set()
+
+
+def hreflang_bzh(page: str, url_base: str = "https://sailingmore.fr/") -> str:
+    """La ligne `<link rel="alternate" hreflang="br">` d'une page, ou rien si le breton n'y existe pas."""
+    if page not in PAGES_BZH:
+        return ""
+    return f'<link rel="alternate" hreflang="br" href="{url_base}{page}?lang=bzh">'
+
+
+def interface_de(ui: dict, langue: str, cle: str):
+    """Texte d'interface d'une langue, avec repli clé par clé sur le français (bloc partiel ≠ `undefined`)."""
+    return ui.get(langue, {}).get(cle) or ui["fr"][cle]
 
 # Le sélecteur de langue : un menu déroulant, plus une rangée de pastilles (Nicolas, 23/11/2026 :
 # « il faut que les langues soient en menu déroulant »). Six langues plus « Auto » tenaient sur une
@@ -577,30 +602,85 @@ _LANGUE_JS = """<script>
   caler(); addEventListener("load", caler); addEventListener("resize", caler); setTimeout(caler, 300);
   var sel = document.getElementById("langue-sel"), zone = document.getElementById("langues");
   if(!sel || !zone) return;
+  /* Le breton (valeur « bzh ») n'a pas de bloc de texte dans les pages : choisi, il laisse la page en
+     français (clé `sm-langue` = fr, que les pages savent lire) et pose un drapeau `sm-bzh`. Ce script
+     ajoute alors l'encart, garde `lang="br"` (le code IANA ; « bzh » n'y est pas) et la pastille BZH.
+     `?lang=xx` choisit la langue avant que les scripts des pages ne la lisent. */
+  var SIX = ["fr","en","it","es","pt","de"];
+  function st(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function ec(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
+  try{
+    var q = new URLSearchParams(location.search).get("lang");
+    if(q === "bzh"){ ec("sm-bzh", "1"); ec("sm-langue", "fr"); }
+    else if(q && SIX.indexOf(q) >= 0){ ec("sm-bzh", null); ec("sm-langue", q); }
+  }catch(e){}
+  function bzh(){
+    var f = st("sm-langue");
+    if(f && f !== "auto") return st("sm-bzh") === "1";
+    var p = (navigator.languages || [navigator.language || "en"]);   /* « br » du navigateur = bzh */
+    for(var i = 0; i < p.length; i++){
+      var b = String(p[i]).toLowerCase().slice(0, 2);
+      if(b === "br") return true;
+      if(SIX.indexOf(b) >= 0) return false;
+    }
+    return false;
+  }
+  function encart(){
+    var e = document.getElementById("encart-bzh"), actif = bzh();
+    if(document.querySelector('meta[name="sm-bzh"]')) actif = false;      /* page dont le breton existe */
+    if(!actif){ if(e) e.remove(); return; }
+    if(e) return;
+    var h = document.querySelector(".entete");
+    if(!h) return;
+    e = document.createElement("p");
+    e.id = "encart-bzh"; e.setAttribute("role", "note");
+    e.style.cssText = "margin:0;padding:.6rem .9rem;background:#0e2338;color:#e8eef4;font-size:.9rem;" +
+      "border-bottom:1px solid rgba(255,255,255,.16)";
+    e.appendChild(document.createTextNode("Cette page n’est pas encore traduite en breton. Écrivez-nous à "));
+    var a = document.createElement("a");
+    a.className = "courriel"; a.style.color = "inherit";
+    a.setAttribute("data-a", "hello.sailingmore"); a.setAttribute("data-b", "gmail.com");
+    var ad = "hello.sailingmore" + "@" + "gmail.com";
+    a.href = "mailto:" + ad; a.textContent = ad;
+    e.appendChild(a);
+    e.appendChild(document.createTextNode(" pour proposer la traduction."));
+    h.parentNode.insertBefore(e, h.nextSibling);
+  }
+  function balise(){
+    if(bzh() && document.documentElement.lang !== "br") document.documentElement.lang = "br";
+  }
   /* Le code affiché sur la pastille : la langue choisie, ou celle que la page affiche en mode auto. */
   var code = document.querySelector(".lg .code");
   function etiq(v){
     if(!code) return;
-    if(v && v !== "auto"){ code.textContent = v.toUpperCase(); return; }
+    if(bzh()){ code.textContent = "BZH"; return; }
+    if(v && v !== "auto" && v !== "bzh"){ code.textContent = v.toUpperCase(); return; }
     var l = (document.documentElement.lang || "fr").slice(0, 2).toUpperCase();
     code.textContent = l || "FR";
   }
-  function lire(){ try{ return localStorage.getItem("sm-langue") || "auto"; }catch(e){ return "auto"; } }
+  function lire(){
+    if(st("sm-bzh") === "1" && st("sm-langue") !== "auto" && st("sm-langue")) return "bzh";
+    return st("sm-langue") || "auto";
+  }
   function poser(){
+    balise(); encart();
     var v = lire(), o = sel.options;
     for(var i = 0; i < o.length; i++){ if(o[i].value === v){ sel.value = v; etiq(v); return; } }
     sel.value = "auto"; etiq("auto");
   }
   sel.addEventListener("change", function(){
     var v = sel.value, bs = zone.querySelectorAll("button[data-lang]");
-    etiq(v);
+    var cible = (v === "bzh") ? "fr" : v;             /* le breton s'affiche sur le texte français */
+    ec("sm-bzh", v === "bzh" ? "1" : null);
     for(var i = 0; i < bs.length; i++){
-      if(bs[i].getAttribute("data-lang") === v){ bs[i].click(); return; }
+      if(bs[i].getAttribute("data-lang") === cible){ bs[i].click(); break; }
     }
+    ec("sm-bzh", v === "bzh" ? "1" : null);
+    balise(); encart(); etiq(v);
   });
   /* la page change de langue sans passer par le menu (auto, bouton, retour arrière) */
   if(window.MutationObserver){
-    new MutationObserver(function(){ etiq(sel.value); })
+    new MutationObserver(function(){ balise(); encart(); etiq(sel.value); })
       .observe(document.documentElement, {attributes: true, attributeFilter: ["lang"]});
   }
   poser();
@@ -620,10 +700,14 @@ def selecteur_langue(langues: list[str], auto: bool = True) -> str:
     """
     if not langues and not auto:
         return ""          # une page qui n'a qu'un seul jeu de textes ne montre pas de menu vide
+    # Sept entrées partout : le breton s'ajoute à la liste que la page donne (une seule source, LANGUES).
+    # Il n'a pas de bouton caché : les pages n'ont pas de bloc `bzh`, le script du sélecteur le traite.
+    options = list(langues) + ([LANGUE_BZH] if langues and LANGUE_BZH not in langues else [])
     opts = ['<option value="auto">Auto (langue du navigateur)</option>'] if auto else []
-    opts += [f'<option value="{l}">{l.upper()} · {NOMS_LANGUES.get(l, l.upper())}</option>' for l in langues]
+    opts += [f'<option value="{l}">{l.upper()} · {NOMS_LANGUES.get(l, l.upper())}</option>' for l in options]
     boutons = ('<button data-lang="auto" aria-pressed="true">Auto</button>' if auto else "") + "".join(
-        f'<button data-lang="{l}" aria-pressed="false">{l.upper()}</button>' for l in langues)
+        f'<button data-lang="{l}" aria-pressed="false">{l.upper()}</button>'
+        for l in langues if l != LANGUE_BZH)
     depart = (langues[0].upper() if langues else "FR")
     return ('<div class="lg"><span hidden>Langue</span>'
             '<span class="globe" aria-hidden="true"></span>'
@@ -1269,7 +1353,7 @@ def html_carte(items: list[dict] | None = None) -> str:
             f'<i style="width:{max(1.8, x["r"]*2):.1f}px;height:{max(1.8, x["r"]*2):.1f}px"></i></button>')
     return ('<section class="monde"><h2 data-t="carte_titre">Nos concentrations de voileux</h2>'
             + CARTE_CSS +
-            '<div class="planisphere"><img src="carte-monde.png" alt="Carte du monde">'
+            '<div class="planisphere"><img src="carte-monde.png" alt="Carte du monde des régates et stages de voile référencés par SailingMore.fr">'
             + "".join(points)
             + marques_bourses()
             + '<div class="etiquette-v" hidden aria-live="polite">'

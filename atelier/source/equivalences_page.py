@@ -46,7 +46,8 @@ PAGE = "equivalences.html"
 APERCU = "equivalences-apercu.html"
 CHAMPS = ("de", "vers", "niveau_source", "niveau_cible", "prerequis", "passerelle", "source_url",
           "valide_par_nicolas")
-LANGUES = ("fr", "en", "it", "es", "pt", "de")
+from site_blocks import LANGUES as _LANGUES_SITE  # noqa: E402  (une seule liste pour toutes les pages)
+LANGUES = tuple(_LANGUES_SITE)
 
 SQUELETTE = {
     "maj": "",
@@ -162,7 +163,7 @@ JS = r"""
 (function(){
 var D=JSON.parse(document.getElementById('eq-donnees').textContent),L='fr';
 function choisir(){var v='auto';try{v=localStorage.getItem('sm-langue')||'auto'}catch(e){}
-  if(v==='auto'){v=(navigator.language||'fr').slice(0,2)}return D.ui[v]?v:'en'}
+  if(v==='auto'){v=(navigator.language||'fr').slice(0,2);if(v==='br')v='fr'}return D.ui[v]?v:'en'}
 function t(k){return (D.ui[L]||D.ui.en)[k]||D.ui.fr[k]||k}
 function tx(v){if(v&&typeof v==='object'){return v[L]||v.en||v.fr||''}return v||''}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -282,7 +283,7 @@ def construire(d: dict, apercu: bool = False) -> str:
             "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
             f"<title>{H.escape(fr['titre'])} — Sailing More</title>"
             f"<meta name=\"description\" content=\"{H.escape(fr['chapo'], quote=True)}\">")
-    if apercu or not lignes:
+    if apercu:
         tete += "<meta name=\"robots\" content=\"noindex,nofollow\">"
     else:
         tete += (f"<link rel=\"canonical\" href=\"{URL}/{PAGE}\">"
@@ -313,21 +314,16 @@ def construire(d: dict, apercu: bool = False) -> str:
     return tete + corps
 
 
-def maj_sitemap(dossier: Path, publiee: bool = True) -> bool:
-    """Ajoute (ou rafraîchit) l'entrée de la page dans sitemap.xml. Idempotent. L'aperçu n'y est jamais.
-
-    `publiee = False` **retire** l'entrée : tant qu'aucune correspondance n'est validée, la page est
-    noindex et n'a rien à faire dans le sitemap (23/11/2026).
-    """
+def maj_sitemap(dossier: Path) -> bool:
+    """Ajoute (ou rafraîchit) l'entrée de la page dans sitemap.xml. Idempotent. L'aperçu n'y est jamais."""
     f = dossier / "sitemap.xml"
     if not f.exists():
         return False
     x = f.read_text(encoding="utf-8")
     x = re.sub(r"\s*<url><loc>https://sailingmore\.fr/equivalences\.html</loc>.*?</url>", "", x, flags=re.S)
-    if publiee:
-        ligne = (f"\n  <url><loc>{URL}/{PAGE}</loc><lastmod>{date.today().isoformat()}</lastmod>"
-                 "<changefreq>monthly</changefreq><priority>0.7</priority></url>")
-        x = x.replace("</urlset>", ligne + "\n</urlset>", 1)
+    ligne = (f"\n  <url><loc>{URL}/{PAGE}</loc><lastmod>{date.today().isoformat()}</lastmod>"
+             "<changefreq>monthly</changefreq><priority>0.7</priority></url>")
+    x = x.replace("</urlset>", ligne + "\n</urlset>", 1)
     f.write_text(x, encoding="utf-8")
     return True
 
@@ -339,12 +335,11 @@ def ecrire_page(dossier: Path = SITE) -> str:
     dossier.mkdir(parents=True, exist_ok=True)
     (dossier / PAGE).write_text(construire(d), encoding="utf-8")
     (dossier / APERCU).write_text(construire(d, apercu=True), encoding="utf-8")
+    sm = maj_sitemap(dossier)
     toutes = [x for x in d.get("correspondances") or [] if isinstance(x, dict)]
     pub = sum(1 for x in toutes if publiable(x))
-    sm = maj_sitemap(dossier, publiee=pub > 0)
     return (f"{pub} correspondance(s) publiée(s) sur {len(toutes)} · {len(toutes) - pub} à vérifier"
-            f" · {len(pb)} problème(s) de forme · sitemap {'à jour' if sm else 'absent'}"
-            + ("" if pub else " · page noindex, hors sitemap"))
+            f" · {len(pb)} problème(s) de forme · sitemap {'à jour' if sm else 'absent'}")
 
 
 def main() -> int:

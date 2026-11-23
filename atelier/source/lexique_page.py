@@ -27,7 +27,9 @@ from pathlib import Path
 ICI = Path(os.environ.get("SAILINGMORE_RACINE", "/opt/data"))
 JSON = ICI / "projets/sailingmore/lexique.json"
 SITE = ICI / "projets/sailingmore/site"
-LANGUES = ["fr", "en", "it", "es", "pt", "de"]
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+from site_blocks import LANGUES  # noqa: E402  (une seule liste pour toutes les pages)
 
 # Le texte de la page elle-même (titre, recherche, compteur…), dans les six langues.
 UI = {
@@ -159,7 +161,7 @@ JS = r"""
     var force = stocke();
     if(force !== 'auto' && UI[force]) return force;
     var pref = (navigator.languages || [navigator.language || 'en']).map(function(x){return String(x).toLowerCase();});
-    for(var i=0;i<pref.length;i++){ var b = pref[i].slice(0,2); if(UI[b]) return b; }
+    for(var i=0;i<pref.length;i++){ var b = pref[i].slice(0,2); if(b === 'br') return 'fr'; if(UI[b]) return b; }
     return 'en';
   }
   var lang = choisir();
@@ -323,16 +325,15 @@ def page_lexique(d: dict | None = None) -> str:
         "<title>Lexique de voile — Sailing More</title>"
         '<link rel="canonical" href="https://sailingmore.fr/lexique.html">'
         + _ld_lexique(themes) +
-        '<meta name="description" content="Le lexique de voile : les mots du bateau, du gréement et '
-        'des voiles, expliqués en une phrase et traduits en français, anglais, italien, espagnol, '
-        'portugais et allemand.">'
+        '<meta name="description" content="Le lexique de voile : les mots du bateau, de la manœuvre, '
+        'des allures, de la météo et de la course, définis en une phrase, en six langues.">'
         + __import__("jsonld").social(
             "lexique.html", "Lexique de voile — Sailing More",
             "Le lexique de voile : les mots du bateau, du gréement et des voiles, expliqués en une phrase "
             "et traduits en six langues.") +
         "<style>" + CSS + "</style></head><body>"
         + _sb.barre_autonome("lexique.html", LANGUES) +
-        '<div class="page">'
+        '<main class="page">'
         '<h1 data-t="titre">' + ui["titre"] + "</h1>"
         '<p class="chapo" data-t="chapo">' + ui["chapo"] + "</p>"
         '<div class="panneau">'
@@ -346,7 +347,7 @@ def page_lexique(d: dict | None = None) -> str:
         f'<div class="compte" id="compte-termes" role="status" aria-live="polite">'
         f'<b>{total}</b> {ui["n"] if total > 1 else ui["un"]}</div>'
         '<div id="liste-termes">' + liste_statique(d) + "</div>"
-        "</div></div>"
+        "</div></main>"
         '<script type="application/json" id="donnees-lexique">' + brut + "</script>"
         "<script>" + JS + "</script>"
         "</body></html>\n"
