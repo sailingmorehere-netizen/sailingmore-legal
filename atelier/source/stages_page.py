@@ -44,6 +44,7 @@ UI = {
         "tous": "Toutes", "tout_age": "Tout âge", "avenir": "À venir", "mois": "Ce mois-ci",
         "chercher": "Chercher (école, stage, lieu)", "dates_ecole": "dates chez l'école",
         "compte": "{n} offres · {e} écoles", "aucune": "Aucune offre ne répond à ces filtres.",
+        "filtrer": "Filtrer",
         "vide": "Aucune offre n'est publiée pour le moment : le relevé se fait sur les fiches des écoles.",
         "du": "du", "au": "au", "voir": "Voir l'offre →", "jours": "jours", "prix_vide": "prix non publié", "photo": "photo :", "tri": "Trier", "proche": "Au plus près", "prix_croissant": "Prix croissant", "date_proche": "Date", "position_refusee": "Position refusée · pays proposé :", "geoloc": "Autoriser ma position",
         "type": "Type", "pratique": "Pratique", "theorie": "Théorie",
@@ -57,6 +58,7 @@ UI = {
         "tous": "All", "tout_age": "Any age", "avenir": "Upcoming", "mois": "This month",
         "chercher": "Search (school, course, place)", "dates_ecole": "dates at the school",
         "compte": "{n} offers · {e} schools", "aucune": "No offer matches these filters.",
+        "filtrer": "Filters",
         "vide": "No offer is published yet: the list is read from the schools' own pages.",
         "du": "from", "au": "to", "voir": "See the offer →", "jours": "days", "prix_vide": "price not published", "photo": "photo:", "tri": "Sort", "proche": "Nearest first", "prix_croissant": "Lowest price", "date_proche": "Date", "position_refusee": "Location refused · country guessed:", "geoloc": "Use my location",
         "type": "Type", "pratique": "Practical", "theorie": "Theory",
@@ -70,6 +72,7 @@ UI = {
         "tous": "Tutti", "tout_age": "Ogni età", "avenir": "In arrivo", "mois": "Questo mese",
         "chercher": "Cerca (scuola, corso, luogo)", "dates_ecole": "date presso la scuola",
         "compte": "{n} offerte · {e} scuole", "aucune": "Nessuna offerta con questi filtri.",
+        "filtrer": "Filtra",
         "vide": "Nessuna offerta è ancora pubblicata: l'elenco si legge dalle pagine delle scuole.",
         "du": "dal", "au": "al", "voir": "Vedi l'offerta →", "jours": "giorni", "prix_vide": "prezzo non pubblicato", "photo": "foto:",
         "tri": "Ordina", "proche": "Più vicini", "prix_croissant": "Prezzo crescente", "date_proche": "Data", "position_refusee": "Posizione negata · paese ipotizzato:", "geoloc": "Usa la mia posizione",
@@ -84,6 +87,7 @@ UI = {
         "tous": "Todos", "tout_age": "Cualquier edad", "avenir": "Próximos", "mois": "Este mes",
         "chercher": "Buscar (escuela, curso, lugar)", "dates_ecole": "fechas en la escuela",
         "compte": "{n} ofertas · {e} escuelas", "aucune": "Ninguna oferta con estos filtros.",
+        "filtrer": "Filtrar",
         "vide": "Todavía no hay ofertas publicadas: la lista se lee de las fichas de las escuelas.",
         "du": "del", "au": "al", "voir": "Ver la oferta →", "jours": "días", "prix_vide": "precio no publicado", "photo": "foto:",
         "tri": "Ordenar", "proche": "Más cercanos", "prix_croissant": "Precio ascendente", "date_proche": "Fecha", "position_refusee": "Ubicación rechazada · país supuesto:", "geoloc": "Usar mi ubicación",
@@ -98,6 +102,7 @@ UI = {
         "tous": "Todos", "tout_age": "Qualquer idade", "avenir": "Próximos", "mois": "Este mês",
         "chercher": "Procurar (escola, curso, local)", "dates_ecole": "datas na escola",
         "compte": "{n} ofertas · {e} escolas", "aucune": "Nenhuma oferta com estes filtros.",
+        "filtrer": "Filtrar",
         "vide": "Ainda não há ofertas publicadas: a lista é lida das páginas das escolas.",
         "du": "de", "au": "a", "voir": "Ver a oferta →", "jours": "dias", "prix_vide": "preço não publicado", "photo": "foto:",
         "tri": "Ordenar", "proche": "Mais próximos", "prix_croissant": "Preço crescente", "date_proche": "Data", "position_refusee": "Localização recusada · país suposto:", "geoloc": "Usar a minha localização",
@@ -112,6 +117,7 @@ UI = {
         "tous": "Alle", "tout_age": "Jedes Alter", "avenir": "Kommende", "mois": "Diesen Monat",
         "chercher": "Suchen (Schule, Kurs, Ort)", "dates_ecole": "Termine bei der Schule",
         "compte": "{n} Angebote · {e} Schulen", "aucune": "Kein Angebot mit diesen Filtern.",
+        "filtrer": "Filtern",
         "vide": "Noch kein Angebot veröffentlicht: die Liste wird von den Seiten der Schulen gelesen.",
         "du": "vom", "au": "bis", "voir": "Zum Angebot →", "jours": "Tage", "prix_vide": "Preis nicht veröffentlicht", "photo": "Foto:", "tri": "Sortieren", "proche": "Am nächsten", "prix_croissant": "Preis aufsteigend", "date_proche": "Datum", "position_refusee": "Standort abgelehnt · Land geschätzt:", "geoloc": "Meinen Standort verwenden",
         "type": "Art", "pratique": "Praxis", "theorie": "Theorie",
@@ -134,7 +140,19 @@ a{color:inherit}
 h1{font-size:clamp(1.6rem,4vw,2.4rem);margin:.2rem 0 .6rem;letter-spacing:-.02em}
 .chapo{color:var(--doux);max-width:44rem;margin:0 0 1.6rem}
 .retour{display:inline-block;color:var(--doux);text-decoration:none;font-size:.9rem;margin-bottom:.6rem}
+.rech{display:flex;align-items:flex-end;gap:.6rem;margin:.2rem 0 .8rem;flex-wrap:wrap}
+.rech .q{flex:1 1 16rem}
+.filtre-b{display:none;align-items:center;gap:.45rem;font:inherit;font-size:.86rem;cursor:pointer;
+  color:#eef3f7;background:var(--carte);border:1px solid var(--trait);border-radius:10px;padding:.7rem 1rem}
+.filtre-b b{font-size:.72rem;background:var(--rouge,#e23a3e);color:#fff;border-radius:999px;padding:.05rem .45rem}
+.filtre-b b:empty{display:none}
+.filtre-b[aria-expanded="true"]{border-color:var(--rouge,#e23a3e)}
 .filtres{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:.7rem;background:var(--carte);border:1px solid var(--trait);border-radius:14px;padding:.9rem;margin-bottom:1rem}
+@media (max-width:700px){
+  .filtres{display:none}
+  .filtres.ouvert{display:grid}
+  .filtre-b{display:inline-flex}
+}
 label{display:flex;flex-direction:column;gap:.25rem;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--doux)}
 select,input{background:#0b1e30;color:var(--encre);border:1px solid var(--trait);border-radius:9px;padding:.5rem .55rem;font:inherit;font-size:.92rem;min-width:0}
 input[type=search]{grid-column:span 2}
@@ -226,8 +244,12 @@ def _html(d: dict) -> str:
              "<div id=\"langues\"></div>"
              f"<h1 data-t=\"titre\">{H.escape(UI['fr']['titre'])}</h1>"
              f"<p class=\"chapo\" data-t=\"chapo\">{H.escape(UI['fr']['chapo'])}</p>"
-             "<section class=\"filtres\">"
-             "<label><span data-t=\"chercher\">Chercher</span><input id=\"f-q\" type=\"search\"></label>"
+             "<section class=\"rech\">"
+             "<label class=\"q\"><span data-t=\"chercher\">Chercher</span><input id=\"f-q\" type=\"search\"></label>"
+             "<button type=\"button\" class=\"filtre-b\" id=\"filtre-b\" aria-expanded=\"false\" "
+             "aria-controls=\"filtres\"><span data-t=\"filtrer\">Filtrer</span> <b id=\"filtre-n\"></b></button>"
+             "</section>"
+             "<section class=\"filtres\" id=\"filtres\">"
              "<label><span data-t=\"langue\">Langue</span><select id=\"f-langue\"></select></label>"
              "<label><span data-t=\"destination\">Destination</span><select id=\"f-pays\"></select></label>"
              "<label><span data-t=\"pays_ecole\">Pays de l'école</span><select id=\"f-pays-ecole\"></select></label>"
@@ -302,9 +324,12 @@ function remplir(){
   var qp=fp.value,ql=fl.value;
   function reste(lg,py){return D.offres.some(function(o){return (!lg||o.langue===lg)&&(!py||o.pays===py)})}
   if(!reste(ql,qp)){if(reste('',qp))fl.value='';else if(reste(ql,''))fp.value='';else{fl.value='';fp.value=''}}
+  /* Le choix de langue de la page en menu déroulant, comme la barre du site (Nicolas, 23/11/2026). */
+  var NOMS={fr:'Français',en:'English',de:'Deutsch',it:'Italiano',es:'Español',pt:'Português'};
   var l=document.getElementById('langues');
-  l.innerHTML=Object.keys(U).map(function(c){return '<button data-l="'+c+'" style="background:none;border:0;color:'+(c===L?'#5fd3c4':'#9db2c7')+';font:inherit;font-size:.8rem;cursor:pointer;padding:.1rem .25rem">'+c.toUpperCase()+'</button>'}).join('');
-  [].forEach.call(l.querySelectorAll('button'),function(b){b.onclick=function(){L=b.dataset.l;try{localStorage.setItem('lang',L)}catch(e){}remplir();dessiner()}});
+  l.innerHTML='<select id="lng-sel" aria-label="Langue de la page" style="background:transparent;color:inherit;font:inherit;font-size:.8rem;border:1px solid rgba(255,255,255,.34);border-radius:.4rem;padding:.5rem .6rem;min-height:38px;cursor:pointer">'
+    +Object.keys(U).map(function(c){return '<option value="'+c+'"'+(c===L?' selected':'')+'>'+(NOMS[c]||c.toUpperCase())+'</option>'}).join('')+'</select>';
+  l.querySelector('select').onchange=function(){L=this.value;try{localStorage.setItem('lang',L)}catch(e){}remplir();dessiner()};
 }
 /* Position du visiteur : le navigateur d'abord (il demande l'accord), l'adresse IP ensuite si elle
    est refusée ou indisponible. Aucune position n'est envoyée ni conservée : elle sert à trier. */
@@ -407,7 +432,35 @@ function dessiner(){
 ['f-q','f-langue','f-pays','f-pays-ecole','f-ecole','f-type','f-niveau','f-quand','f-prix','f-tri'].forEach(function(i){
   var e=document.getElementById(i);if(e){e.addEventListener('input',dessiner);e.addEventListener('change',dessiner)}});
 document.getElementById('f-tri').addEventListener('change',function(){garde('tri',this.value)});
-remplir();dessiner();poserPosition();
+
+/* Les filtres se replient sous un bouton sur téléphone, comme chez Les Glénans et les places de
+   marché (23/11/2026) : la recherche reste seule visible, le bouton dit combien de filtres sont
+   actifs, et le panneau s'ouvre au tap. Sur ordinateur la grille reste dépliée. */
+var fb = document.getElementById('filtre-b'), zoneF = document.getElementById('filtres');
+var DEFAUT = {};
+function majBadge(){
+  var n = 0;
+  Object.keys(DEFAUT).forEach(function(id){
+    var e = document.getElementById(id); if(!e) return;
+    if((e.value||'').trim() !== (DEFAUT[id]||'')) n++;
+  });
+  var b = document.getElementById('filtre-n');
+  if(b) b.textContent = n ? String(n) : '';
+}
+remplir();
+if(fb && zoneF){
+  fb.addEventListener('click', function(){
+    var ouvert = zoneF.classList.toggle('ouvert');
+    fb.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+  });
+  ['f-q','f-langue','f-pays','f-pays-ecole','f-ecole','f-type','f-niveau','f-quand','f-prix'].forEach(function(id){
+    var e = document.getElementById(id);
+    DEFAUT[id] = e ? e.value : '';
+    if(e) e.addEventListener('change', majBadge);
+  });
+  majBadge();
+}
+dessiner();poserPosition();
 """
 
 SITE = ICI / "projets/sailingmore/site"
