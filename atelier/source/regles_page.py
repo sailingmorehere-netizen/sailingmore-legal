@@ -874,6 +874,10 @@ def page_regles(d: dict | None = None) -> str:
         '<meta name="description" content="Les règles de course à la voile (RRS 2025-2028) : numéro, '
         'intitulé, résumé et exemple concret pour chaque règle, avec recherche et filtres, en français, '
         'anglais, italien, espagnol, portugais et allemand.">'
+        + __import__("jsonld").social(
+            "regles-de-course.html", "Règles de course à la voile — Sailing More",
+            f"Les règles de course à la voile (RRS {ed['libelle']}) : numéro, intitulé, résumé et exemple "
+            "concret pour chaque règle, avec recherche et filtres.") +
         "<style>" + site_blocks.ENTETE_CSS + CSS + "</style>"
         "<noscript><style>.recherche{display:none}</style></noscript></head><body>"
         + site_blocks.entete_site("regles-de-course.html", LANGUES) + SPRITE +

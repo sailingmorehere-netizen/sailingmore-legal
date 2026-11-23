@@ -19,11 +19,12 @@ from __future__ import annotations
 
 import html as _html
 import json
+import os
 import sys
 import unicodedata
 from pathlib import Path
 
-ICI = Path("/opt/data")
+ICI = Path(os.environ.get("SAILINGMORE_RACINE", "/opt/data"))
 JSON = ICI / "projets/sailingmore/lexique.json"
 SITE = ICI / "projets/sailingmore/site"
 LANGUES = ["fr", "en", "it", "es", "pt", "de"]
@@ -325,6 +326,10 @@ def page_lexique(d: dict | None = None) -> str:
         '<meta name="description" content="Le lexique de voile : les mots du bateau, du gréement et '
         'des voiles, expliqués en une phrase et traduits en français, anglais, italien, espagnol, '
         'portugais et allemand.">'
+        + __import__("jsonld").social(
+            "lexique.html", "Lexique de voile — Sailing More",
+            "Le lexique de voile : les mots du bateau, du gréement et des voiles, expliqués en une phrase "
+            "et traduits en six langues.") +
         "<style>" + CSS + "</style></head><body>"
         '<div class="page">'
         '<div class="haut"><a class="retour" href="index.html" data-t="retour">' + ui["retour"] + "</a>"

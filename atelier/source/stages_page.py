@@ -217,6 +217,10 @@ def _html(d: dict) -> str:
              f"{__import__('jsonld').page_simple('stages.html', UI['fr']['titre'])}"
              "<meta name=\"description\" content=\"Stages et cours de voile vendus par des écoles "
              "européennes : prix publiés, destination, langue, lien direct vers la fiche de l'école.\">"
+             + __import__('jsonld').social(
+                 "stages.html", "Stages de voile — Sailing More",
+                 "Stages et cours de voile vendus par des écoles européennes : prix publiés, destination, "
+                 "langue, lien direct vers la fiche de l'école.") +
              f"<style>{CSS}</style></head><body><main class=\"page\">"
              f"<a class=\"retour\" href=\"/\" data-t=\"retour\">{H.escape(UI['fr']['retour'])}</a>"
              "<div id=\"langues\"></div>"
