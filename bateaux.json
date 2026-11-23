@@ -2,6 +2,7 @@
  "page": "bateaux.html",
  "genere_par": "scripts/bateaux_page.py",
  "bateaux": {
+  "surprise": "Surprise",
   "x35": "Voilier Habitable X35",
   "hobie16": "Catamaran Hobie 16 avec spi",
   "laser": "Dériveur Laser",
@@ -53,12 +54,22 @@
   ],
   "balcon-avant": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-balcon-avant",
+    "niveau": "tout"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-balcon-avant",
     "niveau": "tout"
    }
   ],
   "barre": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-barre",
+    "niveau": "essentiel"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-barre",
@@ -112,6 +123,11 @@
   ],
   "bome": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-bome",
+    "niveau": "essentiel"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-bome",
     "niveau": "essentiel"
@@ -156,6 +172,11 @@
   ],
   "bordure": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-bordure",
+    "niveau": "tout"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-bordure",
     "niveau": "tout"
@@ -192,6 +213,11 @@
    }
   ],
   "bout-dehors": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-bout-dehors",
+    "niveau": "tout"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-bout-dehors",
@@ -236,6 +262,11 @@
   ],
   "capot": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-capot",
+    "niveau": "tout"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-capot",
     "niveau": "tout"
@@ -253,12 +284,22 @@
   ],
   "chaumard": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-chaumard",
+    "niveau": "tout"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-chaumard",
     "niveau": "tout"
    }
   ],
   "chute": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-chute",
+    "niveau": "tout"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-chute",
@@ -297,6 +338,11 @@
   ],
   "cockpit": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-cockpit",
+    "niveau": "essentiel"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-cockpit",
     "niveau": "essentiel"
@@ -313,6 +359,11 @@
    }
   ],
   "coque": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-coque",
+    "niveau": "essentiel"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-coque",
@@ -389,6 +440,11 @@
   ],
   "ecoute": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-ecoute",
+    "niveau": "tout"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-ecoute",
     "niveau": "tout"
@@ -410,6 +466,11 @@
    }
   ],
   "etai": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-etai",
+    "niveau": "essentiel"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-etai",
@@ -438,6 +499,11 @@
   ],
   "etambot": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-etambot",
+    "niveau": "tout"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-etambot",
     "niveau": "tout"
@@ -459,6 +525,11 @@
    }
   ],
   "etrave": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-etrave",
+    "niveau": "tout"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-etrave",
@@ -508,6 +579,11 @@
    }
   ],
   "foc": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-foc",
+    "niveau": "essentiel"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-foc",
@@ -580,6 +656,11 @@
   ],
   "grand-voile": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-grand-voile",
+    "niveau": "essentiel"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-grand-voile",
     "niveau": "essentiel"
@@ -611,6 +692,11 @@
    }
   ],
   "guindant": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-guindant",
+    "niveau": "tout"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-guindant",
@@ -649,12 +735,22 @@
   ],
   "guindeau": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-guindeau",
+    "niveau": "tout"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-guindeau",
     "niveau": "tout"
    }
   ],
   "hale-bas": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-hale-bas",
+    "niveau": "tout"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-hale-bas",
@@ -679,6 +775,11 @@
    }
   ],
   "hauban": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-hauban",
+    "niveau": "essentiel"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-hauban",
@@ -707,12 +808,22 @@
   ],
   "hublot": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-hublot",
+    "niveau": "tout"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-hublot",
     "niveau": "tout"
    }
   ],
   "latte": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-latte",
+    "niveau": "tout"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-latte",
@@ -777,6 +888,11 @@
   ],
   "lest": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-lest",
+    "niveau": "tout"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-lest",
     "niveau": "tout"
@@ -790,6 +906,11 @@
    }
   ],
   "mat": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-mat",
+    "niveau": "essentiel"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-mat",
@@ -845,6 +966,11 @@
   ],
   "pataras": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-pataras",
+    "niveau": "essentiel"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-pataras",
     "niveau": "essentiel"
@@ -872,6 +998,11 @@
    }
   ],
   "pont": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-pont",
+    "niveau": "tout"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-pont",
@@ -902,6 +1033,11 @@
   ],
   "quille": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-quille",
+    "niveau": "essentiel"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-quille",
     "niveau": "essentiel"
@@ -925,6 +1061,11 @@
    }
   ],
   "safran": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-safran",
+    "niveau": "essentiel"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-safran",
@@ -965,6 +1106,11 @@
   ],
   "sous-barbe": [
    {
+    "bateau": "surprise",
+    "ancre": "surprise-sous-barbe",
+    "niveau": "tout"
+   },
+   {
     "bateau": "x35",
     "ancre": "x35-sous-barbe",
     "niveau": "tout"
@@ -995,6 +1141,11 @@
    }
   ],
   "taquet": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-taquet",
+    "niveau": "tout"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-taquet",
@@ -1055,6 +1206,11 @@
    }
   ],
   "winch": [
+   {
+    "bateau": "surprise",
+    "ancre": "surprise-winch",
+    "niveau": "tout"
+   },
    {
     "bateau": "x35",
     "ancre": "x35-winch",
