@@ -298,6 +298,11 @@ CSS = CSS.replace("__CARTE_CSS__", carte_epreuves.CSS)
 JS = r"""
 (function(){
   var data = JSON.parse(document.getElementById('donnees').textContent);
+  // La date du jour est celle du navigateur (date locale), pas celle de la génération : la page reste juste
+  // entre deux publications. La valeur du JSON ne sert que de repli si l'horloge est absurde.
+  (function(){ var d = new Date(), p = function(n){ return ('0'+n).slice(-2); };
+    var j = d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate());
+    if(d.getFullYear() >= +data.aujourdhui.slice(0,4)) data.aujourdhui = j; })();
   var champ = document.getElementById('q');
   var compte = document.getElementById('compte');
   var liste = document.getElementById('liste');
@@ -803,7 +808,13 @@ def ecrire_page(dossier: Path) -> int:
     """
     d = charger()
     (dossier / "regates.html").write_text(construire(d), encoding="utf-8")
-    return len(epreuves_pour_page(d))
+    epreuves = epreuves_pour_page(d)
+    ld = ld_epreuves(epreuves)
+    ans = sorted({e["debut"][:4] for e in ld})
+    print(f"balisage Google des régates : {len(ld)} épreuve(s) sur {len(epreuves)} à venir "
+          f"(douze mois glissants, plafond {LD_MAX}) · "
+          + (f"du {ld[0]['debut']} au {ld[-1]['debut']} · années {', '.join(ans)}" if ld else "aucune"))
+    return len(epreuves)
 
 
 def affichable(e: dict) -> bool:
@@ -860,17 +871,34 @@ def epreuves_pour_page(d: dict) -> list[dict]:
 
 
 LD_MAX = 100  # plafond de l'ItemList : au-delà, le bloc pèse plus que la page n'y gagne
+LD_JOURS = 365  # fenêtre glissante du balisage : les douze mois à venir, pas l'année civile
+
+
+def ld_epreuves(epreuves: list[dict]) -> list[dict]:
+    """Les épreuves balisées : les LD_MAX **prochaines** par date dans les douze mois à venir,
+    non annulées, avec un lieu.
+
+    Jusqu'au 23/11/2026 le filtre était l'année civile du jour : en novembre il ne restait que
+    54 épreuves balisées sur 1 004 à venir (dont 661 en 2027) — Google ne voyait presque rien au
+    moment où se prépare la saison suivante. `epreuves` arrive déjà trié par date
+    (`epreuves_pour_page`), on prend donc les premières."""
+    limite = date.fromordinal(date.today().toordinal() + LD_JOURS).isoformat()
+    out = []
+    for e in epreuves:
+        if e["debut"] > limite or e["annulee"] or not e["ville"]:
+            continue
+        out.append(e)
+        if len(out) >= LD_MAX:
+            break
+    return out
 
 
 def _ld_regates(epreuves: list[dict]) -> str:
-    """JSON-LD : fil d'Ariane + ItemList des épreuves de la saison en cours (année civile du jour),
-    non annulées, avec un lieu, dans l'ordre des dates, LD_MAX au plus. Aucun prix, aucune note."""
+    """JSON-LD : fil d'Ariane + ItemList des LD_MAX prochaines épreuves des douze mois à venir
+    (voir `ld_epreuves`). Aucun prix, aucune note."""
     import jsonld
-    annee = str(date.today().year)
     items = []
-    for e in epreuves:
-        if not e["debut"].startswith(annee) or e["annulee"] or not e["ville"]:
-            continue
+    for e in ld_epreuves(epreuves):
         ev = {"@type": "SportsEvent", "name": e["nom"], "startDate": e["debut"],
               "endDate": e["fin"] or e["debut"],
               "location": {"@type": "Place", "name": e["ville"],
@@ -881,9 +909,7 @@ def _ld_regates(epreuves: list[dict]) -> str:
         if e["lien"]:
             ev["url"] = e["lien"]
         items.append(ev)
-        if len(items) >= LD_MAX:
-            break
-    liste = {"@type": "ItemList", "name": f"Régates de la saison {annee}",
+    liste = {"@type": "ItemList", "name": "Régates des douze mois à venir",
              "numberOfItems": len(items),
              "itemListElement": [{"@type": "ListItem", "position": i, "item": ev}
                                  for i, ev in enumerate(items, 1)]}
@@ -1008,7 +1034,7 @@ def construire(d: dict) -> str:
         + filtres +
         '<form class="alerte" id="alerte" hidden></form>'
         "</div>"
-        '<div class="compte"><span id="compte"></span>'
+        '<div class="compte"><span id="compte" role="status" aria-live="polite"></span>'
         '<span><button class="lien-effacer" id="btn-ics-tout" type="button" hidden></button> '
         '<button class="lien-effacer" id="effacer" type="button">Tout effacer</button></span></div>'
         + carte_epreuves.html() +

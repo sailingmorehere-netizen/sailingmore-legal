@@ -32,9 +32,43 @@ ICI = Path(os.environ.get("SAILINGMORE_RACINE", "/opt/data"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import carte_epreuves  # noqa: E402
 
+import stages_niveaux  # noqa: E402
+
 JSON = ICI / "projets/sailingmore/stages.json"
 PEREMPTION_JOURS = 60
-NIVEAUX = ("debutant", "intermediaire", "confirme")
+# Échelle du niveau (sprint 1, 23/11/2026) : définie et documentée dans `stages_niveaux.py`, lue
+# dans le titre de l'offre à chaque construction. L'ancienne valeur du relevé (debutant /
+# intermediaire / confirme, en partie déduite de la durée) est gardée telle quelle dans
+# `niveau_releve`, sans être affichée.
+NIVEAUX = stages_niveaux.NIVEAUX
+LIBELLES_NIVEAU = {
+    "fr": {"decouverte": "Découverte", "equipier": "Équipier", "chef-de-bord": "Chef de bord",
+           "hauturier": "Hauturier", "moniteur": "Moniteur", "certif": "Certification",
+           "equivalences": "Équivalences des diplômes de voile →"},
+    "en": {"decouverte": "Discovery", "equipier": "Crew", "chef-de-bord": "Skipper",
+           "hauturier": "Offshore", "moniteur": "Instructor", "certif": "Certification",
+           "equivalences": "Sailing qualification equivalences →"},
+    "it": {"decouverte": "Scoperta", "equipier": "Equipaggio", "chef-de-bord": "Skipper",
+           "hauturier": "Altura", "moniteur": "Istruttore", "certif": "Certificazione",
+           "equivalences": "Equivalenze dei brevetti di vela →"},
+    "es": {"decouverte": "Descubrimiento", "equipier": "Tripulante", "chef-de-bord": "Patrón",
+           "hauturier": "Altura", "moniteur": "Instructor", "certif": "Certificación",
+           "equivalences": "Equivalencias de titulaciones de vela →"},
+    "pt": {"decouverte": "Descoberta", "equipier": "Tripulante", "chef-de-bord": "Skipper",
+           "hauturier": "Oceano", "moniteur": "Instrutor", "certif": "Certificação",
+           "equivalences": "Equivalências de cartas de vela →"},
+    "de": {"decouverte": "Schnuppern", "equipier": "Crew", "chef-de-bord": "Skipper",
+           "hauturier": "Hochsee", "moniteur": "Ausbilder", "certif": "Zertifikat",
+           "equivalences": "Gleichwertigkeit von Segelscheinen →"},
+}
+
+
+def avec_niveau(o: dict) -> dict:
+    """L'offre avec `niveau` et `certif` lus dans son titre (vides si le titre ne permet pas de trancher)."""
+    out = {**o, **stages_niveaux.classer(o.get("titre") or "")}
+    if o.get("niveau") and o.get("niveau") not in NIVEAUX:
+        out["niveau_releve"] = o["niveau"]
+    return out
 
 UI = {
  "fr": {"titre": "Stages de voile", "retour": "← Sailing More",
@@ -43,7 +77,7 @@ UI = {
         "ecole": "École", "niveau": "Niveau", "quand": "Date", "prix": "Prix max.",
         "tous": "Toutes", "tout_age": "Tout âge", "avenir": "À venir", "mois": "Ce mois-ci",
         "chercher": "Chercher (école, stage, lieu)", "dates_ecole": "dates chez l'école",
-        "compte": "{n} offres · {e} écoles", "aucune": "Aucune offre ne répond à ces filtres.",
+        "compte": "{n} offres · {e} écoles", "aucune": "Aucune offre ne répond à ces filtres.", "effacer": "Tout effacer",
         "filtrer": "Filtrer",
         "vide": "Aucune offre n'est publiée pour le moment : le relevé se fait sur les fiches des écoles.",
         "du": "du", "au": "au", "voir": "Voir l'offre →", "jours": "jours", "prix_vide": "prix non publié", "photo": "photo :", "tri": "Trier", "proche": "Au plus près", "prix_croissant": "Prix croissant", "date_proche": "Date", "position_refusee": "Position refusée · pays proposé :", "geoloc": "Autoriser ma position",
@@ -57,7 +91,7 @@ UI = {
         "ecole": "School", "niveau": "Level", "quand": "Date", "prix": "Max. price",
         "tous": "All", "tout_age": "Any age", "avenir": "Upcoming", "mois": "This month",
         "chercher": "Search (school, course, place)", "dates_ecole": "dates at the school",
-        "compte": "{n} offers · {e} schools", "aucune": "No offer matches these filters.",
+        "compte": "{n} offers · {e} schools", "aucune": "No offer matches these filters.", "effacer": "Clear all",
         "filtrer": "Filters",
         "vide": "No offer is published yet: the list is read from the schools' own pages.",
         "du": "from", "au": "to", "voir": "See the offer →", "jours": "days", "prix_vide": "price not published", "photo": "photo:", "tri": "Sort", "proche": "Nearest first", "prix_croissant": "Lowest price", "date_proche": "Date", "position_refusee": "Location refused · country guessed:", "geoloc": "Use my location",
@@ -71,7 +105,7 @@ UI = {
         "ecole": "Scuola", "niveau": "Livello", "quand": "Data", "prix": "Prezzo max.",
         "tous": "Tutti", "tout_age": "Ogni età", "avenir": "In arrivo", "mois": "Questo mese",
         "chercher": "Cerca (scuola, corso, luogo)", "dates_ecole": "date presso la scuola",
-        "compte": "{n} offerte · {e} scuole", "aucune": "Nessuna offerta con questi filtri.",
+        "compte": "{n} offerte · {e} scuole", "aucune": "Nessuna offerta con questi filtri.", "effacer": "Cancella tutto",
         "filtrer": "Filtra",
         "vide": "Nessuna offerta è ancora pubblicata: l'elenco si legge dalle pagine delle scuole.",
         "du": "dal", "au": "al", "voir": "Vedi l'offerta →", "jours": "giorni", "prix_vide": "prezzo non pubblicato", "photo": "foto:",
@@ -86,7 +120,7 @@ UI = {
         "ecole": "Escuela", "niveau": "Nivel", "quand": "Fecha", "prix": "Precio máx.",
         "tous": "Todos", "tout_age": "Cualquier edad", "avenir": "Próximos", "mois": "Este mes",
         "chercher": "Buscar (escuela, curso, lugar)", "dates_ecole": "fechas en la escuela",
-        "compte": "{n} ofertas · {e} escuelas", "aucune": "Ninguna oferta con estos filtros.",
+        "compte": "{n} ofertas · {e} escuelas", "aucune": "Ninguna oferta con estos filtros.", "effacer": "Borrar todo",
         "filtrer": "Filtrar",
         "vide": "Todavía no hay ofertas publicadas: la lista se lee de las fichas de las escuelas.",
         "du": "del", "au": "al", "voir": "Ver la oferta →", "jours": "días", "prix_vide": "precio no publicado", "photo": "foto:",
@@ -101,7 +135,7 @@ UI = {
         "ecole": "Escola", "niveau": "Nível", "quand": "Data", "prix": "Preço máx.",
         "tous": "Todos", "tout_age": "Qualquer idade", "avenir": "Próximos", "mois": "Este mês",
         "chercher": "Procurar (escola, curso, local)", "dates_ecole": "datas na escola",
-        "compte": "{n} ofertas · {e} escolas", "aucune": "Nenhuma oferta com estes filtros.",
+        "compte": "{n} ofertas · {e} escolas", "aucune": "Nenhuma oferta com estes filtros.", "effacer": "Limpar tudo",
         "filtrer": "Filtrar",
         "vide": "Ainda não há ofertas publicadas: a lista é lida das páginas das escolas.",
         "du": "de", "au": "a", "voir": "Ver a oferta →", "jours": "dias", "prix_vide": "preço não publicado", "photo": "foto:",
@@ -116,7 +150,7 @@ UI = {
         "ecole": "Schule", "niveau": "Niveau", "quand": "Datum", "prix": "Max. Preis",
         "tous": "Alle", "tout_age": "Jedes Alter", "avenir": "Kommende", "mois": "Diesen Monat",
         "chercher": "Suchen (Schule, Kurs, Ort)", "dates_ecole": "Termine bei der Schule",
-        "compte": "{n} Angebote · {e} Schulen", "aucune": "Kein Angebot mit diesen Filtern.",
+        "compte": "{n} Angebote · {e} Schulen", "aucune": "Kein Angebot mit diesen Filtern.", "effacer": "Alles zurücksetzen",
         "filtrer": "Filtern",
         "vide": "Noch kein Angebot veröffentlicht: die Liste wird von den Seiten der Schulen gelesen.",
         "du": "vom", "au": "bis", "voir": "Zum Angebot →", "jours": "Tage", "prix_vide": "Preis nicht veröffentlicht", "photo": "Foto:", "tri": "Sortieren", "proche": "Am nächsten", "prix_croissant": "Preis aufsteigend", "date_proche": "Datum", "position_refusee": "Standort abgelehnt · Land geschätzt:", "geoloc": "Meinen Standort verwenden",
@@ -210,10 +244,11 @@ def _avec_position(o: dict) -> dict:
 def construire(d: dict | None = None) -> str:
     d = d if d is not None else charger()
     offres = [o for o in d.get("offres", []) if affichable(o)]
-    offres = [_avec_position(o) for o in offres]
+    offres = [avec_niveau(_avec_position(o)) for o in offres]
     offres.sort(key=lambda o: (o.get("debut") or "9999-12-31", o.get("prix_eur") or 0))
+    ui = {lg: {**textes, **LIBELLES_NIVEAU.get(lg, LIBELLES_NIVEAU["en"])} for lg, textes in UI.items()}
     donnees = {
-        "ui": UI, "offres": offres, "langues": LANGUES,
+        "ui": ui, "offres": offres, "langues": LANGUES,
         "pays": sorted({(o["pays"], o["pays_nom"]) for o in offres if o.get("pays")}),
         "ecoles": sorted({(o["ecole_slug"], o["ecole"]) for o in offres}),
         "pays_ecole": sorted({(o["ecole_pays"], o["ecole_pays_nom"]) for o in offres if o.get("ecole_pays")}),
@@ -261,8 +296,10 @@ def _html(d: dict) -> str:
              "<label><span data-t=\"prix\">Prix max.</span><input id=\"f-prix\" type=\"number\" min=\"0\" step=\"50\" inputmode=\"numeric\"></label>"
              "</section>"
              + carte_epreuves.html() +
-             "<p class=\"compte\" id=\"compte\"></p><div class=\"liste\" id=\"liste\"></div>"
+             "<p class=\"compte\" id=\"compte\" role=\"status\" aria-live=\"polite\"></p><div class=\"liste\" id=\"liste\"></div>"
              f"<p class=\"pied\" data-t=\"pied\">{H.escape(UI['fr']['pied'])}</p>"
+             f"<p class=\"pied\"><a href=\"equivalences.html\" data-t=\"equivalences\">"
+             f"{H.escape(LIBELLES_NIVEAU['fr']['equivalences'])}</a></p>"
              "</main>"
              "<script id=\"donnees\" type=\"application/json\">"
              + json.dumps(d, ensure_ascii=False).replace("</", "<\\/")
@@ -300,7 +337,7 @@ function options(sel,liste,tous){
 }
 function remplir(){
   document.documentElement.lang=L;
-  ['titre','chapo','pied','retour','chercher','langue','destination','pays_ecole','ecole','niveau','quand','prix','tous'].forEach(function(k){
+  ['titre','chapo','pied','retour','chercher','langue','destination','pays_ecole','ecole','niveau','quand','prix','tous','equivalences'].forEach(function(k){
     var e=document.querySelector('[data-t="'+k+'"]');if(e)e.textContent=t(k)});
   var f=document.getElementById('f-q');if(f)f.placeholder=t('chercher');
   options('f-langue',D.langues_presentes.map(function(c){return [c,D.langues[c]||c.toUpperCase()]}));
@@ -406,7 +443,8 @@ function dessiner(){
       +'<a class="lien" href="'+esc(o.lien)+'" rel="noopener nofollow" target="_blank">'+t('voir')+'</a></div>'
       +'</article>';
   }).join('');
-  document.getElementById('liste').innerHTML=html||('<p class="vide">'+(D.offres.length?t('aucune'):t('vide'))+'</p>');
+  document.getElementById('liste').innerHTML=html||('<p class="vide">'+(D.offres.length?t('aucune')+' <button type="button" id="tout-effacer" class="lien" style="cursor:pointer;font:inherit">'+esc(t('effacer'))+'</button>':t('vide'))+'</p>');
+  ecrireUrl();
   var MT={fr:{groupe:'{n} offres à cet endroit',aide:"Touchez une pastille pour voir l'offre ; un rond numéroté regroupe plusieurs offres.",compte:'{n} sur la carte, {m} sans position (elles figurent dans la liste ci-dessous).',titre:'Les stages sur la carte'},
     en:{groupe:'{n} offers at this place',aide:'Tap a dot to see the offer; a numbered circle groups several offers.',compte:'{n} on the map, {m} without a position (they are in the list below).',titre:'Courses on the map',plus:'and {n} more'},
     de:{groupe:'{n} Angebote an diesem Ort',aide:'Punkt antippen, um das Angebot zu sehen; ein nummerierter Kreis fasst mehrere zusammen.',compte:'{n} auf der Karte, {m} ohne Position (sie stehen in der Liste unten).',titre:'Die Kurse auf der Karte'},
@@ -431,6 +469,37 @@ function dessiner(){
 }
 ['f-q','f-langue','f-pays','f-pays-ecole','f-ecole','f-type','f-niveau','f-quand','f-prix','f-tri'].forEach(function(i){
   var e=document.getElementById(i);if(e){e.addEventListener('input',dessiner);e.addEventListener('change',dessiner)}});
+/* « Tout effacer » (zéro résultat) : vide tous les filtres, garde le tri. */
+document.getElementById('liste').addEventListener('click',function(ev){
+  if(!ev.target||ev.target.id!=='tout-effacer')return;
+  CLES_URL.forEach(function(c){if(c[1]!=='f-tri'){document.getElementById(c[1]).value=''}});
+  majBadge();dessiner();
+});
+/* État dans l'adresse : ?q=…&langue=fr&pays=FRA&ecole=…&niveau=…&type=…&quand=…&prix=…&tri=… ; seules les valeurs
+   qui diffèrent de celles de l'ouverture s'écrivent (« tous » = filtre vidé alors que l'ouverture en posait un) ;
+   une valeur inconnue est ignorée. */
+var CLES_URL=[['q','f-q'],['langue','f-langue'],['pays','f-pays'],['pays_ecole','f-pays-ecole'],['ecole','f-ecole'],
+  ['niveau','f-niveau'],['type','f-type'],['quand','f-quand'],['prix','f-prix'],['tri','f-tri']];
+var BASE_URL={};
+function lireUrl(){
+  var p;try{p=new URLSearchParams(location.search)}catch(x){return}
+  CLES_URL.forEach(function(c){
+    var v=p.get(c[0]);if(v===null)return;
+    var e=document.getElementById(c[1]);if(!e)return;
+    if(v==='tous')v='';
+    if(c[1]==='f-q'||c[1]==='f-prix'){e.value=v.slice(0,80);return}
+    if(Array.prototype.some.call(e.options,function(o){return o.value===v}))e.value=v;
+  });
+}
+function ecrireUrl(){
+  var a=[];
+  CLES_URL.forEach(function(c){
+    var e=document.getElementById(c[1]);if(!e)return;
+    var v=e.value,b=BASE_URL[c[1]];
+    if(v!==b)a.push(c[0]+'='+encodeURIComponent(v===''?'tous':v));
+  });
+  try{history.replaceState(null,'',location.pathname+(a.length?'?'+a.join('&'):'')+location.hash)}catch(x){}
+}
 document.getElementById('f-tri').addEventListener('change',function(){garde('tri',this.value)});
 
 /* Les filtres se replient sous un bouton sur téléphone, comme chez Les Glénans et les places de
@@ -460,6 +529,8 @@ if(fb && zoneF){
   });
   majBadge();
 }
+CLES_URL.forEach(function(c){var e=document.getElementById(c[1]);BASE_URL[c[1]]=e?e.value:''});
+lireUrl();majBadge();
 dessiner();poserPosition();
 """
 
@@ -536,16 +607,18 @@ PAGES_BLOC = ("index.html", "regates.html", "regles-de-course.html", "lexique.ht
 
 def ecrire_bloc(dossier: Path, offres: list[dict]) -> int:
     """JSON compact + script du bloc « près de chez vous », à côté de stages.html. Une ligne par offre :
-    [lat, lon, approx(0/1), titre, école, lieu, pays, début, prix, devise, lien, image, pays ISO3]."""
+    [lat, lon, approx(0/1), titre, école, lieu, pays, début, prix, devise, lien, image, pays ISO3,
+    niveau, certif]. `niveau` et `certif` sont ajoutés en fin de ligne (23/11/2026) : le script du bloc
+    lit par position, les treize premières ne bougent pas. Vides quand le titre ne permet pas de trancher."""
     lignes = []
     for o in offres:
-        o = _avec_position(o)
+        o = avec_niveau(_avec_position(o))
         if o.get("lat") is None or o.get("lon") is None or not o.get("lien"):
             continue
         lignes.append([round(o["lat"], 2), round(o["lon"], 2), 1 if o.get("precision") != "ville" else 0,
                        o.get("titre") or "", o.get("ecole") or "", o.get("lieu") or "", o.get("pays_nom") or "",
                        o.get("debut") or "", o.get("prix"), o.get("devise") or "", o["lien"],
-                       o.get("image") or "", o.get("pays") or ""])
+                       o.get("image") or "", o.get("pays") or "", o.get("niveau") or "", o.get("certif") or ""])
     (dossier / "stages-proches.json").write_text(
         json.dumps({"maj": date.today().isoformat(), "o": lignes}, ensure_ascii=False, separators=(",", ":")),
         encoding="utf-8")
@@ -589,6 +662,12 @@ def ecrire_page(dossier: Path = SITE) -> int:
             if src.exists() and (not dst.exists() or dst.stat().st_size != src.stat().st_size):
                 dst.write_bytes(src.read_bytes())
     ecrire_bloc(dossier, [o for o in d.get("offres", []) if affichable(o)])
+    # Comptes du niveau et de la certification, sur toutes les offres de la base puis sur les publiables.
+    toutes = [avec_niveau(o) for o in d.get("offres", [])]
+    for libelle, lot in (("base", toutes), ("publiables", [o for o in toutes if affichable(o)])):
+        c = stages_niveaux.comptes(lot)
+        print(f"stages ({libelle}) : {c['offres']} offres · {c['niveau']} avec un niveau · "
+              f"{c['certif']} avec une certification · {c['vides']} sans l'un ni l'autre")
     return sum(1 for o in d.get("offres", []) if affichable(o))
 
 

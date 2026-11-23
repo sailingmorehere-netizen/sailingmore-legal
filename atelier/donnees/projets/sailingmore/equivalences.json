@@ -1,0 +1,86 @@
+{
+ "maj": "2026-11-23",
+ "note": "Une entrée par couple de référentiels. Ne rien écrire de mémoire : chaque ligne vient d'un document officiel (source_url) et n'est publiée qu'avec valide_par_nicolas = true. prerequis et passerelle : texte simple, ou {\"fr\": ..., \"en\": ...} pour traduire.",
+ "modele": {
+  "de": "",
+  "vers": "",
+  "niveau_source": "",
+  "niveau_cible": "",
+  "prerequis": "",
+  "passerelle": "",
+  "source_url": "",
+  "valide_par_nicolas": false
+ },
+ "correspondances": [
+  {
+   "de": "RYA",
+   "vers": "ICC",
+   "niveau_source": "Day Skipper (pratique, voile ou moteur)",
+   "niveau_cible": "ICC — eaux côtières, type de bateau de la formation",
+   "prerequis": "16 ans révolus ; résidence au Royaume-Uni (la RYA n'émet l'ICC britannique que pour les résidents UK).",
+   "passerelle": "Demande directe à la RYA avec le certificat Day Skipper pratique : aucun test supplémentaire. Le Day Skipper théorique seul ne suffit pas.",
+   "source_url": "https://www.rya.org.uk/our-services/icc",
+   "valide_par_nicolas": false
+  },
+  {
+   "de": "RYA",
+   "vers": "ICC",
+   "niveau_source": "Day Skipper théorique seul (shorebased)",
+   "niveau_cible": "ICC — non délivré",
+   "prerequis": "—",
+   "passerelle": "Insuffisant : le théorique valide seulement la catégorie « eaux côtières » du formulaire, il faut en plus une preuve de compétence pratique (Day Skipper pratique ou un test ICC en centre agréé).",
+   "source_url": "https://www.rya.org.uk/our-services/icc",
+   "valide_par_nicolas": false
+  },
+  {
+   "de": "RYA",
+   "vers": "ICC",
+   "niveau_source": "Coastal Skipper, Yachtmaster Coastal, Offshore ou Ocean",
+   "niveau_cible": "ICC — eaux côtières",
+   "prerequis": "16 ans révolus ; résidence au Royaume-Uni.",
+   "passerelle": "Demande directe à la RYA, sans test supplémentaire.",
+   "source_url": "https://www.rya.org.uk/our-services/icc",
+   "valide_par_nicolas": false
+  },
+  {
+   "de": "FFVoile / État français",
+   "vers": "ICC",
+   "niveau_source": "Permis plaisance côtier ou extension hauturière",
+   "niveau_cible": "ICC maritime — non délivré par la France",
+   "prerequis": "—",
+   "passerelle": "La France n'applique la résolution 40 de la CEE-ONU qu'aux eaux intérieures : un permis côtier ne donne pas droit à un ICC maritime. Il faut passer par un organisme étranger habilité (RYA, IYT) ou un test ICC.",
+   "source_url": "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000006885167",
+   "valide_par_nicolas": false
+  },
+  {
+   "de": "FFVoile / État français",
+   "vers": "ICC",
+   "niveau_source": "Permis eaux intérieures (ou extension grande plaisance eaux intérieures, certificats S et PP)",
+   "niveau_cible": "ICC — eaux intérieures",
+   "prerequis": "Être titulaire du titre correspondant.",
+   "passerelle": "Demande auprès du service instructeur, sur présentation de l'original du titre et d'une photo récente.",
+   "source_url": "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000006885167",
+   "valide_par_nicolas": false
+  },
+  {
+   "de": "DSV",
+   "vers": "RYA",
+   "niveau_source": "SKS (Sportküstenschifferschein)",
+   "niveau_cible": "RYA Yachtmaster Coastal — niveau comparable, pas équivalent",
+   "prerequis": "SBF See + 300 milles nautiques en yacht côtier ; 16 ans.",
+   "passerelle": "Aucune passerelle administrative : les deux titres ne se convertissent pas. Le SKS couvre 12 milles d'un abri ; la comparaison porte sur le niveau d'exigence, et les organismes allemands eux-mêmes mettent en garde contre une assimilation directe.",
+   "source_url": "https://segelplanet.de/segelscheine-uebersicht/",
+   "valide_par_nicolas": false
+  },
+  {
+   "de": "DSV",
+   "vers": "RYA",
+   "niveau_source": "SSS (Sportseeschifferschein)",
+   "niveau_cible": "RYA Yachtmaster Offshore — niveau comparable, pas équivalent",
+   "prerequis": "SBF See + 1 000 milles (700 si l'on détient déjà le SKS) ; 30 milles d'un abri.",
+   "passerelle": "Aucune conversion : le SSS reste un titre d'État allemand, le Yachtmaster Offshore un certificat britannique délivré sous autorité de la MCA. Pour un usage professionnel, l'un ne remplace pas l'autre.",
+   "source_url": "https://www.sportbootschule.tv/mediathek/nautische-notizen/wird-der-sss-sportseeschifferschein-unterschaetzt",
+   "valide_par_nicolas": false
+  }
+ ]
+}
