@@ -1254,9 +1254,11 @@ def fichiers_a_publier() -> list[str]:
     Deux listes pour un même site, c'est ce qui a ramené l'ancien gabarit en ligne le 20/11 : la
     génération et la publication doivent lire la même liste, et elle est ici.
     """
-    pages = [n for n in ("index.html", "jeux.html", "annonceurs.html", "merci.html",
+    # `carte.html` est une page du site comme les autres : elle part avec elles, sinon le fichier
+    # publié reste celui d'hier (23/11/2026, la carte à deux modes).
+    pages = [n for n in ("index.html", "carte.html", "jeux.html", "annonceurs.html", "merci.html",
                          "regates.html", "regles-de-course.html", "lexique.html", "stages.html",
-                         "cours.html", "bateaux.html", "bateaux.json", "stages-proches.json", "mentions-legales.html",
+                         "cours.html", "bateaux.html", "bateaux.json", "stages-proches.json", "404.html", "mentions-legales.html",
                          "confidentialite.html", "delete.html", "sitemap.xml")
              if (SITE / n).exists()]
     images = [n for n in ("og-image.jpg", "icon-512.png", "icon-180.png", "favicon-32.png",
@@ -1335,6 +1337,15 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         globals().update(depart)
 
     SITE.mkdir(parents=True, exist_ok=True)
+    # La carte du Léman vient de son propre atelier (`carte-leman/build5.py`), pas d'ici : on la
+    # recopie à chaque construction pour qu'il n'y ait jamais deux versions en circulation
+    # (23/11/2026 : la version à deux modes est restée dans le dossier du projet pendant que le
+    # site publiait celle de la veille).
+    carte_src = ICI.parent / "projets" / "sailingmore" / "carte-leman" / "carte-leman-modes.html"
+    if carte_src.exists():
+        import shutil as _sh  # noqa: PLC0415
+        _sh.copy2(carte_src, SITE / "carte.html")
+        print(f"carte : {carte_src.name} recopiée dans {SITE.name}/carte.html")
     (SITE / "index.html").write_text(accueil)
     (SITE / "jeux.html").write_text(concours)
     (SITE / "merci.html").write_text(merci)
@@ -1395,8 +1406,11 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         print(f"stages près de chez vous posé sur : {stages_page.injecter_bloc(SITE)}")
     except Exception as e:  # noqa: BLE001
         print(f"bloc stages non posé : {e}")
+    # La mer d'abord, la barre ensuite : la barre s'insère juste après `<body>` et passe donc
+    # au-dessus du tableau de bord du bateau, qui sinon s'affiche avant elle (23/11/2026).
     n = poser_mer_partout()
     print(f"mer posée sur {n} page(s) supplémentaire(s)")
+    print(f"barre du site posée sur {poser_entete_partout()} page(s)")
     print(f"équilibre posé sur {poser_equilibre(SITE)} page(s)")
     print(f"site écrit dans {SITE} — {len(list(SITE.rglob('*')))} entrées")
     liste = fichiers_a_publier()
@@ -1542,6 +1556,44 @@ liste.addEventListener('click',function(e){
 })();</script>"""
 
 
+def poser_entete_partout() -> int:
+    """La barre du site sur toutes les pages, y compris légales, 404 et le calendrier.
+
+    Nicolas, 23/11/2026 : « 1 sur toutes les pages maintenant note en règle ». Même bloc que
+    `site_blocks.entete_site()` — nom, menu, langues — posé juste après `<body>` : un
+    `position:sticky` ne colle que dans son parent, et la barre doit tenir en haut de chaque page.
+    Idempotent : le bloc précédent est retiré avant d'être reposé, une construction ne l'empile pas.
+    Deux pages n'ont pas le menu des langues dans la barre : la carte du Léman (tout en français,
+    plein écran) et les stages (leur propre menu, qui pilote le contenu de la page).
+    """
+    fait = 0
+    for page in sorted(SITE.glob("*.html")):
+        html = page.read_text(encoding="utf-8")
+        avant = html
+        if "<!--entete-debut-->" in html:
+            tete, _, reste = html.partition("<!--entete-debut-->")
+            _, _, queue = reste.partition("<!--entete-fin-->")
+            html = tete + queue
+        if 'class="entete"' in html:
+            if html != avant:
+                page.write_text(html, encoding="utf-8")
+            continue
+        langues, auto = LANGUES, True
+        # Pas de second `#langues` : une page qui a déjà son propre sélecteur garde le sien,
+        # la barre lui apporte le nom et le menu (regles-apercu, par exemple).
+        # La carte du Léman n'est qu'en français : sa barre porte le nom et le menu, sans menu de
+        # langue. Les stages, eux, gardent le leur (celui de la page filtre les offres).
+        if page.name == "carte.html" or page.name == "stages.html" or \
+                'id="lng-sel"' in html or 'id="langues"' in html:
+            langues, auto = [], False
+        bloc = ("<!--entete-debut-->" + site_blocks.barre_autonome(page.name, langues, auto)
+                + "<!--entete-fin-->")
+        html = re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + bloc, html, count=1)
+        page.write_text(html, encoding="utf-8")
+        fait += 1
+    return fait
+
+
 def poser_mer_partout() -> int:
     """Le bateau en fond sur toutes les pages, posé par la construction elle-même.
 
@@ -1570,6 +1622,14 @@ def poser_mer_partout() -> int:
     fait = 0
     for page in sorted(SITE.glob("*.html")):
         html = page.read_text()
+        # La carte est un instrument plein écran, pas une page de lecture : le tableau de bord du
+        # bateau y masquait le coin haut-gauche et débordait de 20 px en largeur (23/11/2026).
+        # On lui retire le bloc, y compris celui qu'une construction passée y avait laissé.
+        if page.name == "carte.html":
+            if "<!--mer-debut-->" in html:
+                html = html.split("<!--mer-debut-->")[0] + html.split("<!--mer-fin-->")[-1]
+                page.write_text(_sans_commandes(html))
+            continue
         if page.name == "index.html" and "<!--mer-debut-->" not in html:
             continue
         if "<!--mer-debut-->" in html:      # on remplace le bloc précédent, sans l'empiler
