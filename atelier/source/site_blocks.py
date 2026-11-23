@@ -535,6 +535,133 @@ _MENU_JS = """<script>
 </script>"""
 
 
+NOMS_LANGUES = {"fr": "Français", "en": "English", "it": "Italiano", "es": "Español",
+                "pt": "Português", "de": "Deutsch", "nl": "Nederlands"}
+
+# Le sélecteur de langue : un menu déroulant, plus une rangée de pastilles (Nicolas, 23/11/2026 :
+# « il faut que les langues soient en menu déroulant »). Six langues plus « Auto » tenaient sur une
+# ligne à 7 px de haut et se touchaient sur téléphone ; la liste déroulante prend 3,4 rem et se
+# choisit du pouce. Les boutons restent dans la page, cachés : le script de chaque page les branche
+# déjà et rien n'est réécrit dans cinq fichiers.
+_LANGUE_CSS = """<style>
+/* La langue : une pastille du site, pas un contrôle du système (Nicolas, 23/11/2026 : « pour la barre
+   des langues il faut un truc plus joli »). Plus de cadre blanc : un globe, le code de la langue en
+   capitales comme les libellés de la barre, le filet rouge de MENU dessous, et le <select> natif posé
+   transparent par-dessus — la roue iOS/Android et les lecteurs d'écran gardent leur menu à eux. */
+.lg{position:relative;display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .1rem;margin-left:.25rem;
+  border-bottom:1px solid rgba(226,58,62,.6);cursor:pointer;line-height:1}
+.lg:hover{border-bottom-color:#fff}
+.lg:focus-within{outline:1px solid #e23a3e;outline-offset:4px}
+.lg .globe{width:.86rem;height:.86rem;flex:0 0 auto;opacity:.85;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e8eef4' stroke-width='1.7'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cellipse cx='12' cy='12' rx='4' ry='9'/%3E%3Cpath d='M3 12h18'/%3E%3C/svg%3E") center/contain no-repeat}
+.lg .code{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:#e8eef4}
+.lg .chev{width:.36rem;height:.36rem;margin:-.14rem .1rem 0 .18rem;opacity:.7;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
+.lg select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:1rem;
+  appearance:none;-webkit-appearance:none;border:0;background:transparent;color:transparent}
+.lg select:focus{outline:none}
+.lg option{color:#10161f;background:#fff}
+@media (max-width:520px){.lg{padding:.3rem .1rem}}
+@media (pointer:coarse){.lg{min-height:44px;min-width:3.4rem;justify-content:center;gap:.34rem}}
+</style>"""
+
+_LANGUE_JS = """<script>
+(function(){
+  /* La carte plein écran se cale sous la barre du site : elle en mesure la hauteur réelle.
+     Avant tout le reste — une page sans menu de langues a quand même une carte à caler. */
+  function caler(){
+    var b = document.querySelector(".entete"), c = document.querySelector(".cl.m-carte");
+    if(b && c) document.documentElement.style.setProperty("--barre", b.offsetHeight + "px");
+  }
+  caler(); addEventListener("load", caler); addEventListener("resize", caler); setTimeout(caler, 300);
+  var sel = document.getElementById("langue-sel"), zone = document.getElementById("langues");
+  if(!sel || !zone) return;
+  /* Le code affiché sur la pastille : la langue choisie, ou celle que la page affiche en mode auto. */
+  var code = document.querySelector(".lg .code");
+  function etiq(v){
+    if(!code) return;
+    if(v && v !== "auto"){ code.textContent = v.toUpperCase(); return; }
+    var l = (document.documentElement.lang || "fr").slice(0, 2).toUpperCase();
+    code.textContent = l || "FR";
+  }
+  function lire(){ try{ return localStorage.getItem("sm-langue") || "auto"; }catch(e){ return "auto"; } }
+  function poser(){
+    var v = lire(), o = sel.options;
+    for(var i = 0; i < o.length; i++){ if(o[i].value === v){ sel.value = v; etiq(v); return; } }
+    sel.value = "auto"; etiq("auto");
+  }
+  sel.addEventListener("change", function(){
+    var v = sel.value, bs = zone.querySelectorAll("button[data-lang]");
+    etiq(v);
+    for(var i = 0; i < bs.length; i++){
+      if(bs[i].getAttribute("data-lang") === v){ bs[i].click(); return; }
+    }
+  });
+  /* la page change de langue sans passer par le menu (auto, bouton, retour arrière) */
+  if(window.MutationObserver){
+    new MutationObserver(function(){ etiq(sel.value); })
+      .observe(document.documentElement, {attributes: true, attributeFilter: ["lang"]});
+  }
+  poser();
+  addEventListener("load", poser);
+  setTimeout(poser, 400);
+
+})();
+</script>"""
+
+
+def selecteur_langue(langues: list[str], auto: bool = True) -> str:
+    """La pastille des langues, suivie des boutons cachés que les pages branchent.
+
+    Le nom de chaque langue s'écrit dans sa propre langue : on reconnaît « Deutsch » sans savoir
+    l'allemand, « DE » ne dit rien à un marin italien. La pastille, elle, montre le code en capitales
+    (23/11/2026) ; « Auto » n'y figure plus, c'est la langue réellement lue qui s'affiche.
+    """
+    if not langues and not auto:
+        return ""          # une page qui n'a qu'un seul jeu de textes ne montre pas de menu vide
+    opts = ['<option value="auto">Auto (langue du navigateur)</option>'] if auto else []
+    opts += [f'<option value="{l}">{l.upper()} · {NOMS_LANGUES.get(l, l.upper())}</option>' for l in langues]
+    boutons = ('<button data-lang="auto" aria-pressed="true">Auto</button>' if auto else "") + "".join(
+        f'<button data-lang="{l}" aria-pressed="false">{l.upper()}</button>' for l in langues)
+    depart = (langues[0].upper() if langues else "FR")
+    return ('<div class="lg"><span hidden>Langue</span>'
+            '<span class="globe" aria-hidden="true"></span>'
+            f'<span class="code" aria-hidden="true">{depart}</span>'
+            '<span class="chev" aria-hidden="true"></span>'
+            f'<select id="langue-sel" aria-label="Langue du site">{"".join(opts)}</select></div>'
+            f'<div class="langues" id="langues" style="display:none" aria-hidden="true">{boutons}</div>')
+
+
+# La barre, avec sa feuille : les pages écrites ailleurs (404, mentions légales, calendrier, jeux)
+# n'ont pas les règles de style de l'accueil. Sans elles la barre s'empilait sur 80 px (23/11/2026).
+_BARRE_CSS = """<style>
+.entete{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:.6rem;width:100%;
+  padding:.55rem .9rem;background:rgba(10,26,43,.96);border-bottom:1px solid rgba(226,58,62,.45);
+  color:#e8eef4;box-sizing:border-box;backdrop-filter:blur(6px)}
+.entete .nom{font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem;
+  color:#9fb3c4;text-decoration:none;white-space:nowrap}
+.entete .nom:hover{color:#fff}
+.entete .menu-d{margin-left:auto}
+.entete .menu-d>summary{list-style:none;cursor:pointer;font-size:.74rem;letter-spacing:.1em;
+  text-transform:uppercase;color:#e8eef4;border-bottom:1px solid rgba(226,58,62,.6);padding-bottom:1px}
+.entete .menu-d>summary::-webkit-details-marker{display:none}
+.entete .menu-d>nav{position:absolute;right:.6rem;top:calc(100% + .4rem);z-index:70;background:#0e2338;
+  border:1px solid rgba(255,255,255,.16);border-radius:.5rem;padding:.5rem;display:grid;
+  grid-template-columns:1fr 1fr;gap:.15rem .8rem;min-width:min(22rem,86vw);
+  box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.entete .menu-d>nav a{color:#dbe6ef;text-decoration:none;font-size:.82rem;padding:.35rem .4rem;border-radius:.35rem}
+.entete .menu-d>nav a:hover{background:rgba(255,255,255,.08)}
+.entete .menu-d>nav a[aria-current="page"]{color:#fff;box-shadow:inset 2px 0 0 #e23a3e}
+body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:flex-start}
+@media (max-width:520px){.entete{padding:.45rem .6rem;gap:.4rem}.entete .nom{font-size:.68rem}}
+</style>"""
+
+
+def barre_autonome(actuelle: str, langues: list[str], auto: bool = True) -> str:
+    """La barre plus sa feuille de style, pour une page produite hors de la feuille de l'accueil."""
+    return _BARRE_CSS + entete_site(actuelle, langues, auto)
+
+
 def entete_site(actuelle: str, langues: list[str], auto: bool = True) -> str:
     """La barre du site, la même sur toutes les pages : le nom, le menu des onze pages, les langues.
 
@@ -543,12 +670,12 @@ def entete_site(actuelle: str, langues: list[str], auto: bool = True) -> str:
     ne colle que dans son parent. Les boutons de langue portent `#langues` et `data-lang`, comme
     partout ; le script de chaque page les branche.
     """
-    boutons = ('<button data-lang="auto" aria-pressed="true">Auto</button>' if auto else "") + "".join(
-        f'<button data-lang="{l}" aria-pressed="false">{l.upper()}</button>' for l in langues)
+    # Le menu passe en dernier : son panneau ouvert s'ancre sur le bord droit de la barre. Placé
+    # avant les langues, il se décalait de la largeur du sélecteur et sortait de l'écran.
     return ('<header class="entete"><a class="nom" href="index.html">Sailing More</a>'
-            f'{menu_site(actuelle)}'
-            f'<div class="langues" id="langues" aria-label="Language">{boutons}</div></header>'
-            + _MENU_JS)
+            f'{selecteur_langue(langues, auto)}'
+            f'{menu_site(actuelle)}</header>'
+            + _LANGUE_CSS + _MENU_JS + _LANGUE_JS)
 
 CARTE_JS = """
 <script>
@@ -1337,8 +1464,20 @@ MENU_CSS = """
     background:rgba(226,58,62,.10)}
   .entete .menu-d nav a.legal{font-size:.74rem;color:var(--gris)}
   .entete .menu-d nav a.legal:hover{color:#fff}
-  @media(max-width:520px){.entete .menu-d{margin-right:.6rem}
-    .entete .menu-d summary{font-size:.7rem}}
+  /* Téléphone : une seule colonne, du texte lisible, des lignes qu'on touche (23/11/2026 : « refais le
+     menu il est illisible sur tel »). En deux colonnes sur 390 px, les libellés se coupaient
+     (« Calendrier des / régates ») et chaque ligne mesurait 35 px, sous la cible tactile de 48 px. */
+  @media(max-width:600px){
+    .entete .menu-d{position:static;margin-right:.4rem}
+    .entete .menu-d summary{font-size:.78rem;min-height:44px;padding:0 .15rem}
+    .entete .menu-d nav{left:.4rem;right:.4rem;top:calc(100% + .3rem);width:auto;
+      grid-template-columns:1fr;gap:.1rem;padding:.45rem}
+    .entete .menu-d nav a{display:flex;align-items:center;min-height:48px;
+      padding:.6rem .8rem;font-size:1rem;line-height:1.25}
+    .entete .menu-d nav a.legal{min-height:42px;font-size:.9rem;padding:.5rem .8rem}
+    .entete .menu-d nav a.legal:first-of-type{margin-top:.35rem;
+      border-top:1px solid rgba(238,243,247,.14);padding-top:.7rem}
+  }
 """
 
 # La barre du site, toujours visible (Nicolas, 22/11/2026). Ces règles valent pour TOUTES les pages :
