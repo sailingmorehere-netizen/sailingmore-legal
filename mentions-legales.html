@@ -131,7 +131,7 @@ body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:fl
   .entete .menu-d>nav a.legal:first-of-type{margin-top:.35rem;
     border-top:1px solid rgba(238,243,247,.14);padding-top:.7rem}
 }
-</style><header class="entete"><a class="nom" href="index.html">Sailing More</a><div class="lg"><span hidden>Langue</span><span class="globe" aria-hidden="true"></span><span class="code" aria-hidden="true">FR</span><span class="chev" aria-hidden="true"></span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto (langue du navigateur)</option><option value="fr">FR · Français</option><option value="en">EN · English</option><option value="it">IT · Italiano</option><option value="es">ES · Español</option><option value="pt">PT · Português</option><option value="de">DE · Deutsch</option></select></div><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button><button data-lang="de" aria-pressed="false">DE</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="index.html">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html">Règles de course</a><a href="stages.html">Stages de voile</a><a href="cours.html">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="carte.html">Carte du Léman</a><a href="lexique.html">Lexique</a><a href="annonceurs.html">Annonceurs</a><a href="mentions-legales.html" class="legal" aria-current="page">Mentions légales</a><a href="confidentialite.html" class="legal">Confidentialité</a><a href="delete.html" class="legal">Supprimer mes données</a></nav></details></header><style>
+</style><header class="entete"><a class="nom" href="index.html">Sailing More</a><div class="lg"><span hidden>Langue</span><span class="globe" aria-hidden="true"></span><span class="code" aria-hidden="true">FR</span><span class="chev" aria-hidden="true"></span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto (langue du navigateur)</option><option value="fr">FR · Français</option><option value="en">EN · English</option><option value="it">IT · Italiano</option><option value="es">ES · Español</option><option value="pt">PT · Português</option><option value="de">DE · Deutsch</option><option value="bzh">BZH · Brezhoneg</option></select></div><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button><button data-lang="de" aria-pressed="false">DE</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="index.html">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html">Règles de course</a><a href="stages.html">Stages de voile</a><a href="cours.html">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="carte.html">Carte du Léman</a><a href="lexique.html">Lexique</a><a href="annonceurs.html">Annonceurs</a><a href="mentions-legales.html" class="legal" aria-current="page">Mentions légales</a><a href="confidentialite.html" class="legal">Confidentialité</a><a href="delete.html" class="legal">Supprimer mes données</a></nav></details></header><style>
 /* La langue : une pastille du site, pas un contrôle du système (Nicolas, 23/11/2026 : « pour la barre
    des langues il faut un truc plus joli »). Plus de cadre blanc : un globe, le code de la langue en
    capitales comme les libellés de la barre, le filet rouge de MENU dessous, et le <select> natif posé
@@ -169,30 +169,85 @@ body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:fl
   caler(); addEventListener("load", caler); addEventListener("resize", caler); setTimeout(caler, 300);
   var sel = document.getElementById("langue-sel"), zone = document.getElementById("langues");
   if(!sel || !zone) return;
+  /* Le breton (valeur « bzh ») n'a pas de bloc de texte dans les pages : choisi, il laisse la page en
+     français (clé `sm-langue` = fr, que les pages savent lire) et pose un drapeau `sm-bzh`. Ce script
+     ajoute alors l'encart, garde `lang="br"` (le code IANA ; « bzh » n'y est pas) et la pastille BZH.
+     `?lang=xx` choisit la langue avant que les scripts des pages ne la lisent. */
+  var SIX = ["fr","en","it","es","pt","de"];
+  function st(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function ec(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
+  try{
+    var q = new URLSearchParams(location.search).get("lang");
+    if(q === "bzh"){ ec("sm-bzh", "1"); ec("sm-langue", "fr"); }
+    else if(q && SIX.indexOf(q) >= 0){ ec("sm-bzh", null); ec("sm-langue", q); }
+  }catch(e){}
+  function bzh(){
+    var f = st("sm-langue");
+    if(f && f !== "auto") return st("sm-bzh") === "1";
+    var p = (navigator.languages || [navigator.language || "en"]);   /* « br » du navigateur = bzh */
+    for(var i = 0; i < p.length; i++){
+      var b = String(p[i]).toLowerCase().slice(0, 2);
+      if(b === "br") return true;
+      if(SIX.indexOf(b) >= 0) return false;
+    }
+    return false;
+  }
+  function encart(){
+    var e = document.getElementById("encart-bzh"), actif = bzh();
+    if(document.querySelector('meta[name="sm-bzh"]')) actif = false;      /* page dont le breton existe */
+    if(!actif){ if(e) e.remove(); return; }
+    if(e) return;
+    var h = document.querySelector(".entete");
+    if(!h) return;
+    e = document.createElement("p");
+    e.id = "encart-bzh"; e.setAttribute("role", "note");
+    e.style.cssText = "margin:0;padding:.6rem .9rem;background:#0e2338;color:#e8eef4;font-size:.9rem;" +
+      "border-bottom:1px solid rgba(255,255,255,.16)";
+    e.appendChild(document.createTextNode("Cette page n’est pas encore traduite en breton. Écrivez-nous à "));
+    var a = document.createElement("a");
+    a.className = "courriel"; a.style.color = "inherit";
+    a.setAttribute("data-a", "hello.sailingmore"); a.setAttribute("data-b", "gmail.com");
+    var ad = "hello.sailingmore" + "@" + "gmail.com";
+    a.href = "mailto:" + ad; a.textContent = ad;
+    e.appendChild(a);
+    e.appendChild(document.createTextNode(" pour proposer la traduction."));
+    h.parentNode.insertBefore(e, h.nextSibling);
+  }
+  function balise(){
+    if(bzh() && document.documentElement.lang !== "br") document.documentElement.lang = "br";
+  }
   /* Le code affiché sur la pastille : la langue choisie, ou celle que la page affiche en mode auto. */
   var code = document.querySelector(".lg .code");
   function etiq(v){
     if(!code) return;
-    if(v && v !== "auto"){ code.textContent = v.toUpperCase(); return; }
+    if(bzh()){ code.textContent = "BZH"; return; }
+    if(v && v !== "auto" && v !== "bzh"){ code.textContent = v.toUpperCase(); return; }
     var l = (document.documentElement.lang || "fr").slice(0, 2).toUpperCase();
     code.textContent = l || "FR";
   }
-  function lire(){ try{ return localStorage.getItem("sm-langue") || "auto"; }catch(e){ return "auto"; } }
+  function lire(){
+    if(st("sm-bzh") === "1" && st("sm-langue") !== "auto" && st("sm-langue")) return "bzh";
+    return st("sm-langue") || "auto";
+  }
   function poser(){
+    balise(); encart();
     var v = lire(), o = sel.options;
     for(var i = 0; i < o.length; i++){ if(o[i].value === v){ sel.value = v; etiq(v); return; } }
     sel.value = "auto"; etiq("auto");
   }
   sel.addEventListener("change", function(){
     var v = sel.value, bs = zone.querySelectorAll("button[data-lang]");
-    etiq(v);
+    var cible = (v === "bzh") ? "fr" : v;             /* le breton s'affiche sur le texte français */
+    ec("sm-bzh", v === "bzh" ? "1" : null);
     for(var i = 0; i < bs.length; i++){
-      if(bs[i].getAttribute("data-lang") === v){ bs[i].click(); return; }
+      if(bs[i].getAttribute("data-lang") === cible){ bs[i].click(); break; }
     }
+    ec("sm-bzh", v === "bzh" ? "1" : null);
+    balise(); encart(); etiq(v);
   });
   /* la page change de langue sans passer par le menu (auto, bouton, retour arrière) */
   if(window.MutationObserver){
-    new MutationObserver(function(){ etiq(sel.value); })
+    new MutationObserver(function(){ balise(); encart(); etiq(sel.value); })
       .observe(document.documentElement, {attributes: true, attributeFilter: ["lang"]});
   }
   poser();
@@ -205,6 +260,9 @@ body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:fl
 </div>
 <div class="page">
 <a class="retour" href="index.html">← Sailing More</a>
+
+
+
 
 
 
@@ -501,6 +559,8 @@ document.querySelectorAll('a.courriel').forEach(a => a.addEventListener('click',
   window.location.href = lien;
 }));
 </script>
+</div>
+
 </div>
 
 </div>
