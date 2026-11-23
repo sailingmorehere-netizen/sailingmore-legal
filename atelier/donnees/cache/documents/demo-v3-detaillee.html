@@ -371,7 +371,7 @@ var BATEAUX={
     zoom:{ouverture:0.4, bord:0.85, virement:0.5, bouee:0.8},   /* rapproche ou éloigne la caméra, plan par plan : l'ouverture est un gros plan */
     longueur:15, demiBau:0.5, ecart:3.7,     /* longueur de coque, demi-largeur d'une coque, demi-écart entre coques (m) */
     mat:[0,1.5,-1.4], hauteurMat:25.5, largeurGreement:2.9, teteMat:[0,27.3,-1.4],
-    sillage:0.95, sillageVol:0.3, bouee:1.7, goutte:2.6,
+    sillage:0.95, sillageVol:0.3, goutte:2.6,
     peinture:{seuils:[0.16,0.24,1.02,1.08], carene:[0.90,0.91,0.92], bande:[0.886,0.137,0.18]},
     mots:{
       voiles:'l’aile et le foc sont',
@@ -413,7 +413,7 @@ var BATEAUX={
     longueur:5.49, demiBau:0.86, ecart:0,
     mat:[0,0.45,-0.95], hauteurMat:10.0, largeurGreement:2.0, teteMat:[0,10.55,-0.8],
     demiAiles:2.135,    /* demi-largeur aux ailes de rappel : 4,27 m hors tout (règle de classe) */
-    sillage:0.55, bouee:0.8, goutte:0.9,
+    sillage:0.55, goutte:0.9,
     peinture:{seuils:[0.05,0.09,0.31,0.345], carene:[0.93,0.94,0.95], bande:[0.886,0.137,0.18]},
     mots:{
       voiles:'les voiles sont',
@@ -455,7 +455,7 @@ var BATEAUX={
     vue:{ouverture:-124, travelling:-1},    /* la caméra se place au vent, pour voir l'équipage au rappel */
     longueur:15.85, demiBau:2.0, ecart:0,
     mat:[0,1.5,-1.0], hauteurMat:22.3, largeurGreement:3.4, teteMat:[0,24.0,-0.7],
-    sillage:1.35, bouee:1.5, goutte:1.6,
+    sillage:1.35, goutte:1.6,
     peinture:{seuils:[0.03,0.11,1.22,1.29], carene:[0.84,0.85,0.87], bande:[0.886,0.137,0.18]},
     mots:{
       voiles:'les voiles sont',
@@ -506,7 +506,8 @@ function nouveauDepart(vent){
      fin:0, echelle:1, sillage:[], dernierPoint:-1, derive:[0,0], risee:[0,0], twa:PRES,
      cam:{d:PLANS.ouverture.d*B.echelle*((B.zoom&&B.zoom.ouverture)||1),h:PLANS.ouverture.h*B.echelle*((B.zoom&&B.zoom.ouverture)||1),av:PLANS.ouverture.av*B.echelle,az:((B.vue&&B.vue.ouverture!=null)?B.vue.ouverture:PLANS.ouverture.tour)*RAD,y:PLANS.ouverture.y*B.echelle*((B.zoom&&B.zoom.ouverture)||1),fov:PLANS.ouverture.focale,dec:PLANS.ouverture.decal*B.echelle}, foyer:[0,0], phase:null,
      brume:BRUME_ENTREE>0?1:0, eq:B.equipage.map(function(){return {c:1,cible:1,attente:0}}), gouttes:[], reserve:[],
-     vol:(B.decollage&&VPRES>B.decollage)?1:0, foil:{'-1':1,'1':0}, moulin:0};
+     vol:(B.decollage&&VPRES>B.decollage)?1:0, foil:{'-1':1,'1':0}, moulin:0,
+     spi:0, spiVeut:false, spiCote:1, spiAng:0, fasSpi:1, creuxSpi:0};   /* le spi (18 pieds) : hissé de 0 à 1, souhaité ou non, bord où il vole, écoute, faseyement, creux */
   var ux=Math.sin(vent), uz=-Math.cos(vent);
   bouee.x=0; bouee.z=0;
   S.x=bouee.x-ux*DEPART+Math.cos(vent)*6; S.z=bouee.z-uz*DEPART+Math.sin(vent)*6;
@@ -586,6 +587,28 @@ function pas(dt){
   S.fasFoc=damp(S.fasFoc,Math.max(fas,(1-S.ecoute)*0.85),0.12,dt);
   S.creuxGV=damp(S.creuxGV,-S.cote*(1-fas),0.2,dt);
   S.creuxFoc=damp(S.creuxFoc,-S.cote*(1-fas)*(0.35+0.65*S.ecoute),0.18,dt);
+
+  /* ---- spi (18 pieds) : un A-sail, envoyé au portant, rentré au près. Deux seuils séparés (il sort au-delà de B.spi.sort, il rentre en deçà
+     de B.spi.rentre) : le choix est un état, pas un test sur l'angle brut, donc il ne claque pas au voisinage du seuil. S.spi (0 rentré, 1 hissé)
+     le suit en douceur. Rien ici n'ajoute à la polaire, à la barre ni à la route : c'est un décor juste. */
+  var spiB=B.spi;
+  if(spiB){
+    if(a>spiB.sort*RAD) S.spiVeut=true; else if(a<spiB.rentre*RAD) S.spiVeut=false;
+    if(S.spi<0.02) S.spiCote=S.cote;   /* rentré : il ressortira du bon bord */
+    /* au virement, au bout au vent ou à l'empannage (le vent change de côté), il rentre sur son bord : il ne traverse jamais le vent gonflé */
+    var spiC=(S.spiVeut && S.mode==='route' && !S.man && S.spiCote===S.cote)?1:0;
+    S.spi=damp(S.spi,spiC,spiC>S.spi?spiB.hisse:spiB.affale,dt);
+    /* l'écoute : sur le vent apparent, sous le vent, jamais plus ouverte que le lit du vent. L'angle est celui du pied avec l'axe du bateau,
+       vu du dessus : borde serré à 16°, choqué à 32° au plus (l'écoute reste en l'air, loin sur l'arrière, pas de côté). À 150° du vent réel
+       le vent apparent vient de 42° environ : l'écoute est alors à 22°. */
+    var spiA=-S.spiCote*Math.min(clamp(awa-20*RAD,16*RAD,32*RAD),a*0.86);
+    S.spiAng=S.spi<0.02 ? spiA : damp(S.spiAng,spiA,0.5,dt);
+    /* il faseye près du vent, écoute choquée, en cours de hissage ou quand l'écoute court encore derrière le vent ; sinon un léger frémissement de chute */
+    var spiF=Math.max(sstep(100*RAD,80*RAD,a),(1-S.ecoute)*0.85,(1-S.spi)*0.9,sstep(0.08,0.45,Math.abs(spiA-S.spiAng))*0.9,0.08);
+    S.fasSpi=damp(S.fasSpi,spiF,0.15,dt);
+    /* creux franc, d'autant plus rempli que le bateau va vite ; il tombe avec le faseyement et l'écoute choquée */
+    S.creuxSpi=damp(S.creuxSpi,(1-S.fasSpi)*lerp(1.2,2.3,clamp(S.v/VPRES,0,1))*(0.35+0.65*S.ecoute),0.25,dt);   /* un creux sans signe : le côté du gonflement vient de la forme (spiGeom) */
+  }
 
   /* ---- vitesse : la polaire donne la cible, l'inertie fait le reste */
   var vc=S.mode==='route' ? polaire(a/RAD)*(0.55+0.45*S.ecoute) : 0;
@@ -829,7 +852,7 @@ sillage:{v:'attribute vec4 aA; attribute vec3 aB; uniform mat4 uVP; uniform floa
 embruns:{v:'attribute vec4 aP; uniform mat4 uVP; uniform float uEch; varying float vA; void main(){ vA=aP.w; gl_Position=uVP*vec4(aP.xyz,1.); gl_PointSize=max(uEch*(.5+.5*aP.w)/gl_Position.w,1.5); }',
   f:PREC+'varying float vA; uniform vec3 uEcume; void main(){ vec2 q=gl_PointCoord-.5; float r=dot(q,q)*4.; gl_FragColor=vec4(uEcume,smoothstep(1.,.1,r)*vA*.6); }'}
 };
-SRC.mer.f=PREC+'varying vec3 vW; uniform vec3 uCam,uFond,uClair,uLueur,uEcume,uPlat,uVoileR; uniform float uT,uQual; uniform vec2 uDerive,uRisee,uLarg; uniform vec4 uBateau,uCoque; uniform vec3 uBateauS,uBouee,uMat,uMatD,uMatH;\n'+GLSL_CIEL+'\n'+GLSL_BRUIT+'\n'+
+SRC.mer.f=PREC+'varying vec3 vW; uniform vec3 uCam,uFond,uClair,uLueur,uEcume,uPlat,uVoileR; uniform float uT,uQual; uniform vec2 uDerive,uRisee,uLarg; uniform vec4 uBateau,uCoque; uniform vec3 uBateauS,uMat,uMatD,uMatH;\n'+GLSL_CIEL+'\n'+GLSL_BRUIT+'\n'+
 'float profil(float t){ return t<.62 ? 1.-pow(max(1.-t/.62,0.),1.55) : 1.-.126*pow((t-.62)/.38,2.); }\n'+
 /* le gréement vu depuis un point de l'eau, le long d'un rayon : sert au reflet des voiles et à leur ombre portée */
 'float greement(vec3 P,vec3 R,float larg){ vec3 w0=P-uMat; float b=dot(R,uMatD), d0=dot(R,w0), e=dot(uMatD,w0); float den=max(1.-b*b,1e-4);\n'+
@@ -868,12 +891,15 @@ glslHoule()+
 '  float ec=mk*smoothstep(bn-.16,bn+.16,(1.-di/1.0)*vi*mix(1.15,.42,tt))*step(-.5,di)*.82;\n'+
 '  float vg=mk*smoothstep(.62,.70,fract(di*.85-uT*1.1+bn*.9))*smoothstep(3.6,1.2,di)*step(.9,di)*uBateauS.x*mix(.55,.12,tt);\n'+
 '  col=mix(col,uEcume,clamp(ec+vg,0.,1.)); }\n'+
-' float db=length(p-uBouee.xy)-uBouee.z; col*=1.-.4*smoothstep(1.1,-.2,db); col=mix(col,uEcume,smoothstep(.45,0.,abs(db-.12))*.5*bruitd(p*3.+uDerive).x);\n'+
 ' float br=1.-exp(-pow(d/1150.,1.55)); col=mix(col,ciel(normalize(vec3(-V.x,.012,-V.z))),br);\n'+
 ' col=brumer(col,d);\n'+
 ' gl_FragColor=vec4(tons(col),1.); }';
 SRC.mer.f=SRC.mer.f.replace('HDX',Math.sin(HOULE_AZ).toFixed(5)).replace('HDZ',(-Math.cos(HOULE_AZ)).toFixed(5));
 SRC.corps.f=SRC.objet.f;
+/* le spi : sommets, normales et (u,v) déjà calculés sur le processeur (surface à part, voir spiPoint) ; même toile que les autres voiles */
+SRC.spi={v:'attribute vec3 aP,aN; attribute vec2 aU; uniform mat4 uVP,uM; varying vec3 vN,vW; varying vec2 vUV;\n'+
+  'void main(){ vec4 w=uM*vec4(aP,1.); vW=w.xyz; vN=mat3(uM[0].xyz,uM[1].xyz,uM[2].xyz)*aN; vUV=aU; gl_Position=uVP*w; }',
+  f:SRC.voile.f};
 
 function programme(src){
   function sh(type,code){var s=gl.createShader(type); gl.shaderSource(s,code); gl.compileShader(s);
@@ -1263,19 +1289,62 @@ BATEAUX.skiff.dessiner=function(c){
   c.poses=S.poses; if(EQUIPAGE) for(i=0;i<3;i++){ dessinerPerso(c,S.poses[i],this.equipage[i]);
     if(S.poses[i].sorti>0.2){ var cr=v3(S.poses[i].bassin,S.poses[i].haut,0.12); c.cap(v3(cr,S.poses[i].face,0.1),v3(cr,S.poses[i].face,0.17),0.03,0.02,INOX,4) } }   /* crochet du harnais */
 };
+/* Le spi : un A-sail. Point d'amure au bout du bout-dehors, drisse en tête de mât, point d'écoute libre sur l'arrière, pas de tangon.
+   amure et tete sont dans le repère du bateau (x vers un bord, y en haut, z vers l'arrière : l'avant est en -z) ; la tête de la voile est
+   exactement en tete (la drisse, juste devant le mât, sous son sommet à 10,5 m) et l'amure exactement en amure : le guindant est le segment droit
+   qui les joint, sans arc. sort et rentre (degrés, angle au vent réel) sont les deux seuils ; hisse et affale (s) sont les temps de hissage et
+   d'affalage. L'écoute vole à ecouteH (m, hauteur absolue : le pont est vers 0,45 m, donc 2,2 m au-dessus) et à D mètres de l'amure, mesurés
+   à plat, dans la direction que donne S.spiAng : D = 6,5 m la renvoie jusque derrière le mât, sous le vent. epaule : exposant de la chute
+   (1 - v^epaule) : plus il est grand, plus la tête est étroite et plus la voile s'ouvre vite sous elle. rond : bombé de la chute en plus.
+   Le moteur de voiles paramétriques (grille déformée dans le shader) est fait pour une grand-voile et un foc ; le spi
+   est donc une surface à part, construite avec Maille (G.spi, remplie à chaque image par spiPoint). La logique d'état est dans pas(). */
+BATEAUX.skiff.spi={amure:[0,0.5,-6.45], tete:[0,10.3,-0.86], sort:95, rentre:85, hisse:1.1, affale:0.5, D:6.5, ecouteH:2.65, epaule:2.1, rond:0.05};
+var SPI_NU=14, SPI_NV=26;
+/* Le repère de la voile, calculé une fois par image (mémorisé dans le contexte de dessin) avec le point d'écoute. Rentré : rien.
+   S.spiAng est l'angle du pied avec l'axe du bateau, vu du dessus, du côté sous le vent (le signe de x suit S.spiCote). */
+function spiGeom(c){
+  if(c.spiG!==undefined) return c.spiG;
+  var sp=BATEAUX.skiff.spi, h=S.spi, g=null;
+  if(h>0.02){
+    var gu=[(sp.tete[0]-sp.amure[0])*h,(sp.tete[1]-sp.amure[1])*h,(sp.tete[2]-sp.amure[2])*h], L=Math.hypot(gu[0],gu[1],gu[2]), lu=norm3(gu),
+        pv=[Math.sin(S.spiAng)*sp.D,sp.ecouteH-sp.amure[1],Math.cos(S.spiAng)*sp.D], E=Math.hypot(pv[0],pv[1],pv[2])*h, pied=norm3(pv), sl=-S.spiCote,   /* le pied va de l'amure au point d'écoute */
+        bd=[sl*0.8,0,-0.6],   /* le gonflement : sous le vent et vers l'avant */
+        bn=norm3(cross(lu,pied));
+    if(bn[0]*bd[0]+bn[1]*bd[1]+bn[2]*bd[2]<0) bn=[-bn[0],-bn[1],-bn[2]];   /* la normale de la voile, tournée vers l'avant et sous le vent : le creux gonfle de ce côté-là */
+    g={M:c.M, T:sp.amure, gu:gu, L:L, pied:pied, E:E, bn:bn, rond:sp.rond, ep:sp.epaule, creux:Math.abs(S.creuxSpi), fas:S.fasSpi*(0.3+0.7*S.echelle), t:S.t,
+       ecoute:[sp.amure[0]+pied[0]*E, sp.amure[1]+pied[1]*E, sp.amure[2]+pied[2]*E]}   /* le point d'écoute, dans le repère du bateau */
+  }
+  return c.spiG=g;
+}
+/* Un point de la surface. u va du guindant (0) à la chute (1), v du pied (0) à la tête (1). Le guindant (u=0) est le segment droit de l'amure à la
+   tête, sans arc. La largeur de la tranche (pr, en pieds) vaut 1 au pied, tombe à zéro en tête et suit 1 - v^epaule : la partie basse porte
+   (pleine largeur jusqu'au tiers), le tiers haut se referme vite vers un point de tête étroit. La chute respire (rond), le pied pend en demi-lune
+   et le creux gonfle selon bn. L'écoute (u=1, v=0) et l'amure (u=0, v=0) ne bougent pas : rien ne faseye aux deux points tenus. */
+function spiPoint(g,u,v){
+  var pr=1-Math.pow(v,g.ep)+g.rond*(1+0.05*Math.sin(g.t*1.7+v*4))*Math.sin(PI*v), ch=g.E*pr,
+      ventre=g.creux*0.11*ch*Math.sin(PI*Math.pow(u,0.78))*(1-0.3*v)*(1+0.05*Math.sin(g.t*1.3+v*3)),
+      fas=g.fas*ch*(0.055*Math.sin(u*12-g.t*23+v*5)+0.03*Math.sin(u*21+g.t*31-v*9))*Math.sqrt(u)*Math.min(v*5,1)+ch*0.004*Math.sin(v*46-g.t*15)*u*u*u*Math.min(v*5,1),
+      pend=0.08*g.E*Math.sin(PI*u)*Math.pow(Math.max(1-v/0.22,0),2), d=ventre+fas, uc=u*ch;
+  return [g.T[0]+g.gu[0]*v+g.pied[0]*uc+g.bn[0]*d,
+          g.T[1]+g.gu[1]*v+g.pied[1]*uc+g.bn[1]*d-pend,
+          g.T[2]+g.gu[2]*v+g.pied[2]*uc+g.bn[2]*d];
+}
 BATEAUX.skiff.voiles=function(c){
   var film=[0.93,0.94,0.95], fib=[0.42,0.45,0.5];   /* film clair à fibres grises, tête de grand-voile rouge */
-  return [{M:c.Mb, guindant:[0,9.3,0.14], bordure:[0,0.01,1], E:3.3, puis:0.9, rond:0.1, tete:0.42, vrille:0.13, creux:S.creuxGV, fas:S.fasGV, teinte:film, bande:ROUGE_C, bandeH:0.83,
+  var vl=[{M:c.Mb, guindant:[0,9.3,0.14], bordure:[0,0.01,1], E:3.3, puis:0.9, rond:0.1, tete:0.42, vrille:0.13, creux:S.creuxGV, fas:S.fasGV, teinte:film, bande:ROUGE_C, bandeH:0.83,
            lattes:7, fibres:0.5, fibC:fib, marque:MARINE_C, num:18},   /* grand-voile à corne, sept lattes forcées */
           {M:mul(mul(c.M,trans(0,0.46,-2.62)),rotAxe(c.g.axeFoc,S.foc)), guindant:[0,7.25,1.75], bordure:norm3([0,0.22,1.9]), E:1.95, puis:1, rond:0.05, tete:0.04, vrille:0.09, creux:S.creuxFoc, fas:S.fasFoc*1.2,
            teinte:film, bandeH:2, lattes:3, fibres:0.5, fibC:fib, marque:MARINE_C, penons:1}];
+  return vl;   /* le spi n'est pas dans cette liste : surface à part, voir spiGeom() et spiPoint() */
 };
 BATEAUX.skiff.traits=function(c){
   /* étai, haubans, bas-haubans, losanges des barres de flèche, sous-barbe et haubans du bout-dehors */
   var t=[0,0.46,-2.62, 0,7.75,-0.83,  -0.95,0.4,-0.6, 0,7.9,-0.83,  0.95,0.4,-0.6, 0,7.9,-0.83,  0,0.5,-6.45, 0,7.9,-0.83,
          -0.95,0.4,-0.6, 0,4.3,-0.88,  0.95,0.4,-0.6, 0,4.3,-0.88,  0,0.5,-6.45, 0,-0.02,-2.72,  0,0.5,-6.45, -0.6,0.42,-1.0,  0,0.5,-6.45, 0.6,0.42,-1.0], i, k, po, cb=Math.cos(S.bome), sb=Math.sin(S.bome);
   for(k=-1;k<=1;k+=2) t.push(0,1.6,-0.94, k*0.55,4.3,-0.6,  k*0.55,4.3,-0.6, k*0.42,7.0,-0.56,  k*0.42,7.0,-0.56, 0,9.4,-0.82);
-  var bomeMil=[sb*2.1,0.98,-0.93+cb*2.1], hd=this.capelage;
+  var bomeMil=[sb*2.1,0.98,-0.93+cb*2.1], hd=this.capelage, sv=spiGeom(c);
+  if(sv && S.spi>0.05){ var xs=-S.spiCote*this.demiAiles, ec=sv.ecoute;   /* deux bouts du point d'écoute vers l'arrière, aux deux ferrures de l'aile sous le vent */
+    t.push(ec[0],ec[1],ec[2],xs,0.66,2.62, ec[0],ec[1],ec[2],xs,0.66,0.95) }
   if(!EQUIPAGE) return t;
   for(i=0;i<3;i++){ po=c.poses[i]; if(po.sorti>0.25){ var cr=v3(po.bassin,po.haut,0.12); t.push(hd[0],hd[1],hd[2],cr[0],cr[1],cr[2]) } }          /* câbles de trapèze */
   po=c.poses[2]; t.push(0,0.6,2.55,po.mainD[0],po.mainD[1],po.mainD[2]);                                                              /* stick de barre */
@@ -1423,15 +1492,19 @@ BATEAUX.tp52.gerbes=function(S){
 
 /* ------------------------------------------------------------------ pièces communes */
 function construire(){
-  var ROUGE=[0.85,0.2,0.15], BLANC=[0.95,0.95,0.94], SOMBRE=[0.16,0.19,0.24], i, j, id;
-  var bo=new Maille(); bo.tube([0,-0.5,0],[0,0.45,0],0.62,0.62,ROUGE,14); bo.tube([0,0.45,0],[0,0.62,0],0.62,0.5,BLANC,14); bo.tube([0,0.62,0],[0,2.1,0],0.5,0.09,ROUGE,14); bo.tube([0,2.1,0],[0,2.5,0],0.035,0.035,SOMBRE,5); bo.tube([0,2.5,0],[0,2.72,0],0.16,0.16,ROUGE,8);
-  G.bouee=televerser(bo);
+  var ROUGE=[0.85,0.2,0.15], i, j, id;
   /* voiles souples : une grille (u du guindant à la chute, v du bas vers la tête), déformée dans le shader */
   var NU=18, NV=34, uv=[], ix=[]; for(j=0;j<=NV;j++)for(i=0;i<=NU;i++) uv.push(i/NU,j/NV);
   for(j=0;j<NV;j++)for(i=0;i<NU;i++){ var a2=j*(NU+1)+i; ix.push(a2,a2+1,a2+NU+2,a2,a2+NU+2,a2+NU+1) }
   var vb=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,vb); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(uv),gl.STATIC_DRAW);
   var ib=gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(ix),gl.STATIC_DRAW);
   G.voile={vb:vb,ib:ib,n:ix.length};
+  /* le spi : une grille de Maille dont seuls les sommets changent à chaque image (la topologie, elle, est montée une fois) ;
+     la couleur de chaque sommet porte son (u,v), lu par le shader de toile */
+  var spm=new Maille(), spa, spj, spl; for(spj=0;spj<=SPI_NV;spj++)for(spl=0;spl<=SPI_NU;spl++) spm.s(0,0,0,[spl/SPI_NU,spj/SPI_NV,0]);
+  for(spj=0;spj<SPI_NV;spj++)for(spl=0;spl<SPI_NU;spl++){ spa=spj*(SPI_NU+1)+spl; spm.tri(spa,spa+1,spa+SPI_NU+2); spm.tri(spa,spa+SPI_NU+2,spa+SPI_NU+1) }
+  var spvb=gl.createBuffer(), spib=gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,spib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(spm.i),gl.STATIC_DRAW);
+  G.spi={m:spm, vb:spvb, ib:spib, n:spm.i.length, d:new Float32Array(spm.p.length/3*8)};
   /* girouette de tête de mât, segment et boule pour les silhouettes */
   var pv=new Maille(); pv.quad([0,0,0],[0,0.34,0],[0,0.2,1.15],[0,0.14,1.15],ROUGE); pv.quad([0.004,0,0],[0.004,0.14,1.15],[0.004,0.2,1.15],[0.004,0.34,0],ROUGE); G.pavillon=televerser(pv);
   /* la capsule des membres : un cylindre de rayon 1 et de longueur 1, coiffé de deux demi-sphères que le shader met à l'échelle */
@@ -1512,12 +1585,11 @@ function rendre(){
   var planV=S.psi+PI-(S.bome+S.foc)*0.5, vx=Math.sin(planV), vz=-Math.cos(planV); /* direction du plan des voiles */
   function largeur(dx,dz){ var l=Math.hypot(dx,dz)||1; return 0.2+0.8*Math.abs((dx*vz-dz*vx)/l) }
   var hm=S.pilonnement+B.mat[1]; var matP=[S.x-sg*B.mat[2]+mdx*hm,hm,S.z+cg*B.mat[2]+mdz*hm]; U(p,'uMat',matP); U(p,'uMatD',[mdx,mdy,mdz]); U(p,'uMatH',[B.hauteurMat,B.largeurGreement,0]); U(p,'uBrumeD',26*B.echelle); U(p,'uLarg',[largeur(fx,fz),largeur(pal.plat[0],pal.plat[2])]);
-  U(p,'uBateau',[S.x,S.z,Math.sin(S.psi),-Math.cos(S.psi)]); U(p,'uBateauS',[clamp(S.v/VPRES,0,1.1),0,0]); U(p,'uCoque',[LONG,B.demiBau,B.ecart||0,1-0.94*S.vol]); U(p,'uBouee',[bouee.x,bouee.z,0.62*(B.bouee||1)]);
+  U(p,'uBateau',[S.x,S.z,Math.sin(S.psi),-Math.cos(S.psi)]); U(p,'uBateauS',[clamp(S.v/VPRES,0,1.1),0,0]); U(p,'uCoque',[LONG,B.demiBau,B.ecart||0,1-0.94*S.vol]);
   gl.bindBuffer(gl.ARRAY_BUFFER,G.plein); gl.enableVertexAttribArray(p.a.aP); gl.vertexAttribPointer(p.a.aP,2,gl.FLOAT,false,0,0); gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
 
   /* bateau : cap, assiette, gîte */
   var M=mul(mul(mul(trans(S.x,S.pilonnement-0.02,S.z),rotY(-S.psi)),rotX(S.tangage)),rotZ(S.gite+S.roulis));
-  var hb=houle(bouee.x,bouee.z,T), Mbo=mul(mul(mul(trans(bouee.x,hb[0]*0.7,bouee.z),rotX(hb[2]*0.9+0.05*Math.sin(T*1.7))),rotZ(-hb[1]*0.9)),echelleM(B.bouee||1));
   /* girouette : elle s'aligne sur le vent apparent (vent réel moins vitesse du bateau) */
   var wx=-Math.sin(S.w)*VENT, wz=Math.cos(S.w)*VENT, bx=Math.sin(S.psi)*S.v, bz=-Math.cos(S.psi)*S.v;
   var ax=wx-bx, azv=wz-bz, capFlux=Math.atan2(ax,-azv), rel=wrap(capFlux-S.psi);
@@ -1533,7 +1605,7 @@ function rendre(){
     obj:function(mesh,mat,teinte,omb){ U(po,'uM',mat); U(po,'uTeinte',teinte||UN); U(po,'uOmb',omb==null?ombre:omb*ombre); dessiner(po,mesh) },
     cap:function(a,b,r0,r1,col,mat){ caps.push(a,b,r0,r1,col,mat==null?6:mat) }};
   B.dessiner(ctx);
-  ctx.obj(G.bouee,Mbo,null,0); ctx.obj(G.pavillon,Mp,null,0);
+  ctx.obj(G.pavillon,Mp,null,0);
   couper(p);
   /* les capsules : membres des équipiers, manivelles, tout ce qui bouge entre deux points */
   if(caps.length){ p=P.corps; eclairer(p); gl.bindBuffer(gl.ARRAY_BUFFER,G.capsule.vb); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,G.capsule.ib);
@@ -1543,8 +1615,9 @@ function rendre(){
   etat.capsules=caps.length/6;
 
   /* voiles souples */
-  p=P.voile; gl.useProgram(p.p);
-  U(p,'uVP',VP); U(p,'uCam',eye); U(p,'uSoleil',pal.soleil); U(p,'uLum',pal.lum); U(p,'uAmbH',pal.ambH); U(p,'uAmbB',pal.ambB); U(p,'uVoile',pal.voile); U(p,'uT',T); U(p,'uBrume',S.brume); U(p,'uBrumeC',pal.brume); U(p,'uBrumeD',26*B.echelle);
+  function lumiereVoile(q){ gl.useProgram(q.p);
+    U(q,'uVP',VP); U(q,'uCam',eye); U(q,'uSoleil',pal.soleil); U(q,'uLum',pal.lum); U(q,'uAmbH',pal.ambH); U(q,'uAmbB',pal.ambB); U(q,'uVoile',pal.voile); U(q,'uT',T); U(q,'uBrume',S.brume); U(q,'uBrumeC',pal.brume); U(q,'uBrumeD',26*B.echelle) }
+  p=P.voile; lumiereVoile(p);
   gl.bindBuffer(gl.ARRAY_BUFFER,G.voile.vb); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,G.voile.ib); gl.enableVertexAttribArray(p.a.aP); gl.vertexAttribPointer(p.a.aP,2,gl.FLOAT,false,0,0);
   var calme=0.3+0.7*S.echelle, vs=B.voiles(ctx), iv, vo; U(p,'uTF',T);
   for(iv=0;iv<vs.length;iv++){ vo=vs[iv]; var tt=vo.teinte||UN, gl2=Math.hypot(vo.guindant[0],vo.guindant[1],vo.guindant[2]);
@@ -1553,6 +1626,21 @@ function rendre(){
     U(p,'uNum',vo.num||0); U(p,'uPenons',vo.penons||0); U(p,'uAsp',vo.E/gl2); U(p,'uTrans',vo.trans!=null?vo.trans:0.62*(0.35+0.65*(tt[0]+tt[1]+tt[2])/3));
     gl.drawElements(gl.TRIANGLES,G.voile.n,gl.UNSIGNED_SHORT,0) }
   couper(p);
+  /* le spi : sa surface est recalculée à chaque image (spiPoint), normales par Maille, puis envoyée dans un tampon dynamique */
+  var spg=B.spi?spiGeom(ctx):null;
+  if(spg){ var spm=G.spi.m, spd=G.spi.d, spk, spo, spq;
+    for(spk=0;spk<spm.p.length/3;spk++){ spq=spiPoint(spg,spm.c[spk*3],spm.c[spk*3+1]); spm.p[spk*3]=spq[0]; spm.p[spk*3+1]=spq[1]; spm.p[spk*3+2]=spq[2] }
+    spm.normales();
+    for(spk=0;spk<spm.p.length/3;spk++){ spo=spk*8; spd[spo]=spm.p[spk*3]; spd[spo+1]=spm.p[spk*3+1]; spd[spo+2]=spm.p[spk*3+2]; spd[spo+3]=spm.n[spk*3]; spd[spo+4]=spm.n[spk*3+1]; spd[spo+5]=spm.n[spk*3+2]; spd[spo+6]=spm.c[spk*3]; spd[spo+7]=spm.c[spk*3+1] }
+    p=P.spi; lumiereVoile(p);
+    gl.bindBuffer(gl.ARRAY_BUFFER,G.spi.vb); gl.bufferData(gl.ARRAY_BUFFER,spd,gl.DYNAMIC_DRAW); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,G.spi.ib);
+    gl.enableVertexAttribArray(p.a.aP); gl.vertexAttribPointer(p.a.aP,3,gl.FLOAT,false,32,0);
+    gl.enableVertexAttribArray(p.a.aN); gl.vertexAttribPointer(p.a.aN,3,gl.FLOAT,false,32,12);
+    gl.enableVertexAttribArray(p.a.aU); gl.vertexAttribPointer(p.a.aU,2,gl.FLOAT,false,32,24);
+    U(p,'uM',spg.M); U(p,'uTeinteV',ROUGE_C); U(p,'uBandeV',BLANC_C); U(p,'uBandeH',0.8); U(p,'uMarque',MARINE_C); U(p,'uFibC',UN); U(p,'uAsp',spg.E/spg.L);
+    U(p,'uTrans',0.62*(0.35+0.65*(ROUGE_C[0]+ROUGE_C[1]+ROUGE_C[2])/3));   /* rouge franc, tête blanche, marque marine : se lit sur l'eau sombre */
+    gl.drawElements(gl.TRIANGLES,G.spi.n,gl.UNSIGNED_SHORT,0);
+    couper(p) }
 
   /* gréement : des traits, recalculés à chaque image quand ils suivent l'équipage (trapèzes, écoutes) */
   gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(false);
