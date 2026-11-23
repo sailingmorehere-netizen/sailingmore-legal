@@ -1036,6 +1036,11 @@ def ecrire_page(dossier: Path = SITE) -> str:
                       "alt": _alt(b, mots, "fr"), "titre": _alt(b, mots, "fr").split(" : ")[0],
                       "legende": f"{LEGENDE} — {_alt(b, mots, 'fr')}"})
     MANIFESTE.write_text(json.dumps(manif, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    # même chaîne : le manifeste qu'on vient d'écrire est lu tout de suite, chaque SVG est rendu en WebP
+    # et posé au chemin du manifeste (celui du HTML, du JSON-LD et du sitemap).
+    import bateaux_rendu
+    for p in bateaux_rendu.rendre_manifeste(MANIFESTE, dossier):
+        print("image posée :", p)
     maj_sitemap(mots)
     # le lexique se réécrit avec ses nouvelles ancres (même générateur, chemins de cette copie)
     try:
