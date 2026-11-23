@@ -43,6 +43,14 @@ var VENT_DEPART=0;        /* direction d'où vient le vent au départ, en degré
 var EQUIPAGE=true;        /* l'équipage à bord, animé (false pour le retirer) */
 var EMBRUNS=true;         /* gerbes d'embruns : aux foils, à l'étrave */
 var BRUME_ENTREE=3.6;     /* durée de la sortie de brume à l'ouverture, en secondes (0 pour la retirer) */
+/* Le bateau va vers la souris (ou le clic, ou le doigt). */
+var SUIVI_IMMOBILE=4;     /* secondes sans mouvement de souris avant le retour à la navigation autonome */
+var SUIVI_RETOUR=0.9;     /* amortissement du retour (s) : la barre a rendu la main aux deux tiers en 1 s, à 96 % en 3 s */
+var SUIVI_CLIC=45;        /* durée maximale d'une cible posée au clic ou au doigt, si le bateau ne l'atteint pas (s) */
+var SUIVI_PORTEE=1000;    /* distance maximale du point d'eau visé (m) : au-delà, le curseur est dans le ciel ou sur l'horizon */
+var SUIVI_MOUV=12;        /* mouvement de souris (px) qui reprend la main après un clic */
+var SUIVI_ARRIVEE=1;      /* rayon où un clic est consommé, en longueurs de coque (le survol, lui, n'est jamais consommé) */
+var SUIVI_MORT=0.5;       /* zone morte autour du bateau, en longueurs de coque : plus près, le cap ne change pas */
 /* Heure du jour. La réglette en haut de la scène la règle de 0 à 24 h. */
 var AUTO_PAR_DEFAUT=true;  /* true : au chargement, la scène prend l'heure de l'horloge de l'appareil */
 var HEURE_DEPART=19.25;    /* heure utilisée quand Auto est coupé au départ (19.25 = 19 h 15, l'heure dorée) */
@@ -257,6 +265,7 @@ function nouveauDepart(vent){
   S.x=bouee.x-ux*DEPART+Math.cos(vent)*6; S.z=bouee.z-uz*DEPART+Math.sin(vent)*6;
   S.foyer=[S.x,S.z];
   stries.forEach(function(s){semer(s,true)});
+  reinitSouris(); /* une cible posée avant le départ n'a plus de sens : le bateau repart d'ailleurs */
 }
 var stries=[]; (function(){for(var i=0;i<46;i++)stries.push({x:0,z:0,vie:0,max:1,l:6})})();
 function semer(s,partout){
@@ -272,9 +281,11 @@ function pas(dt){
   var loin=mx*ux+mz*uz, travers=mx*rx+mz*rz, dist=Math.hypot(mx,mz), theta=Math.atan2(travers,loin);
   var twa=wrap(w-S.psi), a=Math.abs(twa), cible;
   S.t+=dt;
+  majSouris(dt); /* le rayon de la souris, la cible, le poids du suivi : rien du tout tant que la souris ne s'en mêle pas */
 
-  /* ---- la route : directe si la bouée est hors de la zone morte, sinon au près en tirant des bords */
-  if(S.mode==='route'){
+  /* ---- la route : directe si la bouée est hors de la zone morte, sinon au près en tirant des bords.
+     Tant que le bateau va vers la souris, c'est capSouris() qui tient cette route, avec la même mécanique. */
+  if(S.mode==='route' && !SOURIS.actif){
     if(false){ /* plus de bouée à atteindre */ }
     else{
       var seuil=S.direct ? PRES-1*RAD : PRES+1.5*RAD, avant=S.amure; /* plus de bordées imposées : on tient l'allure que la souris donne */
@@ -295,6 +306,12 @@ function pas(dt){
   }
   if(S.mode==='route'){ S.allureLue=damp(S.allureLue,S.allure,0.45,dt); cible=wrap(w-S.amure*S.allureLue) }
   else cible=w; /* arrivée : bout au vent */
+  /* ---- vers la souris : le cap visé remplace celui de la route, puis s'efface en douceur quand elle s'en va.
+     Il ne touche qu'au cap demandé : la barre, la polaire et les voiles ci-dessous restent celles d'avant. */
+  if(S.mode==='route' && SOURIS.poids>0){
+    if(SOURIS.actif) SOURIS.cap=capSouris(w,a);
+    cible=melangeCap(cible,SOURIS.cap,SOURIS.poids);
+  }
 
   /* ---- barre : le bateau tourne d'autant mieux qu'il a de la vitesse */
   var err=wrap(cible-S.psi), vmax=B.barre*RAD*clamp(S.v/VPRES,0.62,1);
@@ -1227,6 +1244,7 @@ function rendre(){
   var portrait=vue.asp<0.95, fov=c.fov*(portrait?PLANS.portrait.focale:1)*RAD, V=regard(eye,cib), PR=perspective(fov,vue.asp,1.5,5200), th=Math.tan(fov/2);
   PR[9]=vue.bas; /* l'image descend de la hauteur de la réglette : le cadrage reste entier sous elle */
   var VP=mul(PR,V.m);
+  memoCam(eye,V,th); /* la caméra de cette image, pour que la boucle y lance le rayon de la souris */
   var T=S.t, p;
   gl.viewport(0,0,canvas.width,canvas.height);
   gl.clear(gl.DEPTH_BUFFER_BIT);
@@ -1430,6 +1448,125 @@ function synchroniser(){ if(auto) reglerHeure(heureAppareil(),false) }
 if(elHeure) elHeure.addEventListener('input',function(){ auto=false; reglerHeure(parseFloat(elHeure.value),true) });
 if(elAuto) elAuto.addEventListener('click',function(){ auto=!auto; if(auto) reglerHeure(heureAppareil(),false); else reglerHeure(heure,false) });
 
+/* ------------------------------------------------------------------ le bateau va vers la souris */
+/* Nicolas, 23/11/2026 : « le bateau va vers la souris ». Les gestionnaires d'événements retiennent seulement
+   la position du pointeur. Tout le calcul est dans la boucle, par pas() : le rayon qui part de la caméra à
+   travers le curseur, son point d'impact sur l'eau (y = 0), le cap qui y mène, le poids du suivi.
+   Le bateau ne triche pas : ce cap n'est qu'une demande à la barre (même plafond B.barre, même polaire), et
+   si le point est dans la zone du près, capSouris() louvoie avec PRES, COULOIR et le virement S.man. */
+var mqReduit=window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+var CAM={ok:false, eye:[0,0,0], f:[0,0,-1], r:[1,0,0], u:[0,1,0], th:1, asp:1, bas:0};  /* la caméra de la dernière image */
+var SOURIS={
+  px:0, py:0, dedans:false, bouge:false,     /* le pointeur : sa position, s'il est sur la scène, s'il a bougé */
+  baisseX:0, baisseY:0,                      /* où le bouton est descendu (pour distinguer un clic d'un glissement) */
+  clicNeuf:false, clicX:0, clicY:0, refX:0, refY:0,
+  mode:0,          /* 0 : rien, 1 : survol, 2 : clic (cible mémorisée) */
+  age:0, tClic:0,  /* secondes depuis le dernier mouvement, depuis le clic */
+  tx:0, tz:0,      /* le point d'eau visé */
+  hx:0, hz:0,      /* le dernier point d'eau trouvé par pointEau() */
+  actif:false,     /* le suivi tient la route */
+  poids:0,         /* 1 : le cap de la souris commande ; il retombe à 0 en SUIVI_RETOUR secondes quand elle s'en va */
+  cap:0,           /* le dernier cap visé, gardé pendant le retour */
+  rect:{l:0,t:0,w:1,h:1}, rectPerime:true, vw:0, vh:0
+};
+function reinitSouris(){ var s=SOURIS; s.mode=0; s.actif=false; s.poids=0; s.bouge=false; s.clicNeuf=false }
+function memoCam(eye,V,th){ var k=CAM, i; for(i=0;i<3;i++){ k.eye[i]=eye[i]; k.f[i]=V.f[i]; k.r[i]=V.r[i]; k.u[i]=V.u[i] }
+  k.th=th; k.asp=vue.asp; k.bas=vue.bas; k.ok=true }
+function majRectSouris(){ var r=canvas.getBoundingClientRect(), R=SOURIS.rect;
+  R.l=r.left; R.t=r.top; R.w=Math.max(1,r.width); R.h=Math.max(1,r.height); SOURIS.rectPerime=false; SOURIS.vw=vue.w; SOURIS.vh=vue.h }
+
+/* Du point d'écran au point d'eau. Même géométrie que rendre() : un point du canvas (nx, ny dans [-1,1]) est vu
+   sous la direction  avant + droite·nx·asp·th + haut·(ny+bas)·th  (th = tan(champ/2) ; bas = le décalage
+   PR[9] de la perspective). Le rayon part de l'œil ; il touche l'eau en t = -œil.y / dir.y.
+   Faux si le rayon ne descend pas (ciel), s'il tombe hors de la portée, ou si le point est hors du canvas. */
+function pointEau(cx,cy){
+  var s=SOURIS, R=s.rect, k=CAM, nx=2*(cx-R.l)/R.w-1, ny=1-2*(cy-R.t)/R.h;
+  if(!k.ok || nx<-1 || nx>1 || ny<-1 || ny>1) return false;
+  var kx=nx*k.asp*k.th, ky=(ny+k.bas)*k.th;
+  var dx=k.f[0]+k.r[0]*kx+k.u[0]*ky, dy=k.f[1]+k.r[1]*kx+k.u[1]*ky, dz=k.f[2]+k.r[2]*kx+k.u[2]*ky;
+  if(dy>-1e-4) return false;
+  var t=-k.eye[1]/dy, hx=k.eye[0]+dx*t, hz=k.eye[2]+dz*t, ex=hx-S.x, ez=hz-S.z;
+  if(ex*ex+ez*ez>SUIVI_PORTEE*SUIVI_PORTEE) return false;
+  s.hx=hx; s.hz=hz; return true;
+}
+
+/* L'état du suivi, une fois par pas : qui commande (clic, survol, personne), le point visé, le poids. */
+function majSouris(dt){
+  var s=SOURIS, reduit=!!(mqReduit && mqReduit.matches);
+  if(S.mode!=='route' || !CAM.ok){ s.mode=0; s.actif=false; s.poids=0; s.bouge=false; s.clicNeuf=false; return }
+  if(s.mode===0 && s.poids===0 && !s.bouge && !s.clicNeuf) return;   /* la souris ne s'en mêle pas : la scène est celle d'avant */
+  if(s.rectPerime || s.vw!==vue.w || s.vh!==vue.h) majRectSouris();
+  /* un clic est consommé à l'arrivée, dans un rayon lié au bateau (pas ARRIVEE : celui-là est le rayon de la bouée).
+     Test fait AVANT la pose d'un nouveau clic : une cible n'est jamais consommée dans l'image où elle est posée.
+     Le survol n'est pas concerné : sa cible est un point qui bouge avec le curseur, pas une marque à atteindre. */
+  if(s.mode===2){ var ar=SUIVI_ARRIVEE*LONG, ex=s.tx-S.x, ez=s.tz-S.z; if(ex*ex+ez*ez<ar*ar) s.mode=0 }
+  /* un clic (ou un doigt) pose la cible ; un second clic ailleurs la remplace ; un clic dans le ciel ne fait rien */
+  if(s.clicNeuf){ s.clicNeuf=false;
+    if(pointEau(s.clicX,s.clicY)){ s.mode=2; s.tx=s.hx; s.tz=s.hz; s.tClic=0; s.refX=s.clicX; s.refY=s.clicY; s.bouge=false } }
+  /* un mouvement de souris sur la scène reprend la main (après un clic, il doit dépasser SUIVI_MOUV pixels) ;
+     en mouvement réduit, jamais : seule l'action explicite agit */
+  if(s.bouge){ s.bouge=false;
+    if(s.dedans && !reduit && (s.mode!==2 || Math.abs(s.px-s.refX)+Math.abs(s.py-s.refY)>SUIVI_MOUV)){ s.mode=1; s.age=0 } }
+  if(s.mode===1){
+    s.age+=dt;
+    if(!s.dedans || reduit || s.age>SUIVI_IMMOBILE || !pointEau(s.px,s.py)) s.mode=0;  /* sorti, immobile, ou dans le ciel */
+    else{ s.tx=s.hx; s.tz=s.hz }
+  } else if(s.mode===2){ s.tClic+=dt; if(s.tClic>SUIVI_CLIC) s.mode=0 }
+  if(s.mode!==0 && !s.actif && s.poids===0) s.cap=S.psi;  /* prise de la main : le cap de départ est celui du bateau, pas un vieux cap */
+  s.actif=s.mode!==0;
+  if(s.actif) s.poids=1;
+  else if(s.poids>0){ s.poids=damp(s.poids,0,SUIVI_RETOUR,dt); if(s.poids<0.004) s.poids=0 }
+}
+
+/* Le cap qui mène au point visé. Même mécanique que la route vers la bouée : direct si le point est hors de la
+   zone du près (seuil PRES, avec la même marge), sinon on tient le près sur l'amure en cours et on vire quand le
+   point sort du couloir (COULOIR), avec le même délai B.repos et le même virement S.man. Jamais de ligne droite
+   à travers le vent. a : l'angle au vent du bateau avant la barre de ce pas. */
+function capSouris(w,a){
+  var s=SOURIS, ux=Math.sin(w), uz=-Math.cos(w), rx=Math.cos(w), rz=Math.sin(w);
+  var mx=s.tx-S.x, mz=s.tz-S.z, mort=SUIVI_MORT*LONG;
+  if(mx*mx+mz*mz<mort*mort) return s.cap;   /* zone morte : le point est sur le bateau, son gisement n'a pas de sens, on ne touche à rien */
+  var loin=mx*ux+mz*uz, travers=mx*rx+mz*rz, theta=Math.atan2(travers,loin);
+  var seuil=S.direct ? PRES-1*RAD : PRES+1.5*RAD, avant=S.amure, cap;
+  if(Math.abs(theta)>=seuil){ S.direct=true; S.amure=-sgn(theta); cap=wrap(w+theta) }
+  else{
+    S.direct=false;
+    if(S.t-S.dernierVirement>(B.repos||2.5)){
+      /* le point est sorti du couloir du côté opposé à notre bord : on vire pour l'y retrouver */
+      if(travers>COULOIR && S.amure>0) S.amure=-1;
+      else if(travers<-COULOIR && S.amure<0) S.amure=1;
+    }
+    cap=wrap(w-S.amure*PRES);
+  }
+  if(S.amure!==avant){
+    S.dernierVirement=S.t;
+    if(a<100*RAD) S.man={de:avant, t0:S.t, etape:1};  /* virement si l'on change d'amure en passant par le vent debout */
+  }
+  return cap;
+}
+/* Le retour : on fond les écarts de cap (et non les caps), pour ne pas dépendre du tour de cadran. À g = 1 c'est le cap
+   de la souris, à g = 0 celui de la route d'avant ; entre les deux, la barre le suit avec son plafond habituel. */
+function melangeCap(auto,suivi,g){ return g>=1 ? suivi : wrap(S.psi+wrap(suivi-S.psi)*g+wrap(auto-S.psi)*(1-g)) }
+
+/* Les gestionnaires ne font que retenir : position du pointeur, bouton descendu, clic. Rien n'est capté sur
+   touchmove : la page défile comme avant, et le doigt ne pose une cible que par un tap (le clic qui en résulte). */
+window.addEventListener('pointermove',function(e){
+  if(e.pointerType==='touch') return;
+  var s=SOURIS; s.px=e.clientX; s.py=e.clientY; s.bouge=true;
+  s.dedans=(e.target===canvas && glisse===null);   /* sur un bouton, le cadran ou un texte, ou pendant un glissement : pas sur la scène */
+},{passive:true});
+document.documentElement.addEventListener('pointerleave',function(e){ if(e.pointerType!=='touch') SOURIS.dedans=false });
+window.addEventListener('blur',function(){ SOURIS.dedans=false });
+window.addEventListener('pointerdown',function(e){ SOURIS.baisseX=e.clientX; SOURIS.baisseY=e.clientY },{passive:true});
+window.addEventListener('click',function(e){
+  if(e.target!==canvas) return;                    /* le cadran, les boutons de bateau, les liens gardent leurs clics */
+  var s=SOURIS; if(Math.abs(e.clientX-s.baisseX)+Math.abs(e.clientY-s.baisseY)>10) return;   /* un glissement n'est pas un clic */
+  s.clicX=e.clientX; s.clicY=e.clientY; s.clicNeuf=true;
+  if(etat.reduit && !etat.tourne && S.mode==='route'){ etat.veut=true; lancer() }   /* mouvement réduit : le clic lance l'animation */
+});
+window.addEventListener('scroll',function(){ SOURIS.rectPerime=true },{passive:true,capture:true});
+window.addEventListener('resize',function(){ SOURIS.rectPerime=true });
+
 /* ------------------------------------------------------------------ démarrage */
 function demarrer(){
   vue.asp=1.6; reglerHeure(auto?heureAppareil():HEURE_DEPART,false); installerChoix(); majTextes();
@@ -1480,5 +1617,20 @@ var DEG=Math.PI/180;
     dernierDefile=y;
   },{passive:true});
   window.addEventListener('touchmove',function(e){ var t=e.touches&&e.touches[0]; if(!t) return; if(dernierY!==null) pousse(t.clientY-dernierY); dernierY=t.clientY },{passive:true});
+})();
+/* ---- manoeuvre commandée de l'extérieur (lexique, 22/11/2026) : UN changement d'état par clic
+        (allure et/ou amure), la boucle existante fait le reste — aucun coût par image ajouté. */
+(function(){
+  var retour=null;
+  window.merManoeuvre=function(o){
+    if(!S || S.mode!=='route') return false;
+    if(o.flip){ S.amure=-S.amure; S.dernierVirement=S.t }
+    if(o.a!=null){
+      S.allure = o.a==='P' ? ((B&&B.pres)||40)*DEG : o.a*DEG;
+      clearTimeout(retour);
+      retour=setTimeout(function(){ S.allure=90*DEG },o.tenir||5000);
+    }
+    return true;
+  };
 })();
 })();
