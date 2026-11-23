@@ -41,8 +41,20 @@
     background:rgba(226,58,62,.10)}
   .entete .menu-d nav a.legal{font-size:.74rem;color:var(--gris)}
   .entete .menu-d nav a.legal:hover{color:#fff}
-  @media(max-width:520px){.entete .menu-d{margin-right:.6rem}
-    .entete .menu-d summary{font-size:.7rem}}
+  /* Téléphone : une seule colonne, du texte lisible, des lignes qu'on touche (23/11/2026 : « refais le
+     menu il est illisible sur tel »). En deux colonnes sur 390 px, les libellés se coupaient
+     (« Calendrier des / régates ») et chaque ligne mesurait 35 px, sous la cible tactile de 48 px. */
+  @media(max-width:600px){
+    .entete .menu-d{position:static;margin-right:.4rem}
+    .entete .menu-d summary{font-size:.78rem;min-height:44px;padding:0 .15rem}
+    .entete .menu-d nav{left:.4rem;right:.4rem;top:calc(100% + .3rem);width:auto;
+      grid-template-columns:1fr;gap:.1rem;padding:.45rem}
+    .entete .menu-d nav a{display:flex;align-items:center;min-height:48px;
+      padding:.6rem .8rem;font-size:1rem;line-height:1.25}
+    .entete .menu-d nav a.legal{min-height:42px;font-size:.9rem;padding:.5rem .8rem}
+    .entete .menu-d nav a.legal:first-of-type{margin-top:.35rem;
+      border-top:1px solid rgba(238,243,247,.14);padding-top:.7rem}
+  }
 
 :root{--h-entete:3.2rem}
 html{scroll-padding-top:calc(var(--h-entete) + .6rem)}
@@ -166,19 +178,26 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
 </head><body><div class="mer-fond mer-fond-commandes">
   <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
 </div>
-<header class="entete"><a class="nom" href="index.html">Sailing More</a><label class="lg"><span hidden>Langue</span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto</option><option value="fr">Français</option><option value="en">English</option><option value="it">Italiano</option><option value="es">Español</option><option value="pt">Português</option><option value="de">Deutsch</option></select></label><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button><button data-lang="de" aria-pressed="false">DE</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="index.html">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html">Règles de course</a><a href="stages.html">Stages de voile</a><a href="cours.html" aria-current="page">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="lexique.html">Lexique</a><a href="annonceurs.html">Annonceurs</a><a href="mentions-legales.html" class="legal">Mentions légales</a><a href="confidentialite.html" class="legal">Confidentialité</a><a href="delete.html" class="legal">Supprimer mes données</a></nav></details></header><style>
-.lg{position:relative;display:inline-flex;align-items:center}
-.lg select{appearance:none;-webkit-appearance:none;background:transparent;color:inherit;
-  font:inherit;font-size:.76rem;letter-spacing:.04em;padding:.32rem 1.5rem .32rem .55rem;
-  border:1px solid rgba(255,255,255,.34);border-radius:.4rem;cursor:pointer;min-height:32px}
-.lg select:hover{border-color:rgba(255,255,255,.62)}
-.lg select:focus-visible{outline:2px solid #e23a3e;outline-offset:2px}
+<header class="entete"><a class="nom" href="index.html">Sailing More</a><div class="lg"><span hidden>Langue</span><span class="globe" aria-hidden="true"></span><span class="code" aria-hidden="true">FR</span><span class="chev" aria-hidden="true"></span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto (langue du navigateur)</option><option value="fr">FR · Français</option><option value="en">EN · English</option><option value="it">IT · Italiano</option><option value="es">ES · Español</option><option value="pt">PT · Português</option><option value="de">DE · Deutsch</option></select></div><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button><button data-lang="de" aria-pressed="false">DE</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="index.html">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html">Règles de course</a><a href="stages.html">Stages de voile</a><a href="cours.html" aria-current="page">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="lexique.html">Lexique</a><a href="annonceurs.html">Annonceurs</a><a href="mentions-legales.html" class="legal">Mentions légales</a><a href="confidentialite.html" class="legal">Confidentialité</a><a href="delete.html" class="legal">Supprimer mes données</a></nav></details></header><style>
+/* La langue : une pastille du site, pas un contrôle du système (Nicolas, 23/11/2026 : « pour la barre
+   des langues il faut un truc plus joli »). Plus de cadre blanc : un globe, le code de la langue en
+   capitales comme les libellés de la barre, le filet rouge de MENU dessous, et le <select> natif posé
+   transparent par-dessus — la roue iOS/Android et les lecteurs d'écran gardent leur menu à eux. */
+.lg{position:relative;display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .1rem;margin-left:.25rem;
+  border-bottom:1px solid rgba(226,58,62,.6);cursor:pointer;line-height:1}
+.lg:hover{border-bottom-color:#fff}
+.lg:focus-within{outline:1px solid #e23a3e;outline-offset:4px}
+.lg .globe{width:.86rem;height:.86rem;flex:0 0 auto;opacity:.85;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e8eef4' stroke-width='1.7'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cellipse cx='12' cy='12' rx='4' ry='9'/%3E%3Cpath d='M3 12h18'/%3E%3C/svg%3E") center/contain no-repeat}
+.lg .code{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:#e8eef4}
+.lg .chev{width:.36rem;height:.36rem;margin:-.14rem .1rem 0 .18rem;opacity:.7;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
+.lg select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:1rem;
+  appearance:none;-webkit-appearance:none;border:0;background:transparent;color:transparent}
+.lg select:focus{outline:none}
 .lg option{color:#10161f;background:#fff}
-.lg::after{content:"";position:absolute;right:.55rem;width:.42rem;height:.42rem;pointer-events:none;
-  border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;
-  transform:rotate(45deg);margin-top:-.2rem;opacity:.75}
-@media (max-width:520px){.lg select{font-size:.72rem}}
-@media (pointer:coarse){.lg select{min-height:44px;padding-right:1.6rem}}
+@media (max-width:520px){.lg{padding:.3rem .1rem}}
+@media (pointer:coarse){.lg{min-height:44px;min-width:3.4rem;justify-content:center;gap:.34rem}}
 </style><script>
 (function(){
   var d = document.querySelector('.entete .menu-d');
@@ -197,18 +216,32 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
   caler(); addEventListener("load", caler); addEventListener("resize", caler); setTimeout(caler, 300);
   var sel = document.getElementById("langue-sel"), zone = document.getElementById("langues");
   if(!sel || !zone) return;
+  /* Le code affiché sur la pastille : la langue choisie, ou celle que la page affiche en mode auto. */
+  var code = document.querySelector(".lg .code");
+  function etiq(v){
+    if(!code) return;
+    if(v && v !== "auto"){ code.textContent = v.toUpperCase(); return; }
+    var l = (document.documentElement.lang || "fr").slice(0, 2).toUpperCase();
+    code.textContent = l || "FR";
+  }
   function lire(){ try{ return localStorage.getItem("sm-langue") || "auto"; }catch(e){ return "auto"; } }
   function poser(){
     var v = lire(), o = sel.options;
-    for(var i = 0; i < o.length; i++){ if(o[i].value === v){ sel.value = v; return; } }
-    sel.value = "auto";
+    for(var i = 0; i < o.length; i++){ if(o[i].value === v){ sel.value = v; etiq(v); return; } }
+    sel.value = "auto"; etiq("auto");
   }
   sel.addEventListener("change", function(){
     var v = sel.value, bs = zone.querySelectorAll("button[data-lang]");
+    etiq(v);
     for(var i = 0; i < bs.length; i++){
       if(bs[i].getAttribute("data-lang") === v){ bs[i].click(); return; }
     }
   });
+  /* la page change de langue sans passer par le menu (auto, bouton, retour arrière) */
+  if(window.MutationObserver){
+    new MutationObserver(function(){ etiq(sel.value); })
+      .observe(document.documentElement, {attributes: true, attributeFilter: ["lang"]});
+  }
   poser();
   addEventListener("load", poser);
   setTimeout(poser, 400);
@@ -508,7 +541,7 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
   .mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{transition:none}
 }
 </style>
-<script src="mer-louvoyage.js?v=2641daef" defer></script>
+<script src="mer-louvoyage.js?v=e57f262e" defer></script>
 <script>
 /* les commandes de la scène s'effacent dès qu'on a quitté le haut de la page */
 (function(){

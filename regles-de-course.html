@@ -41,8 +41,20 @@
     background:rgba(226,58,62,.10)}
   .entete .menu-d nav a.legal{font-size:.74rem;color:var(--gris)}
   .entete .menu-d nav a.legal:hover{color:#fff}
-  @media(max-width:520px){.entete .menu-d{margin-right:.6rem}
-    .entete .menu-d summary{font-size:.7rem}}
+  /* Téléphone : une seule colonne, du texte lisible, des lignes qu'on touche (23/11/2026 : « refais le
+     menu il est illisible sur tel »). En deux colonnes sur 390 px, les libellés se coupaient
+     (« Calendrier des / régates ») et chaque ligne mesurait 35 px, sous la cible tactile de 48 px. */
+  @media(max-width:600px){
+    .entete .menu-d{position:static;margin-right:.4rem}
+    .entete .menu-d summary{font-size:.78rem;min-height:44px;padding:0 .15rem}
+    .entete .menu-d nav{left:.4rem;right:.4rem;top:calc(100% + .3rem);width:auto;
+      grid-template-columns:1fr;gap:.1rem;padding:.45rem}
+    .entete .menu-d nav a{display:flex;align-items:center;min-height:48px;
+      padding:.6rem .8rem;font-size:1rem;line-height:1.25}
+    .entete .menu-d nav a.legal{min-height:42px;font-size:.9rem;padding:.5rem .8rem}
+    .entete .menu-d nav a.legal:first-of-type{margin-top:.35rem;
+      border-top:1px solid rgba(238,243,247,.14);padding-top:.7rem}
+  }
 
 :root{--h-entete:3.2rem}
 html{scroll-padding-top:calc(var(--h-entete) + .6rem)}
@@ -247,19 +259,26 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
 </style>
 </head><body><div class="mer-fond mer-fond-commandes">
   <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
-</div><header class="entete"><a class="nom" href="index.html">Sailing More</a><label class="lg"><span hidden>Langue</span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto</option><option value="fr">Français</option><option value="en">English</option><option value="it">Italiano</option><option value="es">Español</option><option value="pt">Português</option><option value="de">Deutsch</option></select></label><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button><button data-lang="de" aria-pressed="false">DE</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="index.html">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html" aria-current="page">Règles de course</a><a href="stages.html">Stages de voile</a><a href="cours.html">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="lexique.html">Lexique</a><a href="annonceurs.html">Annonceurs</a><a href="mentions-legales.html" class="legal">Mentions légales</a><a href="confidentialite.html" class="legal">Confidentialité</a><a href="delete.html" class="legal">Supprimer mes données</a></nav></details></header><style>
-.lg{position:relative;display:inline-flex;align-items:center}
-.lg select{appearance:none;-webkit-appearance:none;background:transparent;color:inherit;
-  font:inherit;font-size:.76rem;letter-spacing:.04em;padding:.32rem 1.5rem .32rem .55rem;
-  border:1px solid rgba(255,255,255,.34);border-radius:.4rem;cursor:pointer;min-height:32px}
-.lg select:hover{border-color:rgba(255,255,255,.62)}
-.lg select:focus-visible{outline:2px solid #e23a3e;outline-offset:2px}
+</div><header class="entete"><a class="nom" href="index.html">Sailing More</a><div class="lg"><span hidden>Langue</span><span class="globe" aria-hidden="true"></span><span class="code" aria-hidden="true">FR</span><span class="chev" aria-hidden="true"></span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto (langue du navigateur)</option><option value="fr">FR · Français</option><option value="en">EN · English</option><option value="it">IT · Italiano</option><option value="es">ES · Español</option><option value="pt">PT · Português</option><option value="de">DE · Deutsch</option></select></div><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button><button data-lang="de" aria-pressed="false">DE</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="index.html">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html" aria-current="page">Règles de course</a><a href="stages.html">Stages de voile</a><a href="cours.html">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="lexique.html">Lexique</a><a href="annonceurs.html">Annonceurs</a><a href="mentions-legales.html" class="legal">Mentions légales</a><a href="confidentialite.html" class="legal">Confidentialité</a><a href="delete.html" class="legal">Supprimer mes données</a></nav></details></header><style>
+/* La langue : une pastille du site, pas un contrôle du système (Nicolas, 23/11/2026 : « pour la barre
+   des langues il faut un truc plus joli »). Plus de cadre blanc : un globe, le code de la langue en
+   capitales comme les libellés de la barre, le filet rouge de MENU dessous, et le <select> natif posé
+   transparent par-dessus — la roue iOS/Android et les lecteurs d'écran gardent leur menu à eux. */
+.lg{position:relative;display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .1rem;margin-left:.25rem;
+  border-bottom:1px solid rgba(226,58,62,.6);cursor:pointer;line-height:1}
+.lg:hover{border-bottom-color:#fff}
+.lg:focus-within{outline:1px solid #e23a3e;outline-offset:4px}
+.lg .globe{width:.86rem;height:.86rem;flex:0 0 auto;opacity:.85;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e8eef4' stroke-width='1.7'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cellipse cx='12' cy='12' rx='4' ry='9'/%3E%3Cpath d='M3 12h18'/%3E%3C/svg%3E") center/contain no-repeat}
+.lg .code{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:#e8eef4}
+.lg .chev{width:.36rem;height:.36rem;margin:-.14rem .1rem 0 .18rem;opacity:.7;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
+.lg select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:1rem;
+  appearance:none;-webkit-appearance:none;border:0;background:transparent;color:transparent}
+.lg select:focus{outline:none}
 .lg option{color:#10161f;background:#fff}
-.lg::after{content:"";position:absolute;right:.55rem;width:.42rem;height:.42rem;pointer-events:none;
-  border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;
-  transform:rotate(45deg);margin-top:-.2rem;opacity:.75}
-@media (max-width:520px){.lg select{font-size:.72rem}}
-@media (pointer:coarse){.lg select{min-height:44px;padding-right:1.6rem}}
+@media (max-width:520px){.lg{padding:.3rem .1rem}}
+@media (pointer:coarse){.lg{min-height:44px;min-width:3.4rem;justify-content:center;gap:.34rem}}
 </style><script>
 (function(){
   var d = document.querySelector('.entete .menu-d');
@@ -278,18 +297,32 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
   caler(); addEventListener("load", caler); addEventListener("resize", caler); setTimeout(caler, 300);
   var sel = document.getElementById("langue-sel"), zone = document.getElementById("langues");
   if(!sel || !zone) return;
+  /* Le code affiché sur la pastille : la langue choisie, ou celle que la page affiche en mode auto. */
+  var code = document.querySelector(".lg .code");
+  function etiq(v){
+    if(!code) return;
+    if(v && v !== "auto"){ code.textContent = v.toUpperCase(); return; }
+    var l = (document.documentElement.lang || "fr").slice(0, 2).toUpperCase();
+    code.textContent = l || "FR";
+  }
   function lire(){ try{ return localStorage.getItem("sm-langue") || "auto"; }catch(e){ return "auto"; } }
   function poser(){
     var v = lire(), o = sel.options;
-    for(var i = 0; i < o.length; i++){ if(o[i].value === v){ sel.value = v; return; } }
-    sel.value = "auto";
+    for(var i = 0; i < o.length; i++){ if(o[i].value === v){ sel.value = v; etiq(v); return; } }
+    sel.value = "auto"; etiq("auto");
   }
   sel.addEventListener("change", function(){
     var v = sel.value, bs = zone.querySelectorAll("button[data-lang]");
+    etiq(v);
     for(var i = 0; i < bs.length; i++){
       if(bs[i].getAttribute("data-lang") === v){ bs[i].click(); return; }
     }
   });
+  /* la page change de langue sans passer par le menu (auto, bouton, retour arrière) */
+  if(window.MutationObserver){
+    new MutationObserver(function(){ etiq(sel.value); })
+      .observe(document.documentElement, {attributes: true, attributeFilter: ["lang"]});
+  }
   poser();
   addEventListener("load", poser);
   setTimeout(poser, 400);
@@ -666,7 +699,7 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
   .mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{transition:none}
 }
 </style>
-<script src="mer-louvoyage.js?v=2641daef" defer></script>
+<script src="mer-louvoyage.js?v=e57f262e" defer></script>
 <script>
 /* les commandes de la scène s'effacent dès qu'on a quitté le haut de la page */
 (function(){
@@ -678,4 +711,87 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
 })();
 </script>
 <style>.mer-fond{z-index:-1}.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer,.mer-fond .geste{display:none!important}</style><!--mer-fin-->
+<!-- schemas avant pendant apres -->
+<style>
+.regle .seq{margin:.9rem 0 .2rem;display:grid;gap:.1rem}
+.regle .seq-etape{display:grid;grid-template-columns:4.4rem minmax(0,1fr);align-items:center;gap:.6rem}
+.regle .seq-etape span{font-size:.66rem;font-variant-numeric:tabular-nums;color:#8aa0b4;
+ text-align:right;padding-right:.15rem}
+.regle .seq-seul .seq-etape{grid-template-columns:1fr}
+.regle .seq-seul .seq-etape span{display:none}
+.regle .seq-seul .seq-svg{max-width:360px}
+.regle .seq-svg{width:100%;max-width:320px;height:auto;display:block;border-radius:10px}
+.regle .seq-fleche{color:#3d5a75;font-size:.75rem;line-height:1;padding-left:5rem}
+.regle .video{margin:.85rem 0 0}
+.regle .lecture{display:inline-flex;align-items:center;gap:.5rem;background:#12314d;color:#eef3f7;
+ border:1px solid #23496b;border-radius:999px;padding:.48rem .95rem;font:inherit;font-size:.78rem;
+ cursor:pointer}
+.regle .lecture:hover{border-color:#eef3f7}
+.regle .lecture b{color:#ffd166;font-weight:700}
+.regle .cadre{position:relative;padding-top:56.25%;margin-top:.6rem;border-radius:10px;
+ overflow:hidden;background:#000}
+.regle .cadre iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.regle .credit{color:#8aa0b4;font-size:.66rem;margin:.4rem 0 0;line-height:1.35}
+</style>
+<script>window.__SEQ = {"10": ["<svg viewBox=\"0 0 320 140\" role=\"img\" class=\"seq-svg\"><defs><marker id=\"mk1\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#eef3f7\"/></marker><marker id=\"mk2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#e23a3e\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"320\" height=\"140\" rx=\"10\" fill=\"#0d2338\"/><path d=\"M300,112 L120,40\" fill=\"none\" stroke=\"#eef3f7\" stroke-width=\"1.7\" stroke-dasharray=\"5 4\" marker-end=\"url(#mk1)\"/><path d=\"M56,110 L250,30\" fill=\"none\" stroke=\"#5b7c96\" stroke-width=\"1.2\" stroke-dasharray=\"2 6\" opacity=\".8\"/><path d=\"M56,110 C 130,132 220,134 300,126\" fill=\"none\" stroke=\"#e23a3e\" stroke-width=\"1.7\" marker-end=\"url(#mk2)\"/><g transform=\"translate(258,94) scale(1.45)\"><path d=\"M-11,3 Q0,12 11,3 L8.5,-1 L-8.5,-1 Z\" fill=\"#eef3f7\"/><line x1=\"0\" y1=\"-1\" x2=\"0\" y2=\"-15\" stroke=\"#eef3f7\" stroke-width=\"1.1\"/><path d=\"M0.8,-14 L0.8,-2.5 L9,-2.5 Z\" fill=\"#b9cad8\"/><path d=\"M-1,-12 L-1,-2.5 L-7.5,-2.5 Z\" fill=\"#cfe0ee\"/></g><circle cx=\"284\" cy=\"72\" r=\"9\" fill=\"#eef3f7\"/><text x=\"284\" y=\"75.4\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#08192b\">A</text><g transform=\"translate(62,112) scale(1.45)\"><path d=\"M-11,3 Q0,12 11,3 L8.5,-1 L-8.5,-1 Z\" fill=\"#e23a3e\"/><line x1=\"0\" y1=\"-1\" x2=\"0\" y2=\"-15\" stroke=\"#e23a3e\" stroke-width=\"1.1\"/><path d=\"M0.8,-14 L0.8,-2.5 L9,-2.5 Z\" fill=\"#f08b8d\"/><path d=\"M-1,-12 L-1,-2.5 L-7.5,-2.5 Z\" fill=\"#c94346\"/></g><circle cx=\"38\" cy=\"132\" r=\"9\" fill=\"#e23a3e\"/><text x=\"38\" y=\"135.4\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#fff\">B</text></svg>"], "18": ["<svg viewBox=\"0 0 320 140\" role=\"img\" class=\"seq-svg\"><defs><marker id=\"mk3\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#eef3f7\"/></marker><marker id=\"mk4\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#8aa0b4\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"320\" height=\"140\" rx=\"10\" fill=\"#0d2338\"/><circle cx=\"205\" cy=\"74\" r=\"40\" fill=\"none\" stroke=\"#8aa0b4\" stroke-width=\"1.4\" stroke-dasharray=\"6 6\"/><circle cx=\"205\" cy=\"74\" r=\"4\" fill=\"#ffd166\"/><path d=\"M40,104 L120,96\" fill=\"none\" stroke=\"#8aa0b4\" stroke-width=\"1.7\" stroke-dasharray=\"5 4\" marker-end=\"url(#mk4)\"/><g transform=\"translate(186,68) scale(1.45)\"><path d=\"M-11,3 Q0,12 11,3 L8.5,-1 L-8.5,-1 Z\" fill=\"#eef3f7\"/><line x1=\"0\" y1=\"-1\" x2=\"0\" y2=\"-15\" stroke=\"#eef3f7\" stroke-width=\"1.1\"/><path d=\"M0.8,-14 L0.8,-2.5 L9,-2.5 Z\" fill=\"#b9cad8\"/><path d=\"M-1,-12 L-1,-2.5 L-7.5,-2.5 Z\" fill=\"#cfe0ee\"/></g><circle cx=\"162\" cy=\"50\" r=\"9\" fill=\"#eef3f7\"/><text x=\"162\" y=\"53.4\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#08192b\">A</text><g transform=\"translate(50,104) scale(1.45)\"><path d=\"M-11,3 Q0,12 11,3 L8.5,-1 L-8.5,-1 Z\" fill=\"#8aa0b4\"/><line x1=\"0\" y1=\"-1\" x2=\"0\" y2=\"-15\" stroke=\"#8aa0b4\" stroke-width=\"1.1\"/><path d=\"M0.8,-14 L0.8,-2.5 L9,-2.5 Z\" fill=\"#c3d3df\"/><path d=\"M-1,-12 L-1,-2.5 L-7.5,-2.5 Z\" fill=\"#9db2c6\"/></g><circle cx=\"26\" cy=\"124\" r=\"9\" fill=\"#8aa0b4\"/><text x=\"26\" y=\"127.4\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#08192b\">B</text></svg>", "<svg viewBox=\"0 0 320 140\" role=\"img\" class=\"seq-svg\"><defs><marker id=\"mk5\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#eef3f7\"/></marker><marker id=\"mk6\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#8aa0b4\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"320\" height=\"140\" rx=\"10\" fill=\"#0d2338\"/><circle cx=\"205\" cy=\"74\" r=\"40\" fill=\"none\" stroke=\"#8aa0b4\" stroke-width=\"1.4\" stroke-dasharray=\"6 6\"/><circle cx=\"205\" cy=\"74\" r=\"4\" fill=\"#ffd166\"/><path d=\"M228,42 C 258,56 266,86 244,100\" fill=\"none\" stroke=\"#eef3f7\" stroke-width=\"1.7\" marker-end=\"url(#mk5)\"/><g transform=\"translate(222,36) scale(1.45)\"><path d=\"M-11,3 Q0,12 11,3 L8.5,-1 L-8.5,-1 Z\" fill=\"#eef3f7\"/><line x1=\"0\" y1=\"-1\" x2=\"0\" y2=\"-15\" stroke=\"#eef3f7\" stroke-width=\"1.1\"/><path d=\"M0.8,-14 L0.8,-2.5 L9,-2.5 Z\" fill=\"#b9cad8\"/><path d=\"M-1,-12 L-1,-2.5 L-7.5,-2.5 Z\" fill=\"#cfe0ee\"/></g><circle cx=\"198\" cy=\"18\" r=\"9\" fill=\"#eef3f7\"/><text x=\"198\" y=\"21.4\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#08192b\">A</text><g transform=\"translate(58,62) scale(1.45)\"><path d=\"M-11,3 Q0,12 11,3 L8.5,-1 L-8.5,-1 Z\" fill=\"#8aa0b4\"/><line x1=\"0\" y1=\"-1\" x2=\"0\" y2=\"-15\" stroke=\"#8aa0b4\" stroke-width=\"1.1\"/><path d=\"M0.8,-14 L0.8,-2.5 L9,-2.5 Z\" fill=\"#c3d3df\"/><path d=\"M-1,-12 L-1,-2.5 L-7.5,-2.5 Z\" fill=\"#9db2c6\"/></g><circle cx=\"34\" cy=\"82\" r=\"9\" fill=\"#8aa0b4\"/><text x=\"34\" y=\"85.4\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#08192b\">B</text><path d=\"M82,70 L104,74\" fill=\"none\" stroke=\"#8aa0b4\" stroke-width=\"1.7\" marker-end=\"url(#mk6)\"/></svg>"], "44": ["<svg viewBox=\"0 0 320 140\" role=\"img\" class=\"seq-svg\"><defs><marker id=\"mk7\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#e23a3e\"/></marker><marker id=\"mk8\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#eef3f7\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"320\" height=\"140\" rx=\"10\" fill=\"#0d2338\"/><g transform=\"translate(148,62) scale(1.45)\"><path d=\"M-11,3 Q0,12 11,3 L8.5,-1 L-8.5,-1 Z\" fill=\"#eef3f7\"/><line x1=\"0\" y1=\"-1\" x2=\"0\" y2=\"-15\" stroke=\"#eef3f7\" stroke-width=\"1.1\"/><path d=\"M0.8,-14 L0.8,-2.5 L9,-2.5 Z\" fill=\"#b9cad8\"/><path d=\"M-1,-12 L-1,-2.5 L-7.5,-2.5 Z\" fill=\"#cfe0ee\"/></g><circle cx=\"124\" cy=\"42\" r=\"9\" fill=\"#eef3f7\"/><text x=\"124\" y=\"45.4\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#08192b\">A</text><g transform=\"translate(196,74) scale(1.45)\"><path d=\"M-11,3 Q0,12 11,3 L8.5,-1 L-8.5,-1 Z\" fill=\"#e23a3e\"/><line x1=\"0\" y1=\"-1\" x2=\"0\" y2=\"-15\" stroke=\"#e23a3e\" stroke-width=\"1.1\"/><path d=\"M0.8,-14 L0.8,-2.5 L9,-2.5 Z\" fill=\"#f08b8d\"/><path d=\"M-1,-12 L-1,-2.5 L-7.5,-2.5 Z\" fill=\"#c94346\"/></g><circle cx=\"222\" cy=\"94\" r=\"9\" fill=\"#e23a3e\"/><text x=\"222\" y=\"97.4\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#fff\">B</text><circle cx=\"172\" cy=\"68\" r=\"10\" fill=\"none\" stroke=\"#ffd166\" stroke-width=\"1.6\"/></svg>", "<svg viewBox=\"0 0 320 140\" role=\"img\" class=\"seq-svg\"><defs><marker id=\"mk9\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#e23a3e\"/></marker><marker id=\"mk10\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#eef3f7\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"320\" height=\"140\" rx=\"10\" fill=\"#0d2338\"/><circle cx=\"160\" cy=\"70\" r=\"32\" fill=\"none\" stroke=\"#ffd166\" stroke-width=\"1.5\" stroke-dasharray=\"7 6\"/><path d=\"M160,38 C 198,46 206,86 176,100\" fill=\"none\" stroke=\"#e23a3e\" stroke-width=\"1.7\" marker-end=\"url(#mk9)\"/><g transform=\"translate(160,70) scale(1.45)\"><path d=\"M-11,3 Q0,12 11,3 L8.5,-1 L-8.5,-1 Z\" fill=\"#e23a3e\"/><line x1=\"0\" y1=\"-1\" x2=\"0\" y2=\"-15\" stroke=\"#e23a3e\" stroke-width=\"1.1\"/><path d=\"M0.8,-14 L0.8,-2.5 L9,-2.5 Z\" fill=\"#f08b8d\"/><path d=\"M-1,-12 L-1,-2.5 L-7.5,-2.5 Z\" fill=\"#c94346\"/></g><circle cx=\"160\" cy=\"22\" r=\"9\" fill=\"#e23a3e\"/><text x=\"160\" y=\"25.4\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#fff\">B</text></svg>", "<svg viewBox=\"0 0 320 140\" role=\"img\" class=\"seq-svg\"><defs><marker id=\"mk11\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#e23a3e\"/></marker><marker id=\"mk12\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#eef3f7\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"320\" height=\"140\" rx=\"10\" fill=\"#0d2338\"/><g transform=\"translate(118,66) scale(1.45)\"><path d=\"M-11,3 Q0,12 11,3 L8.5,-1 L-8.5,-1 Z\" fill=\"#e23a3e\"/><line x1=\"0\" y1=\"-1\" x2=\"0\" y2=\"-15\" stroke=\"#e23a3e\" stroke-width=\"1.1\"/><path d=\"M0.8,-14 L0.8,-2.5 L9,-2.5 Z\" fill=\"#f08b8d\"/><path d=\"M-1,-12 L-1,-2.5 L-7.5,-2.5 Z\" fill=\"#c94346\"/></g><circle cx=\"94\" cy=\"46\" r=\"9\" fill=\"#e23a3e\"/><text x=\"94\" y=\"49.4\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#fff\">B</text><path d=\"M148,74 L256,88\" fill=\"none\" stroke=\"#e23a3e\" stroke-width=\"1.7\" stroke-dasharray=\"5 4\" marker-end=\"url(#mk11)\"/><g transform=\"translate(264,90) scale(1.45)\"><path d=\"M-11,3 Q0,12 11,3 L8.5,-1 L-8.5,-1 Z\" fill=\"#eef3f7\"/><line x1=\"0\" y1=\"-1\" x2=\"0\" y2=\"-15\" stroke=\"#eef3f7\" stroke-width=\"1.1\"/><path d=\"M0.8,-14 L0.8,-2.5 L9,-2.5 Z\" fill=\"#b9cad8\"/><path d=\"M-1,-12 L-1,-2.5 L-7.5,-2.5 Z\" fill=\"#cfe0ee\"/></g><circle cx=\"290\" cy=\"70\" r=\"9\" fill=\"#eef3f7\"/><text x=\"290\" y=\"73.4\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#08192b\">A</text></svg>"]}; window.__VIDEO = {"10": "5rS5GpzEOYY", "18": "AiLKmHfAYiE", "44": "Tlk798UfvVo"};</script>
+<script>
+(function(){
+  var SEQ = window.__SEQ || {}, VIDEO = window.__VIDEO || {};
+  // Les étapes sont numérotées, jamais nommées : un nombre va pour un, deux ou cinq temps, et il
+  // ne demande aucune traduction. Seul le bouton de lecture parle.
+  var UI = {
+    fr:{l:"Voir la vidéo",c:"Vidéo d'un tiers, lue chez YouTube. Rien n'est chargé avant votre clic."},
+    en:{l:"Watch the video",c:"Third-party video, played on YouTube. Nothing loads before you click."},
+    it:{l:"Guarda il video",c:"Video di terzi, letta su YouTube. Nulla si carica prima del clic."},
+    es:{l:"Ver el vídeo",c:"Vídeo de un tercero, leído en YouTube. Nada se carga antes del clic."},
+    pt:{l:"Ver o vídeo",c:"Vídeo de terceiros, lido no YouTube. Nada carrega antes do clique."},
+    de:{l:"Video ansehen",c:"Video eines Dritten, auf YouTube. Vor dem Klick wird nichts geladen."}
+  };
+  function langue(){ var l=(document.documentElement.lang||"fr").slice(0,2); return UI[l]?l:"fr"; }
+  function esc(s){ return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];}); }
+
+  function poser(){
+    var u = UI[langue()];
+    Object.keys(SEQ).forEach(function(cle){
+      var carte = document.getElementById("r"+cle);
+      if(!carte || carte.querySelector(".seq")) return;
+      var cible = carte.querySelector(".resume");
+      if(!cible) return;
+      var etapes = SEQ[cle], h = '<div class="seq' + (etapes.length < 2 ? ' seq-seul' : '') + '">';
+      etapes.forEach(function(svg, i){
+        h += '<div class="seq-etape"><span>' + (i + 1) + '</span>' + svg + '</div>';
+        if(i < etapes.length - 1) h += '<div class="seq-fleche">↓</div>';
+      });
+      if(VIDEO[cle]){
+        h += '<div class="video"><button class="lecture" type="button" data-cle="'+cle+'">'
+           + '<b>▶</b> '+esc(u.l)+'</button><div class="cadre" hidden></div>'
+           + '<p class="credit">'+esc(u.c)+'</p></div>';
+      }
+      cible.insertAdjacentHTML("afterend", h + '</div>');
+    });
+  }
+
+  document.addEventListener("click", function(ev){
+    var b = ev.target.closest && ev.target.closest(".lecture");
+    if(!b) return;
+    var cle = b.dataset.cle, cadre = b.nextElementSibling;
+    if(!cadre || !cadre.classList.contains("cadre") || !cadre.hidden) return;
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + VIDEO[cle] + "?autoplay=1&rel=0&modestbranding=1";
+    f.title = "Vidéo — règle " + cle;
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+    f.setAttribute("allowfullscreen","");
+    f.setAttribute("referrerpolicy","strict-origin-when-cross-origin");
+    cadre.appendChild(f); cadre.hidden = false; b.hidden = true;
+  });
+
+  var liste = document.getElementById("liste-regles");
+  if(liste) new MutationObserver(poser).observe(liste, {childList:true});
+  new MutationObserver(poser).observe(document.documentElement,
+                                     {attributes:true, attributeFilter:["lang"]});
+  if(document.readyState !== "loading") poser();
+  else document.addEventListener("DOMContentLoaded", poser);
+})();
+</script>
+<!-- /schemas avant pendant apres -->
 </body></html>
