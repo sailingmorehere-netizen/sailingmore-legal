@@ -559,7 +559,111 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
 /* 9. Un seul style de titre pour les pages secondaires */
 .page h1{font-weight:300;text-transform:uppercase;letter-spacing:.02em}
 </style>
-</head><body><div class="mer-fond mer-fond-commandes">
+</head><body><!--entete-debut--><style>
+.entete{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:.6rem;width:100%;
+  padding:.55rem .9rem;background:rgba(10,26,43,.96);border-bottom:1px solid rgba(226,58,62,.45);
+  color:#e8eef4;box-sizing:border-box;backdrop-filter:blur(6px)}
+.entete .nom{font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem;
+  color:#9fb3c4;text-decoration:none;white-space:nowrap}
+.entete .nom:hover{color:#fff}
+.entete .menu-d{margin-left:auto}
+.entete .menu-d>summary{list-style:none;cursor:pointer;font-size:.74rem;letter-spacing:.1em;
+  text-transform:uppercase;color:#e8eef4;border-bottom:1px solid rgba(226,58,62,.6);padding-bottom:1px}
+.entete .menu-d>summary::-webkit-details-marker{display:none}
+.entete .menu-d>nav{position:absolute;right:.6rem;top:calc(100% + .4rem);z-index:70;background:#0e2338;
+  border:1px solid rgba(255,255,255,.16);border-radius:.5rem;padding:.5rem;display:grid;
+  grid-template-columns:1fr 1fr;gap:.15rem .8rem;min-width:min(22rem,86vw);
+  box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.entete .menu-d>nav a{color:#dbe6ef;text-decoration:none;font-size:.82rem;padding:.35rem .4rem;border-radius:.35rem}
+.entete .menu-d>nav a:hover{background:rgba(255,255,255,.08)}
+.entete .menu-d>nav a[aria-current="page"]{color:#fff;box-shadow:inset 2px 0 0 #e23a3e}
+body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:flex-start}
+@media (max-width:520px){.entete{padding:.45rem .6rem;gap:.4rem}.entete .nom{font-size:.68rem}}
+/* Téléphone : le panneau du menu en une colonne, texte de 16 px et lignes de 48 px (23/11/2026 :
+   « refais le menu il est illisible sur tel »). Cette feuille sert les pages hors feuille d'accueil
+   (stages, lexique, jeux, mentions légales) : elles avaient le même panneau serré en deux colonnes. */
+@media (max-width:600px){
+  .entete .menu-d>summary{font-size:.78rem;min-height:44px;display:flex;align-items:center;
+    padding:0 .15rem}
+  .entete .menu-d>nav{left:.4rem;right:.4rem;top:calc(100% + .3rem);width:auto;min-width:0;
+    grid-template-columns:1fr;gap:.1rem;padding:.45rem;background:#081624;
+    max-height:calc(100vh - 3.6rem);overflow-y:auto}
+  .entete .menu-d>nav a{display:flex;align-items:center;min-height:48px;
+    padding:.6rem .8rem;font-size:1rem;line-height:1.25}
+  .entete .menu-d>nav a.legal{min-height:42px;font-size:.9rem;padding:.5rem .8rem}
+  .entete .menu-d>nav a.legal:first-of-type{margin-top:.35rem;
+    border-top:1px solid rgba(238,243,247,.14);padding-top:.7rem}
+}
+</style><header class="entete"><a class="nom" href="index.html">Sailing More</a><div class="lg"><span hidden>Langue</span><span class="globe" aria-hidden="true"></span><span class="code" aria-hidden="true">FR</span><span class="chev" aria-hidden="true"></span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto (langue du navigateur)</option><option value="fr">FR · Français</option><option value="en">EN · English</option><option value="it">IT · Italiano</option><option value="es">ES · Español</option><option value="pt">PT · Português</option><option value="de">DE · Deutsch</option></select></div><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button><button data-lang="de" aria-pressed="false">DE</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="index.html">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html">Règles de course</a><a href="stages.html">Stages de voile</a><a href="cours.html">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="carte.html">Carte du Léman</a><a href="lexique.html">Lexique</a><a href="annonceurs.html" aria-current="page">Annonceurs</a><a href="mentions-legales.html" class="legal">Mentions légales</a><a href="confidentialite.html" class="legal">Confidentialité</a><a href="delete.html" class="legal">Supprimer mes données</a></nav></details></header><style>
+/* La langue : une pastille du site, pas un contrôle du système (Nicolas, 23/11/2026 : « pour la barre
+   des langues il faut un truc plus joli »). Plus de cadre blanc : un globe, le code de la langue en
+   capitales comme les libellés de la barre, le filet rouge de MENU dessous, et le <select> natif posé
+   transparent par-dessus — la roue iOS/Android et les lecteurs d'écran gardent leur menu à eux. */
+.lg{position:relative;display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .1rem;margin-left:.25rem;
+  border-bottom:1px solid rgba(226,58,62,.6);cursor:pointer;line-height:1}
+.lg:hover{border-bottom-color:#fff}
+.lg:focus-within{outline:1px solid #e23a3e;outline-offset:4px}
+.lg .globe{width:.86rem;height:.86rem;flex:0 0 auto;opacity:.85;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e8eef4' stroke-width='1.7'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cellipse cx='12' cy='12' rx='4' ry='9'/%3E%3Cpath d='M3 12h18'/%3E%3C/svg%3E") center/contain no-repeat}
+.lg .code{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:#e8eef4}
+.lg .chev{width:.36rem;height:.36rem;margin:-.14rem .1rem 0 .18rem;opacity:.7;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
+.lg select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:1rem;
+  appearance:none;-webkit-appearance:none;border:0;background:transparent;color:transparent}
+.lg select:focus{outline:none}
+.lg option{color:#10161f;background:#fff}
+@media (max-width:520px){.lg{padding:.3rem .1rem}}
+@media (pointer:coarse){.lg{min-height:44px;min-width:3.4rem;justify-content:center;gap:.34rem}}
+</style><script>
+(function(){
+  var d = document.querySelector('.entete .menu-d');
+  if(!d) return;
+  document.addEventListener('click', function(e){ if(!d.contains(e.target)) d.open = false; });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') d.open = false; });
+})();
+</script><script>
+(function(){
+  /* La carte plein écran se cale sous la barre du site : elle en mesure la hauteur réelle.
+     Avant tout le reste — une page sans menu de langues a quand même une carte à caler. */
+  function caler(){
+    var b = document.querySelector(".entete"), c = document.querySelector(".cl.m-carte");
+    if(b && c) document.documentElement.style.setProperty("--barre", b.offsetHeight + "px");
+  }
+  caler(); addEventListener("load", caler); addEventListener("resize", caler); setTimeout(caler, 300);
+  var sel = document.getElementById("langue-sel"), zone = document.getElementById("langues");
+  if(!sel || !zone) return;
+  /* Le code affiché sur la pastille : la langue choisie, ou celle que la page affiche en mode auto. */
+  var code = document.querySelector(".lg .code");
+  function etiq(v){
+    if(!code) return;
+    if(v && v !== "auto"){ code.textContent = v.toUpperCase(); return; }
+    var l = (document.documentElement.lang || "fr").slice(0, 2).toUpperCase();
+    code.textContent = l || "FR";
+  }
+  function lire(){ try{ return localStorage.getItem("sm-langue") || "auto"; }catch(e){ return "auto"; } }
+  function poser(){
+    var v = lire(), o = sel.options;
+    for(var i = 0; i < o.length; i++){ if(o[i].value === v){ sel.value = v; etiq(v); return; } }
+    sel.value = "auto"; etiq("auto");
+  }
+  sel.addEventListener("change", function(){
+    var v = sel.value, bs = zone.querySelectorAll("button[data-lang]");
+    etiq(v);
+    for(var i = 0; i < bs.length; i++){
+      if(bs[i].getAttribute("data-lang") === v){ bs[i].click(); return; }
+    }
+  });
+  /* la page change de langue sans passer par le menu (auto, bouton, retour arrière) */
+  if(window.MutationObserver){
+    new MutationObserver(function(){ etiq(sel.value); })
+      .observe(document.documentElement, {attributes: true, attributeFilter: ["lang"]});
+  }
+  poser();
+  addEventListener("load", poser);
+  setTimeout(poser, 400);
+
+})();
+</script><!--entete-fin--><div class="mer-fond mer-fond-commandes">
   <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
 </div><div class="page page-annonceurs"><a class="retour" href="index.html">← Sailing More</a><h1 data-t="kit_titre">Annonceurs</h1><p data-t="ann_intro">Sailing More publie tous les soirs à 18 h : les courses en cours, puis une vidéo un soir sur deux. Quatre formules pour y mettre votre marque : de 440 à 3 900 €, jeu concours compris.</p><div class="carte-kit"><div class="tarifs"><div class="tarif-ligne"><span class="tarif-nom" data-t="p1_nom">Essai une semaine</span><span class="tarif-ce" data-t="p1_ce">2 publications · 1 concours</span><span class="tarif-prix">440 €</span></div><div class="tarif-ligne"><span class="tarif-nom" data-t="p2_nom">Présence un mois</span><span class="tarif-ce" data-t="p2_ce">4 publications · 2 concours</span><span class="tarif-prix">890 €</span></div><div class="tarif-ligne"><span class="tarif-nom" data-t="p3_nom">Parité un mois</span><span class="tarif-ce" data-t="p3_ce">5 publications · 2 concours</span><span class="tarif-prix">1 390 €</span></div><div class="tarif-ligne"><span class="tarif-nom" data-t="p4_nom">Trimestre</span><span class="tarif-ce" data-t="p4_ce">12 publications · 6 concours</span><span class="tarif-prix">3 900 €</span></div></div><p class="tarif-notes" data-t="tarif_notes">Prix HT. Aucune portée garantie : on la mesure, et on l'écrit avant de signer.</p><details class="plis plis-detail"><summary data-t="det_titre">Le détail, formule par formule</summary><table class="detail-packs"><thead><tr><th></th><th data-t="p1_nom">Essai une semaine</th><th data-t="p2_nom">Présence un mois</th><th data-t="p3_nom">Parité un mois</th><th data-t="p4_nom">Trimestre</th></tr></thead><tbody><tr><td class="det-intitule" data-t="d1">Publications dédiées, Facebook et Instagram</td><td>2</td><td>4</td><td>5</td><td>12</td></tr><tr><td class="det-intitule" data-t="d2">Jeux concours de 7 jours, avec votre lot et votre logo sur l'affiche</td><td>1</td><td>2</td><td>2</td><td>6</td></tr><tr><td class="det-intitule" data-t="d3">Stories pour annoncer le concours</td><td>1</td><td>2</td><td>2</td><td>6</td></tr><tr><td class="det-intitule" data-t="d4">Tirage au sort, et le gagnant annoncé</td><td class="det-oui">✓</td><td class="det-oui">✓</td><td class="det-oui">✓</td><td class="det-oui">✓</td></tr><tr><td class="det-intitule" data-t="d5">Rapport de portée sous 72 h, chiffres Meta</td><td class="det-oui">✓</td><td class="det-oui">✓</td><td class="det-oui">✓</td><td class="det-oui">✓</td></tr><tr><td class="det-intitule" data-t="d6">La mention « partenariat rémunéré »</td><td class="det-oui">✓</td><td class="det-oui">✓</td><td class="det-oui">✓</td><td class="det-oui">✓</td></tr><tr><td class="det-intitule" data-t="d7">Durée du pack</td><td>7 j</td><td>30 j</td><td>30 j</td><td>90 j</td></tr><tr><td class="det-intitule" data-t="d8">Une parution en plus, à l'unité</td><td class="det-vide">—</td><td>150 €</td><td>200 €</td><td class="det-vide">—</td></tr></tbody></table><p class="tarif-notes" data-t="d_legende">Une publication dédiée, c'est un post Facebook et un post Instagram sur votre marque, avec votre visuel et le lien que vous voulez. Le concours met votre lot en jeu, sur une affiche qui porte votre logo. La coche veut dire que c'est compris. Les images sont les nôtres ou les vôtres ; celle d'un tiers, seulement avec son accord écrit. Et le lot du concours vient de vous.</p></details><h2 class="hors-titre" data-t="h_titre">Au-delà des quatre formules</h2><p class="hors-intro" data-t="h_intro">Plus gros budget, saison entière, ou votre nom sur une série : dites la période et l'objectif, réponse chiffrée sous 48 h.</p><div class="tarifs hors"><div class="tarif-ligne"><span class="tarif-nom" data-t="h2_nom">Douze mois</span><span class="tarif-ce" data-t="h2_ce">l'année entière, concours et publications répartis</span><span class="tarif-prix">6 000 €</span></div><div class="tarif-ligne"><span class="tarif-nom" data-t="h3_nom">Sur mesure</span><span class="tarif-ce" data-t="h3_ce">un budget plus gros, ou un événement : on écrit la formule ensemble</span><span class="tarif-prix">sur devis</span></div><div class="tarif-ligne"><span class="tarif-nom" data-t="h4_nom">Sponsoring d'un format</span><span class="tarif-ce" data-t="h4_ce">votre nom sur une série qu'on produit, avec nos images ou les vôtres</span><span class="tarif-prix">sur devis</span></div></div><p class="tarif-notes" data-t="h_note">Prix avant signature. Prix HT.</p><form class="kit-form" method="POST" action="https://formsubmit.co/hello.sailingmore@gmail.com" data-a="hello.sailingmore" data-b="gmail.com"><input type="hidden" name="_subject" value="Demande de grille — Sailing More"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_next" value="https://sailingmore.fr/merci.html"><input class="miel" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true"><label><span data-t="kit_nom">Votre nom</span><input name="nom" required autocomplete="name"></label><label><span data-t="kit_marque">Marque ou activité</span><input name="marque" required autocomplete="organization"></label><label><span data-t="kit_email">Email</span><input name="email" type="email" required autocomplete="email" inputmode="email"></label><button class="bouton" type="submit"><span data-t="kit_bouton">Recevoir la grille</span> <span class="fleche" aria-hidden="true">→</span></button></form><p class="kit-note" data-t="kit_note">Vos données servent seulement à vous répondre. Suppression sur demande.</p><p class="kit-ou"><span data-t="kit_ou">Ou écrivez à</span> <a class="courriel" href="mailto:hello.sailingmore@gmail.com" data-a="hello.sailingmore" data-b="gmail.com" data-t="kit_lien">notre adresse</a>.</p><noscript><p class="kit-ou">Sans JavaScript, écrivez à <a href="mailto:hello.sailingmore@gmail.com">hello.sailingmore@gmail.com</a> — la grille part le jour même.</p></noscript><script>(function(){document.querySelectorAll('form.kit-form').forEach(function(f){if(f.dataset.a&&f.dataset.b)f.action='https://formsubmit.co/'+f.dataset.a+'@'+f.dataset.b;});document.querySelectorAll('a.courriel').forEach(function(a){if(a.dataset.a&&a.dataset.b){var ad=a.dataset.a+'@'+a.dataset.b;a.href='mailto:'+ad;a.textContent=ad;a.removeAttribute('data-t');}});})();</script></div><details class="plis plis-carte"><summary data-t="ann_carte">Où sont les lecteurs</summary><section class="monde"><h2 data-t="carte_titre">Nos concentrations de voileux</h2>
 <style>
