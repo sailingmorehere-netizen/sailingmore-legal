@@ -48,7 +48,7 @@ UI = {
                     "Cherchez par numéro, par titre ou par situation vécue.",
            "retour": "← Sailing More", "placeholder": "Un numéro (10), un mot (bâbord), une situation (collision)…",
            "aria": "Rechercher dans les règles", "tous": "Toutes", "tous_m": "Tous",
-           "partie": "Partie", "themes_lib": "Ce que je cherche", "parties_lib": "Partie du livre",
+           "partie": "Partie", "themes_lib": "Ce que je cherche", "regles_lib": "Numéro de règle", "toutes_regles": "Toutes les règles",
            "un": "règle", "n": "règles", "aucun": "Aucune règle ne correspond à cette recherche.",
            "defs": "Définitions", "app": "Appendices", "regle": "Règle", "def": "Définition",
            "appendice": "Appendice", "exemple": "Exemple", "issue": "Issue", "voir": "Voir aussi",
@@ -64,7 +64,7 @@ UI = {
                     "Search by number, by title or by a situation you lived.",
            "retour": "← Sailing More", "placeholder": "A number (10), a word (port), a situation (collision)…",
            "aria": "Search the rules", "tous": "All", "tous_m": "All",
-           "partie": "Part", "themes_lib": "What I am looking for", "parties_lib": "Part of the book",
+           "partie": "Part", "themes_lib": "What I am looking for", "regles_lib": "Rule number", "toutes_regles": "All rules",
            "un": "rule", "n": "rules", "aucun": "No rule matches this search.",
            "defs": "Definitions", "app": "Appendices", "regle": "Rule", "def": "Definition",
            "appendice": "Appendix", "exemple": "Example", "issue": "Outcome", "voir": "See also",
@@ -80,7 +80,7 @@ UI = {
                     "Cerca per numero, per titolo o per situazione vissuta.",
            "retour": "← Sailing More", "placeholder": "Un numero (10), una parola (mura a sinistra), una situazione (collisione)…",
            "aria": "Cerca nelle regole", "tous": "Tutte", "tous_m": "Tutti",
-           "partie": "Parte", "themes_lib": "Cosa cerco", "parties_lib": "Parte del libro",
+           "partie": "Parte", "themes_lib": "Cosa cerco", "regles_lib": "Numero di regola", "toutes_regles": "Tutte le regole",
            "un": "regola", "n": "regole", "aucun": "Nessuna regola corrisponde a questa ricerca.",
            "defs": "Definizioni", "app": "Appendici", "regle": "Regola", "def": "Definizione",
            "appendice": "Appendice", "exemple": "Esempio", "issue": "Esito", "voir": "Vedi anche",
@@ -96,7 +96,7 @@ UI = {
                     "Busca por número, por título o por una situación vivida.",
            "retour": "← Sailing More", "placeholder": "Un número (10), una palabra (babor), una situación (colisión)…",
            "aria": "Buscar en las reglas", "tous": "Todas", "tous_m": "Todos",
-           "partie": "Parte", "themes_lib": "Lo que busco", "parties_lib": "Parte del libro",
+           "partie": "Parte", "themes_lib": "Lo que busco", "regles_lib": "Número de regla", "toutes_regles": "Todas las reglas",
            "un": "regla", "n": "reglas", "aucun": "Ninguna regla coincide con esta búsqueda.",
            "defs": "Definiciones", "app": "Apéndices", "regle": "Regla", "def": "Definición",
            "appendice": "Apéndice", "exemple": "Ejemplo", "issue": "Resultado", "voir": "Ver también",
@@ -112,7 +112,7 @@ UI = {
                     "Pesquise por número, por título ou por uma situação vivida.",
            "retour": "← Sailing More", "placeholder": "Um número (10), uma palavra (bombordo), uma situação (colisão)…",
            "aria": "Pesquisar nas regras", "tous": "Todas", "tous_m": "Todos",
-           "partie": "Parte", "themes_lib": "O que procuro", "parties_lib": "Parte do livro",
+           "partie": "Parte", "themes_lib": "O que procuro", "regles_lib": "Número de regra", "toutes_regles": "Todas as regras",
            "un": "regra", "n": "regras", "aucun": "Nenhuma regra corresponde a esta pesquisa.",
            "defs": "Definições", "app": "Apêndices", "regle": "Regra", "def": "Definição",
            "appendice": "Apêndice", "exemple": "Exemplo", "issue": "Resultado", "voir": "Ver também",
@@ -128,7 +128,7 @@ UI = {
                     "Suche nach Nummer, Titel oder erlebter Situation.",
            "retour": "← Sailing More", "placeholder": "Eine Nummer (10), ein Wort (Backbord), eine Situation (Kollision)…",
            "aria": "In den Regeln suchen", "tous": "Alle", "tous_m": "Alle",
-           "partie": "Teil", "themes_lib": "Was ich suche", "parties_lib": "Teil des Buches",
+           "partie": "Teil", "themes_lib": "Was ich suche", "regles_lib": "Regelnummer", "toutes_regles": "Alle Regeln",
            "un": "Regel", "n": "Regeln", "aucun": "Keine Regel passt zu dieser Suche.",
            "defs": "Definitionen", "app": "Anhänge", "regle": "Regel", "def": "Definition",
            "appendice": "Anhang", "exemple": "Beispiel", "issue": "Ergebnis", "voir": "Siehe auch",
@@ -181,6 +181,9 @@ a{color:#fff;text-decoration:none}
 .filtres{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;margin-top:.7rem}
 .filtres .etiq{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:#8aa0b4;
   margin-right:.2rem}
+.filtres select{font:inherit;font-size:.78rem;color:#eef3f7;background:#0a1f33;
+  border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:.3rem .5rem;width:auto;max-width:100%}
+.filtres select:focus{border-color:rgba(226,58,62,.7);outline:none}
 .puce{font:inherit;font-size:.72rem;letter-spacing:.04em;color:var(--gris);background:none;
   border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:.28rem .6rem;cursor:pointer}
 .puce:hover{color:#fff;border-color:rgba(255,255,255,.4)}
@@ -269,6 +272,7 @@ svg.sc{display:block;width:100%;height:auto;background:#071c31;border:1px solid 
   .page{padding:2.4rem 1rem 4rem}
   .recherche{padding:.7rem 0 .8rem}
   .filtres .etiq{width:100%}
+  .filtres select{width:100%}
   .regle{padding-left:.6rem;scroll-margin-top:calc(var(--h-entete) + 12rem)}
   .regle .num{display:block;min-width:0}
 }
@@ -281,10 +285,10 @@ JS = r"""
   var champ = document.getElementById('champ-q');
   var liste = document.getElementById('liste-regles');
   var compte = document.getElementById('compte-regles');
-  var zoneParties = document.getElementById('f-parties');
-  var zoneThemes = document.getElementById('f-themes');
+  var selRegle = document.getElementById('sel-regle');
+  var selTheme = document.getElementById('sel-theme');
   var zoneActifs = document.getElementById('actifs');
-  var etat = {partie:'toutes', theme:'tous', texte:''};
+  var etat = {regle:'', theme:'tous', texte:''};
   var ORDRE = ['defs','1','2','3','4','5','6','7','app'];
 
   function stocke(){ try{ return localStorage.getItem('sm-langue') || 'auto'; }catch(e){ return 'auto'; } }
@@ -325,29 +329,38 @@ JS = r"""
     return u.partie + ' ' + k + ' · ' + parParCle[k].nom[lang];
   }
 
-  function puce(attr, val, actif, texte, titre){
-    return '<button class="puce" type="button" data-' + attr + '="' + esc(val) + '" aria-pressed="' + actif + '"'
-      + (titre ? ' title="' + esc(titre) + '"' : '') + '>' + esc(texte) + '</button>';
+  function opt(val, texte, sel){
+    return '<option value="' + esc(val) + '"' + (sel ? ' selected' : '') + '>' + esc(texte) + '</option>';
   }
-  function boutonsFiltres(){
+  function libRegle(r){ return r.partie === 'defs' ? r.titre[lang] : r.titre[lang] + ' — ' + r.num; }
+  function remplirSelects(){
     var u = UI[lang];
-    var h = '<span class="etiq">' + esc(u.parties_lib) + '</span>'
-      + puce('partie','toutes', etat.partie==='toutes', u.tous);
+    var h = opt('', u.toutes_regles, etat.regle === '');
     ORDRE.forEach(function(k){
       if(k !== 'defs' && k !== 'app' && !parParCle[k]) return;
       var lib = k==='defs' ? u.defs : k==='app' ? u.app : u.partie + ' ' + k;
-      h += puce('partie', k, etat.partie===k, lib, k==='defs'||k==='app' ? '' : parParCle[k].nom[lang]);
+      h += '<optgroup label="' + esc(lib) + '">';
+      REGLES.forEach(function(r){ if(r.partie === k) h += opt(r.cle, libRegle(r), etat.regle === r.cle); });
+      h += '</optgroup>';
     });
-    zoneParties.innerHTML = h;
-    var t = '<span class="etiq">' + esc(u.themes_lib) + '</span>' + puce('theme','tous', etat.theme==='tous', u.tous_m);
-    THEMES.forEach(function(th){ t += puce('theme', th.cle, etat.theme===th.cle, th.nom[lang]); });
-    zoneThemes.innerHTML = t;
+    selRegle.innerHTML = h;
+    var t = opt('tous', u.tous_m, etat.theme === 'tous');
+    THEMES.forEach(function(th){ t += opt(th.cle, th.nom[lang], etat.theme === th.cle); });
+    selTheme.innerHTML = t;
+    document.getElementById('lib-regle').textContent = u.regles_lib;
+    document.getElementById('lib-theme').textContent = u.themes_lib;
+    selRegle.setAttribute('aria-label', u.regles_lib);
+    selTheme.setAttribute('aria-label', u.themes_lib);
   }
+  function selectsDefaut(){ selRegle.value = ''; selTheme.value = 'tous'; }
 
   function actifs(){
     var u = UI[lang], h = '';
-    if(etat.partie !== 'toutes') h += '<button type="button" data-retire="partie" aria-label="' + esc(u.retirer) + ' : ' + esc(nomPartie(etat.partie)) + '">'
-      + esc(etat.partie==='defs'||etat.partie==='app' ? nomPartie(etat.partie) : u.partie + ' ' + etat.partie) + '</button>';
+    if(etat.regle && parRegle[etat.regle]){
+      var rs = parRegle[etat.regle];
+      var tx = rs.partie === 'defs' ? rs.titre[lang] : u.regle + ' ' + rs.num + ' · ' + rs.titre[lang];
+      h += '<button type="button" data-retire="regle" aria-label="' + esc(u.retirer) + ' : ' + esc(tx) + '">' + esc(tx) + '</button>';
+    }
     if(etat.theme !== 'tous'){
       var th = THEMES.filter(function(x){return x.cle===etat.theme;})[0];
       h += '<button type="button" data-retire="theme" aria-label="' + esc(u.retirer) + ' : ' + esc(th.nom[lang]) + '">' + esc(th.nom[lang]) + '</button>';
@@ -402,7 +415,7 @@ JS = r"""
     return m ? m[1] : null;
   }
   function garde(r, q){
-    if(etat.partie !== 'toutes' && r.partie !== etat.partie) return false;
+    if(etat.regle && r.cle !== etat.regle) return false;
     if(etat.theme !== 'tous' && (r.themes || []).indexOf(etat.theme) < 0) return false;
     return true;
   }
@@ -444,7 +457,7 @@ JS = r"""
     var actif = stocke();
     document.querySelectorAll('#langues button').forEach(function(b){
       b.setAttribute('aria-pressed', String(b.dataset.lang === actif)); });
-    boutonsFiltres();
+    remplirSelects();
     dessine();
   }
 
@@ -452,8 +465,8 @@ JS = r"""
     var id = decodeURIComponent((location.hash||'').slice(1));
     if(!id) return;
     var el = document.getElementById(id);
-    if(!el && (etat.texte || etat.partie !== 'toutes' || etat.theme !== 'tous')){
-      etat = {partie:'toutes', theme:'tous', texte:''}; champ.value = ''; boutonsFiltres(); dessine();
+    if(!el && (etat.texte || etat.regle || etat.theme !== 'tous')){
+      etat = {regle:'', theme:'tous', texte:''}; champ.value = ''; selectsDefaut(); dessine();
       el = document.getElementById(id);
     }
     if(el) el.scrollIntoView();
@@ -465,22 +478,15 @@ JS = r"""
       lang = choisir(); traduit();
     });
   });
-  zoneParties.addEventListener('click', function(ev){
-    var b = ev.target.closest('.puce'); if(!b) return;
-    // Un clic sur le filtre déjà actif le retire.
-    etat.partie = (etat.partie === b.dataset.partie) ? 'toutes' : b.dataset.partie; boutonsFiltres(); dessine();
-  });
-  zoneThemes.addEventListener('click', function(ev){
-    var b = ev.target.closest('.puce'); if(!b) return;
-    etat.theme = (etat.theme === b.dataset.theme) ? 'tous' : b.dataset.theme; boutonsFiltres(); dessine();
-  });
+  selRegle.addEventListener('change', function(){ etat.regle = selRegle.value; dessine(); });
+  selTheme.addEventListener('change', function(){ etat.theme = selTheme.value; dessine(); });
   zoneActifs.addEventListener('click', function(ev){
     var b = ev.target.closest('button'); if(!b) return;
     var k = b.dataset.retire;
-    if(k === 'partie' || k === 'tout') etat.partie = 'toutes';
-    if(k === 'theme' || k === 'tout') etat.theme = 'tous';
+    if(k === 'regle' || k === 'tout'){ etat.regle = ''; selRegle.value = ''; }
+    if(k === 'theme' || k === 'tout'){ etat.theme = 'tous'; selTheme.value = 'tous'; }
     if(k === 'texte' || k === 'tout'){ etat.texte = ''; champ.value = ''; }
-    boutonsFiltres(); dessine();
+    dessine();
   });
   liste.addEventListener('click', function(ev){
     var b = ev.target.closest('.video-lire'); if(!b) return;
@@ -854,17 +860,25 @@ def page_regles(d: dict | None = None) -> str:
         f'<button data-lang="{l}" aria-pressed="false">{l.upper()}</button>' for l in LANGUES)
     ed = d["edition"]
 
-    def puce(attr: str, val: str, texte: str, actif: bool) -> str:
-        return (f'<button class="puce" type="button" data-{attr}="{e(val)}" '
-                f'aria-pressed="{"true" if actif else "false"}">{e(texte)}</button>')
+    def opt(val: str, texte: str) -> str:
+        return f'<option value="{e(val)}">{e(texte)}</option>'
 
-    f_parties = (f'<span class="etiq">{e(ui["parties_lib"])}</span>' + puce("partie", "toutes", ui["tous"], True)
-                 + puce("partie", "defs", ui["defs"], False)
-                 + "".join(puce("partie", p["cle"], f'{ui["partie"]} {p["cle"]}', False)
-                           for p in d["parties"] if p["cle"] not in ("defs", "app"))
-                 + puce("partie", "app", ui["app"], False))
-    f_themes = (f'<span class="etiq">{e(ui["themes_lib"])}</span>' + puce("theme", "tous", ui["tous_m"], True)
-                + "".join(puce("theme", t["cle"], t["nom"]["fr"], False) for t in d["themes"]))
+    groupes = []
+    for k in ORDRE_PARTIES:
+        rs = [r for r in d["regles"] if r["partie"] == k]
+        if not rs:
+            continue
+        lib = ui["defs"] if k == "defs" else ui["app"] if k == "app" else f'{ui["partie"]} {k}'
+        groupes.append(f'<optgroup label="{e(lib)}">' + "".join(
+            opt(r["cle"], r["titre"]["fr"] if k == "defs" else f'{r["titre"]["fr"]} — {r["num"]}')
+            for r in rs) + "</optgroup>")
+    f_regles = (f'<span class="etiq" id="lib-regle">{e(ui["regles_lib"])}</span>'
+                f'<select id="sel-regle" aria-label="{e(ui["regles_lib"])}">'
+                + opt("", ui["toutes_regles"]) + "".join(groupes) + "</select>")
+    f_themes = (f'<span class="etiq" id="lib-theme">{e(ui["themes_lib"])}</span>'
+                f'<select id="sel-theme" aria-label="{e(ui["themes_lib"])}">'
+                + opt("tous", ui["tous_m"]) + "".join(opt(t["cle"], t["nom"]["fr"]) for t in d["themes"])
+                + "</select>")
     return (
         '<!doctype html>\n<html lang="fr"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
@@ -891,8 +905,8 @@ def page_regles(d: dict | None = None) -> str:
         '<path d="M10.6 10.6 14 14" stroke="#eef3f7" stroke-width="1.4"/></svg>'
         f'<input id="champ-q" type="search" placeholder="{e(ui["placeholder"])}" '
         f'aria-label="{e(ui["aria"])}" autocomplete="off"></div>'
-        '<div class="filtres" id="f-parties">' + f_parties + "</div>"
-        '<div class="filtres" id="f-themes">' + f_themes + "</div>"
+        '<div class="filtres">' + f_regles + "</div>"
+        '<div class="filtres">' + f_themes + "</div>"
         '<div class="actifs" id="actifs"></div></div>'
         f'<div class="compte" id="compte-regles" role="status" aria-live="polite">'
         f'<b>{total}</b> {ui["n"] if total > 1 else ui["un"]}</div>'
