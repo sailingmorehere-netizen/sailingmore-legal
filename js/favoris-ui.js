@@ -4,7 +4,7 @@
   "use strict";
   var F = window.SMFav;
   if(!F) return;
-  var SIX = ["fr", "en", "it", "es", "pt", "de"];
+  var SIX = window.SM_LANGUES || ["en"];   /* idem : une seule liste pour tout le site */
 
   var T = {
     fr: { enr: "Enregistrer", enrOk: "Enregistré", enrTitre: "Garder dans mes favoris", retTitre: "Retirer de mes favoris",

@@ -8,7 +8,7 @@
 (function(){
   "use strict";
   var TYPES = ["regle", "bateau", "port", "stage"];
-  var LANGUES = ["fr", "en", "it", "es", "pt", "de"];
+  var LANGUES = window.SM_LANGUES || ["en"];   /* liste unique, posée par le détecteur (24/11/2026) */
   var CLE = "sm-favoris";
   var MAX = 2000;            /* plafond de la liste : un import ne peut pas remplir le stockage */
   var MAX_ID = 300;

@@ -5,7 +5,7 @@
   <link>https://sailingmore.fr/</link>
   <description>Stages de voile, calendrier des régates d&#x27;Europe, cours théoriques, règles de course : les pages de Sailing More, mises à jour au fil de l&#x27;eau.</description>
   <language>fr-fr</language>
-  <lastBuildDate>Tue, 24 Nov 2026 21:58:11 +0000</lastBuildDate>
+  <lastBuildDate>Tue, 24 Nov 2026 22:05:00 +0000</lastBuildDate>
   <atom:link href="https://sailingmore.fr/feed.xml" rel="self" type="application/rss+xml"/>
   <ttl>720</ttl>
   <copyright>Sailing More</copyright>
@@ -14,8 +14,15 @@
     <title>Cours théoriques de voile — Sailing More</title>
     <link>https://sailingmore.fr/cours.html</link>
     <guid isPermaLink="true">https://sailingmore.fr/cours.html</guid>
-    <pubDate>Tue, 24 Nov 2026 21:56:40 +0000</pubDate>
+    <pubDate>Tue, 24 Nov 2026 22:03:55 +0000</pubDate>
     <description>Un cours de voile théorique, gratuit, en 12 chapitres : vocabulaire, allures, cap, marées, météo, balisage, RIPAM/COLREG et règles de course (RRS 2025-2028), avec exercices corrigés.</description>
+  </item>
+  <item>
+    <title>Simulateur de priorités — règles de course et RIPAM — Sailing More</title>
+    <link>https://sailingmore.fr/simulateur.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/simulateur.html</guid>
+    <pubDate>Tue, 24 Nov 2026 22:03:55 +0000</pubDate>
+    <description>50 scénarios pour s&#x27;entraîner aux priorités en mer : règles de course, RIPAM de jour et feux de nuit. Schéma, règle applicable et explication en une phrase, en six langues.</description>
   </item>
   <item>
     <title>Stages de voile — Sailing More</title>
@@ -23,13 +30,6 @@
     <guid isPermaLink="true">https://sailingmore.fr/stages.html</guid>
     <pubDate>Tue, 24 Nov 2026 21:51:14 +0000</pubDate>
     <description>Stages et cours de voile vendus par des écoles européennes : prix publiés, destination, langue, lien direct vers la fiche de l&#x27;école.</description>
-  </item>
-  <item>
-    <title>Simulateur de priorités — règles de course et RIPAM — Sailing More</title>
-    <link>https://sailingmore.fr/simulateur.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/simulateur.html</guid>
-    <pubDate>Tue, 24 Nov 2026 21:51:14 +0000</pubDate>
-    <description>50 scénarios pour s&#x27;entraîner aux priorités en mer : règles de course, RIPAM de jour et feux de nuit. Schéma, règle applicable et explication en une phrase, en six langues.</description>
   </item>
   <item>
     <title>Règles de course à la voile — Sailing More</title>
