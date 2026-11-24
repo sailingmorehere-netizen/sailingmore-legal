@@ -1398,6 +1398,14 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         print(f"nomenclature des bateaux : {bateaux_page.ecrire_page(SITE)}")
     except Exception as e:  # noqa: BLE001
         print(f"nomenclature des bateaux non écrite : {e}")
+    # Favoris (24/11/2026) : favoris_page.py est la source unique des trois scripts et de mes-favoris.html.
+    # Les balises <script> viennent de site_blocks.entete_site() (liste PAGES_FAVORIS), posée plus bas
+    # par poser_entete_partout() : mes-favoris.html reçoit ainsi la barre du site comme les autres.
+    try:
+        import favoris_page
+        print(f"favoris : {favoris_page.ecrire_page(SITE)}")
+    except Exception as e:  # noqa: BLE001
+        print(f"favoris non écrits : {e}")
     for nom in ("mentions-legales.html", "confidentialite.html", "delete.html"):
         if (SORTIE / nom).exists():
             brut = (SORTIE / nom).read_text()

@@ -22,6 +22,9 @@ BRANCHE = "claude"
 JETON = (RACINE / "credentials/github-token.txt").read_text().strip()
 SOURCE = {"accueil_site.py", "site_blocks.py", "mer_louvoyage.py", "carte_site.py", "equilibre.css",
           "marque.py", "regates_page.py",
+          # Favoris (24/11/2026) : écrit js/favoris*.js, js/config.js et mes-favoris.html ; sans lui
+          # dans l'atelier, la reconstruction perd la page.
+          "favoris_page.py",
           # Modules importés par regates_page : sans eux dans l'atelier, la reconstruction du site
           # s'arrête sur « No module named regates_classes » et plus rien ne se publie.
           "regates_classes.py", "regates_drapeaux.py",

@@ -777,7 +777,22 @@ def entete_site(actuelle: str, langues: list[str], auto: bool = True) -> str:
     return ('<header class="entete"><a class="nom" href="index.html">Sailing More</a>'
             f'{selecteur_langue(langues, auto)}'
             f'{menu_site(actuelle)}</header>'
-            + _LANGUE_CSS + _MENU_JS + _LANGUE_JS)
+            + _LANGUE_CSS + _MENU_JS + _LANGUE_JS + balises_favoris(actuelle))
+
+
+# Les pages qui reçoivent les trois balises des favoris (24/11/2026). UNE SEULE liste : une page
+# ajoutée ici l'a à la prochaine construction, sans patch sur le HTML construit. Les scripts sont
+# écrits par `favoris_page.py`. `defer` : ils tournent après l'analyse de la page, dans cet ordre,
+# alors que la balise est posée juste après `<body>`.
+PAGES_FAVORIS = ("regles-de-course.html", "stages.html", "mes-favoris.html")
+
+
+def balises_favoris(actuelle: str) -> str:
+    """Les trois `<script>` des favoris si `actuelle` est dans PAGES_FAVORIS, sinon rien."""
+    if actuelle not in PAGES_FAVORIS:
+        return ""
+    return ('<script defer src="/js/config.js"></script><script defer src="/js/favoris.js"></script>'
+            '<script defer src="/js/favoris-ui.js"></script>')
 
 CARTE_JS = """
 <script>
