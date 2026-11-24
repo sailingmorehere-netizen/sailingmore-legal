@@ -100,7 +100,8 @@ NIVEAU_PAR_TITRE: list[tuple[str, str]] = [
     ("rya day skipper motorboat", "chef-de-bord"), ("sbt yachtmaster coastal coc prep for motor", "chef-de-bord"),
     ("sbt yachtmaster offshore coc prep for motor", "hauturier"),
     ("rya powerboat instructors course", "moniteur"), ("powerboat instructor skills", "moniteur"),
-    ("rya powerboat instructor", "moniteur"), ("rya pwc instructor course", "moniteur"),
+    ("rya pwc instructor course", "moniteur"),
+    # « RYA Powerboat Instructor » (uksa.org) retiré le 24/11/2026 : la page répond 403, rien ne prouve le niveau.
 ]
 
 

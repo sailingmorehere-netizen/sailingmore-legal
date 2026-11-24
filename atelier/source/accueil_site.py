@@ -23,6 +23,7 @@ import shutil
 import datetime
 from pathlib import Path
 
+import accueil_2026
 import marque
 import mer_louvoyage
 import site_blocks
@@ -1309,7 +1310,8 @@ def page_accueil(jeu: str, blocs: str = "") -> str:
         globals().update(
             NUIT=m["nuit"], NUIT2=m["nuit2"], EAU=m["eau"], CREME=m["creme"],
             GRIS=m["gris"], ROUGE=m["rouge"], AMBRE=m["ambre"], TOILE=m["toile"])
-        return habillage(page(jeu, blocs, site_blocks.html_carte(), mer_louvoyage.html_fond()), m)
+        # Accueil 2026 (tâche 47) : le gabarit reste, tout le corps vient de `accueil_2026.py`.
+        return accueil_2026.refondre(habillage(page(jeu, blocs, site_blocks.html_carte(), mer_louvoyage.html_fond()), m), RACINE)
     finally:
         globals().update(depart)
 
@@ -1882,7 +1884,7 @@ def main() -> int:
         return 0
     if "--site" in sys.argv or "--publier" in sys.argv:
         return sortir_le_site(jeu, blocs)
-    (SORTIE / "index.html").write_text(page(jeu, blocs, carte, kit=site_blocks.html_kit(fr=TEXTES['fr'])))
+    (SORTIE / "index.html").write_text(accueil_2026.refondre(page(jeu, blocs, carte, kit=site_blocks.html_kit(fr=TEXTES['fr'])), RACINE))
     (SORTIE / "jeux.html").write_text(page_jeu(jeu))
     print(f"écrit {SORTIE / 'index.html'} · {SORTIE / 'jeux.html'}")
     print(f"chiffres au {chiffres().get('maj')} · prochain jeu {jeu} · {len(citations())} citations")
