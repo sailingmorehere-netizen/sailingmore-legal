@@ -37,7 +37,8 @@ UI = {
            "chapo": "Les mots de la voile, chacun expliqué en une phrase et traduit en six langues.",
            "retour": "← Sailing More", "placeholder": "Un mot, une pièce du bateau, une définition…",
            "aria": "Rechercher dans le lexique", "tous": "Tous", "theme": "Thème",
-           "un": "terme", "n": "termes", "aucun": "Aucun terme ne correspond à cette recherche."},
+           "un": "terme", "n": "termes", "aucun": "Aucun terme ne correspond à cette recherche.",
+           "desole": "Désolé pour le français : le breton de ce mot manque encore."},
     "en": {"titre": "Sailing glossary",
            "chapo": "The words of sailing, each explained in one sentence and translated into six languages.",
            "retour": "← Sailing More", "placeholder": "A word, a part of the boat, a definition…",
@@ -132,6 +133,9 @@ a{color:#fff;text-decoration:none}
    (scrollWidth 1042 pour 780 px de fenêtre, 21/11/2026) : le flex-wrap garantit le repli. */
 .terme .autres span{white-space:nowrap;min-width:0;overflow-wrap:anywhere}
 .terme .autres b{color:var(--gris);font-weight:500}
+.terme .autres .manque{opacity:.75}
+.terme .autres .manque i{font-style:italic;color:#8fa3b5}
+.terme .autres .manque sup{font-size:.85em;vertical-align:.2em}
 .vide{padding:3rem 0;color:var(--gris);font-size:.9rem}
 .pied{margin-top:3.6rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,.09);
   color:#6f8598;font-size:.72rem;line-height:1.8}
@@ -189,6 +193,14 @@ JS = r"""
   function carte(x){
     var autres = LANGUES.filter(function(l){return l!==lang;}).map(function(l){
       return '<span lang="' + l + '">' + l + ' <b>' + esc(x.mot[l]) + '</b></span>'; }).join('');
+    // Le breton : le mot s'il est attesté, sinon le français avec le petit mot d'excuse (Nicolas,
+    // 24/11/2026 : « ceux que t'as pas, tu les fais en français […] désolé pour le français »).
+    if (lang !== 'bzh') {
+      autres += x.mot.bzh
+        ? '<span lang="br">br <b>' + esc(x.mot.bzh) + '</b></span>'
+        : '<span lang="br" class="manque" title="' + esc(UI.fr.desole) + '">br <i>' + esc(x.mot.fr)
+          + '</i> <sup aria-hidden="true">☺</sup></span>';
+    }
     return '<article class="terme" id="' + esc(x.cle) + '">'
       + '<h3><a href="#' + esc(x.cle) + '">' + esc(x.mot[lang]) + '</a></h3>'
       + '<p class="def">' + esc(x.def[lang]) + '</p>'
@@ -281,6 +293,11 @@ def liste_statique(d: dict, lang: str = "fr") -> str:
         for x in termes:
             autres = "".join(
                 f'<span lang="{l}">{l} <b>{e(x["mot"][l])}</b></span>' for l in LANGUES if l != lang)
+            if lang != "bzh":
+                autres += (f'<span lang="br">br <b>{e(x["mot"]["bzh"])}</b></span>'
+                           if x["mot"].get("bzh") else
+                           f'<span lang="br" class="manque" title="{e(UI["fr"]["desole"])}">br '
+                           f'<i>{e(x["mot"][lang])}</i> <sup aria-hidden="true">☺</sup></span>')
             cartes.append(
                 f'<article class="terme" id="{e(x["cle"])}">'
                 f'<h3><a href="#{e(x["cle"])}">{e(x["mot"][lang])}</a></h3>'
