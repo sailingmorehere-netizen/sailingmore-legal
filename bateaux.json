@@ -2,7 +2,7 @@
  "page": "bateaux.html",
  "genere_par": "scripts/bateaux_page.py",
  "bateaux": {
-  "surprise": "Surprise",
+  "surprise": "Voilier habitable Surprise",
   "x35": "Voilier Habitable X35",
   "hobie16": "Catamaran Hobie 16 avec spi",
   "laser": "Dériveur Laser",
