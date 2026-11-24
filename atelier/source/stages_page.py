@@ -264,6 +264,7 @@ def construire(d: dict | None = None) -> str:
 
 def _html(d: dict) -> str:
     import html as H
+    import site_blocks  # la barre du site et le menu : un seul endroit
     corps = ("<!doctype html><html lang=\"fr\"><head><meta charset=\"utf-8\">"
              "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
              f"<title>{H.escape(UI['fr']['titre'])} — Sailing More</title>"
@@ -275,9 +276,9 @@ def _html(d: dict) -> str:
                  "stages.html", "Stages de voile — Sailing More",
                  "Stages et cours de voile vendus par des écoles européennes : prix publiés, destination, "
                  "langue, lien direct vers la fiche de l'école.") +
-             f"<style>{CSS}</style></head><body><main class=\"page\">"
+             f"<style>{site_blocks.ENTETE_CSS}{CSS}</style></head><body>\n"
+             f"{site_blocks.entete_site('stages.html', site_blocks.LANGUES)}\n<main class=\"page\">"
              f"<a class=\"retour\" href=\"/\" data-t=\"retour\">{H.escape(UI['fr']['retour'])}</a>"
-             "<div id=\"langues\"></div>"
              f"<h1 data-t=\"titre\">{H.escape(UI['fr']['titre'])}</h1>"
              f"<p class=\"chapo\" data-t=\"chapo\">{H.escape(UI['fr']['chapo'])}</p>"
              "<section class=\"rech\">"
