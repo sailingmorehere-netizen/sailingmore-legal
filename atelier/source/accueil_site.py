@@ -1258,10 +1258,15 @@ def fichiers_a_publier() -> list[str]:
                          "equivalences.html", "cours.html", "bateaux.html", "bateaux.json", "stages-proches.json", "404.html", "mentions-legales.html",
                          "confidentialite.html", "delete.html", "sitemap.xml", "feed.xml")
              if (SITE / n).exists()]
+    # Une page par pavillon (24/11/2026, chapitre des pavillons du cours) : 42 pages `pavillon-<id>.html`.
+    # Elles se publient avec les autres, sinon elles restent locales et les liens du cours mènent à un 404.
+    pages += sorted(p.name for p in SITE.glob("pavillon-*.html"))
     images = [n for n in ("og-image.jpg", "icon-512.png", "icon-180.png", "favicon-32.png",
                           "carte-monde.png") if (SITE / n).exists()]
     medias = sorted(p.relative_to(SITE).as_posix() for d in ("stories", "reels", "drapeaux")
                     for p in (SITE / d).glob("*") if p.suffix.lower() in {".jpg", ".png"})
+    # Les 42 SVG des pavillons du Code international de signaux (12 Ko en tout), avec leur dossier.
+    medias += sorted(p.relative_to(SITE).as_posix() for p in (SITE / "pavillons").glob("*.svg"))
     polices = sorted(p.relative_to(SITE).as_posix() for p in (SITE / "fonts").glob("*.woff"))
     # Les neuf images WebP de la nomenclature des bateaux (rendues par Hermes depuis images-src/bateaux/*.svg,
     # voir bateaux-images.json) : stables, à `images/bateaux/sailingmore-nomenclature-<sujet>.webp`.

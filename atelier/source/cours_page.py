@@ -49,6 +49,14 @@ CHAPITRES = [
      "regles": ["rrs:10", "rrs:11", "rrs:12", "rrs:13", "rrs:14", "rrs:15", "rrs:16", "rrs:17"]},
     {"id": "marques", "schemas": ["18", "44"], "regles": ["rrs:18", "rrs:19", "rrs:20", "rrs:44", "rrs:2"]},
     {"id": "securite", "schemas": [], "regles": ["rrs:1"]},
+    # Les pavillons (24/11/2026) : l'alphabet marin et le Code international de signaux, une page par
+    # pavillon, la grille de navigation. Les blocs sont dessinés par `pavillons_cours.py`, à partir de
+    # `pavillons.json` (42 pavillons) — les règles citées y portent leur propre lien.
+    {"id": "pavillons", "pavillons": True, "schemas": [], "regles": []},
+    # Les pavillons de course : chaque signal renvoie à la règle qui le décrit (RRS 26 à 61).
+    {"id": "signaux_course", "signaux": True, "schemas": [], "regles": []},
+    # La VHF : usage, procédure et canaux.
+    {"id": "vhf", "vhf": True, "schemas": [], "regles": []},
 ]
 
 # Intitulés RRS 2025-2028 : repris de regles.json (ordre : fr, en, it, es, pt, de).
@@ -1111,6 +1119,12 @@ JS = """
 })();
 """
 
+# Les trois chapitres des pavillons : leurs textes vivent dans `pavillons_cours.py`, avec les données.
+import pavillons_cours  # noqa: E402
+
+pavillons_cours.CHAPITRE_PAVILLONS = [c["id"] for c in CHAPITRES].index("pavillons") + 1
+pavillons_cours.poser_textes(TEXTES)
+
 _LEX = re.compile(r"\{([a-z0-9-]+)\|([^}]+)\}")
 _donnees_regles = None
 
@@ -1120,8 +1134,10 @@ def _e(s: str) -> str:
 
 
 def _txt(s: str) -> str:
-    """Échappe le texte, puis pose les liens lexique : {id|mot} -> <a href="lexique.html#id">mot</a>."""
-    return _LEX.sub(lambda m: f'<a href="lexique.html#{m.group(1)}">{m.group(2)}</a>', _e(s))
+    """Échappe le texte, pose les liens lexique ({id|mot}) et les pavillons ({pav:id}, « pavillon A »)."""
+    s = pavillons_cours.baliser(s)
+    s = _LEX.sub(lambda m: f'<a href="lexique.html#{m.group(1)}">{m.group(2)}</a>', _e(s))
+    return pavillons_cours.rendre(s)
 
 
 def _brut(s: str) -> str:
@@ -1206,6 +1222,7 @@ def _chapitre(n: int, ch: dict, lang: str) -> str:
             items.append(f'<li>{puce}<b>{_e(titre)}</b> — {_txt(t["regles_texte"][k])}</li>')
         regles = f'<div class="regles"><h3>{_e(t["regles"])}</h3><ul>{"".join(items)}</ul></div>'
     schemas = _schemas(ch["schemas"], lang) if ch["schemas"] else ""
+    pav = pavillons_cours.bloc(ch["id"], lang) if ch.get("pavillons") or ch.get("signaux") or ch.get("vhf") else ""
     # L'exercice du simulateur, dans la langue du cours : 50 situations, dessinées ici même.
     simu = ""
     if ch.get("a_simulateur"):
@@ -1217,7 +1234,7 @@ def _chapitre(n: int, ch: dict, lang: str) -> str:
     exo = (f'<div class="exo"><h3>{_e(t["exo"])}</h3><p>{_txt(c["q"])}</p>'
            f'<details><summary>{_e(t["corr"])}</summary><p>{_txt(c["a"])}</p></details></div>')
     return (f'<section class="chap" id="ch{n}-{lang}"><h2><span class="no">{n}</span>{_e(_brut(c["t"]))}</h2>'
-            f'{corps}{regles}{schemas}{simu}{exo}'
+            f'{corps}{pav}{regles}{schemas}{simu}{exo}'
             f'<p><a class="haut-lien" href="#sommaire-{lang}">{_e(t["haut"])}</a></p></section>')
 
 
@@ -1260,7 +1277,7 @@ def page_cours() -> str:
             f'<link rel="canonical" href="https://sailingmore.fr/cours.html">'
             f'{_ld_cours(desc)}'
             f'<meta name="description" content="{_html.escape(desc)}">'
-            f'<style>{site_blocks.ENTETE_CSS}{CSS}{_css_schemas()}</style></head><body>\n'
+            f'<style>{site_blocks.ENTETE_CSS}{CSS}{pavillons_cours.CSS}{_css_schemas()}</style></head><body>\n'
             f'{site_blocks.entete_site("cours.html", LANGUES)}{regles_page.SPRITE}\n<div class="page">\n{corps}\n</div>\n'
             f'<script>{JS.replace("__LANGUES__", json.dumps(LANGUES))}</script>\n</body></html>\n')
 
@@ -1269,6 +1286,8 @@ def ecrire_page(dossier: Path = SITE) -> str:
     """Écrit `cours.html` dans `dossier` — appelé par `accueil_site.sortir_le_site`."""
     dossier.mkdir(parents=True, exist_ok=True)
     (dossier / "cours.html").write_text(page_cours(), encoding="utf-8")
+    import site_blocks as _sb  # noqa: PLC0415  (la CSS du site : un seul endroit)
+    pavillons_cours.ecrire_pages(dossier, f"{_sb.CSS}{CSS}{pavillons_cours.CSS}")
     return "cours.html"
 
 

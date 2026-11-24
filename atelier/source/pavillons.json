@@ -1,0 +1,889 @@
+{
+ "edition": {
+  "titre": "Code international de signaux",
+  "source_en": "Wikipédia (International maritime signal flags), tables ICS",
+  "source_course": "RRS 2025-2028, textes de scripts/regles.json",
+  "verifie_le": "2026-11-24",
+  "licence": "Wikimedia Commons, domaine public ou CC"
+ },
+ "pavillons": [
+  {
+   "id": "a",
+   "code": "A",
+   "otan": "Alfa",
+   "type": "lettre",
+   "image": "pavillons/a.svg",
+   "forme": {
+    "fr": "guidon fourchu",
+    "en": "swallowtailed"
+   },
+   "couleurs_en": "Swallowtailed, per pale argent and azure",
+   "ics": {
+    "fr": "J'ai un plongeur en plongée ; tenez-vous à bonne distance et passez lentement.",
+    "en": "I have a diver down; keep well clear at slow speed."
+   },
+   "complement": {
+    "fr": "",
+    "en": "Azimuth or bearing"
+   }
+  },
+  {
+   "id": "b",
+   "code": "B",
+   "otan": "Bravo",
+   "type": "lettre",
+   "image": "pavillons/b.svg",
+   "forme": {
+    "fr": "guidon fourchu",
+    "en": "swallowtailed"
+   },
+   "couleurs_en": "Swallowtailed, gules",
+   "ics": {
+    "fr": "Je charge, décharge ou transporte des marchandises dangereuses.",
+    "en": "I am taking in or discharging or carrying dangerous goods.\" (Originally used by the Royal Navy specifically for military explosives.)"
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "c",
+   "code": "C",
+   "otan": "Charlie",
+   "type": "lettre",
+   "image": "pavillons/c.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Azure, a fess gules fimbriated argent",
+   "ics": {
+    "fr": "Oui (affirmatif).",
+    "en": "Affirmative."
+   },
+   "complement": {
+    "fr": "Relèvement (azimut)",
+    "en": "Magnetic bearing"
+   }
+  },
+  {
+   "id": "d",
+   "code": "D",
+   "otan": "Delta",
+   "type": "lettre",
+   "image": "pavillons/d.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Or, a Spanish fess azure",
+   "ics": {
+    "fr": "Écartez-vous de moi ; je manœuvre avec difficulté.",
+    "en": "Keep clear of me; I am maneuvering with difficulty."
+   },
+   "complement": {
+    "fr": "Date",
+    "en": "Date"
+   }
+  },
+  {
+   "id": "e",
+   "code": "E",
+   "otan": "Echo",
+   "type": "lettre",
+   "image": "pavillons/e.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Per fess azure and gules",
+   "ics": {
+    "fr": "Je viens sur tribord.",
+    "en": "I am altering my course to starboard."
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "f",
+   "code": "F",
+   "otan": "Foxtrot",
+   "type": "lettre",
+   "image": "pavillons/f.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Argent, a lozenge throughout gules",
+   "ics": {
+    "fr": "Je suis en avarie ; communiquez avec moi.",
+    "en": "I am disabled; communicate with me."
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "g",
+   "code": "G",
+   "otan": "Golf",
+   "type": "lettre",
+   "image": "pavillons/g.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Paly of six or and azure",
+   "ics": {
+    "fr": "Je demande un pilote. (Navires de pêche sur les lieux de pêche : je relève mes filets.)",
+    "en": "I require a pilot.\"By fishing vessels near fishing grounds: \"I am hauling nets."
+   },
+   "complement": {
+    "fr": "Longitude",
+    "en": "Longitude (The first 2 or 3 digits denote degrees; the last 2 denote minutes.)"
+   }
+  },
+  {
+   "id": "h",
+   "code": "H",
+   "otan": "Hotel",
+   "type": "lettre",
+   "image": "pavillons/h.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Per pale argent and gules",
+   "ics": {
+    "fr": "J'ai un pilote à bord.",
+    "en": "I have a pilot on board."
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "i",
+   "code": "I",
+   "otan": "India",
+   "type": "lettre",
+   "image": "pavillons/i.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Or, a pellet",
+   "ics": {
+    "fr": "Je viens sur bâbord.",
+    "en": "I am altering my course to port."
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "j",
+   "code": "J",
+   "otan": "Juliett",
+   "type": "lettre",
+   "image": "pavillons/j.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Azure, a fess argent",
+   "ics": {
+    "fr": "Je suis en feu et j'ai une cargaison dangereuse à bord, ou une fuite de cargaison dangereuse : écartez-vous de moi.",
+    "en": "I am on fire and have dangerous cargo on board: keep well clear of me.\"or\"I am leaking dangerous cargo."
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "k",
+   "code": "K",
+   "otan": "Kilo",
+   "type": "lettre",
+   "image": "pavillons/k.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Per pale or and azure",
+   "ics": {
+    "fr": "Je désire communiquer avec vous.",
+    "en": "I wish to communicate with you."
+   },
+   "complement": {
+    "fr": "Moyen de communication (1 sémaphore, 2 lampes, 3 radio)",
+    "en": "\"I wish to communicate with you by...\":1) Semaphore signaling by hand-flags or arms; 2) Loud hailer (megaphone);3) Morse signaling lamp;4) Sound signals."
+   }
+  },
+  {
+   "id": "l",
+   "code": "L",
+   "otan": "Lima",
+   "type": "lettre",
+   "image": "pavillons/l.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Quarterly or and sable",
+   "ics": {
+    "fr": "Arrêtez-vous immédiatement.",
+    "en": "Stop immediately."
+   },
+   "complement": {
+    "fr": "Latitude",
+    "en": "Latitude (the first 2 digits denote degrees; the last 2 denote minutes.)"
+   }
+  },
+  {
+   "id": "m",
+   "code": "M",
+   "otan": "Mike",
+   "type": "lettre",
+   "image": "pavillons/m.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Azure, a saltire argent",
+   "ics": {
+    "fr": "Mon navire est stoppé et n'a plus d'erre.",
+    "en": "My vessel is stopped and making no way through the water."
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "n",
+   "code": "N",
+   "otan": "November",
+   "type": "lettre",
+   "image": "pavillons/n.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Chequy of sixteen azure and argent",
+   "ics": {
+    "fr": "Non (négatif).",
+    "en": "Negative."
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "o",
+   "code": "O",
+   "otan": "Oscar",
+   "type": "lettre",
+   "image": "pavillons/o.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Per bend gules and or",
+   "ics": {
+    "fr": "Homme à la mer.",
+    "en": "Man overboard.\" (often attached to the man overboard pole on boats). With a sinister hoist, the semaphore flag."
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "p",
+   "code": "P",
+   "otan": "Papa",
+   "type": "lettre",
+   "image": "pavillons/p.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Azure, an inescutcheon argent",
+   "ics": {
+    "fr": "Pavillon bleu de Peter. Au port : toutes les personnes doivent se présenter à bord, le navire va appareiller.",
+    "en": "The Blue Peter. In harbour: All persons should report on board as the vessel is about to proceed to sea. At sea: It may be used by fishing vessels to mean: \"My nets have come fast upon an obstruction."
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "q",
+   "code": "Q",
+   "otan": "Quebec",
+   "type": "lettre",
+   "image": "pavillons/q.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Or",
+   "ics": {
+    "fr": "Mon navire est indemne et je demande la libre pratique.",
+    "en": "My vessel is 'healthy' and I request free pratique."
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "r",
+   "code": "R",
+   "otan": "Romeo",
+   "type": "lettre",
+   "image": "pavillons/r.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Gules, a cross or",
+   "ics": {
+    "fr": "Aucun sens à lettre unique depuis 1969 ; s'employait pour « la route est libre devant moi ».",
+    "en": ""
+   },
+   "complement": {
+    "fr": "Distance en milles marins",
+    "en": "Distance (range) in nautical miles."
+   }
+  },
+  {
+   "id": "s",
+   "code": "S",
+   "otan": "Sierra",
+   "type": "lettre",
+   "image": "pavillons/s.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Argent, an inescutcheon azure",
+   "ics": {
+    "fr": "Je bats en arrière (je fais route en arrière).",
+    "en": "I am operating astern propulsion."
+   },
+   "complement": {
+    "fr": "Vitesse en nœuds",
+    "en": "Speed (velocity) in knots"
+   }
+  },
+  {
+   "id": "t",
+   "code": "T",
+   "otan": "Tango",
+   "type": "lettre",
+   "image": "pavillons/t.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Tierced in pale gules, argent and azure",
+   "ics": {
+    "fr": "Écartez-vous de moi. (Bateaux de pêche : je chalute en paire.)",
+    "en": "Keep clear of me.\"Fishing boats: \"Keep clear of me; I am engaged in pair trawling."
+   },
+   "complement": {
+    "fr": "Heure locale",
+    "en": "Local time. (The first 2 digits denote hours; the last 2 denote minutes.)"
+   }
+  },
+  {
+   "id": "u",
+   "code": "U",
+   "otan": "Uniform",
+   "type": "lettre",
+   "image": "pavillons/u.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Quarterly gules and argent",
+   "ics": {
+    "fr": "Vous courez un danger.",
+    "en": "You are running into danger."
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "v",
+   "code": "V",
+   "otan": "Victor",
+   "type": "lettre",
+   "image": "pavillons/v.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Argent, a saltire gules",
+   "ics": {
+    "fr": "J'ai besoin de secours.",
+    "en": "I require assistance."
+   },
+   "complement": {
+    "fr": "Vitesse en km/h",
+    "en": "Velocity in kilometres per hour."
+   }
+  },
+  {
+   "id": "w",
+   "code": "W",
+   "otan": "Whiskey",
+   "type": "lettre",
+   "image": "pavillons/w.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Azure, an inescutcheon gules fimbriated argent",
+   "ics": {
+    "fr": "J'ai besoin d'une assistance médicale.",
+    "en": "I require medical assistance."
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "x",
+   "code": "X",
+   "otan": "X-ray",
+   "type": "lettre",
+   "image": "pavillons/x.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Argent, a cross azure",
+   "ics": {
+    "fr": "Arrêtez l'exécution de vos intentions et surveillez mes signaux.",
+    "en": "Stop carrying out your intentions and watch for my signals."
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "y",
+   "code": "Y",
+   "otan": "Yankee",
+   "type": "lettre",
+   "image": "pavillons/y.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Bendy sinister of ten or and gules",
+   "ics": {
+    "fr": "Je chasse sur mon ancre.",
+    "en": "I am dragging my anchor."
+   },
+   "complement": {
+    "fr": "",
+    "en": ""
+   }
+  },
+  {
+   "id": "z",
+   "code": "Z",
+   "otan": "Zulu",
+   "type": "lettre",
+   "image": "pavillons/z.svg",
+   "forme": {
+    "fr": "carré",
+    "en": "square"
+   },
+   "couleurs_en": "Per saltire or, sable, gules and azure",
+   "ics": {
+    "fr": "J'ai besoin d'un remorqueur. (Navires de pêche : je file mes filets.)",
+    "en": "I require a tug.\"By fishing vessels near fishing grounds: \"I am shooting nets."
+   },
+   "complement": {
+    "fr": "Heure UTC",
+    "en": "Time (UTC). (The first 2 digits denote hours; the last 2 denote minutes.)"
+   }
+  },
+  {
+   "id": "0",
+   "code": "0",
+   "otan": "Zero",
+   "type": "chiffre",
+   "image": "pavillons/0.svg",
+   "forme": {
+    "fr": "pennon",
+    "en": "pennant"
+   },
+   "ics": {
+    "fr": "Chiffre 0 — s'emploie dans un groupe de chiffres : date, heure, latitude, longitude, relèvement, distance, vitesse.",
+    "en": "Numeral Zero — used in groups of figures: date, time, latitude, longitude, bearing, distance, speed."
+   }
+  },
+  {
+   "id": "1",
+   "code": "1",
+   "otan": "One",
+   "type": "chiffre",
+   "image": "pavillons/1.svg",
+   "forme": {
+    "fr": "pennon",
+    "en": "pennant"
+   },
+   "ics": {
+    "fr": "Chiffre 1 — s'emploie dans un groupe de chiffres : date, heure, latitude, longitude, relèvement, distance, vitesse.",
+    "en": "Numeral One — used in groups of figures: date, time, latitude, longitude, bearing, distance, speed."
+   }
+  },
+  {
+   "id": "2",
+   "code": "2",
+   "otan": "Two",
+   "type": "chiffre",
+   "image": "pavillons/2.svg",
+   "forme": {
+    "fr": "pennon",
+    "en": "pennant"
+   },
+   "ics": {
+    "fr": "Chiffre 2 — s'emploie dans un groupe de chiffres : date, heure, latitude, longitude, relèvement, distance, vitesse.",
+    "en": "Numeral Two — used in groups of figures: date, time, latitude, longitude, bearing, distance, speed."
+   }
+  },
+  {
+   "id": "3",
+   "code": "3",
+   "otan": "Three",
+   "type": "chiffre",
+   "image": "pavillons/3.svg",
+   "forme": {
+    "fr": "pennon",
+    "en": "pennant"
+   },
+   "ics": {
+    "fr": "Chiffre 3 — s'emploie dans un groupe de chiffres : date, heure, latitude, longitude, relèvement, distance, vitesse.",
+    "en": "Numeral Three — used in groups of figures: date, time, latitude, longitude, bearing, distance, speed."
+   }
+  },
+  {
+   "id": "4",
+   "code": "4",
+   "otan": "Four",
+   "type": "chiffre",
+   "image": "pavillons/4.svg",
+   "forme": {
+    "fr": "pennon",
+    "en": "pennant"
+   },
+   "ics": {
+    "fr": "Chiffre 4 — s'emploie dans un groupe de chiffres : date, heure, latitude, longitude, relèvement, distance, vitesse.",
+    "en": "Numeral Four — used in groups of figures: date, time, latitude, longitude, bearing, distance, speed."
+   }
+  },
+  {
+   "id": "5",
+   "code": "5",
+   "otan": "Five",
+   "type": "chiffre",
+   "image": "pavillons/5.svg",
+   "forme": {
+    "fr": "pennon",
+    "en": "pennant"
+   },
+   "ics": {
+    "fr": "Chiffre 5 — s'emploie dans un groupe de chiffres : date, heure, latitude, longitude, relèvement, distance, vitesse.",
+    "en": "Numeral Five — used in groups of figures: date, time, latitude, longitude, bearing, distance, speed."
+   }
+  },
+  {
+   "id": "6",
+   "code": "6",
+   "otan": "Six",
+   "type": "chiffre",
+   "image": "pavillons/6.svg",
+   "forme": {
+    "fr": "pennon",
+    "en": "pennant"
+   },
+   "ics": {
+    "fr": "Chiffre 6 — s'emploie dans un groupe de chiffres : date, heure, latitude, longitude, relèvement, distance, vitesse.",
+    "en": "Numeral Six — used in groups of figures: date, time, latitude, longitude, bearing, distance, speed."
+   }
+  },
+  {
+   "id": "7",
+   "code": "7",
+   "otan": "Seven",
+   "type": "chiffre",
+   "image": "pavillons/7.svg",
+   "forme": {
+    "fr": "pennon",
+    "en": "pennant"
+   },
+   "ics": {
+    "fr": "Chiffre 7 — s'emploie dans un groupe de chiffres : date, heure, latitude, longitude, relèvement, distance, vitesse.",
+    "en": "Numeral Seven — used in groups of figures: date, time, latitude, longitude, bearing, distance, speed."
+   }
+  },
+  {
+   "id": "8",
+   "code": "8",
+   "otan": "Eight",
+   "type": "chiffre",
+   "image": "pavillons/8.svg",
+   "forme": {
+    "fr": "pennon",
+    "en": "pennant"
+   },
+   "ics": {
+    "fr": "Chiffre 8 — s'emploie dans un groupe de chiffres : date, heure, latitude, longitude, relèvement, distance, vitesse.",
+    "en": "Numeral Eight — used in groups of figures: date, time, latitude, longitude, bearing, distance, speed."
+   }
+  },
+  {
+   "id": "9",
+   "code": "9",
+   "otan": "Niner",
+   "type": "chiffre",
+   "image": "pavillons/9.svg",
+   "forme": {
+    "fr": "pennon",
+    "en": "pennant"
+   },
+   "ics": {
+    "fr": "Chiffre 9 — s'emploie dans un groupe de chiffres : date, heure, latitude, longitude, relèvement, distance, vitesse.",
+    "en": "Numeral Niner — used in groups of figures: date, time, latitude, longitude, bearing, distance, speed."
+   }
+  },
+  {
+   "id": "substitut-1",
+   "code": "1er subst.",
+   "otan": "Premier substitut",
+   "type": "substitut",
+   "image": "pavillons/substitut-1.svg",
+   "forme": {
+    "fr": "pennon",
+    "en": "pennant"
+   },
+   "ics": {
+    "fr": "Répète le premier pavillon du même groupe hissé dans le même signal. En course, hissé seul au départ, il signifie rappel général.",
+    "en": "Repeats the first flag of the same class hoisted in the same signal. In racing, hoisted alone at the start, it means general recall."
+   },
+   "course": {
+    "regle": "29",
+    "fr": "Rappel général : le comité n'a pas pu identifier les bateaux partis trop tôt, ou la procédure est fautive ; la course est relancée.",
+    "en": "General recall."
+   }
+  },
+  {
+   "id": "substitut-2",
+   "code": "2e subst.",
+   "otan": "Deuxième substitut",
+   "type": "substitut",
+   "image": "pavillons/substitut-2.svg",
+   "forme": {
+    "fr": "pennon",
+    "en": "pennant"
+   },
+   "ics": {
+    "fr": "Répète le deuxième pavillon du même groupe hissé dans le même signal.",
+    "en": "Repeats the second flag of the same class."
+   }
+  },
+  {
+   "id": "substitut-3",
+   "code": "3e subst.",
+   "otan": "Troisième substitut",
+   "type": "substitut",
+   "image": "pavillons/substitut-3.svg",
+   "forme": {
+    "fr": "pennon",
+    "en": "pennant"
+   },
+   "ics": {
+    "fr": "Répète le troisième pavillon du même groupe hissé dans le même signal.",
+    "en": "Repeats the third flag of the same class."
+   }
+  },
+  {
+   "id": "reponse",
+   "code": "AP",
+   "otan": "Fanion de réponse",
+   "type": "special",
+   "image": "pavillons/reponse.svg",
+   "forme": {
+    "fr": "pennon à bandes verticales",
+    "en": "vertically striped pennant"
+   },
+   "ics": {
+    "fr": "Hissé à mi-mât pendant une transmission, il dit que le signal est compris ; dans un groupe de chiffres il marque la virgule décimale.",
+    "en": "Hoisted at the dip during a transmission it means 'signal understood'; in a group of figures it marks the decimal point."
+   },
+   "course": {
+    "regle": "27",
+    "fr": "Report : les départs sont différés, le signal de départ n'est pas donné ; la séquence reprend une minute après l'affalé.",
+    "en": "Postponement."
+   }
+  },
+  {
+   "id": "noir",
+   "code": "noir",
+   "otan": "Pavillon noir",
+   "type": "special",
+   "image": "pavillons/noir.svg",
+   "forme": {
+    "fr": "carré uni",
+    "en": "plain square"
+   },
+   "ics": {
+    "fr": "Pas de sens dans le code international : c'est un pavillon de course.",
+    "en": "No ICS meaning: a racing flag."
+   },
+   "course": {
+    "regle": "30",
+    "fr": "Règle du pavillon noir : un bateau dans le triangle formé par les extrémités de la ligne et la première marque dans la dernière minute est disqualifié sans instruction, et ne peut plus partir.",
+    "en": "Black flag rule."
+   }
+  },
+  {
+   "id": "rouge",
+   "code": "rouge",
+   "otan": "Pavillon rouge",
+   "type": "special",
+   "image": "pavillons/rouge.svg",
+   "forme": {
+    "fr": "carré uni",
+    "en": "plain square"
+   },
+   "ics": {
+    "fr": "Pas de sens dans le code international : c'est un pavillon de course.",
+    "en": "No ICS meaning: a racing flag."
+   },
+   "course": {
+    "regle": "61",
+    "fr": "Réclamation : le bateau qui réclame hisse un pavillon rouge au plus tôt après l'incident et le garde jusqu'à ce qu'il soit à terre, hors de la vue des bateaux en course.",
+    "en": "Protest flag."
+   }
+  }
+ ],
+ "course": [
+  {
+   "pavillon": "p",
+   "regle": "26",
+   "fr": "Pavillon préparatoire, hissé quatre minutes avant le départ.",
+   "en": "Preparatory signal, four minutes before the start."
+  },
+  {
+   "pavillon": "i",
+   "regle": "30",
+   "fr": "Règle du tour de bout : un bateau du côté parcours dans la dernière minute doit revenir par une extension de la ligne avant de partir.",
+   "en": "Round-an-end rule."
+  },
+  {
+   "pavillon": "z",
+   "regle": "30",
+   "fr": "Pénalité de 20 % pour un bateau dans le triangle pendant la dernière minute.",
+   "en": "20 % penalty."
+  },
+  {
+   "pavillon": "u",
+   "regle": "30",
+   "fr": "Un bateau dans le triangle pendant la dernière minute est disqualifié, mais la course peut être relancée.",
+   "en": "U flag rule."
+  },
+  {
+   "pavillon": "noir",
+   "regle": "30",
+   "fr": "Disqualification sans instruction et interdiction de repartir.",
+   "en": "Black flag rule."
+  },
+  {
+   "pavillon": "x",
+   "regle": "29",
+   "fr": "Rappel individuel : un ou plusieurs bateaux étaient du côté parcours au signal ; ils repassent la ligne.",
+   "en": "Individual recall."
+  },
+  {
+   "pavillon": "substitut-1",
+   "regle": "29",
+   "fr": "Rappel général : toute la flotte repart.",
+   "en": "General recall."
+  },
+  {
+   "pavillon": "reponse",
+   "regle": "27",
+   "fr": "Report : le départ est différé, la séquence reprend une minute après l'affalé.",
+   "en": "Postponement."
+  },
+  {
+   "pavillon": "n",
+   "regle": "32",
+   "fr": "Annulation : les courses sont annulées, les bateaux rentrent au port d'attente.",
+   "en": "Abandonment."
+  },
+  {
+   "pavillon": "s",
+   "regle": "32",
+   "fr": "Parcours réduit : la course est raccourcie, l'arrivée est à la marque signalée.",
+   "en": "Shortened course."
+  },
+  {
+   "pavillon": "c",
+   "regle": "33",
+   "fr": "Changement du bord suivant du parcours.",
+   "en": "Change of the next leg."
+  },
+  {
+   "pavillon": "m",
+   "regle": "34",
+   "fr": "Marque manquante : l'objet qui porte le pavillon est à considérer comme la marque.",
+   "en": "Missing mark."
+  },
+  {
+   "pavillon": "y",
+   "regle": "40",
+   "fr": "Équipements de flottabilité : chaque coureur porte un gilet.",
+   "en": "Life jackets."
+  },
+  {
+   "pavillon": "v",
+   "regle": "37",
+   "fr": "Instructions de recherche et de sauvetage : écouter le canal du comité.",
+   "en": "Search and rescue instructions."
+  },
+  {
+   "pavillon": "l",
+   "regle": "37",
+   "fr": "Venez à portée de voix ou suivez ce bateau.",
+   "en": "Come within hail or follow this boat."
+  },
+  {
+   "pavillon": "rouge",
+   "regle": "61",
+   "fr": "Réclamation : le bateau qui réclame le hisse au plus tôt et le garde jusque sur terre.",
+   "en": "Protest."
+  }
+ ]
+}
