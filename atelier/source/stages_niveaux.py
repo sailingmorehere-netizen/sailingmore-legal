@@ -83,8 +83,32 @@ ORDRE_CERTIF: list[tuple[str, re.Pattern]] = [
 ]
 
 
+# Niveaux posés à la main (tâche 44, nuit du 24/11/2026) pour des titres sans formule explicite mais sans
+# ambiguïté (cours « de base », classes Optimist, « Instructor »…). Début de titre, casse ignorée ; une
+# ligne retirée rend le titre à la règle. Les cours moteur « Day/Coastal Skipper », « Yachtmaster » et les
+# cours d'instructeur y sont classés malgré HORS_ECHELLE : décision prise à la place de Nicolas, à confirmer.
+NIVEAU_PAR_TITRE: list[tuple[str, str]] = [
+    ("basic sailing course", "decouverte"), ("corso di vela base", "decouverte"),
+    ("grundkurs", "decouverte"), ("segelkurs basic i dein", "decouverte"),
+    ("optimist 8 - 12", "decouverte"), ("zeilkamp optimist", "decouverte"),
+    ("kindersegelkurs berlin opti", "decouverte"), ("dinghy minis", "decouverte"),
+    ("private discover sailing", "decouverte"), ("asa 101", "decouverte"),
+    ("cwo i 5-daagse", "decouverte"), ("cwo i-weekend", "decouverte"),
+    ("segeln lernen zürichsee", "decouverte"),
+    ("asa 106", "chef-de-bord"), ("rya day skipper motor", "chef-de-bord"),
+    ("rya coastal skipper motor", "chef-de-bord"), ("rya motor boat coastal skipper", "chef-de-bord"),
+    ("rya day skipper motorboat", "chef-de-bord"), ("sbt yachtmaster coastal coc prep for motor", "chef-de-bord"),
+    ("sbt yachtmaster offshore coc prep for motor", "hauturier"),
+    ("rya powerboat instructors course", "moniteur"), ("powerboat instructor skills", "moniteur"),
+    ("rya powerboat instructor", "moniteur"), ("rya pwc instructor course", "moniteur"),
+]
+
+
 def niveau(titre: str) -> str:
     t = titre or ""
+    for debut, nv in NIVEAU_PAR_TITRE:
+        if t.casefold().startswith(debut):
+            return nv
     if HORS_ECHELLE.search(t) and not re.search(r"instruct|moniteur", t, _I):
         # Le moteur, la radio, le pro : pas d'échelle de voile. Un moniteur moteur reste « moniteur »
         # seulement si le titre ne parle pas de moteur — d'où le second test ci-dessous.
