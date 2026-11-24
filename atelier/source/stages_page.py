@@ -23,6 +23,7 @@ sont mesurées par `stages_releve.py` (et `stages_moisson.py` pour les catalogue
 from __future__ import annotations
 
 import json
+import re
 import sys
 import os
 from datetime import date, timedelta
@@ -243,7 +244,7 @@ def _avec_position(o: dict) -> dict:
 
 def construire(d: dict | None = None) -> str:
     d = d if d is not None else charger()
-    offres = [o for o in d.get("offres", []) if affichable(o)]
+    offres = [o for o in d.get("offres", []) if affichable(o) and not non_stage(o.get("titre"), o.get("prix_eur"))]
     offres = [avec_niveau(_avec_position(o)) for o in offres]
     offres.sort(key=lambda o: (o.get("debut") or "9999-12-31", o.get("prix_eur") or 0))
     ui = {lg: {**textes, **LIBELLES_NIVEAU.get(lg, LIBELLES_NIVEAU["en"])} for lg, textes in UI.items()}
@@ -571,7 +572,7 @@ function position(fin){
 }
 function dessiner(){
   var a=new Date().toISOString().slice(0,10);
-  var l=DATA.o.filter(function(o){return !o[7]||o[7]>=a});
+  var l=DATA.o.filter(function(o){return !o[16]&&(!o[7]||o[7]>=a)});
   l=l.map(function(o){return {o:o,d:POS?hav(POS[0],POS[1],o[0],o[1]):null}});
   l.sort(function(x,y){
     if(POS)return x.d-y.d;
@@ -605,11 +606,65 @@ BLOC_HTML = (MARQUE_BLOC + '<section id="stages-proches" style="max-width:60rem;
 PAGES_BLOC = ("index.html", "regates.html", "regles-de-course.html", "lexique.html", "cours.html", "bateaux.html")
 
 
+# Titres qui ne sont pas des stages (tâche 44, 24/11/2026). Le relevé des pages d'écoles ramasse aussi les
+# titres de navigation, d'actualité, de conseils et de location : on les repère ici, à la source, et la ligne
+# du bloc les porte marqués (positions 15 = motif, 16 = 1) ; le script du bloc les saute.
+_NON_STAGE = [
+    ("nav", r"^(informatie|information|general information|infos? pratiques?|la storia|le sedi|offerte aanvragen|"
+            r"vergaderen|regatas|quienes somos|fundaci[oó]n .*|cenizas al mar|veiligheid|erkenningen zeilschool|"
+            r"de accommodatie|de locatie .*|bedrijfsevenement|bedrijfsuitje zeilen|training & coaching|"
+            r"zeilschoolvloot|ontwikkeling van de zeilscholen|thema's seizoen.*|verhalen|zeilschool gezocht\?|"
+            r"zeilschool aanbiedingen|welk theorieboek.*|exclusief zeilinstituut.*|zeilinstructeur worden.*|"
+            r"'s avonds bij .*|our sailing areas|adh[ée]sion .*|prot[ée]g[ée] ?:.*|heiß|termine & kursplan|"
+            r"entscheidungshilfe.*|costo dei corsi|calendario corsi.*|open day.*|.* archiv(os|i|es)|"
+            r"escola de vela|escuela de vela|scuola vela|ecole de croisi[èe]re|courses|cursussen|sailing trips|"
+            r"specialist courses|rya training centres|.* training centre|zeilkampen|bootkeuze / zeilkampen|"
+            r"book your sailing adventure|first time sailing\?|course preparation checklist|in wolgast|"
+            r"in mecklenburg-vorpommern|angebote für studenten|le basi di .*|actividades de nuestra .*|"
+            r"zeilles voor jeugd|zeilles volwassenen & privéles)$"),
+    ("actu", r"^(el|la|los|las) .*(conquista|acoge|llega|abre inscripciones|no termina)|^todo listo para|"
+             r"^¿quieres saber|^which sailing course is right|^\d+ reasons|reasons to join|^reefing a sail|"
+             r"^sailing tips|^winds in |^marinas in |^sailing itinerary|^attractive sailing destinations|"
+             r"^regatta schedule|^sailing distance calculator|^knots for boating|^next step after|"
+             r"^10 essentials|pre course requirements|^postage payment|top up payment|"
+             r"^course cancellation|^l'effetto che fa|^apnea a vela|sailing through galicia|"
+             r"^quiz patent|^welk |^sailing holiday in "),
+    ("location", r"yacht charter|bareboat sailing|charter\b|noleggio|tariffe noleggio|stay and sail|"
+                 r"flotilla holidays|skippered flotilla|^flottielje zeilen|^meezeilen in |zeilvakantie|"
+                 r"^zeilen in (kroatië|griekenland)|^turkije$|^zeilen voor de vakantie"),
+]
+_NON_STAGE = [(m, re.compile(p, re.I)) for m, p in _NON_STAGE]
+_PLURIEL_VITRINE = re.compile(r"\b(courses|cursos|cursussen|corsi|kurse|courses?,)\b.*$|^(rya )?(powerboat|motorboat|sailing)"
+                              r" (training )?courses?\b", re.I)
+
+
+def non_stage(titre: str, prix=None) -> str:
+    """Motif ('nav', 'actu', 'location', 'encodage', 'vitrine') si le titre n'est pas un stage, '' sinon.
+    'vitrine' : page de rubrique au pluriel (« RYA Powerboat Courses ») sans prix — pas une offre."""
+    t = (titre or "").strip()
+    if "�" in t or "�" in t:
+        return "encodage"
+    for motif, rx in _NON_STAGE:
+        if rx.search(t):
+            return motif
+    if prix is None and _PLURIEL_VITRINE.search(t) and not re.search(r"\b(course|cursus|corso|kurs)\b.*\b(20\d\d|day|week)", t, re.I):
+        return "vitrine"
+    return ""
+
+
+def _marque(o: dict) -> list:
+    """Positions 15 (motif) et 16 (1 si ce n'est pas un stage, 0 sinon)."""
+    m = non_stage(o.get("titre") or "", o.get("prix"))
+    return [m, 1 if m else 0]
+
+
 def ecrire_bloc(dossier: Path, offres: list[dict]) -> int:
     """JSON compact + script du bloc « près de chez vous », à côté de stages.html. Une ligne par offre :
     [lat, lon, approx(0/1), titre, école, lieu, pays, début, prix, devise, lien, image, pays ISO3,
     niveau, certif]. `niveau` et `certif` sont ajoutés en fin de ligne (23/11/2026) : le script du bloc
-    lit par position, les treize premières ne bougent pas. Vides quand le titre ne permet pas de trancher."""
+    lit par position, les treize premières ne bougent pas. Vides quand le titre ne permet pas de trancher.
+    Positions 15 et 16 (24/11/2026) : motif et drapeau « n'est pas un stage » (voir `non_stage`) ; le bloc
+    n'affiche pas les lignes marquées."""
     lignes = []
     for o in offres:
         o = avec_niveau(_avec_position(o))
@@ -618,7 +673,8 @@ def ecrire_bloc(dossier: Path, offres: list[dict]) -> int:
         lignes.append([round(o["lat"], 2), round(o["lon"], 2), 1 if o.get("precision") != "ville" else 0,
                        o.get("titre") or "", o.get("ecole") or "", o.get("lieu") or "", o.get("pays_nom") or "",
                        o.get("debut") or "", o.get("prix"), o.get("devise") or "", o["lien"],
-                       o.get("image") or "", o.get("pays") or "", o.get("niveau") or "", o.get("certif") or ""])
+                       o.get("image") or "", o.get("pays") or "", o.get("niveau") or "", o.get("certif") or "",
+                       *_marque(o)])
     (dossier / "stages-proches.json").write_text(
         json.dumps({"maj": date.today().isoformat(), "o": lignes}, ensure_ascii=False, separators=(",", ":")),
         encoding="utf-8")
