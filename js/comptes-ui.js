@@ -103,13 +103,11 @@
     var l = null;
     try{ l = localStorage.getItem("sm-langue"); }catch(e){}
     if(SIX.indexOf(l) >= 0) return l;
-    var cand = (navigator.languages || [navigator.language || "fr"]);
-    for(var i = 0; i < cand.length; i++){
-      var b = String(cand[i]).toLowerCase().slice(0, 2);
-      if(SIX.indexOf(b) >= 0) return b;
-    }
-    var h = (document.documentElement.getAttribute("lang") || "fr").slice(0, 2);
-    return SIX.indexOf(h) >= 0 ? h : "fr";
+    /* Une seule détection pour tout le site, dans le <head> (24/11/2026). */
+    var d = (typeof window.smLangue === "function") ? window.smLangue()
+            : (document.documentElement.getAttribute("lang") || "en").slice(0, 2);
+    if(d === "bzh") d = "fr";
+    return SIX.indexOf(d) >= 0 ? d : "en";
   }
   function t(k){
     var s = (T[lg()] || T.fr)[k] || T.fr[k] || k;

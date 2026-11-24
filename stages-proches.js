@@ -1,8 +1,8 @@
 (function(){
 var T={"fr": {"titre": "Stages près de chez vous", "tous": "Tous les stages →", "prix": "prix non publié", "dist": "km"}, "en": {"titre": "Courses near you", "tous": "All courses →", "prix": "price not published", "dist": "km"}, "de": {"titre": "Kurse in Ihrer Nähe", "tous": "Alle Kurse →", "prix": "Preis nicht veröffentlicht", "dist": "km"}, "it": {"titre": "Corsi vicino a te", "tous": "Tutti i corsi →", "prix": "prezzo non pubblicato", "dist": "km"}, "es": {"titre": "Cursos cerca de ti", "tous": "Todos los cursos →", "prix": "precio no publicado", "dist": "km"}, "pt": {"titre": "Cursos perto de si", "tous": "Todos os cursos →", "prix": "preço não publicado", "dist": "km"}};
 var host=document.getElementById('stages-proches');if(!host)return;
-var L='fr';try{L=localStorage.getItem('lang')||document.documentElement.lang||(navigator.language||'fr')}catch(e){}
-L=String(L).slice(0,2).toLowerCase();if(!T[L])L='en';var X=T[L];
+var L='fr';try{L=(window.smLangue?window.smLangue():document.documentElement.lang||'en')}catch(e){}
+L=String(L).slice(0,2).toLowerCase();if(L==='bz')L='fr';if(!T[L])L='en';var X=T[L];
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function hav(a,b,c,d){var r=Math.PI/180,p=(c-a)*r,q=(d-b)*r,h=Math.sin(p/2)*Math.sin(p/2)+Math.cos(a*r)*Math.cos(c*r)*Math.sin(q/2)*Math.sin(q/2);return 12742*Math.asin(Math.sqrt(h))}
 function teinte(s){var h=0;s=s||'';for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%360;return h}

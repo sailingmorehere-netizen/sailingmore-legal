@@ -33,7 +33,8 @@ tr.non-valide td{opacity:.85}
   table.eq td::before{content:attr(data-l);display:block;font-size:.72rem;letter-spacing:.06em;
     text-transform:uppercase;color:var(--doux)}
 }
-</style><style id="equilibre">
+</style>  <link rel="alternate" type="application/rss+xml" title="Sailing More" href="https://sailingmore.fr/feed.xml">
+<style id="equilibre">
 /* Rééquilibrage design — 20/11/2026. Posé en dernier dans chaque page : il l'emporte sur les styles d'origine. */
 
 /* 1. Une police de marque, la même sur tous les appareils (Inter, licence SIL OFL, hébergée sur le site) */
@@ -172,24 +173,18 @@ body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:fl
      français (clé `sm-langue` = fr, que les pages savent lire) et pose un drapeau `sm-bzh`. Ce script
      ajoute alors l'encart, garde `lang="br"` (le code IANA ; « bzh » n'y est pas) et la pastille BZH.
      `?lang=xx` choisit la langue avant que les scripts des pages ne la lisent. */
-  var SIX = ["fr","en","it","es","pt","de"];
+  var SIX = ["fr", "en", "it", "es", "pt", "de"];
   function st(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function ec(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
-  try{
-    var q = new URLSearchParams(location.search).get("lang");
-    if(q === "bzh"){ ec("sm-bzh", "1"); ec("sm-langue", "fr"); }
-    else if(q && SIX.indexOf(q) >= 0){ ec("sm-bzh", null); ec("sm-langue", q); }
-  }catch(e){}
+  /* Plus aucune détection ici : le socle l'a faite dans le <head>, avant le premier pixel
+     (24/11/2026, une seule règle pour tout le site). `?lang=` et le choix du visiteur y sont déjà
+     rangeés sous `sm-langue`. */
+  var LANGUES = (typeof window !== "undefined" && window.SM_LANGUES) || SIX;
   function bzh(){
-    var f = st("sm-langue");
-    if(f && f !== "auto") return st("sm-bzh") === "1";
-    var p = (navigator.languages || [navigator.language || "en"]);   /* « br » du navigateur = bzh */
-    for(var i = 0; i < p.length; i++){
-      var b = String(p[i]).toLowerCase().slice(0, 2);
-      if(b === "br") return true;
-      if(SIX.indexOf(b) >= 0) return false;
-    }
-    return false;
+    var l = (typeof window.smLangue === "function") ? window.smLangue() : null;
+    if(l === "bzh") return true;
+    if(l) return false;                       /* une langue choisie l'emporte sur le drapeau */
+    return st("sm-bzh") === "1";
   }
   function encart(){
     var e = document.getElementById("encart-bzh"), actif = bzh();
@@ -259,8 +254,9 @@ body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:fl
 </div><main class="page"><h1 data-t="titre">Équivalences des diplômes de voile</h1><p class="chapo" data-t="chapo">Ce stage RYA en Grèce mène à quel niveau FFVoile, SKS ou ICC ? Chaque correspondance de cette page vient d&#x27;un document officiel, cité en lien, et a été relue par un moniteur avant d&#x27;être publiée.</p><div class="filtres"><label><span data-tl="de">Référentiel de départ</span><select id="f-de"></select></label><label><span data-tl="vers">Référentiel visé</span><select id="f-vers"></select></label></div><p class="compte" id="eq-compte" aria-live="polite"></p><p class="vide" id="eq-vide" hidden>Les correspondances sont en cours de vérification sur les documents officiels. Elles apparaîtront ici une par une, chacune avec sa source.</p><table class="eq" id="eq-table" hidden><thead><tr><th data-tl="niveau_source">Niveau détenu</th><th data-tl="niveau_cible">Niveau équivalent</th><th data-tl="prerequis">Prérequis</th><th data-tl="passerelle">Démarche</th><th data-tl="source">Source</th></tr></thead><tbody id="eq-corps"></tbody></table><noscript><p class="vide">Les correspondances sont en cours de vérification sur les documents officiels. Elles apparaîtront ici une par une, chacune avec sa source.</p></noscript><p><a class="lien-stages" href="stages.html" data-t="stages">Voir les stages de voile →</a></p><p class="pied" data-t="pied">Une équivalence vous semble fausse, ou un document officiel a changé ? Écrivez-nous : la ligne est retirée le temps de la vérifier.</p></main><script type="application/json" id="eq-donnees">{"ui":{"fr":{"titre":"Équivalences des diplômes de voile","chapo":"Ce stage RYA en Grèce mène à quel niveau FFVoile, SKS ou ICC ? Chaque correspondance de cette page vient d'un document officiel, cité en lien, et a été relue par un moniteur avant d'être publiée.","de":"Référentiel de départ","vers":"Référentiel visé","tous":"Tous","niveau_source":"Niveau détenu","niveau_cible":"Niveau équivalent","prerequis":"Prérequis","passerelle":"Démarche","source":"Source","voir_source":"document officiel","vide":"Les correspondances sont en cours de vérification sur les documents officiels. Elles apparaîtront ici une par une, chacune avec sa source.","aucune":"Aucune correspondance publiée pour ce couple de référentiels.","a_verifier":"à vérifier","compte":"{n} correspondance(s) publiée(s)","pied":"Une équivalence vous semble fausse, ou un document officiel a changé ? Écrivez-nous : la ligne est retirée le temps de la vérifier.","stages":"Voir les stages de voile →"},"en":{"titre":"Sailing qualification equivalences","chapo":"Which FFVoile, SKS or ICC level does this RYA course in Greece lead to? Every equivalence on this page comes from an official document, linked, and has been checked by an instructor before publication.","de":"From scheme","vers":"To scheme","tous":"All","niveau_source":"Level held","niveau_cible":"Equivalent level","prerequis":"Prerequisites","passerelle":"How to get it","source":"Source","voir_source":"official document","vide":"The equivalences are being checked against the official documents. They will appear here one by one, each with its source.","aucune":"No equivalence published for this pair of schemes.","a_verifier":"to be checked","compte":"{n} equivalence(s) published","pied":"An equivalence looks wrong, or an official document has changed? Tell us: the line is withdrawn while we check it.","stages":"See sailing courses →"},"it":{"titre":"Equivalenze dei brevetti di vela","chapo":"Questo corso RYA in Grecia a quale livello FFVoile, SKS o ICC porta? Ogni equivalenza di questa pagina viene da un documento ufficiale, citato con il link, ed è stata riletta da un istruttore prima della pubblicazione.","de":"Sistema di partenza","vers":"Sistema di arrivo","tous":"Tutti","niveau_source":"Livello posseduto","niveau_cible":"Livello equivalente","prerequis":"Prerequisiti","passerelle":"Procedura","source":"Fonte","voir_source":"documento ufficiale","vide":"Le equivalenze sono in corso di verifica sui documenti ufficiali. Appariranno qui una alla volta, ciascuna con la sua fonte.","aucune":"Nessuna equivalenza pubblicata per questa coppia di sistemi.","a_verifier":"da verificare","compte":"{n} equivalenza/e pubblicata/e","pied":"Un'equivalenza ti sembra sbagliata, o un documento ufficiale è cambiato? Scrivici: la riga viene ritirata il tempo di verificarla.","stages":"Vedi i corsi di vela →"},"es":{"titre":"Equivalencias de titulaciones de vela","chapo":"¿A qué nivel FFVoile, SKS o ICC lleva este curso RYA en Grecia? Cada equivalencia de esta página procede de un documento oficial, enlazado, y ha sido revisada por un instructor antes de publicarse.","de":"Sistema de origen","vers":"Sistema de destino","tous":"Todos","niveau_source":"Nivel que tienes","niveau_cible":"Nivel equivalente","prerequis":"Requisitos previos","passerelle":"Cómo obtenerlo","source":"Fuente","voir_source":"documento oficial","vide":"Las equivalencias se están comprobando en los documentos oficiales. Aparecerán aquí una a una, cada una con su fuente.","aucune":"No hay equivalencias publicadas para este par de sistemas.","a_verifier":"por verificar","compte":"{n} equivalencia(s) publicada(s)","pied":"¿Una equivalencia parece errónea, o ha cambiado un documento oficial? Escríbenos: la línea se retira mientras se comprueba.","stages":"Ver los cursos de vela →"},"pt":{"titre":"Equivalências de cartas de vela","chapo":"A que nível FFVoile, SKS ou ICC leva este curso RYA na Grécia? Cada equivalência desta página vem de um documento oficial, com ligação, e foi revista por um instrutor antes de ser publicada.","de":"Sistema de origem","vers":"Sistema de destino","tous":"Todos","niveau_source":"Nível que tem","niveau_cible":"Nível equivalente","prerequis":"Pré-requisitos","passerelle":"Como obter","source":"Fonte","voir_source":"documento oficial","vide":"As equivalências estão a ser verificadas nos documentos oficiais. Vão aparecer aqui uma a uma, cada uma com a sua fonte.","aucune":"Nenhuma equivalência publicada para este par de sistemas.","a_verifier":"por verificar","compte":"{n} equivalência(s) publicada(s)","pied":"Uma equivalência parece errada, ou um documento oficial mudou? Escreva-nos: a linha é retirada enquanto a verificamos.","stages":"Ver os cursos de vela →"},"de":{"titre":"Gleichwertigkeit von Segelscheinen","chapo":"Zu welchem FFVoile-, SKS- oder ICC-Niveau führt dieser RYA-Kurs in Griechenland? Jede Gleichwertigkeit auf dieser Seite stammt aus einem verlinkten amtlichen Dokument und wurde vor der Veröffentlichung von einem Ausbilder geprüft.","de":"Ausgangssystem","vers":"Zielsystem","tous":"Alle","niveau_source":"Vorhandenes Niveau","niveau_cible":"Gleichwertiges Niveau","prerequis":"Voraussetzungen","passerelle":"Weg dorthin","source":"Quelle","voir_source":"amtliches Dokument","vide":"Die Gleichwertigkeiten werden anhand der amtlichen Dokumente geprüft. Sie erscheinen hier nach und nach, jede mit ihrer Quelle.","aucune":"Für dieses Systempaar ist keine Gleichwertigkeit veröffentlicht.","a_verifier":"zu prüfen","compte":"{n} Gleichwertigkeit(en) veröffentlicht","pied":"Eine Gleichwertigkeit scheint falsch, oder ein amtliches Dokument hat sich geändert? Schreiben Sie uns: die Zeile wird bis zur Prüfung entfernt.","stages":"Segelkurse ansehen →"}},"lignes":[],"de":[],"vers":[]}</script><script>
 (function(){
 var D=JSON.parse(document.getElementById('eq-donnees').textContent),L='fr';
-function choisir(){var v='auto';try{v=localStorage.getItem('sm-langue')||'auto'}catch(e){}
-  if(v==='auto'){v=(navigator.language||'fr').slice(0,2);if(v==='br')v='fr'}return D.ui[v]?v:'en'}
+/* Une seule détection pour tout le site, faite dans le <head> (24/11/2026). */
+function choisir(){var v=(typeof window.smLangue==='function')?window.smLangue():'en';
+  if(v==='bzh')v='fr';return D.ui[v]?v:'en'}
 function t(k){return (D.ui[L]||D.ui.en)[k]||D.ui.fr[k]||k}
 function tx(v){if(v&&typeof v==='object'){return v[L]||v.en||v.fr||''}return v||''}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}

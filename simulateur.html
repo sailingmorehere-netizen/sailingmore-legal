@@ -50,6 +50,7 @@ svg.pan{display:block;width:150px;height:52px;margin:.5rem 0 0;border-radius:.4r
 .score{color:var(--gris);font-size:.8rem;margin-left:auto;align-self:center}
 @media(max-width:520px){.rep button{flex:1 1 30%;min-width:0}}
 </style>
+  <link rel="alternate" type="application/rss+xml" title="Sailing More" href="https://sailingmore.fr/feed.xml">
 <style id="equilibre">
 /* Rééquilibrage design — 20/11/2026. Posé en dernier dans chaque page : il l'emporte sur les styles d'origine. */
 
@@ -190,24 +191,18 @@ body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:fl
      français (clé `sm-langue` = fr, que les pages savent lire) et pose un drapeau `sm-bzh`. Ce script
      ajoute alors l'encart, garde `lang="br"` (le code IANA ; « bzh » n'y est pas) et la pastille BZH.
      `?lang=xx` choisit la langue avant que les scripts des pages ne la lisent. */
-  var SIX = ["fr","en","it","es","pt","de"];
+  var SIX = ["fr", "en", "it", "es", "pt", "de"];
   function st(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function ec(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
-  try{
-    var q = new URLSearchParams(location.search).get("lang");
-    if(q === "bzh"){ ec("sm-bzh", "1"); ec("sm-langue", "fr"); }
-    else if(q && SIX.indexOf(q) >= 0){ ec("sm-bzh", null); ec("sm-langue", q); }
-  }catch(e){}
+  /* Plus aucune détection ici : le socle l'a faite dans le <head>, avant le premier pixel
+     (24/11/2026, une seule règle pour tout le site). `?lang=` et le choix du visiteur y sont déjà
+     rangeés sous `sm-langue`. */
+  var LANGUES = (typeof window !== "undefined" && window.SM_LANGUES) || SIX;
   function bzh(){
-    var f = st("sm-langue");
-    if(f && f !== "auto") return st("sm-bzh") === "1";
-    var p = (navigator.languages || [navigator.language || "en"]);   /* « br » du navigateur = bzh */
-    for(var i = 0; i < p.length; i++){
-      var b = String(p[i]).toLowerCase().slice(0, 2);
-      if(b === "br") return true;
-      if(SIX.indexOf(b) >= 0) return false;
-    }
-    return false;
+    var l = (typeof window.smLangue === "function") ? window.smLangue() : null;
+    if(l === "bzh") return true;
+    if(l) return false;                       /* une langue choisie l'emporte sur le drapeau */
+    return st("sm-bzh") === "1";
   }
   function encart(){
     var e = document.getElementById("encart-bzh"), actif = bzh();
@@ -386,7 +381,7 @@ function repondre(r){
  $('scene').innerHTML=scene(s,true);
  var rr=D.reasons[L][s.reason]||D.reasons.fr[s.reason];
  var lien=s.rule?' <a href="regles-de-course.html#r'+s.rule+'">'+esc(t('regle'))+' →</a>':'';
- $('corr').innerHTML='<b>'+esc(r===s.ans?t('ok'):t('ko'))+' '+esc(t('reponse'))+' '+esc(t('r'+s.ans))+'.</b>'+esc(rr)+lien;
+ $('corr').innerHTML='<b>'+esc(r===s.ans?t('ok'):t('ko'))+' '+esc(t('reponse'))+' '+esc(t('r'+s.ans))+'.</b> '+esc(rr)+lien;
  $('corr').hidden=false;maj();}
 function maj(){
  $('titre').textContent=t('titre');document.title=t('titre')+' — Sailing More';
@@ -402,7 +397,7 @@ function maj(){
 function histo(){try{history.replaceState(null,'','#s='+cur().id+'&l='+L);}catch(e){}}
 function depuisHash(){
  var m=/s=(\d+)/.exec(location.hash),l=/l=([a-z]{2})/.exec(location.hash);
- if(l&&LANGS.indexOf(l[1])>=0)L=l[1];else{var n=(navigator.language||'fr').slice(0,2);if(LANGS.indexOf(n)>=0)L=n;}
+ if(l&&LANGS.indexOf(l[1])>=0)L=l[1];else{var n=(window.smLangue?window.smLangue():(navigator.language||'en')).slice(0,2);if(n==='bz')n='fr';if(LANGS.indexOf(n)>=0)L=n;}
  liste();
  if(m){var id=parseInt(m[1],10);for(var i=0;i<ordre.length;i++){if(SC[ordre[i]].id===id)pos=i;}}}
 document.addEventListener('click',function(e){

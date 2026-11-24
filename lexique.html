@@ -77,7 +77,8 @@ a{color:#fff;text-decoration:none}
   .filtres .etiq{width:100%}
   .terme{padding-left:.6rem;scroll-margin-top:11rem}
 }
-</style><style id="equilibre">
+</style>  <link rel="alternate" type="application/rss+xml" title="Sailing More" href="https://sailingmore.fr/feed.xml">
+<style id="equilibre">
 /* Rééquilibrage design — 20/11/2026. Posé en dernier dans chaque page : il l'emporte sur les styles d'origine. */
 
 /* 1. Une police de marque, la même sur tous les appareils (Inter, licence SIL OFL, hébergée sur le site) */
@@ -218,24 +219,18 @@ body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:fl
      français (clé `sm-langue` = fr, que les pages savent lire) et pose un drapeau `sm-bzh`. Ce script
      ajoute alors l'encart, garde `lang="br"` (le code IANA ; « bzh » n'y est pas) et la pastille BZH.
      `?lang=xx` choisit la langue avant que les scripts des pages ne la lisent. */
-  var SIX = ["fr","en","it","es","pt","de"];
+  var SIX = ["fr", "en", "it", "es", "pt", "de"];
   function st(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function ec(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
-  try{
-    var q = new URLSearchParams(location.search).get("lang");
-    if(q === "bzh"){ ec("sm-bzh", "1"); ec("sm-langue", "fr"); }
-    else if(q && SIX.indexOf(q) >= 0){ ec("sm-bzh", null); ec("sm-langue", q); }
-  }catch(e){}
+  /* Plus aucune détection ici : le socle l'a faite dans le <head>, avant le premier pixel
+     (24/11/2026, une seule règle pour tout le site). `?lang=` et le choix du visiteur y sont déjà
+     rangeés sous `sm-langue`. */
+  var LANGUES = (typeof window !== "undefined" && window.SM_LANGUES) || SIX;
   function bzh(){
-    var f = st("sm-langue");
-    if(f && f !== "auto") return st("sm-bzh") === "1";
-    var p = (navigator.languages || [navigator.language || "en"]);   /* « br » du navigateur = bzh */
-    for(var i = 0; i < p.length; i++){
-      var b = String(p[i]).toLowerCase().slice(0, 2);
-      if(b === "br") return true;
-      if(SIX.indexOf(b) >= 0) return false;
-    }
-    return false;
+    var l = (typeof window.smLangue === "function") ? window.smLangue() : null;
+    if(l === "bzh") return true;
+    if(l) return false;                       /* une langue choisie l'emporte sur le drapeau */
+    return st("sm-bzh") === "1";
   }
   function encart(){
     var e = document.getElementById("encart-bzh"), actif = bzh();
@@ -313,12 +308,11 @@ body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:fl
   // Même choix de langue que l'accueil (clé « sm-langue », « auto » = langue du navigateur) :
   // le code de l'accueil est dans un gabarit de page, on ne peut pas l'importer — voir le rapport.
   function stocke(){ try{ return localStorage.getItem('sm-langue') || 'auto'; }catch(e){ return 'auto'; } }
+  /* La langue est choisie une seule fois, dans le <head> (24/11/2026). On lit le résultat. */
   function choisir(){
-    var force = stocke();
-    if(force !== 'auto' && UI[force]) return force;
-    var pref = (navigator.languages || [navigator.language || 'en']).map(function(x){return String(x).toLowerCase();});
-    for(var i=0;i<pref.length;i++){ var b = pref[i].slice(0,2); if(b === 'br') return 'fr'; if(UI[b]) return b; }
-    return 'en';
+    var l = (typeof window.smLangue === 'function') ? window.smLangue() : 'en';
+    if(l === 'bzh') l = 'fr';
+    return UI[l] ? l : 'en';
   }
   var lang = choisir();
 

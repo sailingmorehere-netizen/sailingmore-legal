@@ -134,7 +134,8 @@ input[type=search]{grid-column:span 2}
 .carte-note{margin:.2rem 0 0;font-size:.72rem;color:#6f8598}
 
 @media(max-width:560px){input[type=search]{grid-column:1/-1}.offre{grid-template-columns:1fr}}
-</style><style id="equilibre">
+</style>  <link rel="alternate" type="application/rss+xml" title="Sailing More" href="https://sailingmore.fr/feed.xml">
+<style id="equilibre">
 /* Rééquilibrage design — 20/11/2026. Posé en dernier dans chaque page : il l'emporte sur les styles d'origine. */
 
 /* 1. Une police de marque, la même sur tous les appareils (Inter, licence SIL OFL, hébergée sur le site) */
@@ -241,24 +242,18 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
      français (clé `sm-langue` = fr, que les pages savent lire) et pose un drapeau `sm-bzh`. Ce script
      ajoute alors l'encart, garde `lang="br"` (le code IANA ; « bzh » n'y est pas) et la pastille BZH.
      `?lang=xx` choisit la langue avant que les scripts des pages ne la lisent. */
-  var SIX = ["fr","en","it","es","pt","de"];
+  var SIX = ["fr", "en", "it", "es", "pt", "de"];
   function st(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function ec(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
-  try{
-    var q = new URLSearchParams(location.search).get("lang");
-    if(q === "bzh"){ ec("sm-bzh", "1"); ec("sm-langue", "fr"); }
-    else if(q && SIX.indexOf(q) >= 0){ ec("sm-bzh", null); ec("sm-langue", q); }
-  }catch(e){}
+  /* Plus aucune détection ici : le socle l'a faite dans le <head>, avant le premier pixel
+     (24/11/2026, une seule règle pour tout le site). `?lang=` et le choix du visiteur y sont déjà
+     rangeés sous `sm-langue`. */
+  var LANGUES = (typeof window !== "undefined" && window.SM_LANGUES) || SIX;
   function bzh(){
-    var f = st("sm-langue");
-    if(f && f !== "auto") return st("sm-bzh") === "1";
-    var p = (navigator.languages || [navigator.language || "en"]);   /* « br » du navigateur = bzh */
-    for(var i = 0; i < p.length; i++){
-      var b = String(p[i]).toLowerCase().slice(0, 2);
-      if(b === "br") return true;
-      if(SIX.indexOf(b) >= 0) return false;
-    }
-    return false;
+    var l = (typeof window.smLangue === "function") ? window.smLangue() : null;
+    if(l === "bzh") return true;
+    if(l) return false;                       /* une langue choisie l'emporte sur le drapeau */
+    return st("sm-bzh") === "1";
   }
   function encart(){
     var e = document.getElementById("encart-bzh"), actif = bzh();
@@ -451,7 +446,7 @@ var CarteEpreuves = (function(){
 })();
 
 var D=JSON.parse(document.getElementById('donnees').textContent),U=D.ui;
-var L='fr';try{L=localStorage.getItem('lang')||(navigator.language||'fr').slice(0,2)}catch(e){}
+var L='fr';try{L=(window.smLangue?window.smLangue():'en')}catch(e){}
 if(!U[L])L='en';
 function t(k){return (U[L]&&U[L][k])||U.fr[k]||k}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -506,7 +501,7 @@ function remplir(){
   var l=document.getElementById('langues');
   l.innerHTML='<select id="lng-sel" aria-label="Langue de la page" style="background:transparent;color:inherit;font:inherit;font-size:.8rem;border:1px solid rgba(255,255,255,.34);border-radius:.4rem;padding:.5rem .6rem;min-height:38px;cursor:pointer">'
     +Object.keys(U).map(function(c){return '<option value="'+c+'"'+(c===L?' selected':'')+'>'+(NOMS[c]||c.toUpperCase())+'</option>'}).join('')+'</select>';
-  l.querySelector('select').onchange=function(){L=this.value;try{localStorage.setItem('lang',L)}catch(e){}remplir();dessiner()};
+  l.querySelector('select').onchange=function(){L=this.value;try{if(window.smChoisirLangue)window.smChoisirLangue(L)}catch(e){}remplir();dessiner()};
 }
 /* Position du visiteur : le navigateur d'abord (il demande l'accord), l'adresse IP ensuite si elle
    est refusée ou indisponible. Aucune position n'est envoyée ni conservée : elle sert à trier. */

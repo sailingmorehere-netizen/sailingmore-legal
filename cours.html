@@ -67,6 +67,26 @@ header.entete{position:sticky;top:0;z-index:30;height:var(--h-entete);flex-wrap:
   header.entete .nom{white-space:nowrap}
 }
 
+
+# Exercice du simulateur (24/11/2026), posé dans le chapitre des priorités. Le dessin vient de la
+# page `simulateur.html` : ici il prend la largeur de la colonne du cours, sur le fond de la page.
+.exo-sim{margin:1.6rem 0 .4rem;padding:1rem;border:1px solid rgba(226,58,62,.35);border-radius:.5rem;
+ background:rgba(10,26,43,.55)}
+.exo-sim .entete-sc{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;
+ font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;color:#9db2c6}
+.exo-sim .badge{padding:.1rem .5rem;border:1px solid rgba(157,178,198,.5);border-radius:1rem}
+.exo-sim #sim-scene,.exo-sim [id$="-scene"]{width:100%;max-width:34rem;margin:0 auto}
+.exo-sim svg{width:100%;height:auto;display:block}
+.exo-sim #sim-panneau,.exo-sim [id$="-panneau"]{max-width:34rem;margin:.6rem auto 0}
+.exo-sim .q{font-weight:600;margin:.9rem 0 .5rem}
+.exo-sim .rep{display:flex;gap:.5rem;flex-wrap:wrap}
+.exo-sim .rep button,.exo-sim .nav button{font:inherit;padding:.5rem .9rem;border-radius:.35rem;
+ border:1px solid rgba(238,243,247,.35);background:transparent;color:inherit;cursor:pointer}
+.exo-sim .rep button:hover,.exo-sim .nav button:hover{border-color:#e23a3e}
+.exo-sim .corr{margin-top:.7rem;padding:.6rem .8rem;border-left:3px solid #7ed6d6;background:rgba(126,214,214,.08)}
+.exo-sim .nav{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-top:.8rem}
+.exo-sim .score{margin-left:auto;font-size:.9rem;color:#9db2c6}
+.exo-sim .pied{font-size:.78rem;color:#9db2c6;margin-top:.8rem}
 body{margin:0;background:#071c31;color:#eef3f7;font-family:ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
 :root{--panneau:#0f2438;--ivoire:#eef3f7;--gris:#9db2c6;--rouge:#e23a3e}
 .page{max-width:48rem;margin:0 auto;padding:2rem 1.4rem 5rem}
@@ -113,7 +133,8 @@ svg.sc{display:block;width:100%;height:auto;background:#071c31;border:1px solid 
 .sc-v{fill:none;stroke:#9db2c6;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .sc .sc-pri{color:#eef3f7}
 .sc .sc-ev{color:#9db2c6}
-.sc .sc-fant{color:#9db2c6;opacity:.35}</style><style id="equilibre">
+.sc .sc-fant{color:#9db2c6;opacity:.35}</style>  <link rel="alternate" type="application/rss+xml" title="Sailing More" href="https://sailingmore.fr/feed.xml">
+<style id="equilibre">
 /* Rééquilibrage design — 20/11/2026. Posé en dernier dans chaque page : il l'emporte sur les styles d'origine. */
 
 /* 1. Une police de marque, la même sur tous les appareils (Inter, licence SIL OFL, hébergée sur le site) */
@@ -235,24 +256,18 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
      français (clé `sm-langue` = fr, que les pages savent lire) et pose un drapeau `sm-bzh`. Ce script
      ajoute alors l'encart, garde `lang="br"` (le code IANA ; « bzh » n'y est pas) et la pastille BZH.
      `?lang=xx` choisit la langue avant que les scripts des pages ne la lisent. */
-  var SIX = ["fr","en","it","es","pt","de"];
+  var SIX = ["fr", "en", "it", "es", "pt", "de"];
   function st(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function ec(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
-  try{
-    var q = new URLSearchParams(location.search).get("lang");
-    if(q === "bzh"){ ec("sm-bzh", "1"); ec("sm-langue", "fr"); }
-    else if(q && SIX.indexOf(q) >= 0){ ec("sm-bzh", null); ec("sm-langue", q); }
-  }catch(e){}
+  /* Plus aucune détection ici : le socle l'a faite dans le <head>, avant le premier pixel
+     (24/11/2026, une seule règle pour tout le site). `?lang=` et le choix du visiteur y sont déjà
+     rangeés sous `sm-langue`. */
+  var LANGUES = (typeof window !== "undefined" && window.SM_LANGUES) || SIX;
   function bzh(){
-    var f = st("sm-langue");
-    if(f && f !== "auto") return st("sm-bzh") === "1";
-    var p = (navigator.languages || [navigator.language || "en"]);   /* « br » du navigateur = bzh */
-    for(var i = 0; i < p.length; i++){
-      var b = String(p[i]).toLowerCase().slice(0, 2);
-      if(b === "br") return true;
-      if(SIX.indexOf(b) >= 0) return false;
-    }
-    return false;
+    var l = (typeof window.smLangue === "function") ? window.smLangue() : null;
+    if(l === "bzh") return true;
+    if(l) return false;                       /* une langue choisie l'emporte sur le drapeau */
+    return st("sm-bzh") === "1";
   }
   function encart(){
     var e = document.getElementById("encart-bzh"), actif = bzh();
@@ -442,7 +457,7 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
 <script>
 (function(){
   var L=["fr", "en", "it", "es", "pt", "de"];
-  function auto(){var n=(navigator.language||"fr").slice(0,2);if(n==="br")return "fr";return L.indexOf(n)>=0?n:"en"}
+  function auto(){var l=(typeof window.smLangue==="function")?window.smLangue():"en";if(l==="bzh")l="fr";return L.indexOf(l)>=0?l:"en"}
   var s=null,a=true;
   try{s=localStorage.getItem("sm-langue")}catch(e){}
   if(L.indexOf(s)>=0){a=false}else{s=auto()}
