@@ -499,6 +499,9 @@ MENU_PAGES = [
     ("carte.html", "Carte du Léman", ""),
     ("lexique.html", "Lexique", ""),
     ("chants-de-marin.html", "Chants de marins", ""),
+    # Deux pages entières écrites par Claude, publiées le 24/11/2026 (règle : brancher sans demander).
+    ("ports.html", "Ports du monde", ""),
+    ("simulateur.html", "Simulateur de priorités", ""),
     ("annonceurs.html", "Annonceurs", ""),
 ]
 

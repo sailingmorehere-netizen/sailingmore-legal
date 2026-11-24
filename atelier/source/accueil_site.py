@@ -1349,6 +1349,16 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         import shutil as _sh  # noqa: PLC0415
         _sh.copy2(carte_src, SITE / "carte.html")
         print(f"carte : {carte_src.name} recopiée dans {SITE.name}/carte.html")
+    # Pages entières écrites par Claude, jamais publiées jusqu'au 24/11/2026 : elles vivaient dans
+    # sa copie de travail et le générateur ne les connaissait pas. Elles sont recopiées depuis
+    # `projets/sailingmore/pages/` (RACINE, donc aussi `donnees/` dans l'atelier), et la barre du
+    # site leur est posée par `poser_entete_partout()` comme à toute page du dossier.
+    pages_src = RACINE / "projets" / "sailingmore" / "pages"
+    if pages_src.is_dir():
+        import shutil as _sh2  # noqa: PLC0415
+        for _p in sorted(pages_src.glob("*.html")):
+            _sh2.copy2(_p, SITE / _p.name)
+        print(f"pages écrites par Claude : {len(list(pages_src.glob('*.html')))} recopiée(s)")
     (SITE / "index.html").write_text(accueil)
     (SITE / "jeux.html").write_text(concours)
     (SITE / "merci.html").write_text(merci)
