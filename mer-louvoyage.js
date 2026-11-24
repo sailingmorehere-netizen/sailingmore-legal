@@ -252,13 +252,6 @@ function houle(x,z,t){var y=0,gx=0,gz=0,i,h,ph; for(i=0;i<3;i++){h=HOULE[i]; ph=
 /* ------------------------------------------------------------------ simulation */
 var S={};
 var bouee={x:0,z:0};
-/* le spi du 18 pieds : un décor juste, qui n'ajoute aucune vitesse (ni polaire, ni barre, ni route n'en dépendent).
-   Chiffres mesurés sur ce bateau : amure au bout du bout-dehors, drisse juste devant le mât (qui monte à 10,5 m),
-   guindant droit entre les deux, point d'écoute à 2,65 m au-dessus du pont (vers 0,45 m), renvoyé à 6,5 m à plat. */
-var SPI={amure:[0,0.5,-6.45], drisse:[0,10.3,-0.86], ecoute:0.45+2.65, bout:6.5, creux:0.6,
-         hisse:75, affale:66,          /* seuils d'angle au vent réel, en degrés : séparés, sinon il claque au voisinage */
-         ecMin:30, ecMax:46,           /* ouverture de l'écoute dans l'axe du bateau, en degrés (assez ouvert pour passer sous le vent de la grand-voile) */
-         tauHisse:1.1, tauAffale:0.5}; /* amortissement du hissage et de l'affalage, en secondes */
 function nouveauDepart(vent){
   S={t:0, w:vent, camAz:vent, mode:'route', direct:false, amure:(Math.random()<0.5?-1:1), dernierVirement:-9, man:null, empannage:-9,
      psi:wrap(vent+PRES*(Math.random()<0.5?-1:1)), om:0, v:VPRES*0.9, cote:1, bome:-bordeGV(ventApparent(PRES,VPRES)), foc:-bordeFoc(ventApparent(PRES,VPRES)), ecoute:1, awa:ventApparent(PRES,VPRES),
@@ -347,18 +340,6 @@ function pas(dt){
   S.fasFoc=damp(S.fasFoc,Math.max(fas,(1-S.ecoute)*0.85),0.12,dt);
   S.creuxGV=damp(S.creuxGV,-S.cote*(1-fas),0.2,dt);
   S.creuxFoc=damp(S.creuxFoc,-S.cote*(1-fas)*(0.35+0.65*S.ecoute),0.18,dt);
-
-  /* ---- spi : hissé au largue (au-delà de 75° du vent réel), affalé sous 66°. Il rentre au virement et à l'empannage,
-     et ressort de l'autre bord une fois relancé : il ne change de bord que rentré, il ne traverse pas le vent gonflé. */
-  if(S.spi==null){ S.spi=0; S.spiVeut=false; S.spiCote=S.cote; S.spiEc=SPI.ecMin*RAD; S.creuxSpi=0; S.fasSpi=0 }
-  if(a>SPI.hisse*RAD) S.spiVeut=true; else if(a<SPI.affale*RAD) S.spiVeut=false;
-  var spiHisse=S.spiVeut && S.mode==='route' && !S.man && S.cote===S.spiCote && a<165*RAD && S.t-S.empannage>2.5;
-  S.spi=damp(S.spi,spiHisse?1:0,spiHisse?SPI.tauHisse:SPI.tauAffale,dt);
-  if(S.spi<0.02) S.spiCote=S.cote;
-  /* l'écoute suit le vent apparent, du côté sous le vent, sans jamais dépasser le lit du vent ; le creux tombe quand il faseye ou que le foc est choqué */
-  S.spiEc=damp(S.spiEc,Math.min(clamp(awa*0.75,SPI.ecMin*RAD,SPI.ecMax*RAD),a*0.86),0.35,dt);
-  S.fasSpi=damp(S.fasSpi,Math.max(fas,(1-S.ecoute)*0.85,0.7*(1-S.spi)),0.15,dt);
-  S.creuxSpi=damp(S.creuxSpi,-S.spiCote*SPI.creux*(1-S.fasSpi),0.25,dt);
 
   /* ---- vitesse : la polaire donne la cible, l'inertie fait le reste */
   var vc=S.mode==='route' ? polaire(a/RAD)*(0.55+0.45*S.ecoute) : 0;
@@ -1041,32 +1022,14 @@ BATEAUX.skiff.voiles=function(c){
            lattes:7, fibres:0.5, fibC:fib, marque:MARINE_C, num:18},   /* grand-voile à corne, sept lattes forcées */
           {M:mul(mul(c.M,trans(0,0.46,-2.62)),rotAxe(c.g.axeFoc,S.foc)), guindant:[0,7.25,1.75], bordure:norm3([0,0.22,1.9]), E:1.95, puis:1, rond:0.05, tete:0.04, vrille:0.09, creux:S.creuxFoc, fas:S.fasFoc*1.2,
            teinte:film, bandeH:2, lattes:3, fibres:0.5, fibC:fib, marque:MARINE_C, penons:1}];
-  if((S.spi||0)>0.02) vl.push(voileSpi(c));
   return vl;
 };
-/* géométrie du spi à l'instant : h est le hissage (0 à 1). La tête glisse le long du guindant, le point d'écoute rentre avec elle.
-   Le point d'écoute est décalé sous le vent (écoute ouverte de S.spiEc) : dans l'axe il croisait la grand-voile. */
-function geoSpi(h){
-  var am=SPI.amure, dr=SPI.drisse, ec=S.spiEc||SPI.ecMin*RAD, cote=S.spiCote||1, k=0.3+0.7*h;
-  var b=[-cote*SPI.bout*Math.sin(ec), SPI.ecoute-am[1], SPI.bout*Math.cos(ec)], E=Math.hypot(b[0],b[1],b[2]);
-  return {guindant:[(dr[0]-am[0])*h,(dr[1]-am[1])*h,(dr[2]-am[2])*h], bordure:[b[0]/E,b[1]/E,b[2]/E], E:E*k,
-          ecoute:[am[0]+b[0]*k, am[1]+b[1]*k, am[2]+b[2]*k]};
-}
-/* le spi : une voile comme les autres, mêmes champs. Épaule en 1 − v^2,1 : puis 0,85 et rond 0,33 donnent environ 4 m aux deux tiers,
-   2,7 m aux quatre cinquièmes, 0,77 m à 95 % pour E = 7 m. Un guindant droit : la tête touche la drisse, l'amure le bout-dehors. */
-function voileSpi(c){
-  var g=geoSpi(S.spi);
-  return {M:mul(c.M,trans(SPI.amure[0],SPI.amure[1],SPI.amure[2])), guindant:g.guindant, bordure:g.bordure, E:g.E, puis:0.85, rond:0.33, tete:0, vrille:0.1,
-          creux:S.creuxSpi, fas:S.fasSpi, teinte:ROUGE_C, bande:BLANC_C, bandeH:0.82, lattes:0, fibres:0, marque:MARINE_C};
-}
 BATEAUX.skiff.traits=function(c){
   /* étai, haubans, bas-haubans, losanges des barres de flèche, sous-barbe et haubans du bout-dehors */
   var t=[0,0.46,-2.62, 0,7.75,-0.83,  -0.95,0.4,-0.6, 0,7.9,-0.83,  0.95,0.4,-0.6, 0,7.9,-0.83,  0,0.5,-6.45, 0,7.9,-0.83,
          -0.95,0.4,-0.6, 0,4.3,-0.88,  0.95,0.4,-0.6, 0,4.3,-0.88,  0,0.5,-6.45, 0,-0.02,-2.72,  0,0.5,-6.45, -0.6,0.42,-1.0,  0,0.5,-6.45, 0.6,0.42,-1.0], i, k, po, cb=Math.cos(S.bome), sb=Math.sin(S.bome);
   for(k=-1;k<=1;k+=2) t.push(0,1.6,-0.94, k*0.55,4.3,-0.6,  k*0.55,4.3,-0.6, k*0.42,7.0,-0.56,  k*0.42,7.0,-0.56, 0,9.4,-0.82);
   var bomeMil=[sb*2.1,0.98,-0.93+cb*2.1], hd=this.capelage;
-  if((S.spi||0)>0.02){ var ge=geoSpi(S.spi), ce=ge.ecoute, xe=-(S.spiCote||1)*1.2;
-    t.push(ce[0],ce[1],ce[2], xe,0.6,1.6,  ce[0],ce[1],ce[2], xe,0.6,2.6) }   /* deux écoutes de spi, du point d'écoute vers l'arrière sous le vent */
   if(!EQUIPAGE) return t;
   for(i=0;i<3;i++){ po=c.poses[i]; if(po.sorti>0.25){ var cr=v3(po.bassin,po.haut,0.12); t.push(hd[0],hd[1],hd[2],cr[0],cr[1],cr[2]) } }          /* câbles de trapèze */
   po=c.poses[2]; t.push(0,0.6,2.55,po.mainD[0],po.mainD[1],po.mainD[2]);                                                              /* stick de barre */
