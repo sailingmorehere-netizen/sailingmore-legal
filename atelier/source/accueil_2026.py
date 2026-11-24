@@ -21,7 +21,18 @@ import sqlite3
 import sys
 from pathlib import Path
 
+# L'ordre des tableaux de textes de l'accueil n'est pas celui du site : c'est fr en de it es pt.
+# Ce n'est pas une seconde liste de langues, mais l'ordre d'écriture des tableaux `P` plus bas ;
+# il est confronté à `site_blocks.LANGUES` au chargement, et le module s'arrête si les deux ne
+# couvrent pas les mêmes langues — le 24/11/2026, avoir pris l'ordre du site a affiché du portugais
+# à un visiteur allemand.
 from site_blocks import LANGUES as _LANGUES_SITE
+ORDRE_DES_TEXTES = ("fr", "en", "de", "it", "es", "pt")
+if set(ORDRE_DES_TEXTES) != set(_LANGUES_SITE):
+    raise SystemExit("accueil_2026 : l'ordre des textes de l'accueil (" + str(ORDRE_DES_TEXTES)
+                     + ") ne couvre pas les langues du site (" + str(_LANGUES_SITE)
+                     + ") — ajouter les textes de la langue manquante avant de publier.")
+LANGUES = list(ORDRE_DES_TEXTES)
 
 MOIS = {
     "fr": ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
@@ -32,8 +43,7 @@ MOIS = {
     "pt": ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"],
 }
 
-# Une langue n'entre dans les pages que quand ses mois et ses textes existent (24/11/2026) :
-LANGUES = [l for l in _LANGUES_SITE if l in MOIS]
+assert set(LANGUES) <= set(MOIS), "accueil_2026 : des mois manquent pour une langue"
 # séparateur de milliers, séparateur décimal, unité du million
 FORMAT = {
     "fr": (" ", ",", "M"), "en": (",", ".", "M"), "de": (".", ",", "Mio."),
