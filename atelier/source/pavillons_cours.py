@@ -473,7 +473,7 @@ def _fiche(pid: str) -> str:
               f'<dl><dt>Code</dt><dd>{_e(p["code"])} — {_e(p["otan"])}</dd>',
               f'<dt>Forme</dt><dd>{_e(_langue(p.get("forme", {}), "fr"))}</dd>']
     if p.get("couleurs_en"):
-        lignes.append(f'<dt>Dessin</dt><dd>{_e(p["couleurs_en"])}</dd>')
+        lignes.append(f'<dt>Dessin (source anglaise)</dt><dd>{_e(p["couleurs_en"])}</dd>')
     lignes.append(f'<dt>Sens dans le code</dt><dd>{_e(_langue(p["ics"], "fr"))}</dd>')
     if _langue(p.get("complement", {}), "fr"):
         lignes.append(f'<dt>Avec des chiffres</dt><dd>{_e(_langue(p["complement"], "fr"))}</dd>')
@@ -551,7 +551,7 @@ CSS = """
 .vhf-canaux th,.vhf-canaux td{border-bottom:1px solid #e2e2e2;padding:.35em .8em .35em 0;text-align:left}
 .vhf-canaux .canal{font-weight:700;white-space:nowrap}
 .pav-fiche{display:flex;flex-wrap:wrap;gap:1.6em;align-items:flex-start;margin:1.2em 0}
-.pav-fiche dl{margin:0;max-width:34em}
+.pav-fiche dl{margin:0;flex:1 1 22em;min-width:0;max-width:34em}
 .pav-fiche dt{font-size:.75em;text-transform:uppercase;letter-spacing:.05em;color:#666;margin-top:.7em}
 .pav-fiche dd{margin:.1em 0 0}
 .pav-grande{border:1px solid #c9c9c9;border-radius:3px;max-width:100%;height:auto}
