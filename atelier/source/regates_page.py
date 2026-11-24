@@ -44,7 +44,18 @@ PAYS_FR = {"FRA": "France", "SUI": "Suisse", "ITA": "Italie", "GER": "Allemagne"
            "NOR": "Norvège", "FIN": "Finlande", "AUT": "Autriche", "MON": "Monaco",
            "AUS": "Australie", "NZL": "Nouvelle-Zélande", "JPN": "Japon", "CHN": "Chine",
            "CAN": "Canada", "BRA": "Brésil", "ARG": "Argentine", "TUR": "Turquie",
-           "GRE": "Grèce", "CRO": "Croatie", "POL": "Pologne", "IRL": "Irlande"}
+           "GRE": "Grèce", "CRO": "Croatie", "POL": "Pologne", "IRL": "Irlande",
+           # Les pays que les sources citent sans qu'ils aient de drapeau : sans nom français,
+           # la carte afficherait le code (« HKG ») au lieu du pays (24/11/2026).
+           "HKG": "Hong Kong", "THA": "Thaïlande", "CHI": "Chili", "HUN": "Hongrie",
+           "SGP": "Singapour", "UAE": "Émirats arabes unis", "MEX": "Mexique", "MAR": "Maroc",
+           "BER": "Bermudes", "CZE": "Tchéquie", "SLO": "Slovénie", "MLT": "Malte",
+           "PER": "Pérou", "RSA": "Afrique du Sud", "MAS": "Malaisie", "IND": "Inde",
+           "VEN": "Venezuela", "ANT": "Antilles néerlandaises", "BAR": "Barbade",
+           "GRN": "Grenade", "IVB": "Îles Vierges britanniques", "SXM": "Saint-Martin",
+           "TTO": "Trinité-et-Tobago", "EST": "Estonie", "LAT": "Lettonie", "LTU": "Lituanie",
+           "LUX": "Luxembourg", "MNE": "Monténégro", "ROU": "Roumanie", "SEN": "Sénégal",
+           "TAH": "Tahiti"}
 
 # ── Position des épreuves, pour « près de moi » ─────────────────────────────────────────────────
 # regates.json ne porte pas de coordonnées : on les déduit ici de la ville (table ci-dessous), à
@@ -681,7 +692,7 @@ JS = r"""
   function icsTelecharge(liste, nom){
     var d = new Date(), p = function(n){ return ('0'+n).slice(-2); };
     var stamp = d.getUTCFullYear() + p(d.getUTCMonth()+1) + p(d.getUTCDate()) + 'T' + p(d.getUTCHours()) + p(d.getUTCMinutes()) + p(d.getUTCSeconds()) + 'Z';
-    var txt = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Sailing More//Calendrier des regates//FR\r\nCALSCALE:GREGORIAN\r\n'
+    var txt = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Sailing More//Calendrier des regates//FR\r\n[secret-masqué]\r\n'
       + liste.map(function(e){ return icsEvt(e, stamp); }).join('\r\n') + '\r\nEND:VCALENDAR\r\n';
     var blob = new Blob([txt], {type:'text/calendar;charset=utf-8'});
     var a = document.createElement('a');
@@ -1129,6 +1140,26 @@ def verifier(d: dict, avertissements: list[str] | None = None) -> list[str]:
             sans_drapeau[e["pays"]] = sans_drapeau.get(e["pays"], 0) + 1
     if sans_drapeau and avertissements is not None:
         avertissements.append("pays sans drapeau : " + ", ".join(f"{c} {n}" for c, n in sorted(sans_drapeau.items())))
+    # Le drapeau doit s'accorder avec ce que l'épreuve dit d'elle-même : « Championnat du Monde
+    # Dragon HONG KONG » portait un drapeau français (24/11/2026). Deux contrôles, de force
+    # différente : une épreuve située hors de France et étiquetée « FRA » est une faute (le
+    # défaut fédéral d'avant), tandis qu'un nom de pays dans l'intitulé n'est qu'un indice —
+    # « Guyader Bermudes 1000 Race » part de Lorient, « Macao Match Cup » se court à Macao.
+    # Le second est donc signalé, jamais bloquant.
+    import regates_lieux as _lieux
+    incoherentes = [e for e in regates if e.get("etranger") and e["pays"] == "FRA"]
+    if incoherentes:
+        problemes.append(f"{len(incoherentes)} épreuve(s) situées hors de France et étiquetées FRA : "
+                         + " · ".join(f"{e['nom'][:40]} ({e['club'][:18]})" for e in incoherentes[:4]))
+    douteux = []
+    for e in regates:
+        vus = _lieux.pays_du_texte(" ".join((e["nom"], e["ville"]))) or _lieux.pays_du_texte(e["club"])
+        if len(vus) == 1 and e["pays"] != next(iter(vus)):
+            douteux.append(f"{e['nom'][:40]} — {e['pays'] or 'aucun pays'} alors que le texte dit "
+                           f"{next(iter(vus))}")
+    if douteux and avertissements is not None:
+        avertissements.append(f"{len(douteux)} pays contredits par le nom ou le club, à vérifier : "
+                              + " · ".join(douteux[:4]))
     aujourdhui = date.today().isoformat()
     if any(e["type"] == "hors-regate" for e in epreuves):
         problemes.append("des épreuves « hors-regate » sont dans la page")

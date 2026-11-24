@@ -79,7 +79,8 @@ NOMS = {
     "netherlands": "NED", "nederland": "NED", "holland": "NED", "pays-bas": "NED",
     "belgium": "BEL", "belgique": "BEL", "belgien": "BEL", "belgio": "BEL",
     "portugal": "POR", "portogallo": "POR", "portugal.": "POR",
-    "united kingdom": "GBR", "great britain": "GBR", "england": "GBR", "scotland": "GBR",
+    "united kingdom": "GBR", "great britain": "GBR", "grande-bretagne": "GBR",
+    "england": "GBR", "scotland": "GBR",
     "wales": "GBR", "northern ireland": "GBR", "angleterre": "GBR", "royaume-uni": "GBR",
     "grossbritannien": "GBR", "großbritannien": "GBR", "inghilterra": "GBR",
     "ireland": "IRL", "irlande": "IRL", "irland": "IRL", "irlanda": "IRL",
@@ -111,7 +112,8 @@ NOMS = {
     "south africa": "RSA", "afrique du sud": "RSA", "sudafrica": "RSA",
     "japan": "JPN", "japon": "JPN", "giappone": "JPN", "korea": "KOR", "coree": "KOR",
     "corée": "KOR", "south korea": "KOR", "china": "CHN", "chine": "CHN", "cina": "CHN",
-    "taiwan": "TPE", "hong kong": "HKG", "singapore": "SGP", "singapour": "SGP",
+    "taiwan": "TPE", "hong kong": "HKG", "hongkong": "HKG", "montenegro": "MNE", "finland": "FIN", "helsinki": "FIN", "macao": "MAC", "macau": "MAC",
+    "singapore": "SGP", "singapour": "SGP",
     "thailand": "THA", "thailande": "THA", "thaïlande": "THA", "malaysia": "MAS",
     "malaisie": "MAS", "indonesia": "INA", "indonesie": "INA", "philippines": "PHI",
     "india": "IND", "inde": "IND", "sri lanka": "SRI", "vietnam": "VIE", "viet nam": "VIE",
@@ -137,10 +139,21 @@ NOMS = {
     "romania": "ROU", "roumanie": "ROU", "serbia": "SRB", "serbie": "SRB",
     "montenegro": "MNE", "bosnia": "BIH", "albania": "ALB", "albanie": "ALB",
     "slovakia": "SVK", "slovaquie": "SVK", "azerbaijan": "AZE", "georgia": "GEO",
+    "saint-marin": "SMR", "trinite": "TTO", "republique dominicaine": "DOM",
+    "porto rico": "PUR", "iles vierges britanniques": "IVB",
 }
 
 # Une source fédérale ne laisse aucun doute sur le pays de l'épreuve qu'elle publie.
 SOURCES_FIXES = {"ffvoile": "FRA", "acvl": "SUI"}
+
+# Les codes pays que la table ci-dessus sait nommer : un code lu ailleurs (le code club de la
+# FFVoile, qui vaut « USA » ou « POR » pour un club étranger) n'est retenu que s'il en est.
+CODES = set(NOMS.values())
+
+# Mots de la table qui désignent aussi autre chose : « America's Cup » se court à Barcelone,
+# « Georgia » est un État américain. Ils ne servent pas à contrôler le pays d'une épreuve.
+AMBIGUS = {"america", "american", "georgia", "california", "florida", "quebec",
+           "british columbia"}
 
 # Villes dont le pays est connu sans réseau : le Léman, la Suisse, les ports français. Ce sont
 # celles que les sources sans pays citent le plus, et une carte du Léman en « Monde » choque.
@@ -260,11 +273,66 @@ def _par_nom(texte: str) -> str:
     return ""
 
 
-def pays(ville: str = "", club: str = "", nom: str = "", sources=(), departement: str = "") -> str:
-    """Le code pays d'une épreuve, ou "" quand rien ne le dit avec assez de sûreté."""
-    for s in sources or ():
-        if s in SOURCES_FIXES:
-            return SOURCES_FIXES[s]
+def _motif_pays():
+    """Une seule expression pour tous les noms de pays : six millions de recherches ligne à
+    ligne coûteraient une demi-minute à la page."""
+    global _MOTIF
+    try:
+        return _MOTIF
+    except NameError:
+        pass
+    mots = sorted((m for m in NOMS if m not in AMBIGUS), key=len, reverse=True)
+    _MOTIF = re.compile(r"(?<![a-z0-9])(" + "|".join(re.escape(m) for m in mots) + r")(?![a-z0-9])")
+    return _MOTIF
+
+
+def pays_du_texte(texte: str) -> set[str]:
+    """Tous les pays que nomme un texte, sans doublon (« Championnat à HONG KONG » → {HKG}).
+
+    Sert au contrôle de la page : ce que l'épreuve dit d'elle-même ne doit pas contredire son
+    drapeau. Les mots ambigus (« America's Cup », « Georgia ») sont écartés pour ne pas
+    accuser une épreuve à tort.
+    """
+    t = cle(texte)
+    if not t:
+        return set()
+    motif = _motif_pays()
+    vus: set[str] = set()
+    for variante in (t, t.replace("-", " "), t.replace(" ", "-")):
+        for mot in motif.findall(variante):
+            vus.add(NOMS[mot])
+    return vus
+
+
+def pays_par_nom(texte: str) -> str:
+    """Le pays nommé dans un texte (« HONG KONG », « Kiel, Germany »), ou "".
+
+    Les traits d'union varient d'une source à l'autre (« PAYS BAS », « Pays-Bas ») : on essaie
+    les trois écritures plutôt que de doubler la table.
+    """
+    t = texte or ""
+    if not t.strip():
+        return ""
+    for essai in (t, t.replace("-", " "), t.replace(" ", "-")):
+        code = _par_nom(essai)
+        if code:
+            return code
+    return ""
+
+
+def pays(ville: str = "", club: str = "", nom: str = "", sources=(), departement: str = "",
+         etranger: bool = False) -> str:
+    """Le code pays d'une épreuve, ou "" quand rien ne le dit avec assez de sûreté.
+
+    `etranger` : le club est hors de France. La source fédérale ne fait alors plus pays par
+    défaut — une fédération publie aussi les épreuves de ses clubs ailleurs dans le monde, et
+    « ffvoile → FRA » a mis un drapeau français sur un championnat du monde à Hong Kong
+    (24/11/2026).
+    """
+    if not etranger:
+        for s in sources or ():
+            if s in SOURCES_FIXES:
+                return SOURCES_FIXES[s]
     if cle(ville) in CORRECTIONS:
         return CORRECTIONS[cle(ville)]
     for texte in (ville, club):
@@ -324,7 +392,7 @@ def geocoder(villes, limite: int = 60, pause: float = 1.1) -> int:
             {"q": v, "format": "jsonv2", "limit": 1, "addressdetails": 1, "accept-language": "fr"})
         try:
             req = urllib.request.Request(url, headers={
-                "User-Agent": "SailingMore/1.0 (+https://sailingmore.fr; hello.sailingmore@gmail.com)"})
+                "User-Agent": "SailingMore/1.0 (+https://sailingmore.fr; [secret-masqué])"})
             with urllib.request.urlopen(req, timeout=20) as r:
                 d = json.loads(r.read().decode())
         except Exception:  # noqa: BLE001 — réseau : on retentera

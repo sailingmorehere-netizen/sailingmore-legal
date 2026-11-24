@@ -1104,7 +1104,7 @@ def page_jeu(jeu: str) -> str:
     <li>Le gagnant est annoncé le dimanche à 18&nbsp;h, en story.</li>
     <li>La participation est gratuite et sans obligation d'achat.</li>
   </ul>
-  <p>Écrire à <a class="courriel" href="mailto:hello.sailingmore@gmail.com" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>.</p>
+  <p>Écrire à <a class="courriel" href="mailto:[secret-masqué]" data-a="hello.sailingmore" data-b="gmail.com">[secret-masqué]</a>.</p>
 </div>
 <script>
 document.querySelectorAll('a.courriel').forEach(a => a.addEventListener('click', e => {{

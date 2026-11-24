@@ -1459,7 +1459,7 @@ def html_carte(items: list[dict] | None = None) -> str:
             + CARTE_JS)
 
 
-def formulaire_kit(adresse: str = "hello.sailingmore@gmail.com") -> str:
+def formulaire_kit(adresse: str = "[secret-masqué]") -> str:
     """Le formulaire, seul — l'accueil et la page annonceurs partagent ce même bloc."""
     local, _, domaine = adresse.partition("@")
     return (f'<form class="kit-form" method="POST" action="https://formsubmit.co/{adresse}" '
@@ -1483,7 +1483,7 @@ def formulaire_kit(adresse: str = "hello.sailingmore@gmail.com") -> str:
             f'<a class="courriel" href="mailto:{adresse}" data-a="{local}" data-b="{domaine}" '
             f'data-t="kit_lien">notre adresse</a>.</p>'
             "<noscript><p class=\"kit-ou\">Sans JavaScript, écrivez à "
-            "<a href=\"mailto:hello.sailingmore@gmail.com\">hello.sailingmore@gmail.com</a> — "
+            "<a href=\"mailto:[secret-masqué]\">[secret-masqué]</a> — "
             "la grille part le jour même.</p></noscript>"
             "<script>(function(){"
             "document.querySelectorAll('form.kit-form').forEach(function(f){"
@@ -1609,7 +1609,7 @@ def tarifs(fr: dict | None = None) -> str:
             + detail_packs(fr))
 
 
-def html_kit(adresse: str = "hello.sailingmore@gmail.com", fr: dict | None = None) -> str:
+def html_kit(adresse: str = "[secret-masqué]", fr: dict | None = None) -> str:
     """Le bloc annonceurs de l'accueil : la promesse, les prix, puis le formulaire."""
     local, _, domaine = adresse.partition("@")
     return ('<section class="kit-bloc" id="annonceurs"><div class="carte-kit">'
