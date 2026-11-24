@@ -25,6 +25,8 @@ SOURCE = {"accueil_site.py", "site_blocks.py", "mer_louvoyage.py", "carte_site.p
           # Favoris (24/11/2026) : écrit js/favoris*.js, js/config.js et mes-favoris.html ; sans lui
           # dans l'atelier, la reconstruction perd la page.
           "favoris_page.py",
+          # Comptes (24/11/2026) : écrans connexion / inscription / mon-compte, inertes en mode « local ».
+          "comptes_page.py",
           # Modules importés par regates_page : sans eux dans l'atelier, la reconstruction du site
           # s'arrête sur « No module named regates_classes » et plus rien ne se publie.
           "regates_classes.py", "regates_drapeaux.py",

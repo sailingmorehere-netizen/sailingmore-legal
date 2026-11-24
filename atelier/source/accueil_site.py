@@ -1406,6 +1406,13 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         print(f"favoris : {favoris_page.ecrire_page(SITE)}")
     except Exception as e:  # noqa: BLE001
         print(f"favoris non écrits : {e}")
+    # Comptes (24/11/2026) : écrans + couche d'appel, inertes tant que SM_CONFIG.comptes vaut « local ».
+    # Scripts posés par site_blocks.balises_comptes() ; aucun lien dans le menu, noindex, hors sitemap.
+    try:
+        import comptes_page
+        print(f"comptes : {comptes_page.ecrire_page(SITE)}")
+    except Exception as e:  # noqa: BLE001
+        print(f"comptes non écrits : {e}")
     for nom in ("mentions-legales.html", "confidentialite.html", "delete.html"):
         if (SORTIE / nom).exists():
             brut = (SORTIE / nom).read_text()

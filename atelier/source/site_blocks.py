@@ -777,7 +777,7 @@ def entete_site(actuelle: str, langues: list[str], auto: bool = True) -> str:
     return ('<header class="entete"><a class="nom" href="index.html">Sailing More</a>'
             f'{selecteur_langue(langues, auto)}'
             f'{menu_site(actuelle)}</header>'
-            + _LANGUE_CSS + _MENU_JS + _LANGUE_JS + balises_favoris(actuelle))
+            + _LANGUE_CSS + _MENU_JS + _LANGUE_JS + balises_favoris(actuelle) + balises_comptes(actuelle))
 
 
 # Les pages qui reçoivent les trois balises des favoris (24/11/2026). UNE SEULE liste : une page
@@ -793,6 +793,19 @@ def balises_favoris(actuelle: str) -> str:
         return ""
     return ('<script defer src="/js/config.js"></script><script defer src="/js/favoris.js"></script>'
             '<script defer src="/js/favoris-ui.js"></script>')
+
+
+# Les écrans de compte (24/11/2026), écrits par `comptes_page.py`. Volontairement ABSENTS de MENU_PAGES
+# (aucun lien) tant que `window.SM_CONFIG.comptes` vaut « local » ; `noindex` dans la page, hors sitemap.
+PAGES_COMPTES = ("connexion.html", "inscription.html", "mon-compte.html")
+
+
+def balises_comptes(actuelle: str) -> str:
+    """Les `<script>` des comptes si `actuelle` est dans PAGES_COMPTES, sinon rien (config → favoris → comptes)."""
+    if actuelle not in PAGES_COMPTES:
+        return ""
+    return ('<script defer src="/js/config.js"></script><script defer src="/js/favoris.js"></script>'
+            '<script defer src="/js/comptes.js"></script><script defer src="/js/comptes-ui.js"></script>')
 
 CARTE_JS = """
 <script>
