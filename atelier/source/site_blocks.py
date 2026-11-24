@@ -183,11 +183,12 @@ def reels(site: Path, combien: int = 3) -> list[dict]:
         credit = (x.get("credits") or "").replace("Video:", "").strip()
         garde.append({"vignette": f"reels/r{x['id']}.jpg", "duree": duree, "credit": credit,
                       "lien": x.get("lien") or "", "nom": x.get("nom", "")})
-    # Le plus ancien des six à gauche, le plus récent à droite : on lit la semaine dans l'ordre du
-    # calendrier. Les tuiles du jour, déjà en tête dans le bon ordre, ne se retournent pas.
-    recentes = [x for x in garde if x not in tuiles]
+    # Le plus ancien des trois à gauche, le plus récent à droite : on lit la semaine dans l'ordre
+    # du calendrier. (Les reels n'ont pas de tuiles du jour, contrairement aux stories : cette
+    # fonction avait hérité du tri des stories et plantait sur un nom qui n'existe pas ici.)
+    recentes = list(garde)
     recentes.reverse()
-    return (tuiles + recentes)[:combien]
+    return recentes[:combien]
 
 
 def villes(combien: int = 50) -> list[dict]:
@@ -495,6 +496,7 @@ MENU_PAGES = [
     ("bateaux.html", "Bateaux", ""),
     ("carte.html", "Carte du Léman", ""),
     ("lexique.html", "Lexique", ""),
+    ("chants-de-marin.html", "Chants de marins", ""),
     ("annonceurs.html", "Annonceurs", ""),
     ("mentions-legales.html", "Mentions légales", "legal"),
     ("confidentialite.html", "Confidentialité", "legal"),

@@ -1378,6 +1378,13 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         print(f"équivalences : {equivalences_page.ecrire_page(SITE)}")
     except Exception as e:  # noqa: BLE001
         print(f"équivalences non écrites : {e}")
+    # Chants de marins (24/11/2026) : même chemin ; chants_page.py est la source unique, chants-de-marin.json
+    # les données. Elle refuse d'écrire si les décisions de Nicolas (6 fiches, 4 lecteurs…) ne tiennent pas.
+    try:
+        import chants_page
+        print(f"chants de marins : {chants_page.ecrire_page(SITE)}")
+    except (Exception, SystemExit) as e:  # noqa: BLE001
+        print(f"chants de marins non écrits : {e}")
     # Cours théoriques (22/11/2026) : même chemin ; cours_page.py est la source unique, rien à la main.
     try:
         import cours_page
@@ -2203,7 +2210,91 @@ MAQUETTES = {
   .cookies{background:#0f2438;border-top:3px solid #e23a3e;border-radius:0}
   .cookies button{background:#e23a3e;color:#fff;border-radius:0}
 """),
+
+    # C — LARGE (23/11/2026) : même charte, même mise en page, la forme seule est reprise.
+    # Ce qui change : une seule échelle typographique en clamp() (plus de tailles en dur), une pile
+    # système qui commence par Inter au lieu de system-ui nu, des chiffres à chasse fixe dans le
+    # tableau de bord, les titres qui s'équilibrent sur deux lignes, et un contour de focus visible.
+    # Rien de ce qui est mesuré ne bouge : ni la barre du titre, ni la grille du cadre, ni les
+    # quatre matières des citations.
+    "signal-C-large": dict(MARINE, nom="LARGE",
+        corps="Inter,Roboto,'Helvetica Neue','Arial Nova','Nimbus Sans',Arial,sans-serif", extra="""
+  body{background:#0a1a2b;-webkit-font-smoothing:antialiased;font-kerning:normal;
+    font-variant-ligatures:common-ligatures}
+  :root{--t-1:clamp(.68rem,.63rem + .16vw,.78rem);--t-2:clamp(.88rem,.83rem + .18vw,.96rem);
+    --t-3:clamp(1.02rem,.97rem + .24vw,1.12rem);--t-4:clamp(1.24rem,1.12rem + .6vw,1.6rem);
+    --e-2:clamp(1.4rem,1.1rem + 1.4vw,2.4rem)}
+  /* le héros n'est pas retouché : sa hauteur est déjà réglée et le titre y est centré par le
+     gabarit. On ne touche qu'à la forme du texte. */
+  h1{font-size:clamp(2.9rem,10.5vw,6.2rem);font-weight:300;letter-spacing:-.035em;
+    text-wrap:balance}
+  h1 span{letter-spacing:-.045em}
+  .surtitre{font-size:clamp(1.35rem,4.4vw,2.2rem);line-height:1.18;letter-spacing:-.015em;
+    text-wrap:balance;color:#eef3f7}
+  .accroche{font-size:var(--t-3);line-height:1.62;max-width:34rem;color:#9db2c6;text-wrap:pretty}
+  h2{font-size:var(--t-1);letter-spacing:.24em;font-weight:500;color:#9db2c6}
+  .cadre{margin-top:var(--e-2);padding:1.9rem 0;border-top-color:rgba(226,58,62,.55)}
+  .grand{padding:0 clamp(.7rem,1.6vw,1.35rem)}
+  .grand b{font-variant-numeric:tabular-nums;letter-spacing:-.025em}
+  .grand span{font-size:clamp(.54rem,.5rem + .12vw,.62rem);letter-spacing:.16em}
+  .citation blockquote{font-size:var(--t-4);line-height:1.55;text-wrap:pretty}
+  .carte-kit p,.carte-jeu p{font-size:var(--t-3);line-height:1.6}
+  a:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{
+    outline:2px solid #e23a3e;outline-offset:3px}
+  .entete{background:rgba(10,26,43,.96);border-bottom:1px solid rgba(226,58,62,.55)}
+"""),
+
+    # D — ATELIER (23/11/2026) : la même charte poussée plus loin dans le rythme, pas dans la
+    # couleur. Le héros et sa barre ne bougent pas (mesure du 20/11). Ce qui change : les sections
+    # s'ouvrent par un numéro rouge de service, les filets portent la structure à la place des
+    # encadrés, et les grands chiffres deviennent le point d'ancrage de la page.
+    "signal-D-atelier": dict(MARINE, nom="ATELIER",
+        corps="Inter,Roboto,'Helvetica Neue','Arial Nova','Nimbus Sans',Arial,sans-serif", extra="""
+  body{background:#0a1a2b;-webkit-font-smoothing:antialiased;font-kerning:normal}
+  h1{font-size:clamp(2.9rem,10.5vw,6.2rem);font-weight:300;letter-spacing:-.035em;text-wrap:balance}
+  h1 span{letter-spacing:-.045em}
+  .surtitre{font-size:clamp(1.3rem,4.2vw,2.1rem);line-height:1.2;letter-spacing:-.015em;
+    text-wrap:balance;color:#eef3f7}
+  .accroche{font-size:clamp(1.02rem,.97rem + .24vw,1.12rem);line-height:1.62;max-width:34rem;
+    color:#9db2c6;text-wrap:pretty}
+  /* le libellé de section devient un numéro de service : rouge, numéroté par CSS, jamais écrit.
+     Seules les sections qui portent un titre sont comptées, sinon la numérotation saute. */
+  section:has(>h2){counter-increment:atelier}
+  h2{font-size:clamp(.66rem,.62rem + .14vw,.74rem);letter-spacing:.26em;font-weight:600;
+    color:#9db2c6;display:flex;align-items:baseline;gap:.7rem}
+  /* le rouge marque un chiffre, la charte l'autorise ; mais un rouge à 4,11:1 ne passe AA qu'en
+     grand texte : le numéro est donc à 20 px, pas à 8 px comme un libellé. */
+  h2::before{content:counter(atelier,decimal-leading-zero);color:#e23a3e;font-weight:600;
+    letter-spacing:.02em;font-variant-numeric:tabular-nums;font-size:1.25rem;line-height:1}
+  .cadre{margin-top:clamp(1.4rem,1.1rem + 1.4vw,2.4rem);padding:2.1rem 0;
+    border-top:2px solid #e23a3e;border-bottom:1px solid rgba(255,255,255,.14)}
+  .grand{border-left:1px solid rgba(255,255,255,.13)}
+  .grand b{font-size:clamp(1.25rem,2.6vw,2.3rem);font-weight:300;letter-spacing:-.035em;
+    font-variant-numeric:tabular-nums;line-height:1}
+  .grand span{font-size:clamp(.52rem,.48rem + .12vw,.6rem);letter-spacing:.18em;color:#9db2c6}
+  .citation blockquote{font-size:clamp(1.2rem,1.08rem + .55vw,1.55rem);line-height:1.58}
+  a:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{
+    outline:2px solid #e23a3e;outline-offset:3px}
+  .entete{background:rgba(10,26,43,.96);border-bottom:1px solid rgba(226,58,62,.55)}
+  /* les icônes de réseaux suivent le bord des chiffres, au lieu de flotter au centre sous un
+     libellé aligné à gauche */
+  .reseaux-apres{max-width:64rem;margin:0 auto 6.5rem;padding:1.4rem;text-align:left}
+  .reseaux-barre{justify-content:flex-start}
+  @media(max-width:760px){h2::before{font-size:.8em}}
+"""),
 }
+
+# C et D ne sont pas des chartes neuves : elles reprennent le bloc structurel de B — angles droits,
+# aucune ombre, la barre du titre à sa mesure du 20/11 — et n'y ajoutent que la forme. Sans cette
+# reprise, une maquette perdait les coins carrés et la barre du héros : constaté au premier rendu.
+for _n in ("signal-C-large", "signal-D-atelier"):
+    MAQUETTES[_n]["extra"] = MAQUETTES["signal-B-cap"]["extra"] + MAQUETTES[_n]["extra"]
+
+# E — la proposition : la forme de C (échelle unique, chasse fixe) posée sur la structure de D
+# (numéros de section, filets porteurs). C seule ne se voit pas ; D seule perd la finesse du texte.
+MAQUETTES["signal-E-atelier-large"] = dict(
+    MAQUETTES["signal-D-atelier"], nom="ATELIER LARGE",
+    extra=MAQUETTES["signal-C-large"]["extra"] + MAQUETTES["signal-D-atelier"]["extra"][len(MAQUETTES["signal-B-cap"]["extra"]):])
 
 
 

@@ -30,7 +30,36 @@ SOURCE = {"accueil_site.py", "site_blocks.py", "mer_louvoyage.py", "carte_site.p
           # Schémas « avant / pendant / après » et vidéo, sur la page des règles (22/11/2026).
           "regles_schemas.py",
           # Page des stages : le générateur et sa source de données, relevée sur les sites des écoles.
-          "stages_page.py", "stages.json"}
+          "stages_page.py", "stages.json",
+          # Trois générateurs oubliés dans cette liste : sans eux, une modification faite ici ne
+          # pouvait pas entrer dans l'atelier, donc n'était jamais publiée — le 23/11/2026, neuf
+          # tâches cochées « faites » n'avaient rien en ligne pour cette seule raison.
+          "lexique_page.py", "bateaux_page.py", "cours_page.py", "lexique.json", "bateaux-images.json",
+          # Ajouts du 23/11/2026 : sans eux l'atelier reconstruit avec l'ancien code, la page
+          # d'accueil perd la section des équivalences et grossit de 30 % de moins que la page en
+          # ligne, donc le garde-fou refuse de publier et plus rien ne passe (ni le breton après).
+          "equivalences_page.py", "stages_niveaux.py", "bateaux_dessins.py", "equivalences.json",
+          # La démonstration d'où sort le moteur WebGL (23/11/2026) : elle est la vraie source du
+          # suivi de la souris, et `mer_louvoyage.py` la lit pour régénérer `mer-louvoyage.js`.
+          "demo-v3-detaillee.html",
+          # Page des chants de marins (24/11/2026) : le générateur et sa source de données.
+          "chants_page.py", "chants-de-marin.json"}
+
+# Les fichiers de données voyagent sous `donnees/projets/sailingmore/`, là où le générateur les lit
+# quand il tourne dans l'atelier. Sans cette carte, `equivalences.json` arriverait à côté du code et
+# la page serait reconstruite vide, squelette à la place du contenu.
+DEST = {"equivalences.json": "atelier/donnees/projets/sailingmore/equivalences.json",
+        "chants-de-marin.json": "atelier/donnees/projets/sailingmore/chants-de-marin.json",
+        # Le moteur WebGL n'est pas écrit dans `mer-louvoyage.js` : `mer_louvoyage.py` l'extrait de
+        # cette démonstration (23/11/2026 : le suivi de la souris a été écrit là). Sans elle dans
+        # l'atelier, la reconstruction régénère l'ancien moteur et la correction n'atteint jamais
+        # le site.
+        "demo-v3-detaillee.html": "atelier/donnees/cache/documents/demo-v3-detaillee.html"}
+# Et sa source locale ne vit pas dans `scripts/` comme les autres données : ce fichier est né dans
+# le projet, pas dans les scripts.
+SRC = {"equivalences.json": RACINE / "projets/sailingmore/equivalences.json",
+       "chants-de-marin.json": RACINE / "projets/sailingmore/chants-de-marin.json",
+       "demo-v3-detaillee.html": RACINE / "cache/documents/demo-v3-detaillee.html"}
 
 
 def appel(chemin: str, methode: str = "GET", corps: dict | None = None):
@@ -68,7 +97,7 @@ def main() -> int:
     s, commit = appel(f"/repos/{DEPOT}/git/commits/{tete}")
     arbre = []
     for nom in souhaite:
-        p = RACINE / "scripts" / nom
+        p = SRC.get(nom, RACINE / "scripts" / nom)
         if not p.exists():
             print("absent :", p)
             return 1
@@ -77,7 +106,8 @@ def main() -> int:
         if s not in (200, 201):
             print("blob refusé", nom, s, blob)
             return 1
-        arbre.append({"path": f"atelier/source/{nom}", "mode": "100644", "type": "blob", "sha": blob["sha"]})
+        arbre.append({"path": DEST.get(nom, f"atelier/source/{nom}"), "mode": "100644",
+                      "type": "blob", "sha": blob["sha"]})
 
     s, t = appel(f"/repos/{DEPOT}/git/trees", "POST",
                  {"base_tree": commit["tree"]["sha"], "tree": arbre})
