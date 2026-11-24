@@ -1261,7 +1261,7 @@ def fichiers_a_publier() -> list[str]:
     pages = [n for n in ("index.html", "carte.html", "jeux.html", "annonceurs.html", "merci.html",
                          "regates.html", "regles-de-course.html", "lexique.html", "stages.html",
                          "equivalences.html", "cours.html", "bateaux.html", "bateaux.json", "stages-proches.json", "404.html", "mentions-legales.html",
-                         "confidentialite.html", "delete.html", "sitemap.xml")
+                         "confidentialite.html", "delete.html", "sitemap.xml", "feed.xml")
              if (SITE / n).exists()]
     images = [n for n in ("og-image.jpg", "icon-512.png", "icon-180.png", "favicon-32.png",
                           "carte-monde.png") if (SITE / n).exists()]
@@ -1453,6 +1453,23 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
     n = poser_mer_partout()
     print(f"mer posée sur {n} page(s) supplémentaire(s)")
     print(f"barre du site posée sur {poser_entete_partout()} page(s)")
+    print(f"lien du flux posé sur {poser_flux_partout()} page(s)")
+    # Le sitemap est reconstruit ici, après toutes les pages : c'est le seul écrivain de la liste
+    # (24/11/2026). `ports.html` et `simulateur.html` n'y figuraient jamais — publiées, jamais
+    # déclarées, donc jamais envoyées à Bing par IndexNow. Les générateurs qui ajoutaient leur
+    # entrée (chants, bateaux) restent idempotents et ne créent pas de doublon.
+    try:
+        import sitemap_site
+        print(f"sitemap.xml reconstruit : {sitemap_site.fusionner(SITE)} adresse(s)")
+    except Exception as e:  # noqa: BLE001
+        print(f"sitemap non reconstruit : {e}")
+    # Le flux RSS lit les pages qui viennent d'être écrites (feed_rss.py, 24/11/2026) : il passe donc
+    # après elles, et son entrée est dans `fichiers_a_publier()` comme tout le reste.
+    try:
+        import feed_rss
+        print(f"flux RSS écrit : {feed_rss.ecrire(SITE)} entrée(s)")
+    except Exception as e:  # noqa: BLE001
+        print(f"flux RSS non écrit : {e}")
     print(f"équilibre posé sur {poser_equilibre(SITE)} page(s)")
     print(f"site écrit dans {SITE} — {len(list(SITE.rglob('*')))} entrées")
     liste = fichiers_a_publier()
@@ -1596,6 +1613,26 @@ liste.addEventListener('click',function(e){
   if(window.merManoeuvre(m)) dire(m.k);
 });
 })();</script>"""
+
+
+def poser_flux_partout() -> int:
+    """Le lien vers `feed.xml` dans la tête de chaque page (24/11/2026).
+
+    Un flux unique pour le site, mais un lien dans chaque page : c'est ce qui permet à un lecteur
+    ou à un robot qui arrive sur `stages.html` de trouver le flux sans deviner `/feed.xml`.
+    Idempotent : le lien est reconnu à son `type="application/rss+xml"`, on ne l'empile pas.
+    """
+    lien = ('<link rel="alternate" type="application/rss+xml" title="Sailing More" '
+            'href="https://sailingmore.fr/feed.xml">')
+    fait = 0
+    for page in sorted(SITE.glob("*.html")):
+        html = page.read_text(encoding="utf-8")
+        if 'type="application/rss+xml"' in html or "</head>" not in html:
+            continue
+        html = html.replace("</head>", "  " + lien + "\n</head>", 1)
+        page.write_text(html, encoding="utf-8")
+        fait += 1
+    return fait
 
 
 def poser_entete_partout() -> int:
