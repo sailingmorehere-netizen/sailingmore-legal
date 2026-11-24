@@ -34,6 +34,7 @@ PAGES = {
     "chants-de-marin.html":  (0.6, "monthly"),
 }
 # Pages exclues volontairement : noindex, ou doublon canonique.
+NON_INDEXEES = re.compile(r"/pavillon-[a-z0-9-]+\.html$")
 EXCLUES = {"404.html", "merci.html", "apercu-schemas.html", "regles-apercu.html",
            "mentions-legales.html", "confidentialite.html", "delete.html"}
 
@@ -81,8 +82,10 @@ def fusionner(dossier: Path = SITE) -> int:
             if m:
                 existants[m.group(1)] = bloc.strip()
     blocks = []
-    # Les 42 pages des pavillons (24/11/2026) : une famille de pages, déclarée d'un coup et non une à une.
-    famille = {p.name: (0.5, "yearly") for p in sorted(dossier.glob("pavillon-*.html"))}
+    # Les 42 pages des pavillons (24/11/2026) : pages de référence en `noindex` tant que leur fiche n'est
+    # pas écrite en entier — une page noindex n'a rien à faire ici. Quand Claude les aura remplies, il
+    # suffira de retirer cette exclusion et le noindex ensemble.
+    famille = {}
     for nom, (prio, freq) in {**PAGES, **famille}.items():
         f = dossier / nom
         if not f.exists():
@@ -95,7 +98,8 @@ def fusionner(dossier: Path = SITE) -> int:
         blocks.append(existants.pop(loc, None) or
                       f"  <url><loc>{loc}</loc><lastmod>{jour}</lastmod>"
                       f"<changefreq>{freq}</changefreq><priority>{prio}</priority></url>")
-    blocks += [existants[k] for k in sorted(existants)]
+    # Une adresse passée en noindex sort du sitemap : garder son bloc d'hier la remettrait dans l'index.
+    blocks += [b for k, b in sorted(existants.items()) if not NON_INDEXEES.search(k)]
     xml = "\n".join(['<?xml version="1.0" encoding="UTF-8"?>',
                      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
                      'xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">']
