@@ -8,12 +8,24 @@ for sep, asc in (((',', ':'), False), ((', ', ': '), False), ((',', ':'), True))
         break
 else:
     raise SystemExit('format non reproductible, je n ecris rien')
-# (index, attendu dans le titre, prix, devise) : minimum lu sur la page de l'offre
-P = [(117, 'Zürichsee', 253.0, 'CHF'), (173, 'SBF-See', 228.0, 'EUR'),
-     (314, 'SKS', 399.0, 'EUR'), (311, 'LAST MINUTE', 310.0, 'EUR')]
-for i, t, p, c in P:
+E, G, C = 'EUR', 'GBP', 'CHF'
+# prix minimum affiché sur la page de l'offre, relevé en ligne le 24/11/2026
+P = {
+    74: (220, E), 75: (410, E),                      # Blue Spirit
+    80: (150, E), 81: (150, E),                      # Compagnia della Vela (weekend court ; frais de la 2e semaine junior)
+    109: (325, E), 110: (450, E), 111: (600, E),     # EZS
+    112: (350, E),                                   # Grosse Freiheit (SBF Binnen Motor ab 350)
+    117: (50, C),                                    # Lagoo (leçon privée ab CHF 50)
+    174: (190, E),                                   # Reichenau étudiants (SBF See théorie)
+    228: (1100, E), 230: (105, E),                   # Soleil
+    273: (600, G),                                   # Solent Sail (day sail avec skipper, hiver)
+    311: (310, E), 312: (550, E), 314: (399, E),     # Überlingen
+    369: (35, G), 370: (350, G), 371: (350, G), 372: (559, G), 373: (350, G),   # Urban Truant
+    376: (10, E),                                    # Vent du Large (adhésion)
+}
+for i, (p, c) in P.items():
     o = d['o'][i]
-    assert t in o[3] and o[8] in (None, '', 0), i
-    o[8], o[9] = p, c
+    assert o[8] in (None, '', 0), i
+    o[8], o[9] = float(p), c
 open(F, 'w', encoding='utf8').write(json.dumps(d, separators=sep, ensure_ascii=asc) + ('\n' if raw.endswith('\n') else ''))
 print('ok', len(P))

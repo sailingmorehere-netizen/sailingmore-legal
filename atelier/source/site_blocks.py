@@ -541,7 +541,9 @@ _MENU_JS = """<script>
 
 
 NOMS_LANGUES = {"fr": "Français", "en": "English", "it": "Italiano", "es": "Español",
-                "pt": "Português", "de": "Deutsch", "nl": "Nederlands", "bzh": "Brezhoneg"}
+                "pt": "Português", "de": "Deutsch", "nl": "Nederlands", "bzh": "Brezhoneg",
+                "el": "Ελληνικά", "hr": "Hrvatski", "sv": "Svenska", "da": "Dansk",
+                "no": "Norsk", "pl": "Polski"}
 
 # UNE SEULE liste des langues du site (23/11/2026) : les pages l'importent, aucune ne la recopie.
 # LANGUES = les six langues dont les pages ont un texte complet. BZH s'y ajoute dans le sélecteur
