@@ -18,7 +18,7 @@ function position(fin){
 }
 function dessiner(){
   var a=new Date().toISOString().slice(0,10);
-  var l=DATA.o.filter(function(o){return !o[7]||o[7]>=a});
+  var l=DATA.o.filter(function(o){return !o[16]&&(!o[7]||o[7]>=a)});
   l=l.map(function(o){return {o:o,d:POS?hav(POS[0],POS[1],o[0],o[1]):null}});
   l.sort(function(x,y){
     if(POS)return x.d-y.d;
