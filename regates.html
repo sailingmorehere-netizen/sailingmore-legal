@@ -936,7 +936,7 @@ var CarteEpreuves = (function(){
   function icsTelecharge(liste, nom){
     var d = new Date(), p = function(n){ return ('0'+n).slice(-2); };
     var stamp = d.getUTCFullYear() + p(d.getUTCMonth()+1) + p(d.getUTCDate()) + 'T' + p(d.getUTCHours()) + p(d.getUTCMinutes()) + p(d.getUTCSeconds()) + 'Z';
-    var txt = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Sailing More//Calendrier des regates//FR\r\nCALSCALE:GREGORIAN\r\n'
+    var txt = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Sailing More//Calendrier des regates//FR\r\n[secret-masqué]\r\n'
       + liste.map(function(e){ return icsEvt(e, stamp); }).join('\r\n') + '\r\nEND:VCALENDAR\r\n';
     var blob = new Blob([txt], {type:'text/calendar;charset=utf-8'});
     var a = document.createElement('a');
