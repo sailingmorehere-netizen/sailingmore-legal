@@ -108,6 +108,7 @@ UI = {
            "m": "m", "sch": "Skizze"},
 }
 NOMS = {
+    "surprise": ["Voilier habitable Surprise", "Surprise cruiser-racer", "Barca da crociera Surprise", "Velero de crucero Surprise", "Veleiro de cruzeiro Surprise", "Fahrtenyacht Surprise"],
     "x35": ["Voilier Habitable X35", "X35 cruiser-racer", "Barca da crociera X35", "Velero de crucero X35", "Veleiro de cruzeiro X35", "Fahrtenyacht X35"],
     "hobie16": ["Catamaran Hobie 16 avec spi", "Hobie 16 catamaran with spinnaker", "Catamarano Hobie 16 con spi", "Catamarán Hobie 16 con spi", "Catamarã Hobie 16 com spi", "Katamaran Hobie 16 mit Spi"],
     "laser": ["Dériveur Laser", "Laser dinghy", "Deriva Laser", "Deriva Laser", "Dinghy Laser", "Jolle Laser"],
@@ -118,7 +119,7 @@ NOMS = {
     "imoca": ["IMOCA", "IMOCA", "IMOCA", "IMOCA", "IMOCA", "IMOCA"],
     "ultim": ["Ultim", "Ultim", "Ultim", "Ultim", "Ultim", "Ultim"],
 }
-COURT = {"x35": "X35", "hobie16": "Hobie 16", "laser": "Laser", "49er": "49er", "iqfoil": "iQFOiL",
+COURT = {"surprise": "Surprise", "x35": "X35", "hobie16": "Hobie 16", "laser": "Laser", "49er": "49er", "iqfoil": "iQFOiL",
          "kite": "Formula Kite", "wing": "Wing", "imoca": "IMOCA", "ultim": "Ultim"}
 CREW = {
     "1": ["1 personne", "1 person", "1 persona", "1 persona", "1 pessoa", "1 Person"],
@@ -135,6 +136,9 @@ LEGENDE = f"{MARQUE} — {MARQUE2}"
 TITRE_PROMESSE = "Nomenclature des bateaux : toutes les pièces, du Laser à l'Ultim — SailingMore"
 # Licence : décision prise à la place de Nicolas — la page des mentions légales, qui dit les conditions de réutilisation.
 LICENCE_URL = "https://sailingmore.fr/mentions-legales.html"
+# Image de partage : celle du bateau mis en avant, et son texte, tirés du même dessin que la page
+# (Nicolas, 24/11/2026 : le SEO suit la modification d'une page au lieu de rester sur le premier dessin).
+VEDETTE_SLUG = "skiff-49er"
 
 
 def json_ld_images(mots) -> str:
@@ -950,7 +954,9 @@ def page(mots, mises) -> str:
     ui = UI["fr"]
     desc = ("Nomenclature illustrée de neuf bateaux de voile — voilier habitable X35, Hobie 16, Laser, 49er, planche iQFOiL, "
             "Formula Kite, wingfoil, IMOCA, Ultim : chaque pièce nommée et reliée à sa définition du lexique.")
-    og = f"{URL}/images/bateaux/{_nom_fichier(BATEAUX[0])}"
+    vedette = next((b for b in BATEAUX if b["slug"] == VEDETTE_SLUG), BATEAUX[0])
+    og = f"{URL}/images/bateaux/{_nom_fichier(vedette)}"
+    og_alt = _alt(vedette, mots, "fr")
     filtres = "".join(f'<button type="button" class="puce" data-cat="{c}" aria-pressed="{"true" if c == "tous" else "false"}">{ui[c]}</button>' for c in CATS)
     return (
         '<!doctype html>\n<html lang="fr"><head><meta charset="utf-8">'
@@ -961,7 +967,8 @@ def page(mots, mises) -> str:
         f'<meta property="og:type" content="website"><meta property="og:site_name" content="Sailing More">'
         f'<meta property="og:title" content="{TITRE_PROMESSE}"><meta property="og:description" content="{_html.escape(desc)}">'
         f'<meta property="og:url" content="{URL}/bateaux.html"><meta property="og:image" content="{og}">'
-        f'<meta property="og:image:alt" content="{_html.escape(_alt(BATEAUX[0], mots, "fr"), quote=True)}">'
+        f'<meta property="og:image:alt" content="{_html.escape(og_alt, quote=True)}">'
+        f'<meta property="og:image:width" content="1200"><meta property="og:image:height" content="{int((vedette["h"] + 80) * 1.2)}">'
         f'<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{og}">'
         f'{_ld_bateaux(mots)}'
         f'<style>{site_blocks.ENTETE_CSS}{CSS}{CSS_SVG}</style></head><body>\n'
