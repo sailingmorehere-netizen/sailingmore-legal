@@ -513,6 +513,9 @@ def page_pavillon(pid: str, css: str = "") -> str:
             f'<title>{_e(titre)} — Sailing More</title>'
             f'<link rel="canonical" href="https://sailingmore.fr/pavillon-{pid}.html">'
             f'<meta name="description" content="{_e(desc)}">'
+            # Page de référence courte (moins de 600 mots) : hors index tant que sa fiche n'est pas
+            # écrite en entier, pour ne pas mettre 42 pages maigres dans Google.
+            f'<meta name="robots" content="noindex,follow">'
             f'<style>{site_blocks.ENTETE_CSS}{css}{CSS}</style></head><body>\n'
             f'{site_blocks.entete_site("cours.html", ["fr"])}<div class="page">\n'
             f'<h1>{_e(titre)}</h1>{_fiche(pid)}'
