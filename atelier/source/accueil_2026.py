@@ -21,7 +21,8 @@ import sqlite3
 import sys
 from pathlib import Path
 
-LANGUES = ["fr", "en", "de", "it", "es", "pt"]
+from site_blocks import LANGUES as _LANGUES_SITE
+
 MOIS = {
     "fr": ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
     "en": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -30,6 +31,9 @@ MOIS = {
     "es": ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
     "pt": ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"],
 }
+
+# Une langue n'entre dans les pages que quand ses mois et ses textes existent (24/11/2026) :
+LANGUES = [l for l in _LANGUES_SITE if l in MOIS]
 # séparateur de milliers, séparateur décimal, unité du million
 FORMAT = {
     "fr": (" ", ",", "M"), "en": (",", ".", "M"), "de": (".", ",", "Mio."),

@@ -113,7 +113,7 @@ JS_COMPTES_UI = r'''/* comptes-ui.js — les écrans connexion / inscription / m
 (function(){
   "use strict";
   var C = window.SMCompte;
-  var SIX = ["fr", "en", "it", "es", "pt", "de"];
+  var SIX = window.SM_LANGUES || ["en"];   /* liste unique, posée par le détecteur (24/11/2026) */
 
   var T = {
     fr: { retour: "← Sailing More", ferme: "Les comptes ouvrent le 1er décembre. D'ici là, rien n'est enregistré ici : vos favoris restent sur cet appareil.",

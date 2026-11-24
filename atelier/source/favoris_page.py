@@ -30,7 +30,7 @@ JS_FAVORIS = r'''/* favoris.js — LE module qui parle au stockage des favoris (
 (function(){
   "use strict";
   var TYPES = ["regle", "bateau", "port", "stage"];
-  var LANGUES = ["fr", "en", "it", "es", "pt", "de"];
+  var LANGUES = window.SM_LANGUES || ["en"];   /* liste unique, posée par le détecteur (24/11/2026) */
   var CLE = "sm-favoris";
   var MAX = 2000;            /* plafond de la liste : un import ne peut pas remplir le stockage */
   var MAX_ID = 300;
@@ -159,7 +159,7 @@ JS_FAVORIS_UI = r'''/* favoris-ui.js — boutons « enregistrer » et page « me
   "use strict";
   var F = window.SMFav;
   if(!F) return;
-  var SIX = ["fr", "en", "it", "es", "pt", "de"];
+  var SIX = window.SM_LANGUES || ["en"];   /* idem : une seule liste pour tout le site */
 
   var T = {
     fr: { enr: "Enregistrer", enrOk: "Enregistré", enrTitre: "Garder dans mes favoris", retTitre: "Retirer de mes favoris",
