@@ -163,7 +163,7 @@ function repondre(r){
  $('scene').innerHTML=scene(s,true);
  var rr=D.reasons[L][s.reason]||D.reasons.fr[s.reason];
  var lien=s.rule?' <a href="regles-de-course.html#r'+s.rule+'">'+esc(t('regle'))+' →</a>':'';
- $('corr').innerHTML='<b>'+esc(r===s.ans?t('ok'):t('ko'))+' '+esc(t('reponse'))+' '+esc(t('r'+s.ans))+'.</b>'+esc(rr)+lien;
+ $('corr').innerHTML='<b>'+esc(r===s.ans?t('ok'):t('ko'))+' '+esc(t('reponse'))+' '+esc(t('r'+s.ans))+'.</b> '+esc(rr)+lien;
  $('corr').hidden=false;maj();}
 function maj(){
  $('titre').textContent=t('titre');document.title=t('titre')+' — Sailing More';
@@ -179,7 +179,7 @@ function maj(){
 function histo(){try{history.replaceState(null,'','#s='+cur().id+'&l='+L);}catch(e){}}
 function depuisHash(){
  var m=/s=(\d+)/.exec(location.hash),l=/l=([a-z]{2})/.exec(location.hash);
- if(l&&LANGS.indexOf(l[1])>=0)L=l[1];else{var n=(navigator.language||'fr').slice(0,2);if(LANGS.indexOf(n)>=0)L=n;}
+ if(l&&LANGS.indexOf(l[1])>=0)L=l[1];else{var n=(window.smLangue?window.smLangue():(navigator.language||'en')).slice(0,2);if(n==='bz')n='fr';if(LANGS.indexOf(n)>=0)L=n;}
  liste();
  if(m){var id=parseInt(m[1],10);for(var i=0;i<ordre.length;i++){if(SC[ordre[i]].id===id)pos=i;}}}
 document.addEventListener('click',function(e){
