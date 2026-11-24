@@ -485,7 +485,9 @@ CARTE_CSS = """
 """
 
 
-# Les pages du site, dans l'ordre où on les lit : le contenu d'abord, le juridique ensuite (grisé).
+# Les pages du site, dans l'ordre où on les lit. Le juridique n'est plus ici (24/11/2026 :
+# « retire les mentions légales du menu ») : mentions légales, confidentialité et suppression de
+# données restent atteignables par le pied de page, comme les licences.
 MENU_PAGES = [
     ("index.html", "Accueil", ""),
     ("regates.html", "Calendrier des régates", ""),
@@ -498,18 +500,15 @@ MENU_PAGES = [
     ("lexique.html", "Lexique", ""),
     ("chants-de-marin.html", "Chants de marins", ""),
     ("annonceurs.html", "Annonceurs", ""),
-    ("mentions-legales.html", "Mentions légales", "legal"),
-    ("confidentialite.html", "Confidentialité", "legal"),
-    ("delete.html", "Supprimer mes données", "legal"),
 ]
 
 
 def menu_site(actuelle: str = "index.html") -> str:
-    """Le panneau de toutes les pages, équilibré en deux colonnes de quatre.
+    """Le panneau de toutes les pages.
 
-    Huit entrées, quatre lignes pleines : aucune colonne plus longue que l'autre, et la page où l'on
-    est se reconnaît à son filet rouge (Nicolas, 22/11/2026 : « que les différentes pages soient
-    mieux équilibrées dans le menu, affiche toutes les autres pages dedans »).
+    Onze entrées de contenu, la page où l'on est reconnaissable à son filet rouge (Nicolas,
+    22/11/2026 : « que les différentes pages soient mieux équilibrées dans le menu, affiche toutes
+    les autres pages dedans »). Le juridique est sorti le 24/11/2026 et vit dans le pied de page.
     """
     liens = []
     for fichier, titre, genre in MENU_PAGES:
