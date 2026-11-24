@@ -1,7 +1,7 @@
 {
  "maj": "2026-11-24T05:00:00",
- "total": 9893,
- "a_venir": 1048,
+ "total": 9899,
+ "a_venir": 1054,
  "regates": [
   {
    "nom": "Le Père Noël",
@@ -220636,7 +220636,8 @@
    "departement": "",
    "ligue": "",
    "sources": [
-    "https://datafeed.sailing.org/stats/api/regatta"
+    "https://datafeed.sailing.org/stats/api/regatta",
+    "https://yacht-club-monaco.mc/en/event/calendar/"
    ],
    "region_repliee": "",
    "region": "Monde",
@@ -223532,7 +223533,8 @@
    "departement": "06",
    "ligue": "SUD",
    "sources": [
-    "https://regates.ffvoile.fr/api/competitions?dateDebutMin=2026-01-01&dateDebutMax=2026-12-31"
+    "https://regates.ffvoile.fr/api/competitions?dateDebutMin=2026-01-01&dateDebutMax=2026-12-31",
+    "https://yacht-club-monaco.mc/en/event/calendar/"
    ],
    "region_repliee": "",
    "region": "France",
@@ -226438,6 +226440,30 @@
    "type": "hors-regate"
   },
   {
+   "nom": "MOTR",
+   "debut": "2027-01-13",
+   "fin": "2027-01-17",
+   "ville": "Monaco",
+   "pays": "MON",
+   "club": "Yacht Club de Monaco",
+   "classes": [],
+   "lien": "https://yacht-club-monaco.mc/en/event/sport-event/monaco-optimist-team-race/",
+   "resultats": "",
+   "niveau": "",
+   "connue": "",
+   "annulee": false,
+   "ocean": false,
+   "departement": "",
+   "ligue": "",
+   "sources": [
+    "https://yacht-club-monaco.mc/en/event/calendar/"
+   ],
+   "region_repliee": "",
+   "region": "Monde",
+   "type": "régate",
+   "lu": "2026-11-24"
+  },
+  {
    "nom": "2027 World Sailing Championships - ILCA 7 Men & ILCA 6 Women",
    "debut": "2027-01-15",
    "fin": "2027-01-23",
@@ -227408,6 +227434,30 @@
    "ligue": "",
    "sources": [
     "https://49er.org/events/"
+   ],
+   "region_repliee": "",
+   "region": "Monde",
+   "type": "régate",
+   "lu": "2026-11-24"
+  },
+  {
+   "nom": "Monaco Sportsboat Winter Series - ACT III",
+   "debut": "2027-02-11",
+   "fin": "2027-02-14",
+   "ville": "Monaco",
+   "pays": "MON",
+   "club": "Yacht Club de Monaco",
+   "classes": [],
+   "lien": "https://yacht-club-monaco.mc/en/events/monaco-sportsboat-winter-series-act-iii/",
+   "resultats": "",
+   "niveau": "",
+   "connue": "",
+   "annulee": false,
+   "ocean": false,
+   "departement": "",
+   "ligue": "",
+   "sources": [
+    "https://yacht-club-monaco.mc/en/event/calendar/"
    ],
    "region_repliee": "",
    "region": "Monde",
@@ -228510,6 +228560,30 @@
    "region_repliee": "",
    "region": "Monde",
    "type": "régate"
+  },
+  {
+   "nom": "Primo Cup - UBS Trophy",
+   "debut": "2027-03-10",
+   "fin": "2027-03-14",
+   "ville": "Monaco",
+   "pays": "MON",
+   "club": "Yacht Club de Monaco",
+   "classes": [],
+   "lien": "https://yacht-club-monaco.mc/en/event/sport-event/primo-cup-ubs-trophy/",
+   "resultats": "",
+   "niveau": "",
+   "connue": "",
+   "annulee": false,
+   "ocean": false,
+   "departement": "",
+   "ligue": "",
+   "sources": [
+    "https://yacht-club-monaco.mc/en/event/calendar/"
+   ],
+   "region_repliee": "",
+   "region": "Monde",
+   "type": "régate",
+   "lu": "2026-11-24"
   },
   {
    "nom": "Superyacht Challenge Antigua (16e)",
@@ -238301,6 +238375,30 @@
    "type": "régate"
   },
   {
+   "nom": "Palermo Montecarlo",
+   "debut": "2027-08-18",
+   "fin": "2027-08-24",
+   "ville": "Monaco",
+   "pays": "MON",
+   "club": "Yacht Club de Monaco",
+   "classes": [],
+   "lien": "https://yacht-club-monaco.mc/en/events/palermo-montecarlo/",
+   "resultats": "",
+   "niveau": "",
+   "connue": "",
+   "annulee": false,
+   "ocean": false,
+   "departement": "",
+   "ligue": "",
+   "sources": [
+    "https://yacht-club-monaco.mc/en/event/calendar/"
+   ],
+   "region_repliee": "",
+   "region": "Monde",
+   "type": "régate",
+   "lu": "2026-11-24"
+  },
+  {
    "nom": "Woensdagavond Race 10",
    "debut": "2027-08-18",
    "fin": "2027-08-18",
@@ -239734,6 +239832,30 @@
    "region_repliee": "",
    "region": "France",
    "type": "championnat"
+  },
+  {
+   "nom": "Monaco Classic Week",
+   "debut": "2027-09-07",
+   "fin": "2027-09-11",
+   "ville": "Monaco",
+   "pays": "MON",
+   "club": "Yacht Club de Monaco",
+   "classes": [],
+   "lien": "https://monacoclassicweek.com/",
+   "resultats": "",
+   "niveau": "",
+   "connue": "",
+   "annulee": false,
+   "ocean": false,
+   "departement": "",
+   "ligue": "",
+   "sources": [
+    "https://yacht-club-monaco.mc/en/event/calendar/"
+   ],
+   "region_repliee": "",
+   "region": "Monde",
+   "type": "régate",
+   "lu": "2026-11-24"
   },
   {
    "nom": "Woensdagavond Race 13",
@@ -241798,6 +241920,30 @@
    "region_repliee": "",
    "region": "Monde",
    "type": "régate"
+  },
+  {
+   "nom": "Virginie Heriot Trophy",
+   "debut": "2027-10-13",
+   "fin": "2027-10-17",
+   "ville": "Monaco",
+   "pays": "MON",
+   "club": "Yacht Club de Monaco",
+   "classes": [],
+   "lien": "https://yacht-club-monaco.mc/en/events/virginie-heriot-trophy/",
+   "resultats": "",
+   "niveau": "",
+   "connue": "",
+   "annulee": false,
+   "ocean": false,
+   "departement": "",
+   "ligue": "",
+   "sources": [
+    "https://yacht-club-monaco.mc/en/event/calendar/"
+   ],
+   "region_repliee": "",
+   "region": "Monde",
+   "type": "régate",
+   "lu": "2026-11-24"
   },
   {
    "nom": "Rolex Middle Sea Race",
