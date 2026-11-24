@@ -81,7 +81,9 @@ def fusionner(dossier: Path = SITE) -> int:
             if m:
                 existants[m.group(1)] = bloc.strip()
     blocks = []
-    for nom, (prio, freq) in PAGES.items():
+    # Les 42 pages des pavillons (24/11/2026) : une famille de pages, déclarée d'un coup et non une à une.
+    famille = {p.name: (0.5, "yearly") for p in sorted(dossier.glob("pavillon-*.html"))}
+    for nom, (prio, freq) in {**PAGES, **famille}.items():
         f = dossier / nom
         if not f.exists():
             continue
