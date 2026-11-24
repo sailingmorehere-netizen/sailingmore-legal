@@ -313,7 +313,7 @@ CSS = CSS.replace("__CARTE_CSS__", carte_epreuves.CSS)
 
 JS = r"""
 var D=JSON.parse(document.getElementById('donnees').textContent),U=D.ui;
-var L='fr';try{L=localStorage.getItem('lang')||(navigator.language||'fr').slice(0,2)}catch(e){}
+var L='fr';try{L=(window.smLangue?window.smLangue():'en')}catch(e){}
 if(!U[L])L='en';
 function t(k){return (U[L]&&U[L][k])||U.fr[k]||k}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -368,7 +368,7 @@ function remplir(){
   var l=document.getElementById('langues');
   l.innerHTML='<select id="lng-sel" aria-label="Langue de la page" style="background:transparent;color:inherit;font:inherit;font-size:.8rem;border:1px solid rgba(255,255,255,.34);border-radius:.4rem;padding:.5rem .6rem;min-height:38px;cursor:pointer">'
     +Object.keys(U).map(function(c){return '<option value="'+c+'"'+(c===L?' selected':'')+'>'+(NOMS[c]||c.toUpperCase())+'</option>'}).join('')+'</select>';
-  l.querySelector('select').onchange=function(){L=this.value;try{localStorage.setItem('lang',L)}catch(e){}remplir();dessiner()};
+  l.querySelector('select').onchange=function(){L=this.value;try{if(window.smChoisirLangue)window.smChoisirLangue(L)}catch(e){}remplir();dessiner()};
 }
 /* Position du visiteur : le navigateur d'abord (il demande l'accord), l'adresse IP ensuite si elle
    est refusée ou indisponible. Aucune position n'est envoyée ni conservée : elle sert à trier. */
@@ -556,8 +556,8 @@ TEXTES_BLOC = {
 JS_BLOC = r"""(function(){
 var T=__TEXTES__;
 var host=document.getElementById('stages-proches');if(!host)return;
-var L='fr';try{L=localStorage.getItem('lang')||document.documentElement.lang||(navigator.language||'fr')}catch(e){}
-L=String(L).slice(0,2).toLowerCase();if(!T[L])L='en';var X=T[L];
+var L='fr';try{L=(window.smLangue?window.smLangue():document.documentElement.lang||'en')}catch(e){}
+L=String(L).slice(0,2).toLowerCase();if(L==='bz')L='fr';if(!T[L])L='en';var X=T[L];
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function hav(a,b,c,d){var r=Math.PI/180,p=(c-a)*r,q=(d-b)*r,h=Math.sin(p/2)*Math.sin(p/2)+Math.cos(a*r)*Math.cos(c*r)*Math.sin(q/2)*Math.sin(q/2);return 12742*Math.asin(Math.sqrt(h))}
 function teinte(s){var h=0;s=s||'';for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%360;return h}

@@ -40,11 +40,11 @@ JS_FAVORIS = r'''/* favoris.js — LE module qui parle au stockage des favoris (
   function base(){ return String(cfg().api || "https://api.sailingmore.fr").replace(/\/+$/, ""); }
 
   function langue(){
-    var l = null;
-    try{ l = localStorage.getItem("sm-langue"); }catch(e){}
-    if(LANGUES.indexOf(l) >= 0) return l;
-    var h = (document.documentElement.getAttribute("lang") || "").slice(0, 2).toLowerCase();
-    return LANGUES.indexOf(h) >= 0 ? h : "fr";
+    /* Une seule détection pour tout le site, dans le <head> (24/11/2026). */
+    var l = (typeof window.smLangue === "function") ? window.smLangue()
+            : (document.documentElement.getAttribute("lang") || "").slice(0, 2).toLowerCase();
+    if(l === "bzh") l = "fr";
+    return LANGUES.indexOf(l) >= 0 ? l : "en";
   }
 
   /* Un favori valide, ou null. Tout ce qui vient d'un import est suspect : on ne garde que les quatre champs. */
@@ -219,16 +219,10 @@ JS_FAVORIS_UI = r'''/* favoris-ui.js — boutons « enregistrer » et page « me
   };
 
   function lg(){
-    var l = null;
-    try{ l = localStorage.getItem("sm-langue"); }catch(e){}
-    if(SIX.indexOf(l) >= 0) return l;
-    var cand = (navigator.languages || [navigator.language || "fr"]);
-    for(var i = 0; i < cand.length; i++){
-      var b = String(cand[i]).toLowerCase().slice(0, 2);
-      if(SIX.indexOf(b) >= 0) return b;
-    }
-    var h = (document.documentElement.getAttribute("lang") || "fr").slice(0, 2);
-    return SIX.indexOf(h) >= 0 ? h : "fr";
+    var l = (typeof window.smLangue === "function") ? window.smLangue()
+            : (document.documentElement.getAttribute("lang") || "en").slice(0, 2).toLowerCase();
+    if(l === "bzh") l = "fr";
+    return SIX.indexOf(l) >= 0 ? l : "en";
   }
   function t(k){ return (T[lg()] || T.fr)[k] || T.fr[k] || k; }
 

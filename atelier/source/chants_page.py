@@ -136,12 +136,8 @@ JS = r"""
 (function(){
 var D=JSON.parse(document.getElementById('chants-donnees').textContent),SIX=D.langues,L='fr',fam='tous',T=D.ui.fr;
 function choisir(){
-  try{var q=new URLSearchParams(location.search).get('lang');if(q&&SIX.indexOf(q)>=0)return q}catch(e){}
-  var v='auto';try{v=localStorage.getItem('sm-langue')||'auto'}catch(e){}
-  if(v!=='auto')return SIX.indexOf(v)>=0?v:'fr';
-  var p=navigator.languages||[navigator.language||'en'];
-  for(var i=0;i<p.length;i++){var b=String(p[i]).toLowerCase().slice(0,2);if(b==='br')return 'fr';if(SIX.indexOf(b)>=0)return b}
-  return 'en'}
+  var l=(typeof window.smLangue==='function')?window.smLangue():'en';
+  if(l==='bzh')l='fr';return SIX.indexOf(l)>=0?l:'en'}
 function pick(o){return (o&&(o[L]||o.en||o.fr))||''}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function fmt(s){if(!isFinite(s))return '–:––';var m=Math.floor(s/60),x=Math.floor(s%60);return m+':'+(x<10?'0':'')+x}

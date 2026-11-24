@@ -161,12 +161,11 @@ JS = r"""
   // Même choix de langue que l'accueil (clé « sm-langue », « auto » = langue du navigateur) :
   // le code de l'accueil est dans un gabarit de page, on ne peut pas l'importer — voir le rapport.
   function stocke(){ try{ return localStorage.getItem('sm-langue') || 'auto'; }catch(e){ return 'auto'; } }
+  /* La langue est choisie une seule fois, dans le <head> (24/11/2026). On lit le résultat. */
   function choisir(){
-    var force = stocke();
-    if(force !== 'auto' && UI[force]) return force;
-    var pref = (navigator.languages || [navigator.language || 'en']).map(function(x){return String(x).toLowerCase();});
-    for(var i=0;i<pref.length;i++){ var b = pref[i].slice(0,2); if(b === 'br') return 'fr'; if(UI[b]) return b; }
-    return 'en';
+    var l = (typeof window.smLangue === 'function') ? window.smLangue() : 'en';
+    if(l === 'bzh') l = 'fr';
+    return UI[l] ? l : 'en';
   }
   var lang = choisir();
 

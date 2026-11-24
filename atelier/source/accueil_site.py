@@ -934,15 +934,10 @@ const MOIS = {jours};
 const JEU = "{jeu}";
 
 function choisir() {{
-  const force = localStorage.getItem("sm-langue");
-  if (force && force !== "auto") return force;
-  const pref = (navigator.languages || [navigator.language || "en"]).map(x => String(x).toLowerCase());
-  for (const p of pref) {{
-    const base = p.slice(0, 2);
-    if (base === "br") return "fr";   // le breton n'a pas de bloc : texte français, encart posé par la barre
-    if (Object.keys(T).includes(base)) return base;
-  }}
-  return "en";
+  // Une seule détection, faite dans le <head> avant le premier pixel (24/11/2026).
+  const l = (typeof window.smLangue === "function") ? window.smLangue() : "en";
+  if (l === "bzh") return "fr";
+  return Object.keys(T).includes(l) ? l : "en";
 }}
 
 function appliquer(l) {{
@@ -1471,6 +1466,9 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
     except Exception as e:  # noqa: BLE001
         print(f"flux RSS non écrit : {e}")
     print(f"équilibre posé sur {poser_equilibre(SITE)} page(s)")
+    # Le détecteur passe en dernier : plusieurs pages (régates, chants, jeux, annonceurs) sont
+    # écrites plus loin dans la chaîne, et une page réécrite après lui perdait son bloc (24/11/2026).
+    print(f"détecteur de langue posé sur {poser_langue_partout()} page(s)")
     print(f"site écrit dans {SITE} — {len(list(SITE.rglob('*')))} entrées")
     liste = fichiers_a_publier()
     # `--page` ne recopie que la page demandée : recopier tout `cache/rhum/site` depuis un cron
@@ -1613,6 +1611,33 @@ liste.addEventListener('click',function(e){
   if(window.merManoeuvre(m)) dire(m.k);
 });
 })();</script>"""
+
+
+def poser_langue_partout() -> int:
+    """Le détecteur unique de langue dans le `<head>` de chaque page (24/11/2026).
+
+    Une seule fonction pour tout le site : `?lang=` → choix du visiteur → langues du navigateur →
+    anglais. Posée **dans la tête**, donc exécutée avant le premier pixel : le visiteur allemand voit
+    l'allemand d'emblée, sans le clignotement français → allemand qu'on avait avec treize détecteurs
+    recopiés qui tournaient chacun à la fin de leur page.
+
+    Idempotent : le bloc est encadré par deux marqueurs et remplacé à chaque construction, jamais
+    empilé. Les pages sans menu de langues (`carte.html`, `simulateur.html`) n'ont qu'un jeu de
+    textes français : leur poser un détecteur mettrait `lang="de"` sur du français — on les laisse.
+    """
+    bloc = "<!--langue-debut-->" + site_blocks.script_langue() + "<!--langue-fin-->"
+    fait = 0
+    for page in sorted(SITE.glob("*.html")):
+        html = page.read_text(encoding="utf-8")
+        avant = html
+        if "<!--langue-debut-->" in html:
+            html = re.sub(r"<!--langue-debut-->.*?<!--langue-fin-->", lambda m: bloc, html, count=1)
+        elif ('data-lang="fr"' in html or 'data-l="' in html) and re.search(r"<head[^>]*>", html):
+            html = re.sub(r"(<head[^>]*>)", lambda m: m.group(1) + bloc, html, count=1)
+        if html != avant:
+            page.write_text(html, encoding="utf-8")
+            fait += 1
+    return fait
 
 
 def poser_flux_partout() -> int:
@@ -1881,10 +1906,8 @@ def _script_langue_annonceurs() -> str:
     titre et la description suivent la langue à partir de `kit_titre` et `ann_intro`."""
     table = json.dumps(TEXTES, ensure_ascii=False)
     return ("<script>(function(){var T=" + table + ";"
-            "function choisir(){var f=null;try{f=localStorage.getItem('sm-langue')}catch(e){}"
-            "if(f&&f!=='auto'&&T[f])return f;"
-            "var p=(navigator.languages||[navigator.language||'en']).map(function(x){return String(x).toLowerCase()});"
-            "for(var i=0;i<p.length;i++){var b=p[i].slice(0,2);if(b==='br')return 'fr';if(T[b])return b}return 'en'}"
+            "function choisir(){var l=(typeof window.smLangue==='function')?window.smLangue():'en';"
+            "if(l==='bzh')return 'fr';return T[l]?l:'en'}"
             "var l=choisir();if(l==='fr')return;var d=T[l];document.documentElement.lang=l;"
             "document.querySelectorAll('[data-t]').forEach(function(el){var v=d[el.dataset.t];if(v)el.textContent=v});"
             "if(d.kit_titre)document.title=d.kit_titre+' \\u2014 Sailing More';"

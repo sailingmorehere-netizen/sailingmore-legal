@@ -345,16 +345,9 @@ def corps(x: dict, T: dict) -> str:
 <script>
 const T = {json.dumps(T, ensure_ascii=False, separators=(",", ":"))};
 function choisir() {{
-  let force = null;
-  try {{ force = localStorage.getItem("sm-langue"); }} catch (e) {{}}
-  if (force && force !== "auto" && T[force]) return force;
-  const pref = (navigator.languages || [navigator.language || "en"]).map(s => String(s).toLowerCase());
-  for (const p of pref) {{
-    const b = p.slice(0, 2);
-    if (b === "br") return "fr";
-    if (T[b]) return b;
-  }}
-  return "en";
+  const l = (typeof window.smLangue === "function") ? window.smLangue() : "en";
+  if (l === "bzh") return "fr";
+  return T[l] ? l : "en";
 }}
 function appliquer(l) {{
   const d = T[l] || T.en;

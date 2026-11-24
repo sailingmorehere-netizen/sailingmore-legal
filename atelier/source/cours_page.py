@@ -42,7 +42,10 @@ CHAPITRES = [
     {"id": "abordage", "schemas": [], "regles": ["col:5", "col:7", "col:8", "col:12", "col:13", "col:14",
                                                   "col:15", "col:16", "col:17", "col:18"]},
     {"id": "depart", "schemas": [], "regles": ["rrs:26", "rrs:29", "rrs:30", "rrs:28", "rrs:31"]},
-    {"id": "priorites", "schemas": ["10", "11", "12"],
+    # Le chapitre porte le simulateur : 50 situations qui font appliquer ce qui vient d'être lu
+    # (Nicolas, 24/11/2026 : « pour simulateur tu ranges ça dans la section cours »). Le simulateur
+    # reste une page à part entière (`simulateur.html`) ; celui du cours vient du même fichier.
+    {"id": "priorites", "a_simulateur": True, "schemas": ["10", "11", "12"],
      "regles": ["rrs:10", "rrs:11", "rrs:12", "rrs:13", "rrs:14", "rrs:15", "rrs:16", "rrs:17"]},
     {"id": "marques", "schemas": ["18", "44"], "regles": ["rrs:18", "rrs:19", "rrs:20", "rrs:44", "rrs:2"]},
     {"id": "securite", "schemas": [], "regles": ["rrs:1"]},
@@ -1035,6 +1038,26 @@ TEXTES["de"] = {
 
 # ── Rendu ──────────────────────────────────────────────────────────────────────────────────────────────
 CSS = """
+
+# Exercice du simulateur (24/11/2026), posé dans le chapitre des priorités. Le dessin vient de la
+# page `simulateur.html` : ici il prend la largeur de la colonne du cours, sur le fond de la page.
+.exo-sim{margin:1.6rem 0 .4rem;padding:1rem;border:1px solid rgba(226,58,62,.35);border-radius:.5rem;
+ background:rgba(10,26,43,.55)}
+.exo-sim .entete-sc{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;
+ font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;color:#9db2c6}
+.exo-sim .badge{padding:.1rem .5rem;border:1px solid rgba(157,178,198,.5);border-radius:1rem}
+.exo-sim #sim-scene,.exo-sim [id$="-scene"]{width:100%;max-width:34rem;margin:0 auto}
+.exo-sim svg{width:100%;height:auto;display:block}
+.exo-sim #sim-panneau,.exo-sim [id$="-panneau"]{max-width:34rem;margin:.6rem auto 0}
+.exo-sim .q{font-weight:600;margin:.9rem 0 .5rem}
+.exo-sim .rep{display:flex;gap:.5rem;flex-wrap:wrap}
+.exo-sim .rep button,.exo-sim .nav button{font:inherit;padding:.5rem .9rem;border-radius:.35rem;
+ border:1px solid rgba(238,243,247,.35);background:transparent;color:inherit;cursor:pointer}
+.exo-sim .rep button:hover,.exo-sim .nav button:hover{border-color:#e23a3e}
+.exo-sim .corr{margin-top:.7rem;padding:.6rem .8rem;border-left:3px solid #7ed6d6;background:rgba(126,214,214,.08)}
+.exo-sim .nav{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-top:.8rem}
+.exo-sim .score{margin-left:auto;font-size:.9rem;color:#9db2c6}
+.exo-sim .pied{font-size:.78rem;color:#9db2c6;margin-top:.8rem}
 body{margin:0;background:#071c31;color:#eef3f7;font-family:ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
 :root{--panneau:#0f2438;--ivoire:#eef3f7;--gris:#9db2c6;--rouge:#e23a3e}
 .page{max-width:48rem;margin:0 auto;padding:2rem 1.4rem 5rem}
@@ -1065,7 +1088,7 @@ a.haut-lien{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:v
 JS = """
 (function(){
   var L=__LANGUES__;
-  function auto(){var n=(navigator.language||"fr").slice(0,2);if(n==="br")return "fr";return L.indexOf(n)>=0?n:"en"}
+  function auto(){var l=(typeof window.smLangue==="function")?window.smLangue():"en";if(l==="bzh")l="fr";return L.indexOf(l)>=0?l:"en"}
   var s=null,a=true;
   try{s=localStorage.getItem("sm-langue")}catch(e){}
   if(L.indexOf(s)>=0){a=false}else{s=auto()}
@@ -1183,10 +1206,18 @@ def _chapitre(n: int, ch: dict, lang: str) -> str:
             items.append(f'<li>{puce}<b>{_e(titre)}</b> — {_txt(t["regles_texte"][k])}</li>')
         regles = f'<div class="regles"><h3>{_e(t["regles"])}</h3><ul>{"".join(items)}</ul></div>'
     schemas = _schemas(ch["schemas"], lang) if ch["schemas"] else ""
+    # L'exercice du simulateur, dans la langue du cours : 50 situations, dessinées ici même.
+    simu = ""
+    if ch.get("a_simulateur"):
+        try:
+            import simulateur_exercice  # noqa: PLC0415
+            simu = simulateur_exercice.exercice(f"sim-{lang}")
+        except Exception as e:  # noqa: BLE001
+            print(f"simulateur non posé dans le cours ({lang}) : {e}")
     exo = (f'<div class="exo"><h3>{_e(t["exo"])}</h3><p>{_txt(c["q"])}</p>'
            f'<details><summary>{_e(t["corr"])}</summary><p>{_txt(c["a"])}</p></details></div>')
     return (f'<section class="chap" id="ch{n}-{lang}"><h2><span class="no">{n}</span>{_e(_brut(c["t"]))}</h2>'
-            f'{corps}{regles}{schemas}{exo}'
+            f'{corps}{regles}{schemas}{simu}{exo}'
             f'<p><a class="haut-lien" href="#sommaire-{lang}">{_e(t["haut"])}</a></p></section>')
 
 

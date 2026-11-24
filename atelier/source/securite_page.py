@@ -90,8 +90,9 @@ UI = {
 JS = r"""
 (function(){
 var D=JSON.parse(document.getElementById('se-donnees').textContent),L='fr';
-function choisir(){var v='auto';try{v=localStorage.getItem('sm-langue')||'auto'}catch(e){}
-  if(v==='auto'){v=(navigator.language||'fr').slice(0,2);if(v==='br')v='fr'}return D.ui[v]?v:'en'}
+/* Une seule détection pour tout le site, faite dans le <head> (24/11/2026). */
+function choisir(){var v=(typeof window.smLangue==='function')?window.smLangue():'en';
+  if(v==='bzh')v='fr';return D.ui[v]?v:'en'}
 function t(k){return (D.ui[L]||D.ui.en)[k]||D.ui.fr[k]||k}
 function tx(v){if(v&&typeof v==='object'){return v[L]||v.en||v.fr||''}return v||''}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}

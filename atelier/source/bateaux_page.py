@@ -688,7 +688,8 @@ JS = r"""
 
   function stocke(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function range(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
-  function auto(){ var n = (navigator.language || 'fr').slice(0,2); if(n === 'br') return 'fr'; return L.indexOf(n) >= 0 ? n : 'en'; }
+  /* Une seule détection pour tout le site, dans le <head> (24/11/2026). */
+  function auto(){ var l = (typeof window.smLangue === 'function') ? window.smLangue() : 'en'; if(l === 'bzh') l = 'fr'; return L.indexOf(l) >= 0 ? l : 'en'; }
   function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function idx(){ return L.indexOf(etat.lang); }
   function u(k){ return UI[etat.lang][k]; }

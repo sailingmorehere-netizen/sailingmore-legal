@@ -556,6 +556,68 @@ BALISE_LANG = {"bzh": "br"}
 # l'encart. Vide aujourd'hui : déclarer une traduction qui est du français fabriquerait un doublon.
 PAGES_BZH: set[str] = set()
 
+# ── LE DÉTECTEUR UNIQUE DE LANGUE (24/11/2026) ──────────────────────────────────────────────────
+# Nicolas : « le détecteur auto pour la langue doit être auto ». Il existait déjà, recopié dans treize
+# générateurs avec treize règles : `stages_page` mémorisait sous la clé `lang`, `bateaux_page` et
+# `cours_page` ne lisaient que `navigator.language`, le repli était tantôt `en` tantôt `fr`.
+# Ici, une seule fonction, posée dans le `<head>` de chaque page par `poser_langue_partout()`.
+# Les pages ne détectent plus rien : elles appellent `window.smLangue()`.
+#
+# Ordre : `?lang=` → choix mémorisé (`sm-langue`) → `navigator.languages` dans l'ordre → **anglais**.
+# Jamais le français en repli : le marché est l'Europe. Le code régional est ramené (de-AT → de,
+# fr-CH → fr, pt-BR → pt, nb/nn → no). `br` (breton du navigateur) donne l'interface bretonne `bzh`.
+# Elle tourne avant le premier pixel : les textes de toutes les langues sont déjà dans le HTML, seul
+# l'affichage change — donc aucun clignotement français → allemand.
+ALIAS_LANGUE = {"nb": "no", "nn": "no", "iw": "he", "in": "id", "ji": "yi", "jw": "jv",
+                "mo": "ro", "sh": "hr", "tl": "fil"}
+
+
+def script_langue() -> str:
+    """Le `<script>` du détecteur, à poser une seule fois dans le `<head>`. Idempotent par son id."""
+    langues = json.dumps(LANGUES)
+    alias = json.dumps(ALIAS_LANGUE)
+    return """<script id="sm-langue-detecteur">
+(function(){
+  var L = __LANGUES__, ALIAS = __ALIAS__;
+  function lu(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function ec(k,v){ try{ if(v===null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){} }
+  function base(c){ c = String(c||'').toLowerCase().replace(/_/g,'-'); var b = c.split('-')[0]; return ALIAS[b]||b; }
+  function connue(b){ return b === 'bzh' || L.indexOf(b) >= 0; }
+  /* Le choix d'une langue, mémorisé pour toutes les pages. Le breton garde le texte français. */
+  function retenir(v){
+    if(v === 'auto'){ ec('sm-bzh', null); ec('sm-langue', 'auto'); }
+    else if(v === 'bzh'){ ec('sm-bzh', '1'); ec('sm-langue', 'fr'); }
+    else { ec('sm-bzh', null); ec('sm-langue', v); }
+  }
+  window.smLangue = function(){
+    /* 1. l'adresse demandée */
+    var q = null; try{ q = new URLSearchParams(location.search).get('lang'); }catch(e){}
+    if(q){ var b = base(q); if(connue(b)){ retenir(b); return b; } }
+    /* 2. le choix du visiteur, s'il en a fait un */
+    var v = lu('sm-langue');
+    if(v && v !== 'auto' && connue(v)) return (v === 'fr' && lu('sm-bzh') === '1') ? 'bzh' : v;
+    /* 3. les langues du navigateur, dans l'ordre */
+    var p = navigator.languages || (navigator.language ? [navigator.language] : []);
+    for(var i = 0; i < p.length; i++){
+      var x = base(p[i]);
+      if(x === 'br') return 'bzh';            /* breton du navigateur : interface bretonne */
+      if(L.indexOf(x) >= 0) return x;
+    }
+    /* 4. l'anglais, jamais le français */
+    return 'en';
+  };
+  window.smChoisirLangue = function(v){ retenir(v); };
+  window.SM_LANGUES = L;
+  /* Avant le premier pixel : la langue retenue dans l'attribut, pour le CSS et pour les pages. */
+  try{
+    var retenu = window.smLangue();
+    document.documentElement.setAttribute('data-sm-langue', retenu);
+    if(retenu !== 'bzh') document.documentElement.setAttribute('lang', retenu);
+  }catch(e){}
+})();
+</script>""".replace("__LANGUES__", langues).replace("__ALIAS__", alias)
+
+
 
 def hreflang_bzh(page: str, url_base: str = "https://sailingmore.fr/") -> str:
     """La ligne `<link rel="alternate" hreflang="br">` d'une page, ou rien si le breton n'y existe pas."""
@@ -610,24 +672,18 @@ _LANGUE_JS = """<script>
      français (clé `sm-langue` = fr, que les pages savent lire) et pose un drapeau `sm-bzh`. Ce script
      ajoute alors l'encart, garde `lang="br"` (le code IANA ; « bzh » n'y est pas) et la pastille BZH.
      `?lang=xx` choisit la langue avant que les scripts des pages ne la lisent. */
-  var SIX = ["fr","en","it","es","pt","de"];
+  var SIX = __LANGUES__;
   function st(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function ec(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
-  try{
-    var q = new URLSearchParams(location.search).get("lang");
-    if(q === "bzh"){ ec("sm-bzh", "1"); ec("sm-langue", "fr"); }
-    else if(q && SIX.indexOf(q) >= 0){ ec("sm-bzh", null); ec("sm-langue", q); }
-  }catch(e){}
+  /* Plus aucune détection ici : le socle l'a faite dans le <head>, avant le premier pixel
+     (24/11/2026, une seule règle pour tout le site). `?lang=` et le choix du visiteur y sont déjà
+     rangeés sous `sm-langue`. */
+  var LANGUES = (typeof window !== "undefined" && window.SM_LANGUES) || SIX;
   function bzh(){
-    var f = st("sm-langue");
-    if(f && f !== "auto") return st("sm-bzh") === "1";
-    var p = (navigator.languages || [navigator.language || "en"]);   /* « br » du navigateur = bzh */
-    for(var i = 0; i < p.length; i++){
-      var b = String(p[i]).toLowerCase().slice(0, 2);
-      if(b === "br") return true;
-      if(SIX.indexOf(b) >= 0) return false;
-    }
-    return false;
+    var l = (typeof window.smLangue === "function") ? window.smLangue() : null;
+    if(l === "bzh") return true;
+    if(l) return false;                       /* une langue choisie l'emporte sur le drapeau */
+    return st("sm-bzh") === "1";
   }
   function encart(){
     var e = document.getElementById("encart-bzh"), actif = bzh();
@@ -693,6 +749,9 @@ _LANGUE_JS = """<script>
 
 })();
 </script>"""
+
+# La liste voyage avec le script : une seule source (LANGUES), jamais recopiée (24/11/2026).
+_LANGUE_JS = _LANGUE_JS.replace("__LANGUES__", json.dumps(LANGUES))
 
 
 def selecteur_langue(langues: list[str], auto: bool = True) -> str:
