@@ -1,4 +1,43 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Équivalences des diplômes de voile — Sailing More</title><meta name="description" content="Ce stage RYA en Grèce mène à quel niveau FFVoile, SKS ou ICC ? Chaque correspondance de cette page vient d&#x27;un document officiel, cité en lien, et a été relue par un moniteur avant d&#x27;être publiée."><meta name="robots" content="noindex,nofollow"><style>
+<!doctype html><html lang="fr"><head><!--langue-debut--><script id="sm-langue-detecteur">
+(function(){
+  var L = ["fr", "en", "it", "es", "pt", "de"], ALIAS = {"nb": "no", "nn": "no", "iw": "he", "in": "id", "ji": "yi", "jw": "jv", "mo": "ro", "sh": "hr", "tl": "fil"};
+  function lu(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function ec(k,v){ try{ if(v===null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){} }
+  function base(c){ c = String(c||'').toLowerCase().replace(/_/g,'-'); var b = c.split('-')[0]; return ALIAS[b]||b; }
+  function connue(b){ return b === 'bzh' || L.indexOf(b) >= 0; }
+  /* Le choix d'une langue, mémorisé pour toutes les pages. Le breton garde le texte français. */
+  function retenir(v){
+    if(v === 'auto'){ ec('sm-bzh', null); ec('sm-langue', 'auto'); }
+    else if(v === 'bzh'){ ec('sm-bzh', '1'); ec('sm-langue', 'fr'); }
+    else { ec('sm-bzh', null); ec('sm-langue', v); }
+  }
+  window.smLangue = function(){
+    /* 1. l'adresse demandée */
+    var q = null; try{ q = new URLSearchParams(location.search).get('lang'); }catch(e){}
+    if(q){ var b = base(q); if(connue(b)){ retenir(b); return b; } }
+    /* 2. le choix du visiteur, s'il en a fait un */
+    var v = lu('sm-langue');
+    if(v && v !== 'auto' && connue(v)) return (v === 'fr' && lu('sm-bzh') === '1') ? 'bzh' : v;
+    /* 3. les langues du navigateur, dans l'ordre */
+    var p = navigator.languages || (navigator.language ? [navigator.language] : []);
+    for(var i = 0; i < p.length; i++){
+      var x = base(p[i]);
+      if(x === 'br') return 'bzh';            /* breton du navigateur : interface bretonne */
+      if(L.indexOf(x) >= 0) return x;
+    }
+    /* 4. l'anglais, jamais le français */
+    return 'en';
+  };
+  window.smChoisirLangue = function(v){ retenir(v); };
+  window.SM_LANGUES = L;
+  /* Avant le premier pixel : la langue retenue dans l'attribut, pour le CSS et pour les pages. */
+  try{
+    var retenu = window.smLangue();
+    document.documentElement.setAttribute('data-sm-langue', retenu);
+    if(retenu !== 'bzh') document.documentElement.setAttribute('lang', retenu);
+  }catch(e){}
+})();
+</script><!--langue-fin--><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Équivalences des diplômes de voile — Sailing More</title><meta name="description" content="Ce stage RYA en Grèce mène à quel niveau FFVoile, SKS ou ICC ? Chaque correspondance de cette page vient d&#x27;un document officiel, cité en lien, et a été relue par un moniteur avant d&#x27;être publiée."><meta name="robots" content="noindex,nofollow"><style>
 :root{--fond:#0a1a2b;--carte:#0f2438;--trait:#1d3549;--encre:#e8eef5;--doux:#9db2c7;--rouge:#e23a3e}
 *{box-sizing:border-box}
 body{margin:0;background:var(--fond);color:var(--encre);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
