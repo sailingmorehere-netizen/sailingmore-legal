@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """Seul écrivain de site/sitemap.xml (règle 7, 25/11/2026).
 
-Appelé par `accueil_site.sortir_le_site` ; aucun autre script n'écrit le sitemap.
+Appelé par `accueil_site.sortir_le_site` (construction) puis par `publier_atelier.publier` sur le
+miroir `cache/rhum/site`, une fois les fichiers fusionnés : le sitemap décrit ce qui est publié, et
+certaines pages (`carte.html`, `stories/`) ne naissent pas dans l'atelier. Même fonction, même
+écrivain ; aucun autre script n'écrit le sitemap.
 - une page est déclarée dès que le fichier existe et ne porte pas `noindex` — y compris les pages
   datées (`stories/`) et les pages légales ; aucune liste fermée, sinon le sitemap retarde sur le site ;
 - `lastmod` = date de modification du fichier, jamais la date du jour ;
