@@ -7,6 +7,7 @@
 <style>
   html,body{margin:0;background:#ece4d6;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 </style>
+<link rel="canonical" href="https://sailingmore.fr/carte.html">
   <link rel="alternate" type="application/rss+xml" title="Sailing More" href="https://sailingmore.fr/feed.xml">
 <style id="equilibre">
 /* Rééquilibrage design — 20/11/2026. Posé en dernier dans chaque page : il l'emporte sur les styles d'origine. */
@@ -148,7 +149,7 @@ body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:fl
      français (clé `sm-langue` = fr, que les pages savent lire) et pose un drapeau `sm-bzh`. Ce script
      ajoute alors l'encart, garde `lang="br"` (le code IANA ; « bzh » n'y est pas) et la pastille BZH.
      `?lang=xx` choisit la langue avant que les scripts des pages ne la lisent. */
-  var SIX = ["fr", "en", "it", "es", "pt", "de"];
+  var SIX = ["fr", "en", "de", "it", "es", "pt"];
   function st(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function ec(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
   /* Plus aucune détection ici : le socle l'a faite dans le <head>, avant le premier pixel
