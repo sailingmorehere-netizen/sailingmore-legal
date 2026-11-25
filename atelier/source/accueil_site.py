@@ -1255,7 +1255,7 @@ def fichiers_a_publier() -> list[str]:
     # `carte.html` est une page du site comme les autres : elle part avec elles, sinon le fichier
     # publié reste celui d'hier (23/11/2026, la carte à deux modes).
     pages = [n for n in ("index.html", "carte.html", "jeux.html", "annonceurs.html", "merci.html",
-                         "regates.html", "regles-de-course.html", "lexique.html", "stages.html",
+                         "regates.html", "regles-de-course.html", "lexique.html", "stages.html", "comparatif-stages.html",
                          "equivalences.html", "cours.html", "bateaux.html", "bateaux.json", "stages-proches.json", "404.html", "mentions-legales.html",
                          "confidentialite.html", "delete.html", "sitemap.xml", "feed.xml")
              if (SITE / n).exists()]
@@ -1384,6 +1384,12 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         print(f"stages et cours : {stages_page.ecrire_page(SITE)} offre(s) publiable(s)")
     except Exception as e:  # noqa: BLE001
         print(f"stages et cours non écrits : {e}")
+    # Comparatif des stages (tâche n°70, 25/11/2026) : mêmes données que stages.html, lues par le même module.
+    try:
+        import comparatif_stages_page
+        print(f"comparatif des stages : {comparatif_stages_page.ecrire_page(SITE)} offre(s) comparée(s)")
+    except Exception as e:  # noqa: BLE001
+        print(f"comparatif des stages non écrit : {e}")
     # Équivalences des diplômes (23/11/2026) : même chemin ; equivalences_page.py est la source unique.
     # Seules les lignes validées par Nicolas et sourcées sont publiées ; l'aperçu (non publié) montre tout.
     try:

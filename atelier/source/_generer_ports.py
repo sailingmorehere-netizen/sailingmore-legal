@@ -34,7 +34,7 @@ n_fiches = sum(1 for d in data if d[6] >= SEUIL_FICHE)
 js = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
 noms = json.dumps({p: NOMS.get(p, p.capitalize()) for p in pays_list}, ensure_ascii=False)
 
-titre = 'Ports du monde et marinas : carte et annuaire | Sailing More'
+titre = 'Ports et marinas du monde : carte et annuaire | Sailing More'
 # Audit SEO du 24/11/2026, correction 4 : texte de l'audit, le nombre vient de `total` (la base des ports).
 desc = ('%d ports, marinas et mouillages (OpenStreetMap) : cherchez par nom ou par pays, voyez la carte '
         'et calculez la distance entre deux ports.' % total)

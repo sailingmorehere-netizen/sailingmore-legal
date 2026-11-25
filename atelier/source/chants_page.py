@@ -146,9 +146,7 @@ function choisir(){
   try{var q=new URLSearchParams(location.search).get('lang');if(q&&SIX.indexOf(q)>=0)return q}catch(e){}
   var v='auto';try{v=localStorage.getItem('sm-langue')||'auto'}catch(e){}
   if(v!=='auto')return SIX.indexOf(v)>=0?v:'fr';
-  var p=navigator.languages||[navigator.language||'en'];
-  for(var i=0;i<p.length;i++){var b=String(p[i]).toLowerCase().slice(0,2);if(b==='br')return 'fr';if(SIX.indexOf(b)>=0)return b}
-  return 'en'}
+  return 'fr'}
 function pick(o){return (o&&(o[L]||o.en||o.fr))||''}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function fmt(s){if(!isFinite(s))return '–:––';var m=Math.floor(s/60),x=Math.floor(s%60);return m+':'+(x<10?'0':'')+x}
@@ -379,8 +377,9 @@ def construire(d: dict) -> str:
                "langueNoms": d["langueNoms"], "chants": d["chants"]}
     brut = json.dumps(donnees, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     # hreflang : six langues + x-default ; `br` seulement quand la page est traduite et relue (PAGES_BZH).
-    alternates = f'<link rel="alternate" hreflang="fr" href="{URL}/{PAGE}">' + "".join(
-        f'<link rel="alternate" hreflang="{l}" href="{URL}/{PAGE}?lang={l}">' for l in LANGUES if l != "fr")
+    # Audit SEO du 24/11/2026, correction 7 : les hreflang `?lang=` sont retirés (même HTML, canonique vers le
+    # français : Google les ignore). Ils reviendront avec de vraies adresses par langue.
+    alternates = f'<link rel="alternate" hreflang="fr" href="{URL}/{PAGE}">'
     alternates += site_blocks.hreflang_bzh(PAGE, URL + "/") + f'<link rel="alternate" hreflang="x-default" href="{URL}/{PAGE}">'
     n = len(d["chants"])
     # Audit SEO du 24/11/2026, correction 4 : titre de l'audit ; la description garde le nombre réel de chants

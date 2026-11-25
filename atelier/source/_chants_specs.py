@@ -252,6 +252,25 @@ SPECS = [
  ("voice-of-her-i-love", "The Voice of Her I Love", "melancolique", W, [(4972, 4982)], [],
   "Une série de vrais chants de mer serait incomplète sans la chanson sentimentale, chère au vieux marin, qui ne parlait pas forcément de la mer ; Whall la juge de plus de mérite que la plupart.",
   "A sentimental song, dear to the old-time sailor, which did not necessarily contain any allusions to the sea; Whall thinks it has more merit than most."),
+ # ------------------------------------------------------------------ ajouts du 25/11/2026 (2e passe) : Smith et Whall
+ ("old-storm-along", "Old Storm Along", "virer", S, [(1970, 1971), (1979, 1984)], [],
+  "Grand favori, souvent chanté après un coup de vent ; Smith le distingue de « O Long Storm, storm along, Stormy », chant de halage. Chaque vers est répété, et la gravité du chant avec ses paroles pour rire rappelle « La Mort de Cock Robin ».",
+  "A great favourite, often sung after a gale of wind; Smith keeps it apart from the hauling chanty 'O Long Storm, storm along, Stormy'. Each line is repeated twice."),
+ ("so-handy-my-girls", "So Handy, My Girls", "hisser", S, [(2010, 2015)], [],
+  "Chant de halage où le mot « handy » donne à chaque reprise le signal d'une longue traction, forte et unanime de tout l'équipage.",
+  "In this hauling chorus the word 'handy' is the signal, at each repetition, for a long pull, a strong pull, and a pull all together."),
+ ("tommys-gone-to-hilo", "Tommy's Gone to Hilo", "hisser", S, [(3037, 3055), (3068, 3078)], [],
+  "Un des chants de style mélancolique, au long refrain traînant ; chaque vers est répété, et la traction se fait sur le mot « Hilo ».",
+  "One of the mournful style of chanties, with a very long dragging chorus; the lines are repeated every time and the pull is made on the word 'Hilo'."),
+ ("south-australia", "South Australia", "virer", S, [(4148, 4215)], [4167, 4168, 4169, 4170],
+  "Chant de cabestan dont Smith tient l'air d'un marin de couleur du « Home » ; il en donne les couplets mot pour mot, avec les croix de la mesure que le chanteur y avait notées.",
+  "A capstan song; Smith had the melody from a coloured seaman at the 'Home', together with a verbatim copy of his verses."),
+ ("a-yankee-ship", "A Yankee Ship", "hisser", S, [(3408, 3460)], [3424, 3425, 3426, 3427],
+  "Appelé aussi « Blow, boys, blow » : l'air est le même sous les deux titres, et il est toujours attribué à l'Amérique ; les couplets varient par les personnages, jamais par le lieu.",
+  "Whether known as 'A Yankee Ship' or 'Blow, boys, blow', the tune is the same and is always fathered on America; the verses vary in the characters, not in the locale."),
+ ("st-helena-soldier", "St. Helena Soldier", "hisser", W, [], [],
+  "Shanty populaire pour les derniers coups de « sweating-up », que Whall n'a jamais vu imprimé ; « bleeding » était alors l'euphémisme de « bloody », comme « blooming » aujourd'hui.",
+  "A popular shanty for last sweating-up hauls which Whall had never seen in print; 'bleeding' used to be euphonious for 'bloody', as 'blooming' is now."),
 ]
 
 # lignes de l'OCR qui prolongent la ligne précédente (retour à la ligne de la colonne du livre) : jointes, jamais réécrites
@@ -264,7 +283,11 @@ JOHNNY_BOKER = "\n\n".join(f"Oh do my Johnny Boker,\n{v}\nDo my Johnny, etc." fo
     "The skipper is a rover.", "The mate he's never sober.", "The Bo'sun is a tailor.", "We'll all go on a jamboree.",
     "The Packet is a rollin'.", "We'll pull and haul together.", "We'll haul for better weather.",
     "And soon we'll be in London Town.", "Come rock and roll me over."))
-MANUEL = {"johnny-boker": JOHNNY_BOKER}
+# St. Helena Soldier (Whall) : syllabes de la portée (« Hel-e-na », « sol-dier ») recollées, rien d'autre
+ST_HELENA = ("You stole my boots, you Saint Helena soldier. . . You stole my boots. Ha! ha!\n"
+             "\"You stole my boots so early in the morning,\" &c.\n\n"
+             "My bleedin' fancy man, he's a R'yl Artil'ry man—he wears spurs.")
+MANUEL = {"johnny-boker": JOHNNY_BOKER, "st-helena-soldier": ST_HELENA}
 # raison du manque, par chant (sinon : la mention générique « notés sous la portée »)
 RAISON = {
  "sally-racket": "paroles complètes du texte imprimé", "pay-me-the-money-down": "paroles partielles : des lignes manquent dans le scan",
@@ -279,8 +302,11 @@ RAISON = {
  "bully-boat": "paroles partielles : trois couplets lisibles, le reste est illisible dans le scan",
  "hilonday": "paroles partielles : couplets 2 à 7 ; le premier est noté sous la portée",
  "voice-of-her-i-love": "paroles partielles : couplet 2 ; le premier est noté sous la portée",
+ "so-handy-my-girls": "paroles partielles : le refrain seul, le livre ne donne pas de couplets de soliste",
+ "a-yankee-ship": "paroles partielles : un couplet omis (terme injurieux, non reproduit)",
+ "st-helena-soldier": "paroles partielles : trois lignes lisibles, le reste est noté sous la portée",
 }
-COMPLETS_AJOUTS = {"sally-racket", "home-dearie-home"}
+COMPLETS_AJOUTS = {"sally-racket", "home-dearie-home", "old-storm-along", "tommys-gone-to-hilo", "south-australia"}
 
 # livre -> (fichier, intitulé court, année du livre, URL de la numérisation)
 LIVRES = {
@@ -290,7 +316,9 @@ LIVRES = {
  S: ("musicofwaterscol00smituoft.txt", "Smith, The Music of the Waters (1888)", "1888", "https://archive.org/details/musicofwaterscol00smituoft"),
 }
 PAGES_SMITH = {"handy-jim": "pp. 52-53", "ved-balasthjoning": "p. 220", "sally-racket": "pp. 22-23", "pay-me-the-money-down": "pp. 23-24",
-               "home-dearie-home": "pp. 25-26", "john-brown": "pp. 40-41", "plains-of-mexico": "p. 47", "heave-away-my-johnny": "pp. 55-56"}
+               "home-dearie-home": "pp. 25-26", "john-brown": "pp. 40-41", "plains-of-mexico": "p. 47", "heave-away-my-johnny": "pp. 55-56",
+               "old-storm-along": "pp. 16-17", "so-handy-my-girls": "p. 17", "tommys-gone-to-hilo": "pp. 33-34",
+               "south-australia": "pp. 49-50", "a-yankee-ship": "pp. 38-39"}
 
 # numéro du chant dans le livre (Terry) et pages certaines (lues dans la table des matières propre)
 NUMERO = {"bound-rio-grande": (2, 4), "wild-goose-shanty": (12, 26), "drunken-sailor": (14, 30), "good-morning-ladies": (18, 38),

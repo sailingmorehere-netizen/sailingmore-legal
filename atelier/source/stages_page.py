@@ -45,22 +45,22 @@ NIVEAUX = stages_niveaux.NIVEAUX
 LIBELLES_NIVEAU = {
     "fr": {"decouverte": "Découverte", "equipier": "Équipier", "chef-de-bord": "Chef de bord",
            "hauturier": "Hauturier", "moniteur": "Moniteur", "certif": "Certification",
-           "equivalences": "Équivalences des diplômes de voile →"},
+           "equivalences": "Équivalences des diplômes de voile →", "comparatif": "Comparer les stages par prix au jour →"},
     "en": {"decouverte": "Discovery", "equipier": "Crew", "chef-de-bord": "Skipper",
            "hauturier": "Offshore", "moniteur": "Instructor", "certif": "Certification",
-           "equivalences": "Sailing qualification equivalences →"},
+           "equivalences": "Sailing qualification equivalences →", "comparatif": "Compare courses by price per day →"},
     "it": {"decouverte": "Scoperta", "equipier": "Equipaggio", "chef-de-bord": "Skipper",
            "hauturier": "Altura", "moniteur": "Istruttore", "certif": "Certificazione",
-           "equivalences": "Equivalenze dei brevetti di vela →"},
+           "equivalences": "Equivalenze dei brevetti di vela →", "comparatif": "Confronta i corsi per prezzo al giorno →"},
     "es": {"decouverte": "Descubrimiento", "equipier": "Tripulante", "chef-de-bord": "Patrón",
            "hauturier": "Altura", "moniteur": "Instructor", "certif": "Certificación",
-           "equivalences": "Equivalencias de titulaciones de vela →"},
+           "equivalences": "Equivalencias de titulaciones de vela →", "comparatif": "Comparar cursos por precio al día →"},
     "pt": {"decouverte": "Descoberta", "equipier": "Tripulante", "chef-de-bord": "Skipper",
            "hauturier": "Oceano", "moniteur": "Instrutor", "certif": "Certificação",
-           "equivalences": "Equivalências de cartas de vela →"},
+           "equivalences": "Equivalências de cartas de vela →", "comparatif": "Comparar cursos por preço por dia →"},
     "de": {"decouverte": "Schnuppern", "equipier": "Crew", "chef-de-bord": "Skipper",
            "hauturier": "Hochsee", "moniteur": "Ausbilder", "certif": "Zertifikat",
-           "equivalences": "Gleichwertigkeit von Segelscheinen →"},
+           "equivalences": "Gleichwertigkeit von Segelscheinen →", "comparatif": "Kurse nach Tagespreis vergleichen →"},
 }
 
 
@@ -301,6 +301,8 @@ def _html(d: dict) -> str:
              + carte_epreuves.html() +
              "<p class=\"compte\" id=\"compte\" role=\"status\" aria-live=\"polite\"></p><div class=\"liste\" id=\"liste\"></div>"
              f"<p class=\"pied\" data-t=\"pied\">{H.escape(UI['fr']['pied'])}</p>"
+             f"<p class=\"pied\"><a href=\"comparatif-stages.html\" data-t=\"comparatif\">"
+             f"{H.escape(LIBELLES_NIVEAU['fr']['comparatif'])}</a></p>"
              f"<p class=\"pied\"><a href=\"equivalences.html\" data-t=\"equivalences\">"
              f"{H.escape(LIBELLES_NIVEAU['fr']['equivalences'])}</a></p>"
              "</main>"

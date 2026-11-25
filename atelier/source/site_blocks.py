@@ -1859,7 +1859,7 @@ CSS = """
 .plis>summary{cursor:pointer;list-style:none;padding:.9rem 0;font-size:.7rem;letter-spacing:.14em;
   text-transform:uppercase;color:rgba(238,241,244,.72)}
 .plis>summary::-webkit-details-marker{display:none}
-.plis>summary::after{content:"+";float:right;color:#e23a3e;font-size:.9rem;letter-spacing:0}
+.plis>summary::after{content:"+";float:right;color:#f05a5e;font-size:.9rem;letter-spacing:0}
 .plis[open]>summary::after{content:"–"}
 .plis>summary:hover{color:#fff}
 .hors-titre{margin:2rem 0 .4rem;font-size:.9rem;letter-spacing:.14em;text-transform:uppercase;
@@ -1895,7 +1895,7 @@ CSS = """
 .plis>summary{cursor:pointer;list-style:none;padding:.9rem 0;font-size:.7rem;letter-spacing:.14em;
   text-transform:uppercase;color:rgba(238,241,244,.72)}
 .plis>summary::-webkit-details-marker{display:none}
-.plis>summary::after{content:"+";float:right;color:#e23a3e;font-size:.9rem;letter-spacing:0}
+.plis>summary::after{content:"+";float:right;color:#f05a5e;font-size:.9rem;letter-spacing:0}
 .plis[open]>summary::after{content:"–"}
 .plis>summary:hover{color:#fff}
 .hors-titre{margin:2rem 0 .4rem;font-size:.9rem;letter-spacing:.14em;text-transform:uppercase;

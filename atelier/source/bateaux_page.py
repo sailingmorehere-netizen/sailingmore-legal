@@ -685,7 +685,7 @@ JS = r"""
 
   function stocke(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function range(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
-  function auto(){ var n = (navigator.language || 'fr').slice(0,2); if(n === 'br') return 'fr'; return L.indexOf(n) >= 0 ? n : 'en'; }
+  function auto(){ return 'fr'; }
   function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function idx(){ return L.indexOf(etat.lang); }
   function u(k){ return UI[etat.lang][k]; }

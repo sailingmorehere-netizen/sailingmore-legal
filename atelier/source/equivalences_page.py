@@ -163,7 +163,7 @@ JS = r"""
 (function(){
 var D=JSON.parse(document.getElementById('eq-donnees').textContent),L='fr';
 function choisir(){var v='auto';try{v=localStorage.getItem('sm-langue')||'auto'}catch(e){}
-  if(v==='auto'){v=(navigator.language||'fr').slice(0,2);if(v==='br')v='fr'}return D.ui[v]?v:'en'}
+  if(v==='auto'){v='fr'}return D.ui[v]?v:'fr'}
 function t(k){return (D.ui[L]||D.ui.en)[k]||D.ui.fr[k]||k}
 function tx(v){if(v&&typeof v==='object'){return v[L]||v.en||v.fr||''}return v||''}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}

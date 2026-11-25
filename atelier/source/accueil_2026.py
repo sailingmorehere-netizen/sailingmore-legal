@@ -222,7 +222,7 @@ def _svg(nom: str) -> str:
 
 CSS = """
 .tete{max-width:62rem;margin:0 auto;padding:2.4rem 1.4rem 1.6rem;text-align:left}
-.tete .marque{margin:0 0 .6rem;font-size:.78rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#e23a3e}
+.tete .marque{margin:0 0 .6rem;font-size:.78rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#f05a5e}
 .tete h1{display:block;font-size:clamp(1.7rem,5.6vw,2.9rem);line-height:1.08;letter-spacing:-.02em;text-transform:none;
   font-weight:800;max-width:40rem;text-wrap:balance}
 .tete .sous{margin:.8rem 0 0;color:#9db2c6;font-size:.95rem}

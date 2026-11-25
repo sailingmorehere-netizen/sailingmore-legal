@@ -18,7 +18,7 @@ from _chants_specs import JOINS, MANUEL, RAISON, COMPLETS_AJOUTS  # noqa: E402
 ECARTS = {"home-dearie-home": 5}   # écart de lignes OCR qui sépare deux couplets (3 par défaut)
 
 COUPURES = {"pen-", "thou-"}   # mots coupés en fin de ligne dans le livre (pen-non, thou-sand), recollés
-ENTETE = re.compile(r"OF THE W\s?[A-Z]\s?[A-Z]", re.I)   # « Music of the Waters » : titre courant de Smith, pas un vers
+ENTETE = re.compile(r"OF THE W\s?[A-Z]\s?[A-Z]")   # titre courant de Smith, en capitales dans l'OCR ; sensible à la casse : « think of the wife » est un vers
 
 SRC = RACINE / "cache/chants/src"
 JSON_F = RACINE / "projets/sailingmore/chants-de-marin.json"
@@ -38,7 +38,7 @@ BRUIT = [(r"\}", ""), (r"\bQO\b", "O"), (r"\bOQ\b", "O"), (r"\b0'", "o'"), (r"\(
          (r"oh\*\.", "oh."), (r"^1 For it blows", "For it blows"), (r"\bpen-non\b", "pennon"), (r"(?<=Scott,) 1$", ""),
          (r"(?<=mail\.\") 2$", ""), (r"(?<=meal\.) 3$", ""), (r", luna\)$", ","), (r"\s*\|\s*\(twice$", ""),
          (r"^%\s+", ""), (r"hundied", "hundred"), (r"thefosey", "the Josey"), (r"^Chorus\s+(?=\w)", ""),
-         (r"^Solo & Chorus\.\s*", ""), (r"^,\s*\d{1,2}\.\s+", ""), (r"\bete\.$", "etc."), (r"^I\.\s+", ""), (r"^\d{1,2}\.\s+(?=King Louis)", "")]
+         (r"^Solo & Chorus\.\s*", ""), (r"^So[/lI1]o\.\s*", ""), (r"^Solo\.\s+(?=South Australia is)", ""), (r"^,\s*\d{1,2}\.\s+", ""), (r"\bete\.$", "etc."), (r"^I\.\s+", ""), (r"^\d{1,2}\.\s+(?=King Louis)", "")]
 
 
 def nettoyer(t: str, livre: str):

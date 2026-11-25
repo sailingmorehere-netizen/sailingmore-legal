@@ -101,7 +101,7 @@ def fond_svg() -> str:
 
 
 def html(titre_id: str = "carte-titre") -> str:
-    return ('<div class="carte-regates"><h2 id="' + titre_id + '" class="etiq"></h2>'
+    return ('<div class="carte-regates"><h2 id="' + titre_id + '" class="etiq">Les épreuves sur la carte</h2>'
             '<svg id="carte-svg" viewBox="0 0 360 180" role="group" aria-label="Carte"></svg>'
             '<button class="carte-reset" id="carte-reset" type="button" hidden></button>'
             '<p class="carte-info" id="carte-info" role="status" aria-live="polite"></p>'
