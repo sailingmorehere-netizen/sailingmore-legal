@@ -2,7 +2,8 @@
 """Seul écrivain de site/sitemap.xml (règle 7, 25/11/2026).
 
 Appelé par `accueil_site.sortir_le_site` ; aucun autre script n'écrit le sitemap.
-- une page est déclarée si le fichier existe et ne porte pas `noindex` ;
+- une page est déclarée dès que le fichier existe et ne porte pas `noindex` — y compris les pages
+  datées (`stories/`) et les pages légales ; aucune liste fermée, sinon le sitemap retarde sur le site ;
 - `lastmod` = date de modification du fichier, jamais la date du jour ;
 - ni `changefreq` ni `priority` ;
 - les blocs `image:image` déjà posés (accueil, bateaux) sont conservés.
@@ -17,7 +18,7 @@ from datetime import datetime
 from pathlib import Path
 
 URL = "https://sailingmore.fr"
-# Ordre du sitemap. `index.html` -> « / ». equivalences.html : absente tant qu'elle est noindex (page vide).
+# Ordre du sitemap (l'ordre seul, pas le droit d'y figurer : c'est `noindex` qui exclut).
 PAGES = ["index.html", "cours.html", "lexique.html", "regles-de-course.html", "regates.html", "stages.html",
          "carte.html", "ports.html", "simulateur.html", "bateaux.html", "chants-de-marin.html",
          "equivalences.html", "securite-obligatoire.html", "jeux.html", "annonceurs.html"]
@@ -27,6 +28,21 @@ NS = ('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
 
 def _indexable(f: Path) -> bool:
     return f.exists() and not re.search(r'<meta[^>]+name=["\']robots["\'][^>]*noindex', f.read_text(encoding="utf-8"), re.I)
+
+
+def _declarees(site: Path) -> list[str]:
+    """Toute page indexable du dossier, `PAGES` d'abord puis les autres (stories datées, pages légales).
+
+    Une page absente du sitemap alors qu'elle est indexable est un signal contradictoire : le 25/11/2026,
+    neuf pages (cinq stories, trois pages légales, un aperçu) étaient dans ce cas parce que la liste
+    ci-dessus était fermée. La liste ne sert plus qu'à l'ordre ; c'est `noindex` qui exclut.
+    """
+    vues = [n for n in PAGES if _indexable(site / n)]
+    for p in sorted(site.rglob("*.html")):
+        nom = p.relative_to(site).as_posix()
+        if nom not in PAGES and _indexable(p):
+            vues.append(nom)
+    return vues
 
 
 def _images(x: str) -> dict[str, str]:
@@ -42,10 +58,8 @@ def fusionner(site: Path) -> int:
     f = site / "sitemap.xml"
     images = _images(f.read_text(encoding="utf-8")) if f.exists() else {}
     lignes = []
-    for nom in PAGES:
+    for nom in _declarees(site):
         p = site / nom
-        if not _indexable(p):
-            continue
         loc = f"{URL}/" if nom == "index.html" else f"{URL}/{nom}"
         lm = datetime.fromtimestamp(p.stat().st_mtime).date().isoformat()
         lignes.append(f"<url><loc>{loc}</loc><lastmod>{lm}</lastmod>{images.get(loc, '')}</url>")
