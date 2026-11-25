@@ -39,37 +39,37 @@ UI = {
            "aria": "Rechercher dans le lexique", "tous": "Tous", "theme": "Thème",
            "un": "terme", "n": "termes", "aucun": "Aucun terme ne correspond à cette recherche.",
            "desole": "Désolé pour le français : le breton de ce mot manque encore.",
-           "cours": "Le cours", "stage": "Un stage à réserver", "trad": "Traduction", "mot2": "Deuxième mot"},
+           "cours": "Le cours", "stage": "Un stage à réserver", "trad": "Traduction", "mot2": "Deuxième mot", "detail": "Le mot en détail"},
     "en": {"titre": "Sailing glossary",
            "chapo": "The words of sailing, each explained in one sentence and translated into six languages.",
            "retour": "← Sailing More", "placeholder": "A word, a part of the boat, a definition…",
            "aria": "Search the glossary", "tous": "All", "theme": "Theme",
            "un": "term", "n": "terms", "aucun": "No term matches this search.",
-           "cours": "The lesson", "stage": "Book a course", "trad": "Translation", "mot2": "Second word"},
+           "cours": "The lesson", "stage": "Book a course", "trad": "Translation", "mot2": "Second word", "detail": "The word in detail"},
     "it": {"titre": "Lessico della vela",
            "chapo": "Le parole della vela, ciascuna spiegata in una frase e tradotta in sei lingue.",
            "retour": "← Sailing More", "placeholder": "Una parola, un pezzo della barca, una definizione…",
            "aria": "Cerca nel lessico", "tous": "Tutti", "theme": "Tema",
            "un": "termine", "n": "termini", "aucun": "Nessun termine corrisponde a questa ricerca.",
-           "cours": "La lezione", "stage": "Prenota un corso", "trad": "Traduzione", "mot2": "Seconda parola"},
+           "cours": "La lezione", "stage": "Prenota un corso", "trad": "Traduzione", "mot2": "Seconda parola", "detail": "La parola in dettaglio"},
     "es": {"titre": "Léxico de vela",
            "chapo": "Las palabras de la vela, cada una explicada en una frase y traducida a seis idiomas.",
            "retour": "← Sailing More", "placeholder": "Una palabra, una pieza del barco, una definición…",
            "aria": "Buscar en el léxico", "tous": "Todos", "theme": "Tema",
            "un": "término", "n": "términos", "aucun": "Ningún término coincide con esta búsqueda.",
-           "cours": "La lección", "stage": "Reservar un curso", "trad": "Traducción", "mot2": "Segunda palabra"},
+           "cours": "La lección", "stage": "Reservar un curso", "trad": "Traducción", "mot2": "Segunda palabra", "detail": "La palabra en detalle"},
     "pt": {"titre": "Léxico de vela",
            "chapo": "As palavras da vela, cada uma explicada numa frase e traduzida para seis línguas.",
            "retour": "← Sailing More", "placeholder": "Uma palavra, uma peça do barco, uma definição…",
            "aria": "Pesquisar no léxico", "tous": "Todos", "theme": "Tema",
            "un": "termo", "n": "termos", "aucun": "Nenhum termo corresponde a esta pesquisa.",
-           "cours": "A lição", "stage": "Reservar um curso", "trad": "Tradução", "mot2": "Segunda palavra"},
+           "cours": "A lição", "stage": "Reservar um curso", "trad": "Tradução", "mot2": "Segunda palavra", "detail": "A palavra em detalhe"},
     "de": {"titre": "Segel-Lexikon",
            "chapo": "Die Wörter des Segelns, jedes in einem Satz erklärt und in sechs Sprachen übersetzt.",
            "retour": "← Sailing More", "placeholder": "Ein Wort, ein Bootsteil, eine Definition…",
            "aria": "Im Lexikon suchen", "tous": "Alle", "theme": "Thema",
            "un": "Begriff", "n": "Begriffe", "aucun": "Kein Begriff passt zu dieser Suche.",
-           "cours": "Die Lektion", "stage": "Kurs buchen", "trad": "Übersetzung", "mot2": "Zweites Wort"},
+           "cours": "Die Lektion", "stage": "Kurs buchen", "trad": "Übersetzung", "mot2": "Zweites Wort", "detail": "Das Wort im Detail"},
 }
 
 # Chaque mot renvoie à deux endroits (Nicolas, 25/11/2026 : « il faut que les mots des lexiques renvoient
@@ -108,7 +108,8 @@ def liens_vers(x: dict, cle_theme: str, lang: str) -> str:
     u = UI.get(lang, UI["fr"])
     n = numero_chapitre().get(ancre_cours(cle_theme), 1)
     langue = lang if lang in LANGUES else "fr"
-    return (f'<p class="vers"><a href="cours.html#ch{n}-{langue}">{e(u["cours"])}</a>'
+    return (f'<p class="vers"><a href="lexique/{e(x["cle"])}.html">{e(u["detail"])}</a>'
+            f'<a href="cours.html#ch{n}-{langue}">{e(u["cours"])}</a>'
             f'<a href="stages.html?q={quote(x["mot"]["fr"])}">{e(u["stage"])}</a></p>')
 
 # Mêmes variables et mêmes gestes que regates_page.py : charte Signal B, filets droits, rouge qui
@@ -266,7 +267,8 @@ JS = r"""
         : '<span lang="br" class="manque" title="' + esc(UI.fr.desole) + '">br <i>' + esc(x.mot.fr)
           + '</i> <sup aria-hidden="true">☺</sup></span>';
     }
-    var liens = '<p class="vers"><a href="cours.html#ch' + (data.cours[t.cle] || data.cours_defaut)
+    var liens = '<p class="vers"><a href="lexique/' + encodeURIComponent(x.cle) + '.html">'
+      + esc(u.detail) + '</a><a href="cours.html#ch' + (data.cours[t.cle] || data.cours_defaut)
       + '-' + (lang === 'bzh' ? 'fr' : lang) + '">'
       + esc(u.cours) + '</a><a href="stages.html?q=' + encodeURIComponent(x.mot.fr) + '">'
       + esc(u.stage) + '</a></p>';

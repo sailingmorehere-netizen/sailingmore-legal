@@ -1105,7 +1105,7 @@ def page_jeu(jeu: str) -> str:
     <li>Le gagnant est annoncé le dimanche à 18&nbsp;h, en story.</li>
     <li>La participation est gratuite et sans obligation d'achat.</li>
   </ul>
-  <p>Écrire à <a class="courriel" href="mailto:[secret-masqué]" data-a="hello.sailingmore" data-b="gmail.com">[secret-masqué]</a>.</p>
+  <p>Écrire à <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">l'adresse de contact</a>.</p>
 </div>
 <script>
 document.querySelectorAll('a.courriel').forEach(a => a.addEventListener('click', e => {{
@@ -1262,6 +1262,10 @@ def fichiers_a_publier() -> list[str]:
     # Une page par pavillon (24/11/2026, chapitre des pavillons du cours) : 42 pages `pavillon-<id>.html`.
     # Elles se publient avec les autres, sinon elles restent locales et les liens du cours mènent à un 404.
     pages += sorted(p.name for p in SITE.glob("pavillon-*.html"))
+    # Une page par école de voile (25/11/2026) : 63 pages `ecole-<slug>.html`, découvertes elles aussi.
+    pages += sorted(p.name for p in SITE.glob("ecole-*.html"))
+    # Une page par mot du lexique : 505 fichiers dans `lexique/`, avec leur dossier.
+    pages += sorted(p.relative_to(SITE).as_posix() for p in (SITE / "lexique").glob("*.html"))
     images = [n for n in ("og-image.jpg", "icon-512.png", "icon-180.png", "favicon-32.png",
                           "carte-monde.png") if (SITE / n).exists()]
     medias = sorted(p.relative_to(SITE).as_posix() for d in ("stories", "reels", "drapeaux")
@@ -1387,6 +1391,7 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
     try:
         import stages_page
         print(f"stages et cours : {stages_page.ecrire_page(SITE)} offre(s) publiable(s)")
+        print(f"pages d'école : {stages_page.ecrire_ecoles(SITE)}")
     except Exception as e:  # noqa: BLE001
         print(f"stages et cours non écrits : {e}")
     # Comparatif des stages (tâche n°70, 25/11/2026) : mêmes données que stages.html, lues par le même module.
@@ -1415,6 +1420,14 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         print(f"cours théoriques : {cours_page.ecrire_page(SITE)}")
     except Exception as e:  # noqa: BLE001
         print(f"cours théoriques non écrits : {e}")
+    # Une page par mot du lexique (25/11/2026, « on ferait pas une page par mots ? ») : même chemin, après le
+    # cours, puisque les pages lisent ses phrases. Rien à la main : le mot, sa phrase et ses questions viennent
+    # du lexique et du cours, une reconstruction les remet à jour.
+    try:
+        import lexique_mot_page
+        print(f"lexique par mot : {lexique_mot_page.ecrire_page(SITE)}")
+    except Exception as e:  # noqa: BLE001
+        print(f"pages de mot non écrites : {e}")
     # Nomenclature des bateaux (22/11/2026) : même chemin ; bateaux_page.py écrit la page, bateaux.json (lu par
     # lexique_page.py), les sources SVG des images et le sitemap. Les mots ajoutés au lexique y sont rangés d'abord.
     try:
@@ -1474,6 +1487,7 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
     try:
         import sitemap_site
         print(f"sitemap.xml reconstruit : {sitemap_site.fusionner(SITE)} adresse(s)")
+        print(f"sitemap des ports : {sitemap_site.fusionner_ports(SITE)} fichier(s)")
     except Exception as e:  # noqa: BLE001
         print(f"sitemap non reconstruit : {e}")
     # Le flux RSS lit les pages qui viennent d'être écrites (feed_rss.py, 24/11/2026) : il passe donc
@@ -1742,7 +1756,11 @@ def poser_mer_partout() -> int:
     reserve = '<div class="mer-fond mer-fond-commandes">' + mer_louvoyage.COMMANDES + '</div>'
     bloc = "<!--mer-debut-->" + bloc + "<!--mer-fin-->"
     fait = 0
-    for page in sorted(SITE.glob("*.html")):
+    # Les pages d'un mot du lexique vivent dans `lexique/` : elles reçoivent la même mer, et le script
+    # du moteur est appelé depuis leur dossier (`../`), sinon il ne se charge pas.
+    pages = [(p, "") for p in sorted(SITE.glob("*.html"))]
+    pages += [(p, "../") for p in sorted((SITE / "lexique").glob("*.html"))]
+    for page, prefix in pages:
         html = page.read_text()
         # La carte est un instrument plein écran, pas une page de lecture : le tableau de bord du
         # bateau y masquait le coin haut-gauche et débordait de 20 px en largeur (23/11/2026).
@@ -1768,6 +1786,8 @@ def poser_mer_partout() -> int:
             bloc_page = bloc.replace("<!--mer-fin-->", SCRIPT_LEXIQUE % (
                 json.dumps(LEXIQUE_MANOEUVRES, ensure_ascii=False),
                 json.dumps(LEXIQUE_LEGENDES, ensure_ascii=False)) + "<!--mer-fin-->")
+        if prefix:
+            bloc_page = bloc_page.replace('src="mer-louvoyage.js', 'src="%smer-louvoyage.js' % prefix)
         if "</body>" in html:
             html = html.replace("</body>", bloc_page + "\n</body>", 1)
         else:

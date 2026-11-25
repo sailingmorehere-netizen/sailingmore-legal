@@ -42,7 +42,11 @@ def fusionner(site: Path) -> int:
     f = site / "sitemap.xml"
     images = _images(f.read_text(encoding="utf-8")) if f.exists() else {}
     lignes = []
-    for nom in PAGES:
+    # Une page par école (25/11/2026) : découvertes sur le disque, jamais dans une liste fermée.
+    noms = list(PAGES) + sorted(x.name for x in site.glob("ecole-*.html")) if site.is_dir() else list(PAGES)
+    # Une page par mot du lexique (25/11/2026) : 505 fichiers dans `lexique/`, avec leur dossier.
+    mot = sorted(x.relative_to(site).as_posix() for x in (site / "lexique").glob("*.html"))
+    for nom in dict.fromkeys(list(noms) + mot):
         p = site / nom
         if not _indexable(p):
             continue
@@ -54,7 +58,40 @@ def fusionner(site: Path) -> int:
     return len(lignes)
 
 
+def fusionner_ports(site: Path) -> int:
+    """Les 15 000 fiches de ports ont leur propre sitemap : le sitemap principal reste la liste
+    courte des pages du site (règle 7, un seul écrivain par fichier). Au-delà de 50 000 adresses,
+    la norme impose de découper — d'où un fichier par tranche de 45 000, prévu dès maintenant."""
+    dossier = site / "ports"
+    fiches = sorted(dossier.glob("*.html")) if dossier.is_dir() else []
+    if not fiches:
+        return 0
+    urls = []
+    for p in fiches:
+        try:
+            tete = p.read_text(encoding="utf-8")[:4000]
+            m = re.search(r'<link rel="canonical" href="([^"]+)"', tete)
+            loc = m.group(1) if m else f"{URL}/ports/{p.name}"
+            if not _indexable(p):
+                continue
+            lm = datetime.fromtimestamp(p.stat().st_mtime).date().isoformat()
+        except (OSError, UnicodeDecodeError):
+            continue
+        urls.append(f"<url><loc>{loc}</loc><lastmod>{lm}</lastmod></url>")
+    tranche = 45000
+    ecrits = 0
+    for i in range(0, len(urls), tranche):
+        nom = "sitemap-ports.xml" if i == 0 else f"sitemap-ports-{i // tranche + 1}.xml"
+        (site / nom).write_text('<?xml version="1.0" encoding="UTF-8"?>\n' + NS + "\n"
+                                + "\n".join(urls[i:i + tranche]) + "\n</urlset>\n", encoding="utf-8")
+        ecrits += 1
+    return ecrits
+
+
 if __name__ == "__main__":
     here = Path(__file__).resolve().parent.parent / "projets" / "sailingmore" / "site"
+    if "--ports" in sys.argv:
+        print(f"sitemap-ports.xml : {fusionner_ports(here)} fichier(s)")
+        sys.exit(0)
     print(f"sitemap.xml : {fusionner(here)} adresse(s)")
     sys.exit(0)
