@@ -39,37 +39,37 @@ UI = {
            "aria": "Rechercher dans le lexique", "tous": "Tous", "theme": "Thème",
            "un": "terme", "n": "termes", "aucun": "Aucun terme ne correspond à cette recherche.",
            "desole": "Désolé pour le français : le breton de ce mot manque encore.",
-           "cours": "Le cours", "stage": "Un stage à réserver", "trad": "Traduction"},
+           "cours": "Le cours", "stage": "Un stage à réserver", "trad": "Traduction", "mot2": "Deuxième mot"},
     "en": {"titre": "Sailing glossary",
            "chapo": "The words of sailing, each explained in one sentence and translated into six languages.",
            "retour": "← Sailing More", "placeholder": "A word, a part of the boat, a definition…",
            "aria": "Search the glossary", "tous": "All", "theme": "Theme",
            "un": "term", "n": "terms", "aucun": "No term matches this search.",
-           "cours": "The lesson", "stage": "Book a course", "trad": "Translation"},
+           "cours": "The lesson", "stage": "Book a course", "trad": "Translation", "mot2": "Second word"},
     "it": {"titre": "Lessico della vela",
            "chapo": "Le parole della vela, ciascuna spiegata in una frase e tradotta in sei lingue.",
            "retour": "← Sailing More", "placeholder": "Una parola, un pezzo della barca, una definizione…",
            "aria": "Cerca nel lessico", "tous": "Tutti", "theme": "Tema",
            "un": "termine", "n": "termini", "aucun": "Nessun termine corrisponde a questa ricerca.",
-           "cours": "La lezione", "stage": "Prenota un corso", "trad": "Traduzione"},
+           "cours": "La lezione", "stage": "Prenota un corso", "trad": "Traduzione", "mot2": "Seconda parola"},
     "es": {"titre": "Léxico de vela",
            "chapo": "Las palabras de la vela, cada una explicada en una frase y traducida a seis idiomas.",
            "retour": "← Sailing More", "placeholder": "Una palabra, una pieza del barco, una definición…",
            "aria": "Buscar en el léxico", "tous": "Todos", "theme": "Tema",
            "un": "término", "n": "términos", "aucun": "Ningún término coincide con esta búsqueda.",
-           "cours": "La lección", "stage": "Reservar un curso", "trad": "Traducción"},
+           "cours": "La lección", "stage": "Reservar un curso", "trad": "Traducción", "mot2": "Segunda palabra"},
     "pt": {"titre": "Léxico de vela",
            "chapo": "As palavras da vela, cada uma explicada numa frase e traduzida para seis línguas.",
            "retour": "← Sailing More", "placeholder": "Uma palavra, uma peça do barco, uma definição…",
            "aria": "Pesquisar no léxico", "tous": "Todos", "theme": "Tema",
            "un": "termo", "n": "termos", "aucun": "Nenhum termo corresponde a esta pesquisa.",
-           "cours": "A lição", "stage": "Reservar um curso", "trad": "Tradução"},
+           "cours": "A lição", "stage": "Reservar um curso", "trad": "Tradução", "mot2": "Segunda palavra"},
     "de": {"titre": "Segel-Lexikon",
            "chapo": "Die Wörter des Segelns, jedes in einem Satz erklärt und in sechs Sprachen übersetzt.",
            "retour": "← Sailing More", "placeholder": "Ein Wort, ein Bootsteil, eine Definition…",
            "aria": "Im Lexikon suchen", "tous": "Alle", "theme": "Thema",
            "un": "Begriff", "n": "Begriffe", "aucun": "Kein Begriff passt zu dieser Suche.",
-           "cours": "Die Lektion", "stage": "Kurs buchen", "trad": "Übersetzung"},
+           "cours": "Die Lektion", "stage": "Kurs buchen", "trad": "Übersetzung", "mot2": "Zweites Wort"},
 }
 
 # Chaque mot renvoie à deux endroits (Nicolas, 25/11/2026 : « il faut que les mots des lexiques renvoient
@@ -141,6 +141,12 @@ h1::after{content:"";display:block;width:3.4rem;height:3px;background:var(--roug
   transition:color .15s,border-color .15s,background .15s}
 .trad button:hover{color:#fff;border-color:#9db2c6}
 .trad button[aria-pressed="true"]{border-color:var(--rouge);color:#fff;background:rgba(226,58,62,.14)}
+/* Deux mots côte à côte : le même terme dans la langue de la page et dans celle qu'on a choisie. */
+.terme.double{display:grid;grid-template-columns:1fr 1fr;column-gap:1.8rem;row-gap:.2rem}
+.terme.double .col h3{margin-top:0}
+.terme.double .vers{grid-column:1 / -1}
+@media (max-width:700px){.terme.double{grid-template-columns:1fr;column-gap:0}
+  .terme.double .col+.col{margin-top:.4rem;padding-top:.6rem;border-top:1px solid rgba(255,255,255,.07)}}
 a{color:#fff;text-decoration:none}
 :focus-visible{outline:2px solid #fff;outline-offset:2px}
 
@@ -224,6 +230,10 @@ JS = r"""
     return UI[l] ? l : 'en';
   }
   var lang = choisir();
+  // Le deuxième mot : la langue choisie dans la barre « Deuxième mot ». Tant qu'elle vaut null,
+  // la page s'affiche normalement ; dès qu'elle diffère de `lang`, chaque terme montre les deux.
+  var langB = (function(){ try{ return localStorage.getItem('sm-lexique-b') || null; }catch(e){ return null; } })();
+  if (langB && langB === 'bzh') langB = null;
 
   function normalise(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
@@ -246,7 +256,7 @@ JS = r"""
   }
 
   function carte(x, t){
-    var u = UI[lang], autres = LANGUES.filter(function(l){return l!==lang;}).map(function(l){
+    var u = UI[lang], autres = LANGUES.filter(function(l){return l!==lang && l!==langB;}).map(function(l){
       return '<span lang="' + l + '">' + l + ' <b>' + esc(x.mot[l]) + '</b></span>'; }).join('');
     // Le breton : le mot s'il est attesté, sinon le français avec le petit mot d'excuse (Nicolas,
     // 24/11/2026 : « ceux que t'as pas, tu les fais en français […] désolé pour le français »).
@@ -256,21 +266,33 @@ JS = r"""
         : '<span lang="br" class="manque" title="' + esc(UI.fr.desole) + '">br <i>' + esc(x.mot.fr)
           + '</i> <sup aria-hidden="true">☺</sup></span>';
     }
+    var liens = '<p class="vers"><a href="cours.html#ch' + (data.cours[t.cle] || data.cours_defaut)
+      + '-' + (lang === 'bzh' ? 'fr' : lang) + '">'
+      + esc(u.cours) + '</a><a href="stages.html?q=' + encodeURIComponent(x.mot.fr) + '">'
+      + esc(u.stage) + '</a></p>';
+    if (langB && langB !== lang) {   // deux mots : le terme dans les deux langues, l'un à côté de l'autre
+      return '<article class="terme double" id="' + esc(x.cle) + '">'
+        + '<div class="col"><h3 lang="' + lang + '"><a href="#' + esc(x.cle) + '">'
+        + esc(x.mot[lang]) + '</a></h3><p class="def" lang="' + lang + '">' + esc(x.def[lang]) + '</p></div>'
+        + '<div class="col"><h3 lang="' + langB + '">' + esc(x.mot[langB]) + '</h3>'
+        + '<p class="def" lang="' + langB + '">' + esc(x.def[langB]) + '</p></div>'
+        + '<p class="autres">' + autres + '</p>' + liens + '</article>';
+    }
     return '<article class="terme" id="' + esc(x.cle) + '">'
       + '<h3><a href="#' + esc(x.cle) + '">' + esc(x.mot[lang]) + '</a></h3>'
       + '<p class="def">' + esc(x.def[lang]) + '</p>'
-      + '<p class="autres">' + autres + '</p>'
-      + '<p class="vers"><a href="cours.html#ch' + (data.cours[t.cle] || data.cours_defaut)
-      + '-' + (lang === 'bzh' ? 'fr' : lang) + '">'
-      + esc(u.cours) + '</a><a href="stages.html?q=' + encodeURIComponent(x.mot.fr) + '">'
-      + esc(u.stage) + '</a></p></article>';
+      + '<p class="autres">' + autres + '</p>' + liens + '</article>';
   }
 
   function dessine(){
     var u = UI[lang], q = normalise(etat.texte).trim(), total = 0, h = '';
     themes.forEach(function(t){
       if(etat.theme !== 'tous' && etat.theme !== t.cle) return;
-      var gardes = t.termes.filter(function(x){ return !q || x._foin[lang].indexOf(q) !== -1; });
+      var gardes = t.termes.filter(function(x){
+        if (!q) return true;
+        if (x._foin[lang].indexOf(q) !== -1) return true;
+        return !!(langB && langB !== lang && x._foin[langB] && x._foin[langB].indexOf(q) !== -1);
+      });
       if(!gardes.length) return;
       gardes.sort(function(a,b){ return a.mot[lang].localeCompare(b.mot[lang], lang); });
       total += gardes.length;
@@ -288,9 +310,11 @@ JS = r"""
     document.querySelectorAll('[data-t]').forEach(function(el){ el.textContent = u[el.dataset.t]; });
     champ.placeholder = u.placeholder;
     champ.setAttribute('aria-label', u.aria);
-    var actif = lang;  // l'état affiché suit la langue réellement en cours, pas le stockage
-    document.querySelectorAll('#langues button, #trad button').forEach(function(b){
-      b.setAttribute('aria-pressed', String(b.dataset.lang === actif)); });
+    // L'état affiché suit les langues réellement en cours, pas le stockage local.
+    document.querySelectorAll('#langues button').forEach(function(b){
+      b.setAttribute('aria-pressed', String(b.dataset.lang === lang)); });
+    document.querySelectorAll('#trad button').forEach(function(b){
+      b.setAttribute('aria-pressed', String(b.dataset.lang === langB)); });
     boutonsThemes();
     dessine();
   }
@@ -318,7 +342,10 @@ JS = r"""
   document.querySelectorAll('#trad button').forEach(function(b){
     b.addEventListener('click', function(){
       try{ localStorage.setItem('sm-langue', b.dataset.lang); }catch(e){}
-      lang = b.dataset.lang; traduit();
+      // Deuxième mot : cliquer la langue déjà choisie la retire et revient à l'affichage simple.
+      langB = (b.dataset.lang === langB) ? null : b.dataset.lang;
+      try{ localStorage.setItem('sm-lexique-b', langB || ''); }catch(e){}
+      traduit();
     });
   });
   zoneThemes.addEventListener('click', function(ev){
@@ -423,8 +450,8 @@ def page_lexique(d: dict | None = None) -> str:
         '<main class="page">'
         '<h1 data-t="titre">' + ui["titre"] + "</h1>"
         '<p class="chapo" data-t="chapo">' + ui["chapo"] + "</p>"
-        '<nav class="trad" id="trad" aria-label="' + ui["trad"] + '">'
-        '<span class="dit" data-t="trad">' + ui["trad"] + "</span>"
+        '<nav class="trad" id="trad" aria-label="' + ui["mot2"] + '">'
+        '<span class="dit" data-t="mot2">' + ui["mot2"] + "</span>"
         + "".join(f'<button type="button" data-lang="{l}">{NOMS_LANGUES[l]}</button>' for l in LANGUES)
         + "</nav>"
         '<div class="panneau">'
