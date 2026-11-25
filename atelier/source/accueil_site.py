@@ -1474,6 +1474,14 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         print(f"stages près de chez vous posé sur : {stages_page.injecter_bloc(SITE)}")
     except Exception as e:  # noqa: BLE001
         print(f"bloc stages non posé : {e}")
+    # Traduction automatique du lexique (25/11/2026, « la page se traduit toute seule dans la langue du
+    # visiteur ») : `trad_auto.py` écrit `auto-trad.js` et pose la balise sur le lexique et les pages de mot.
+    try:
+        import trad_auto
+        n_trad = trad_auto.poser(SITE, trad_auto.pages_du_lexique(SITE))
+        print(f"traduction automatique posée sur {n_trad} page(s) du lexique")
+    except Exception as e:  # noqa: BLE001
+        print(f"traduction automatique non posée : {e}")
     # La mer d'abord, la barre ensuite : la barre s'insère juste après `<body>` et passe donc
     # au-dessus du tableau de bord du bateau, qui sinon s'affiche avant elle (23/11/2026).
     n = poser_mer_partout()
