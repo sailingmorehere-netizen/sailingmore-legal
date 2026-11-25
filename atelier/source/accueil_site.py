@@ -804,7 +804,7 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
     color:#fff;background:transparent;border:1px solid rgba(226,58,62,.85);
     position:relative;overflow:hidden;isolation:isolate;transition:color .22s ease,border-color .22s ease}}
   /* la ligne qui monte du bas au survol : le rouge remplit le rectangle, lentement */
-  .bouton::before{{content:"";position:absolute;inset:0;z-index:-1;background:#e23a3e;
+  .bouton::before{{content:"";position:absolute;inset:0;z-index:-1;background:#c62a2e;
     transform:translateY(101%);transition:transform .28s cubic-bezier(.4,0,.2,1)}}
   .bouton:hover{{color:#fff;border-color:#e23a3e}}
   .bouton:hover::before{{transform:translateY(0)}}
@@ -1068,6 +1068,7 @@ def page_jeu(jeu: str) -> str:
 <link rel="canonical" href="https://sailingmore.fr/jeux.html">
 {__import__("jsonld").page_simple("jeux.html", "Le jeu concours")}
 <meta name="description" content="Le jeu concours Sailing More : cinq jours de stories, du mardi au samedi, un tirage le dimanche.">
+{__import__("jsonld").social("jeux.html", "Le jeu concours — Sailing More", "Le jeu concours Sailing More : cinq jours de stories, du mardi au samedi, un tirage le dimanche.")}
 <style>
   body{{margin:0;background:#071c31;
     color:{CREME};font-family:system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
@@ -1430,7 +1431,7 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
             brut = (SORTIE / nom).read_text()
             if nom == "confidentialite.html":
                 brut = avec_section_alertes(brut)
-            (SITE / nom).write_text(habillage_pages_legales(brut))
+            (SITE / nom).write_text(tete_pages_legales(nom, habillage_pages_legales(brut)))
     for nom in ("carte-monde.png", "favicon-32.png", "icon-180.png", "icon-512.png", "og-image.jpg"):
         if (SORTIE / nom).exists():
             shutil.copy2(SORTIE / nom, SITE / nom)
@@ -1773,7 +1774,7 @@ CSS_BOUTON = """
     font-family:inherit;cursor:pointer;text-decoration:none;
     color:#fff;background:transparent;border:1px solid rgba(226,58,62,.85);
     position:relative;overflow:hidden;isolation:isolate;transition:color .22s ease,border-color .22s ease}
-  .bouton::before{content:"";position:absolute;inset:0;z-index:-1;background:#e23a3e;
+  .bouton::before{content:"";position:absolute;inset:0;z-index:-1;background:#c62a2e;
     transform:translateY(101%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
   .bouton:hover{color:#fff;border-color:#e23a3e}
   .bouton:hover::before{transform:translateY(0)}
@@ -1849,6 +1850,28 @@ def avec_section_alertes(html: str) -> str:
     return html[:i] + SECTION_ALERTES + html[i:]
 
 
+_DESC_LEGALES = {
+    "mentions-legales.html": "Éditeur, hébergeur et conditions d'utilisation du site Sailing More.",
+    "confidentialite.html": "Les données que Sailing More collecte, ce qu'il en fait et comment exercer vos droits.",
+    "delete.html": "Demander la suppression de vos données sur Sailing More.",
+}
+
+
+def tete_pages_legales(nom: str, html: str) -> str:
+    """Audit SEO du 24/11/2026, correction 4 : description et canonique propres aux trois pages légales,
+    `lang="fr"` sur delete.html (la page est bilingue, le français est la langue du HTML). Idempotent."""
+    d = _DESC_LEGALES.get(nom)
+    if not d:
+        return html
+    if 'rel="canonical"' not in html:
+        html = html.replace("</head>", f'<link rel="canonical" href="https://sailingmore.fr/{nom}"></head>', 1)
+    if 'name="description"' not in html:
+        html = html.replace("</head>", f'<meta name="description" content="{d}"></head>', 1)
+    if nom == "delete.html":
+        html = html.replace('<html lang="en"', '<html lang="fr"', 1)
+    return html
+
+
 def habillage_pages_legales(html: str) -> str:
     """Les pages légales passent au même marine que le site, sans toucher au texte.
 
@@ -1877,10 +1900,16 @@ def page_annonceurs() -> str:
     """La page que le bouton du héros ouvre dans un nouvel onglet : le formulaire seul, sans détour."""
     return ("<!doctype html>\n<html lang=\"fr\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
-            "<title>Annonceurs — Sailing More</title>"
+            "<title>Publicité voile : formules annonceurs | Sailing More</title>"
             "<link rel=\"canonical\" href=\"https://sailingmore.fr/annonceurs.html\">"
-            f"<meta name=\"description\" content=\"Les formules annonceurs de Sailing More : de {_PMIN} à "
-            f"{_PMAX} €, jeu concours et publications dédiées, rapport de portée sous 72 h.\">"
+            # Audit SEO du 24/11/2026, correction 4. Le « 141 000 abonnés » du texte de l'audit n'est PAS repris :
+            # le total ne vient d'aucune donnée de ce script (relevé Meta fait ailleurs). Prix : _PMIN/_PMAX.
+            f"<meta name=\"description\" content=\"Touchez les abonnés voile de Sailing More sur Facebook et "
+            f"Instagram : formules de {_PMIN} à {_PMAX} € HT, jeu concours compris, rapport de portée sous 72 h.\">"
+            + __import__("jsonld").social(
+                "annonceurs.html", "Publicité voile : formules annonceurs | Sailing More",
+                f"Touchez les abonnés voile de Sailing More sur Facebook et Instagram : formules de {_PMIN} à "
+                f"{_PMAX} € HT, jeu concours compris, rapport de portée sous 72 h.")
             + CSS_LEGAL.replace("</style>", site_blocks.CSS + CSS_BOUTON + "</style>"
                               + "<style>.page.page-annonceurs{max-width:64rem}"
                               # Nicolas, 20/11/2026 : les espaces de cette page sautaient de 15 px à
@@ -2062,7 +2091,7 @@ MAQUETTES = {
   .reel{border-radius:0;border-color:rgba(255,255,255,.16)}
   footer{color:#9db2c6}
   .cookies{background:rgba(8,21,33,.98);border:1px solid rgba(226,58,62,.35);border-radius:0}
-  .cookies button{background:#e23a3e;color:#fff;border-radius:0}
+  .cookies button{background:#e23a3e;color:#000;border-radius:0}
 """),
 
     # B — CAP : le rouge ne parle plus, il désigne. Le marine seul écrit.
@@ -2091,7 +2120,7 @@ MAQUETTES = {
   .ep22{}
   .ep21 blockquote{color:#fff;font-weight:700}
   .citation figcaption strong{color:#fff} .citation figcaption span{color:#9db2c6}
-  .siecle{color:#e23a3e;letter-spacing:.2em;font-size:.55rem}
+  .siecle{color:#f05a5e;letter-spacing:.2em;font-size:.55rem}
   .stories h2,.reels h2,.monde h2{color:#fff;font-weight:300;letter-spacing:.02em;
     text-transform:uppercase;white-space:normal}
   .planisphere{border-radius:0;border-color:rgba(255,255,255,.14);background:#081521}
@@ -2107,7 +2136,7 @@ MAQUETTES = {
   .carte-reel{background:transparent}
   footer{color:#9db2c6}
   .cookies{background:rgba(8,21,33,.98);border:1px solid rgba(255,255,255,.18);border-radius:0}
-  .cookies button{background:#e23a3e;color:#fff;border-radius:0}
+  .cookies button{background:#e23a3e;color:#000;border-radius:0}
 
   /* ---- en-tête sur téléphone : le nom tient sur une ligne, les langues respirent ---- */
   @media(max-width:600px){
@@ -2290,7 +2319,7 @@ MAQUETTES = {
     width:min(24rem,82vw);padding:1.5rem 1.8rem}
   .citation figcaption{border-top:3px solid #e23a3e;padding-top:.6rem;margin-top:.9rem}
   .citation blockquote{color:#eef3f7}
-  .ep21 blockquote{color:#fff} .siecle{color:#e23a3e;letter-spacing:.22em}
+  .ep21 blockquote{color:#fff} .siecle{color:#f05a5e;letter-spacing:.22em}
   .stories h2,.reels h2,.monde h2{color:#fff;text-transform:uppercase;letter-spacing:-.02em;
     white-space:normal;font-weight:900}
   .planisphere{border-radius:0;border-color:rgba(255,255,255,.16);background:#081521}
@@ -2300,7 +2329,7 @@ MAQUETTES = {
   .reel{border-radius:0;border-color:rgba(255,255,255,.16)}
   footer{color:#9db2c6}
   .cookies{background:#0f2438;border-top:3px solid #e23a3e;border-radius:0}
-  .cookies button{background:#e23a3e;color:#fff;border-radius:0}
+  .cookies button{background:#e23a3e;color:#000;border-radius:0}
 """),
 
     # C — LARGE (23/11/2026) : même charte, même mise en page, la forme seule est reprise.

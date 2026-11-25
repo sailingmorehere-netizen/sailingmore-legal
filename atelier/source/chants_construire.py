@@ -13,6 +13,12 @@ from pathlib import Path
 RACINE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _chants_specs import SPECS, LIVRES, NUMERO, BILLY_BOY, BILLY_NOTE, PAGES_SMITH, W, T1, T2, S  # noqa: E402
+from _chants_specs import JOINS, MANUEL, RAISON, COMPLETS_AJOUTS  # noqa: E402
+
+ECARTS = {"home-dearie-home": 5}   # écart de lignes OCR qui sépare deux couplets (3 par défaut)
+
+COUPURES = {"pen-", "thou-"}   # mots coupés en fin de ligne dans le livre (pen-non, thou-sand), recollés
+ENTETE = re.compile(r"OF THE W\s?[A-Z]\s?[A-Z]", re.I)   # « Music of the Waters » : titre courant de Smith, pas un vers
 
 SRC = RACINE / "cache/chants/src"
 JSON_F = RACINE / "projets/sailingmore/chants-de-marin.json"
@@ -28,7 +34,11 @@ BRUIT = [(r"\}", ""), (r"\bQO\b", "O"), (r"\bOQ\b", "O"), (r"\b0'", "o'"), (r"\(
          (r"\(tatce\)", "(twice)"), (r"\(thrtce\)", "(thrice)"), (r"\(tw7ce\)", "(twice)"), (r"\(¢wice\)", "(twice)"),
          (r"^\[n ", "In "), (r"^\[had ", "I had "), (r"^OI ", "O I "), (r"Tommy[\"?](?= gone)", "Tommy's"),
          (r"\bboire 4\b", "boire à"), (r"donne a boire", "donne à boire"), (r"\b4 ses\b", "à ses"), (r"^A grands", "À grands"),
-         (r"pàid", "paid"), (r"Tammy's", "Tommy's"), (r"\" Mexico,\"", '"Mexico,"')]
+         (r"pàid", "paid"), (r"Tammy's", "Tommy's"), (r"\" Mexico,\"", '"Mexico,"'),
+         (r"oh\*\.", "oh."), (r"^1 For it blows", "For it blows"), (r"\bpen-non\b", "pennon"), (r"(?<=Scott,) 1$", ""),
+         (r"(?<=mail\.\") 2$", ""), (r"(?<=meal\.) 3$", ""), (r", luna\)$", ","), (r"\s*\|\s*\(twice$", ""),
+         (r"^%\s+", ""), (r"hundied", "hundred"), (r"thefosey", "the Josey"), (r"^Chorus\s+(?=\w)", ""),
+         (r"^Solo & Chorus\.\s*", ""), (r"^,\s*\d{1,2}\.\s+", ""), (r"\bete\.$", "etc."), (r"^I\.\s+", ""), (r"^\d{1,2}\.\s+(?=King Louis)", "")]
 
 
 def nettoyer(t: str, livre: str):
@@ -38,9 +48,10 @@ def nettoyer(t: str, livre: str):
     num = bool(NUM.match(t))
     t = NUM.sub("", t)
     if livre == S:
-        t = re.sub(r"^(Solo|Chorus)\.\s*", "", t)
-        t = re.sub(r"^[\"u]\s+", "", t)
-        t = re.sub(r"\s*\"\s*$", "", t)
+        t2 = re.sub(r"^(Solo|Chorus)\.\s*", "", t)
+        if t2 != t:   # le guillemet ouvrant qui suit « Solo. » n'est pas un vers ; ailleurs il fait partie du texte
+            t2 = re.sub(r"^[\"u]\s+", "", t2)
+        t = re.sub(r"\s*\"\s*$", "", t2)
     t = re.sub(r"^[\*\+†]+\s*", "", t)                     # appel de note en tête
     t = re.sub(r"[\*\+†]+$", "", t.rstrip()).strip()        # appel de note en queue
     t = t.replace('"*', '"').replace("* ", " ")
@@ -62,22 +73,29 @@ def pages_whall(lignes):
     return [(n, int(s)) for n, s in ((i, l.strip()) for i, l in enumerate(lignes, 1)) if n >= 1706 and re.fullmatch(r"\d{1,3}", s)]
 
 
-def extraire(lignes, plages, excl, livre):
+def extraire(lignes, plages, excl, livre, joins=frozenset(), ecart=3):
     gardes = []
     for a, b in plages:
         for n in range(a, b + 1):
             if n in excl:
                 continue
             t = lignes[n - 1].strip()
-            if t:
+            if t and not ENTETE.search(t):
                 c, num = nettoyer(t, livre)
+                if n in joins and gardes and c:   # suite de la ligne précédente (retour à la ligne de la colonne du livre)
+                    pn, pc, pnum = gardes[-1]
+                    if pc.endswith("-"):
+                        pc = pc[:-1] if pc.split()[-1] in COUPURES else pc   # « pen- / non » : un seul mot coupé en fin de ligne
+                        gardes[-1] = (n, pc + c, pnum)
+                    else:
+                        gardes[-1] = (n, pc + " " + c, pnum)
                 # ligne de bruit : aucun mot de trois lettres
-                if c and re.search(r"[A-Za-zÀ-ÿ]{3,}", c):
+                elif c and re.search(r"[A-Za-zÀ-ÿ]{3,}", c):
                     gardes.append((n, c, num))
     numerote = livre != W and sum(1 for g in gardes if g[2]) >= 2
     couplets, cur, prec = [], [], None
     for n, c, num in gardes:
-        coupure = num if numerote else (prec is not None and n - prec >= 3)
+        coupure = num if numerote else (prec is not None and n - prec >= ecart)
         if coupure and cur:
             couplets.append("\n".join(cur))
             cur = []
@@ -133,7 +151,9 @@ def main():
     marq = pages_whall(cache[W])
     rejets = []
     for cle, titre, typ, livre, plages, excl, nfr, nen in SPECS:
-        txt, debut = extraire(cache[livre], plages, set(excl), livre)
+        txt, debut = extraire(cache[livre], plages, set(excl), livre, JOINS.get(cle, frozenset()), ECARTS.get(cle, 3))
+        if cle in MANUEL:
+            txt = MANUEL[cle]
         if len(txt.splitlines()) < 4:
             rejets.append((titre, "moins de 4 vers lisibles"))
             continue
@@ -141,8 +161,8 @@ def main():
         c = {"id": cle, "type": typ, "lg": lg, "titre": titre,
              "annees": "≤" + LIVRES[livre][2], "livre": livre,
              "resume": {"fr": nfr, "en": nen}, "paroles": txt, "accords": "", "audio": None, "video": None,
-             "source": source(cle, titre, livre, debut, marq) + ("" if cle in COMPLETS else " — paroles partielles : le premier couplet et le refrain, notés sous la portée, ne sont pas toujours lisibles")}
-        if cle not in COMPLETS:
+             "source": source(cle, titre, livre, debut, marq) + ("" if cle in COMPLETS or cle in COMPLETS_AJOUTS else " — " + RAISON.get(cle, "paroles partielles : le premier couplet et le refrain, notés sous la portée, ne sont pas toujours lisibles"))}
+        if cle not in COMPLETS and cle not in COMPLETS_AJOUTS:
             c["partiel"] = True
         d["chants"].append(c)
     # Billy Boy (Terry I) : recopié à la main, deux colonnes entrelacées dans le scan

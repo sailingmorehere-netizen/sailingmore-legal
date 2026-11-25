@@ -383,13 +383,18 @@ def construire(d: dict) -> str:
         f'<link rel="alternate" hreflang="{l}" href="{URL}/{PAGE}?lang={l}">' for l in LANGUES if l != "fr")
     alternates += site_blocks.hreflang_bzh(PAGE, URL + "/") + f'<link rel="alternate" hreflang="x-default" href="{URL}/{PAGE}">'
     n = len(d["chants"])
+    # Audit SEO du 24/11/2026, correction 4 : titre de l'audit ; la description garde le nombre réel de chants
+    # et laisse tomber « un enregistrement libre pour chacun », non vérifié ici.
+    seo_titre = "Chants de marins : paroles et histoire | Sailing More"
+    description = (f"{n} chants de marins expliqués : à quoi ils servaient à bord, et les paroles du domaine "
+                   "public dans leur langue d'origine.")
     tete = ('<!doctype html><html lang="fr"><head><meta charset="utf-8">'
             '<meta name="viewport" content="width=device-width,initial-scale=1">'
-            f'<title>{H.escape(fr["titrePage"])} — Sailing More</title>'
+            f'<title>{H.escape(seo_titre)}</title>'
             f'<meta name="description" content="{H.escape(description, quote=True)}">'
             f'<link rel="canonical" href="{URL}/{PAGE}">{alternates}'
             + jsonld.bloc(*_noeuds_jsonld(d))
-            + jsonld.social(PAGE, f'{fr["titrePage"]} — Sailing More', description))
+            + jsonld.social(PAGE, seo_titre, description))
     corps = (f"<style>{CSS}</style></head><body><main class=\"page\">"
              f'<h1 id="h1">{H.escape(fr["titrePage"])}</h1>'
              f'<p class="chapo" id="chapo">{H.escape(fr["chapo"])}</p>'
@@ -423,16 +428,8 @@ def construire(d: dict) -> str:
 
 
 def maj_sitemap(dossier: Path) -> bool:
-    """Ajoute (ou rafraîchit) l'entrée de la page dans sitemap.xml. Idempotent."""
-    f = dossier / "sitemap.xml"
-    if not f.exists():
-        return False
-    x = f.read_text(encoding="utf-8")
-    x = re.sub(r"\s*<url><loc>https://sailingmore\.fr/chants-de-marin\.html</loc>.*?</url>", "", x, flags=re.S)
-    ligne = (f"\n  <url><loc>{URL}/{PAGE}</loc><lastmod>{date.today().isoformat()}</lastmod>"
-             "<changefreq>monthly</changefreq><priority>0.7</priority></url>")
-    f.write_text(x.replace("</urlset>", ligne + "\n</urlset>", 1), encoding="utf-8")
-    return True
+    """Sans écriture depuis le 25/11/2026 : `sitemap_site.fusionner` est le seul écrivain du sitemap."""
+    return (dossier / "sitemap.xml").exists()
 
 
 def ecrire_page(dossier: Path = SITE) -> str:

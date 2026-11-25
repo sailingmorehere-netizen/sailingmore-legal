@@ -214,15 +214,8 @@ def construire(d: dict, apercu: bool = False) -> str:
 
 
 def maj_sitemap(dossier: Path) -> bool:
-    f = dossier / "sitemap.xml"
-    if not f.exists():
-        return False
-    x = re.sub(r"\s*<url><loc>https://sailingmore\.fr/securite-obligatoire\.html</loc>.*?</url>", "",
-               f.read_text(encoding="utf-8"), flags=re.S)
-    x = x.replace("</urlset>", f"\n  <url><loc>{URL}/{PAGE}</loc><lastmod>{date.today().isoformat()}</lastmod>"
-                  "<changefreq>monthly</changefreq><priority>0.6</priority></url>\n</urlset>", 1)
-    f.write_text(x, encoding="utf-8")
-    return True
+    """Sans écriture depuis le 25/11/2026 : `sitemap_site.fusionner` est le seul écrivain du sitemap."""
+    return (dossier / "sitemap.xml").exists()
 
 
 def ecrire_page(dossier: Path = SITE) -> str:

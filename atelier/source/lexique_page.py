@@ -335,18 +335,18 @@ def page_lexique(d: dict | None = None) -> str:
         f'{ui["tous"]}</button>'
         + "".join(f'<button class="puce" type="button" data-theme="{_html.escape(t["cle"])}" '
                   f'aria-pressed="false">{_html.escape(t["nom"]["fr"])}</button>' for t in themes))
+    # Audit SEO du 24/11/2026, correction 4 : textes de l'audit, le compteur vient de `total` (les termes).
+    seo_titre = f"Lexique de la voile : {total} mots définis | Sailing More"
+    seo_desc = (f"Bôme, choquer, lofer, empanner : {total} mots de la voile définis en une phrase, classés par "
+                "thème (bateau, manœuvre, allures, météo, course), en 6 langues.")
     return (
         '<!doctype html>\n<html lang="fr"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
-        "<title>Lexique de voile — Sailing More</title>"
+        f"<title>{seo_titre}</title>"
         '<link rel="canonical" href="https://sailingmore.fr/lexique.html">'
         + _ld_lexique(themes) +
-        '<meta name="description" content="Le lexique de voile : les mots du bateau, de la manœuvre, '
-        'des allures, de la météo et de la course, définis en une phrase, en six langues.">'
-        + __import__("jsonld").social(
-            "lexique.html", "Lexique de voile — Sailing More",
-            "Le lexique de voile : les mots du bateau, du gréement et des voiles, expliqués en une phrase "
-            "et traduits en six langues.") +
+        f'<meta name="description" content="{seo_desc}">'
+        + __import__("jsonld").social("lexique.html", seo_titre, seo_desc) +
         "<style>" + CSS + "</style></head><body>"
         + _sb.barre_autonome("lexique.html", LANGUES) +
         '<main class="page">'

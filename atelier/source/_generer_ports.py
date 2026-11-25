@@ -35,8 +35,9 @@ js = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
 noms = json.dumps({p: NOMS.get(p, p.capitalize()) for p in pays_list}, ensure_ascii=False)
 
 titre = 'Ports du monde et marinas : carte et annuaire | Sailing More'
-desc = ('Annuaire de %d ports, marinas et mouillages (données OpenStreetMap) : recherche par nom, '
-        'liste par pays, carte et distance à vol d\'oiseau entre deux ports.' % total)
+# Audit SEO du 24/11/2026, correction 4 : texte de l'audit, le nombre vient de `total` (la base des ports).
+desc = ('%d ports, marinas et mouillages (OpenStreetMap) : cherchez par nom ou par pays, voyez la carte '
+        'et calculez la distance entre deux ports.' % total)
 ld = {"@context": "https://schema.org", "@graph": [
     {"@type": "CollectionPage", "name": titre, "url": "https://sailingmore.fr/ports.html", "inLanguage": "fr"},
     {"@type": "BreadcrumbList", "itemListElement": [
@@ -51,6 +52,10 @@ page = '''<!doctype html>
 <title>%(titre)s</title>
 <meta name="description" content="%(desc)s">
 <link rel="canonical" href="https://sailingmore.fr/ports.html">
+<meta property="og:title" content="%(titre)s"><meta property="og:description" content="%(desc)s">
+<meta property="og:url" content="https://sailingmore.fr/ports.html"><meta property="og:type" content="website">
+<meta property="og:site_name" content="Sailing More"><meta property="og:image" content="https://sailingmore.fr/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://sailingmore.fr/og-image.jpg">
 <script type="application/ld+json">%(ld)s</script>
 <style>
 body{margin:0;background:#0a1a2b;color:#eef3f7;font-family:system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;line-height:1.5}

@@ -1257,10 +1257,16 @@ def _langue(lang: str) -> str:
 
 
 def _ld_cours(desc: str) -> str:
-    """JSON-LD : fil d'Ariane + Course (nom, description, fournisseur). Ni prix, ni note."""
+    """JSON-LD : fil d'Ariane + Course (nom, description, fournisseur, gratuité, mode en ligne, auteur).
+    Audit SEO du 24/11/2026, correction 6 : « courseWorkload » (PT10H dans l'audit) n'est PAS écrit, la durée
+    est à faire confirmer par Nicolas. Ni note."""
     import jsonld
     cours = {"@type": "Course", "name": TEXTES["fr"]["titre"], "description": desc, "inLanguage": "fr",
-             "url": f"{jsonld.SITE}/cours.html", "provider": {"@id": jsonld.ORG_ID}}
+             "url": f"{jsonld.SITE}/cours.html", "provider": {"@id": jsonld.ORG_ID},
+             "isAccessibleForFree": True,
+             "offers": {"@type": "Offer", "price": 0, "priceCurrency": "EUR", "category": "Free"},
+             "hasCourseInstance": {"@type": "CourseInstance", "courseMode": "online"},
+             "author": {"@type": "Person", "name": "Nicolas Baudu"}}
     return jsonld.bloc(jsonld.fil("cours.html", TEXTES["fr"]["titre"]), cours, jsonld.organisation())
 
 
@@ -1271,12 +1277,17 @@ def page_cours() -> str:
     corps = "\n\n".join(_langue(l) for l in LANGUES)
     n = len(CHAPITRES)
     desc = TEXTES["fr"]["desc"].replace("{n}", str(n))
+    # Audit SEO du 24/11/2026, correction 4 : textes de l'audit (le JSON-LD garde la description longue).
+    seo_titre = "Cours théorique de voile gratuit | Sailing More"
+    seo_desc = ("Apprenez la théorie de la voile gratuitement : allures, réglages, cartes, marées, météo, "
+                "balisage, RIPAM et règles de course, avec exercices corrigés.")
     return (f'<!doctype html>\n<html lang="fr"><head><meta charset="utf-8">'
             f'<meta name="viewport" content="width=device-width,initial-scale=1">'
-            f'<title>{TEXTES["fr"]["titre"]} — Sailing More</title>'
+            f'<title>{seo_titre}</title>'
             f'<link rel="canonical" href="https://sailingmore.fr/cours.html">'
             f'{_ld_cours(desc)}'
-            f'<meta name="description" content="{_html.escape(desc)}">'
+            f'<meta name="description" content="{_html.escape(seo_desc, quote=True)}">'
+            + __import__("jsonld").social("cours.html", seo_titre, seo_desc) +
             f'<style>{site_blocks.ENTETE_CSS}{CSS}{pavillons_cours.CSS}{_css_schemas()}</style></head><body>\n'
             f'{site_blocks.entete_site("cours.html", LANGUES)}{regles_page.SPRITE}\n<div class="page">\n{corps}\n</div>\n'
             f'<script>{JS.replace("__LANGUES__", json.dumps(LANGUES))}</script>\n</body></html>\n')

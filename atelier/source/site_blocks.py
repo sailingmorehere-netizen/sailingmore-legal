@@ -415,7 +415,7 @@ CARTE_CSS = """
 .encart-france .pt-b .bulle b{font-size:10px;font-weight:700;color:#f2f5f8;line-height:1.2}
 .encart-france .pt-b .bulle span.zone{font-size:8px;font-weight:600;letter-spacing:.1em;
   text-transform:uppercase;color:rgba(238,243,247,.5)}
-.encart-france .pt-b .bulle i{font-style:normal;font-size:9px;font-weight:700;color:#e23a3e}
+.encart-france .pt-b .bulle i{font-style:normal;font-size:9px;font-weight:700;color:#f05a5e}
 .encart-france .pt-b:hover .bulle,.encart-france .pt-b:focus-visible .bulle{
   opacity:1;transform:translate(-50%,0)}
 .encart-france .pt-b.bord-g .bulle{left:0;transform:translate(0,5px)}
@@ -449,7 +449,7 @@ CARTE_CSS = """
 .planisphere .pt-b .bulle span.zone{font-size:9.5px;font-weight:600;letter-spacing:.13em;
   text-transform:uppercase;color:rgba(238,243,247,.5)}
 .planisphere .pt-b .bulle i{font-style:normal;font-size:10px;font-weight:700;letter-spacing:.05em;
-  color:#e23a3e;font-variant-numeric:tabular-nums}
+  color:#f05a5e;font-variant-numeric:tabular-nums}
 .planisphere .pt-b:hover .bulle,.planisphere .pt-b:focus-visible .bulle{opacity:1;transform:translate(-50%,0)}
 .planisphere .pt-b.bord-g .bulle{left:0;transform:translate(0,5px)}
 .planisphere .pt-b.bord-g:hover .bulle,.planisphere .pt-b.bord-g:focus-visible .bulle{transform:translate(0,0)}
@@ -1824,7 +1824,7 @@ CSS = """
   font-weight:300}
 .detail-packs .det-intitule{text-align:left;color:rgba(238,241,244,.8);line-height:1.45;
   font-size:.74rem;padding-right:.8rem}
-.detail-packs .det-oui{color:#e23a3e;font-weight:600}
+.detail-packs .det-oui{color:#f05a5e;font-weight:600}
 .detail-packs .det-vide{color:rgba(238,241,244,.22)}
 @media (max-width:520px){.detail-packs{font-size:.7rem}.detail-packs td{padding:.5rem .2rem}
   .detail-packs th{font-size:.55rem}.detail-packs .det-intitule{font-size:.68rem}}
@@ -1860,7 +1860,7 @@ CSS = """
   font-weight:300}
 .detail-packs .det-intitule{text-align:left;color:rgba(238,241,244,.8);line-height:1.45;
   font-size:.74rem;padding-right:.8rem}
-.detail-packs .det-oui{color:#e23a3e;font-weight:600}
+.detail-packs .det-oui{color:#f05a5e;font-weight:600}
 .detail-packs .det-vide{color:rgba(238,241,244,.22)}
 @media (max-width:520px){.detail-packs{font-size:.7rem}.detail-packs td{padding:.5rem .2rem}
   .detail-packs th{font-size:.55rem}.detail-packs .det-intitule{font-size:.68rem}}

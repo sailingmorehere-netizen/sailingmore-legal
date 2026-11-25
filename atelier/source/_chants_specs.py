@@ -209,7 +209,78 @@ SPECS = [
  ("ved-balasthjoning", "Ved Balasthjoning", "hisser", S, [(15356, 15359), (15363, 15366)], [],
   "Chant norvégien pour jeter le lest : de tous les chants des marins du monde, aucun ne sent autant la fraîcheur et la vigueur de la mer, selon Smith.",
   "A Norwegian ballast-throwing song, of all the songs Smith heard none so redolent of the freshness and vigour of the sea."),
+ # ------------------------------------------------------------------ ajouts du 25/11/2026 (lignes lues dans l'OCR, rien d'écrit à la main sauf Johnny Boker)
+ ("sally-racket", "Sally Racket", "hisser", S, [(2337, 2392)], [2378],
+  "Chant de drisse de hune très employé pour charger le bois à Québec ; le mot « men » du refrain portait le coup de tire.",
+  "The well-known topsail-halyard song, greatly used by the sailors when loading their ships with timber at Quebec; in the chorus the word 'men' is accented by the pull."),
+ ("pay-me-the-money-down", "Pay Me the Money Down", "pompe", S, [(2421, 2434)], [2428],
+  "Refrain de pompe « très favori » ; Smith le tient pour une chanson comique anglaise, et n'importe quel air vif de pompe à incendie y convenait.",
+  "A very favourite pumping chorus, known as an English comic song; any quick, lively tune to which you might work a fire-engine would serve."),
+ ("home-dearie-home", "Home, Dearie, Home", "melancolique", S, [(2559, 2605)], [2566, 2606],
+  "Parmi les chants favoris des marins du Nord de l'Angleterre, que Smith juge « le plus charmant et le plus pathétique » ; il y est question d'Amble, au Northumberland.",
+  "Amongst the favourite chanties of North-country sailors, 'that most charming and pathetic of songs'."),
+ ("john-brown", "John Brown", "virer", S, [(3579, 3585), (3598, 3620)], [3603],
+  "Chanty que les marins disent toujours venu d'Amérique, comme « A Yankee Ship » ; il suit l'air de la chanson de la guerre de Sécession.",
+  "Like 'A Yankee Ship', always fathered on America."),
+ ("plains-of-mexico", "The Plains of Mexico", "virer", S, [(3942, 3946)], [],
+  "Chanty de guindeau très en faveur ; le nom du général Santa Anna revient souvent dans les chants des Noirs du Sud, note Smith.",
+  "The windlass chanty known as 'The Plains of Mexico' is a great favourite; the name of Santa Anna is frequently heard in the songs of the Southern negroes."),
+ ("heave-away-my-johnny", "Heave Away, My Johnny", "virer", S, [(4632, 4639), (4644, 4683), (4700, 4710)], [4640, 4684, 4686, 4688],
+  "Un des « bons chants de cabestan » de Smith ; chaque vers y est répété, pour que l'ancre soit levée avant la fin du chant. Il raconte un émigrant à Liverpool et les paquebots de Tap Scott.",
+  "One of two good capstan songs in Smith; each line is repeated, so that the anchor may be up ere it is finished."),
+ # ------------------------------------------------------------------ Terry I (suite)
+ ("johnny-boker", "Johnny Boker", "hisser", T1, [], [],
+  "Shanty populaire, parfois pour hisser une voile mais plus souvent pour border en dernier effort ; la dernière note, qui coïncidait avec le tire, sonnait plutôt comme un grognement sec.",
+  "A popular shanty, sometimes used for bunting-up a sail but more usually for 'sweating-up'; the last note coincided with the pull and sounded more like a staccato grunt."),
+ ("haul-away-joe-terry", "Haul Away, Joe", "hisser", T1, [(9211, 9212), (9215, 9215), (9225, 9225), (9229, 9229), (9235, 9235), (9237, 9239), (9242, 9242), (9245, 9245)], [],
+  "Version mineure, la plus belle selon Terry, celle qu'il entendait sur la Tyne ; les couplets improvisés étaient sans fin, mais ceux de « King Louis » ne manquaient jamais.",
+  "This minor version, certainly the most beautiful of them, is the one Terry used to hear on the Tyne; the verses extemporized were endless, but the King Louis ones never seem to have been omitted."),
+ # ------------------------------------------------------------------ Terry II (suite)
+ ("miss-lucy-long", "Miss Lucy Long", "virer", T2, [(2266, 2268), (2271, 2273)], [],
+  "Chanté à Terry par M. Short, qui est le seul de qui il l'ait entendu.",
+  "Sung to Terry by Mr. Short; he never heard it from anyone else."),
+ ("hilo-john-brown", "Hilo, John Brown", "hisser", T2, [(2851, 2852), (2855, 2856)], [],
+  "Whall en donne une version sous le titre « Stand to your ground » ; Terry n'a rencontré que deux marins qui connaissaient ce shanty.",
+  "Whall gives a version under the title 'Stand to your ground'; Terry met only two seamen who knew the shanty."),
+ ("bully-boat", "The Bully Boat Is Coming", "hisser", T2, [(3160, 3161), (3167, 3168), (3173, 3176)], [],
+  "Chanté à Terry par M. Short, qui disait « the paddles rolling » ; d'autres marins chantaient « roaring », lecture plus probable selon Terry.",
+  "Sung to Terry by Mr. Short, who sang 'paddles rolling'; others always sang 'roaring', which seems the more probable reading."),
+ ("hilonday", "Hilonday", "hisser", T2, [(3901, 3914)], [],
+  "Terry l'a appris enfant de James Runciman, et se souvient de l'avoir entendu le chanter avec W. E. Henley, chez ce dernier.",
+  "Learnt in boyhood from the late Mr. James Runciman, whom Terry remembers giving tongue to it with W. E. Henley."),
+ # ------------------------------------------------------------------ Whall (suite)
+ ("voice-of-her-i-love", "The Voice of Her I Love", "melancolique", W, [(4972, 4982)], [],
+  "Une série de vrais chants de mer serait incomplète sans la chanson sentimentale, chère au vieux marin, qui ne parlait pas forcément de la mer ; Whall la juge de plus de mérite que la plupart.",
+  "A sentimental song, dear to the old-time sailor, which did not necessarily contain any allusions to the sea; Whall thinks it has more merit than most."),
 ]
+
+# lignes de l'OCR qui prolongent la ligne précédente (retour à la ligne de la colonne du livre) : jointes, jamais réécrites
+JOINS = {
+ "home-dearie-home": {2570, 2575, 2580, 2583, 2586, 2589, 2592, 2595, 2600, 2605},
+ "heave-away-my-johnny": {4634, 4639, 4646, 4649, 4653, 4656, 4660, 4665, 4668, 4672, 4675, 4679, 4682, 4703, 4707, 4710},
+}
+# Johnny Boker (Terry I, n° 27) : trois colonnes de couplets dans le scan, lues de gauche à droite, recopiées telles quelles
+JOHNNY_BOKER = "\n\n".join(f"Oh do my Johnny Boker,\n{v}\nDo my Johnny, etc." for v in (
+    "The skipper is a rover.", "The mate he's never sober.", "The Bo'sun is a tailor.", "We'll all go on a jamboree.",
+    "The Packet is a rollin'.", "We'll pull and haul together.", "We'll haul for better weather.",
+    "And soon we'll be in London Town.", "Come rock and roll me over."))
+MANUEL = {"johnny-boker": JOHNNY_BOKER}
+# raison du manque, par chant (sinon : la mention générique « notés sous la portée »)
+RAISON = {
+ "sally-racket": "paroles complètes du texte imprimé", "pay-me-the-money-down": "paroles partielles : des lignes manquent dans le scan",
+ "home-dearie-home": "paroles complètes du texte imprimé",
+ "john-brown": "paroles partielles : couplets 2 et 3 omis (termes injurieux, non reproduits)",
+ "plains-of-mexico": "paroles partielles : seul le premier couplet imprimé est lisible",
+ "heave-away-my-johnny": "paroles partielles : la fin du refrain du couplet 1 est tronquée dans le scan",
+ "johnny-boker": "paroles partielles : couplets 2 à 10 ; le premier est noté sous la portée",
+ "haul-away-joe-terry": "paroles partielles : couplets 5 et 6 omis (terme injurieux), le premier est noté sous la portée",
+ "miss-lucy-long": "paroles partielles : deux couplets lisibles, le reste est illisible dans le scan",
+ "hilo-john-brown": "paroles partielles : deux couplets lisibles, le reste est illisible dans le scan",
+ "bully-boat": "paroles partielles : trois couplets lisibles, le reste est illisible dans le scan",
+ "hilonday": "paroles partielles : couplets 2 à 7 ; le premier est noté sous la portée",
+ "voice-of-her-i-love": "paroles partielles : couplet 2 ; le premier est noté sous la portée",
+}
+COMPLETS_AJOUTS = {"sally-racket", "home-dearie-home"}
 
 # livre -> (fichier, intitulé court, année du livre, URL de la numérisation)
 LIVRES = {
@@ -218,7 +289,8 @@ LIVRES = {
  T2: ("the-shanty-book-part-two.txt", "Terry, The Shanty Book, Part II (1926)", "1926", "https://archive.org/details/the-shanty-book-part-two"),
  S: ("musicofwaterscol00smituoft.txt", "Smith, The Music of the Waters (1888)", "1888", "https://archive.org/details/musicofwaterscol00smituoft"),
 }
-PAGES_SMITH = {"handy-jim": "pp. 52-53", "ved-balasthjoning": "p. 220"}
+PAGES_SMITH = {"handy-jim": "pp. 52-53", "ved-balasthjoning": "p. 220", "sally-racket": "pp. 22-23", "pay-me-the-money-down": "pp. 23-24",
+               "home-dearie-home": "pp. 25-26", "john-brown": "pp. 40-41", "plains-of-mexico": "p. 47", "heave-away-my-johnny": "pp. 55-56"}
 
 # numéro du chant dans le livre (Terry) et pages certaines (lues dans la table des matières propre)
 NUMERO = {"bound-rio-grande": (2, 4), "wild-goose-shanty": (12, 26), "drunken-sailor": (14, 30), "good-morning-ladies": (18, 38),
@@ -228,7 +300,8 @@ NUMERO = {"bound-rio-grande": (2, 4), "wild-goose-shanty": (12, 26), "drunken-sa
           "paddy-works-railway": (7, None), "cant-you-dance-polka": (8, None), "fire-down-below": (16, None),
           "shallow-brown": (17, None), "round-the-corner-sally": (22, None), "my-tommys-gone-away": (24, None),
           "sing-fare-you-well": (25, None), "lizer-lee": (28, None), "hundred-years-eastern-shore": (29, None),
-          "sailor-likes-his-bottle": (34, None)}
+          "sailor-likes-his-bottle": (34, None), "johnny-boker": (27, None), "haul-away-joe-terry": (28, None),
+          "miss-lucy-long": (13, None), "hilo-john-brown": (20, None), "bully-boat": (23, None), "hilonday": (31, None)}
 
 # Billy Boy : deux colonnes entrelacées dans le scan, recopié tel quel (couplets 2 à 4 ; le 1er est dans la partition)
 BILLY_BOY = ("Is she fit to be yor wife,\nBilly Boy, Billy Boy?\nIs she fit to be yor wife, me Billy Boy?\n"

@@ -132,7 +132,8 @@ MARQUE = "SailingMore.fr"
 MARQUE2 = "École de voile en ligne"
 LEGENDE = f"{MARQUE} — {MARQUE2}"
 # Titre : la promesse, jamais un slogan (Hermes, 22/11/2026). L'école se dit dans le H1, la description, la fiche.
-TITRE_PROMESSE = "Nomenclature des bateaux : toutes les pièces, du Laser à l'Ultim — SailingMore"
+# Audit SEO du 24/11/2026, correction 4 : texte de l'audit, marque écrite « Sailing More ».
+TITRE_PROMESSE = "Nomenclature des voiliers, pièce par pièce | Sailing More"
 # Licence : décision prise à la place de Nicolas — la page des mentions légales, qui dit les conditions de réutilisation.
 LICENCE_URL = "https://sailingmore.fr/mentions-legales.html"
 
@@ -948,8 +949,10 @@ def page(mots, mises) -> str:
     brut = json.dumps(donnees, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     corps = "".join(_section(b, m, mots) for b, m in zip(BATEAUX, mises))
     ui = UI["fr"]
-    desc = ("Nomenclature illustrée de neuf bateaux de voile — voilier habitable X35, Hobie 16, Laser, 49er, planche iQFOiL, "
-            "Formula Kite, wingfoil, IMOCA, Ultim : chaque pièce nommée et reliée à sa définition du lexique.")
+    # Le nombre vient de la liste des bateaux (9 dans cette copie : le texte de l'audit en annonçait 10, avec
+    # la Surprise, qui n'est pas dans les données ; elle n'est donc pas nommée ici).
+    desc = (f"Les pièces de {len(BATEAUX)} bateaux sur un schéma : X35, Hobie 16, Laser, 49er, iQFOiL, kite, "
+            "wingfoil, IMOCA et Ultim. Chaque mot renvoie au lexique.")
     og = f"{URL}/images/bateaux/{_nom_fichier(BATEAUX[0])}"
     filtres = "".join(f'<button type="button" class="puce" data-cat="{c}" aria-pressed="{"true" if c == "tous" else "false"}">{ui[c]}</button>' for c in CATS)
     return (
@@ -1000,23 +1003,9 @@ def image_svg(b, m, mots) -> str:
 
 
 def maj_sitemap(mots) -> None:
-    f = SITE / "sitemap.xml"
-    if not f.exists():
-        return
-    x = f.read_text(encoding="utf-8")
-    if "xmlns:image" not in x:
-        x = x.replace('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-                      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">')
-    x = re.sub(r"\s*<url><loc>https://sailingmore\.fr/bateaux\.html</loc>.*?</url>", "", x, flags=re.S)
-    e = lambda s: _html.escape(s, quote=False)  # noqa: E731
-    imgs = "".join(
-        f'<image:image><image:loc>{URL}/images/bateaux/{_nom_fichier(b)}</image:loc>'
-        f'<image:title>{e(_alt(b, mots, "fr").split(" : ")[0])}</image:title>'
-        f'<image:caption>{e(LEGENDE + " — " + _alt(b, mots, "fr"))}</image:caption></image:image>' for b in BATEAUX)
-    ligne = (f'\n  <url><loc>{URL}/bateaux.html</loc><lastmod>{date.today().isoformat()}</lastmod>'
-             f'<changefreq>monthly</changefreq><priority>0.8</priority>{imgs}</url>')
-    x = x.replace("</urlset>", ligne + "\n</urlset>")
-    f.write_text(x, encoding="utf-8")
+    """Sans écriture depuis le 25/11/2026 : `sitemap_site.fusionner` est le seul écrivain du sitemap
+    (il conserve les blocs image:image déjà posés pour bateaux.html)."""
+    return None
 
 
 def ecrire_page(dossier: Path = SITE) -> str:

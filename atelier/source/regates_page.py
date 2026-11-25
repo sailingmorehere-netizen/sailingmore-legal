@@ -933,6 +933,15 @@ def _ld_regates(epreuves: list[dict]) -> str:
               "endDate": e["fin"] or e["debut"],
               "location": {"@type": "Place", "name": e["ville"] or e["pays_fr"] or e["pays"],
                            "address": adresse}}
+        # Audit SEO du 24/11/2026, correction 6 : statut, mode, image, description. Rien n'est inventé :
+        # la description n'existe que si la classe ou le club sont dans les données ; l'image est celle du site.
+        ev["eventStatus"] = "https://schema.org/EventScheduled"
+        ev["eventAttendanceMode"] = "https://schema.org/OfflineEventAttendanceMode"
+        ev["image"] = "https://sailingmore.fr/og-image.jpg"
+        classes = [c for c in e["classes"] if c][:3]
+        if classes or e["club"]:
+            ev["description"] = ("Régate" + (f" de {', '.join(classes)}" if classes else "")
+                                 + (f" organisée par {e['club']}" if e["club"] else "") + ".")
         if e["club"]:
             ev["organizer"] = {"@type": "Organization", "name": e["club"]}
         if e["lien"]:
@@ -1028,14 +1037,20 @@ def construire(d: dict) -> str:
         "majeures": "les sites des organisateurs",
     }
 
+    # Audit SEO du 24/11/2026, correction 4 : title et description du document de l'audit, avec les
+    # compteurs pris dans les données (le même `epreuves` que le chapô et le compteur de la page).
+    n_pays = len({e["pays"] for e in epreuves if e["pays"]})
+    seo_titre = "Calendrier des régates : Léman, France, monde | Sailing More"
+    seo_desc = (f"{len(epreuves)} régates à venir dans {n_pays} pays : dates, lieux, clubs et classes. "
+                "Filtrez le Léman, la France ou le monde et trouvez votre prochaine course.")
     return (
         '<!doctype html>\n<html lang="fr"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
-        "<title>Calendrier des régates — Sailing More</title>"
+        f"<title>{seo_titre}</title>"
         '<link rel="canonical" href="https://sailingmore.fr/regates.html">'
         + _ld_regates(epreuves) +
-        '<meta name="description" content="Toutes les régates de voile : Léman, France, Suisse et '
-        'monde. Dates, lieux, clubs, classes, inscriptions. Recherche et filtres.">'
+        f'<meta name="description" content="{seo_desc}">'
+        + __import__("jsonld").social("regates.html", seo_titre, seo_desc) +
         "<style>" + CSS + "</style></head><body>" + sprite +
         '<div class="page">'
         '<a class="retour" href="/">← Sailing More</a>'

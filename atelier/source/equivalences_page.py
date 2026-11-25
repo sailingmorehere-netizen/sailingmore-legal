@@ -162,9 +162,8 @@ tr.non-valide td{opacity:.85}
 JS = r"""
 (function(){
 var D=JSON.parse(document.getElementById('eq-donnees').textContent),L='fr';
-/* Une seule détection pour tout le site, faite dans le <head> (24/11/2026). */
-function choisir(){var v=(typeof window.smLangue==='function')?window.smLangue():'en';
-  if(v==='bzh')v='fr';return D.ui[v]?v:'en'}
+function choisir(){var v='auto';try{v=localStorage.getItem('sm-langue')||'auto'}catch(e){}
+  if(v==='auto'){v=(navigator.language||'fr').slice(0,2);if(v==='br')v='fr'}return D.ui[v]?v:'en'}
 function t(k){return (D.ui[L]||D.ui.en)[k]||D.ui.fr[k]||k}
 function tx(v){if(v&&typeof v==='object'){return v[L]||v.en||v.fr||''}return v||''}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -284,9 +283,11 @@ def construire(d: dict, apercu: bool = False) -> str:
             "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
             f"<title>{H.escape(fr['titre'])} — Sailing More</title>"
             f"<meta name=\"description\" content=\"{H.escape(fr['chapo'], quote=True)}\">")
-    if apercu:
+    # noindex tant qu'aucune correspondance n'est publiable (25/11/2026) : levé tout seul dès la première.
+    vide = not any(publiable(x) for x in d.get("correspondances") or [] if isinstance(x, dict))
+    if apercu or vide:
         tete += "<meta name=\"robots\" content=\"noindex,nofollow\">"
-    else:
+    if not apercu:
         tete += (f"<link rel=\"canonical\" href=\"{URL}/{PAGE}\">"
                  + jsonld.page_simple(PAGE, fr["titre"])
                  + jsonld.social(PAGE, f"{fr['titre']} — Sailing More", fr["chapo"]))
@@ -316,17 +317,8 @@ def construire(d: dict, apercu: bool = False) -> str:
 
 
 def maj_sitemap(dossier: Path) -> bool:
-    """Ajoute (ou rafraîchit) l'entrée de la page dans sitemap.xml. Idempotent. L'aperçu n'y est jamais."""
-    f = dossier / "sitemap.xml"
-    if not f.exists():
-        return False
-    x = f.read_text(encoding="utf-8")
-    x = re.sub(r"\s*<url><loc>https://sailingmore\.fr/equivalences\.html</loc>.*?</url>", "", x, flags=re.S)
-    ligne = (f"\n  <url><loc>{URL}/{PAGE}</loc><lastmod>{date.today().isoformat()}</lastmod>"
-             "<changefreq>monthly</changefreq><priority>0.7</priority></url>")
-    x = x.replace("</urlset>", ligne + "\n</urlset>", 1)
-    f.write_text(x, encoding="utf-8")
-    return True
+    """Sans écriture depuis le 25/11/2026 : `sitemap_site.fusionner` est le seul écrivain du sitemap."""
+    return (dossier / "sitemap.xml").exists()
 
 
 def ecrire_page(dossier: Path = SITE) -> str:

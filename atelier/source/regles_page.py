@@ -44,8 +44,8 @@ DEUX_EXEMPLES = {str(n) for n in range(10, 20)} | {"31", "42", "44", "61"}
 MIN_MOTS_RESUME = 25
 
 UI = {
-    "fr": {"titre": "Règles de course à la voile",
-           "chapo": "Les règles de course (RRS 2025-2028) expliquées avec nos mots, un exemple concret pour chacune. "
+    "fr": {"titre": "Règles de course à la voile (RCV)",
+           "chapo": "Les règles de course à la voile (RCV 2025-2028) expliquées avec nos mots, un exemple concret pour chacune. "
                     "Cherchez par numéro, par titre ou par situation vécue.",
            "retour": "← Sailing More", "placeholder": "Un numéro (10), un mot (bâbord), une situation (collision)…",
            "aria": "Rechercher dans les règles", "tous": "Toutes", "tous_m": "Tous",
@@ -892,7 +892,7 @@ def _ld_regles(d: dict) -> str:
     import jsonld
     url = f"{jsonld.SITE}/regles-de-course.html"
     article = {"@type": "Article", "headline": "Règles de course à la voile", "inLanguage": "fr",
-               "description": f"Les règles de course à la voile (RRS {d['edition']['libelle']}) : numéro, "
+               "description": f"Les règles de course à la voile (RCV {d['edition']['libelle']}) : numéro, "
                               "intitulé, résumé et exemple concret pour chaque règle.",
                "mainEntityOfPage": url, "url": url,
                "author": {"@id": jsonld.ORG_ID}, "publisher": {"@id": jsonld.ORG_ID}}
@@ -924,18 +924,18 @@ def page_regles(d: dict | None = None) -> str:
                 f'{e(ui["tous_m"])}</button>'
                 + "".join(f'<button type="button" class="puce" data-theme="{e(th["cle"])}" '
                           f'aria-pressed="false">{e(th["nom"]["fr"])}</button>' for th in d["themes"]))
+    # Audit SEO du 24/11/2026, correction 4 : textes de l'audit ; l'édition vient des données.
+    seo_titre = f"Règles de course à la voile (RCV {ed['libelle']}) | Sailing More"
+    seo_desc = (f"Toutes les règles de course à la voile {ed['libelle']} résumées en clair, avec un exemple "
+                "pour chaque règle. Cherchez une règle par numéro ou par mot.")
     return (
         '<!doctype html>\n<html lang="fr"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
-        "<title>Règles de course à la voile — Sailing More</title>"
+        f"<title>{seo_titre}</title>"
         '<link rel="canonical" href="https://sailingmore.fr/regles-de-course.html">'
         + _ld_regles(d) +
-        '<meta name="description" content="Les règles de course à la voile (RRS 2025-2028) : résumé et '
-        'exemple pour chaque règle, avec recherche et filtres, en six langues.">'
-        + __import__("jsonld").social(
-            "regles-de-course.html", "Règles de course à la voile — Sailing More",
-            f"Les règles de course à la voile (RRS {ed['libelle']}) : numéro, intitulé, résumé et exemple "
-            "concret pour chaque règle, avec recherche et filtres.") +
+        f'<meta name="description" content="{seo_desc}">'
+        + __import__("jsonld").social("regles-de-course.html", seo_titre, seo_desc) +
         "<style>" + site_blocks.ENTETE_CSS + CSS + "</style>"
         "<noscript><style>.recherche{display:none}</style></noscript></head><body>"
         + site_blocks.entete_site("regles-de-course.html", LANGUES) + SPRITE +

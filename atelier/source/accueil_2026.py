@@ -120,7 +120,7 @@ def textes(x: dict) -> dict:
         T[l] = d
         T[l]["_tot"] = tot
     P = {  # texte par langue, dans l'ordre LANGUES = fr en de it es pt
-        "titre": ["Sailing More — stages, régates et cours de voile", "Sailing More — sailing courses, regattas and lessons",
+        "titre": ["Stages, régates et cours de voile en Europe | Sailing More", "Sailing More — sailing courses, regattas and lessons",
                   "Sailing More — Segelkurse, Regatten und Theorie", "Sailing More — corsi di vela, regate e lezioni",
                   "Sailing More — cursos de vela, regatas y clases", "Sailing More — cursos de vela, regatas e aulas"],
         "h1": ["Stages, régates et cours de voile, en Europe et au-delà.",
@@ -163,7 +163,7 @@ def textes(x: dict) -> dict:
         "c_chants": ["Chants de marins", "Sea shanties", "Seemannslieder", "Canti di marinai", "Cantos de marineros", "Cantos de marinheiros"],
         "l_chants": ["{n} chants de marins, présentés un à un.", "{n} sea shanties, presented one by one.", "{n} Seemannslieder, einzeln vorgestellt.",
                      "{n} canti di marinai, presentati uno a uno.", "{n} cantos de marineros, presentados uno a uno.", "{n} cantos de marinheiros, apresentados um a um."],
-        "r_titre": ["Réseaux", "Social networks", "Soziale Netzwerke", "Social", "Redes", "Redes"],
+        "r_titre": ["Sailing More sur les réseaux", "Social networks", "Soziale Netzwerke", "Social", "Redes", "Redes"],
         "r_date": ["relevé le", "as of", "Stand:", "rilevato il", "datos del", "dados de"],
         "r_abo": ["abonnés", "followers", "Follower", "follower", "seguidores", "seguidores"],
         "r_vues": ["vues mesurées", "measured views", "gemessene Aufrufe", "visualizzazioni misurate", "visualizaciones medidas", "visualizações medidas"],
@@ -172,7 +172,7 @@ def textes(x: dict) -> dict:
         "r_cont": ["contenus publiés", "posts published", "veröffentlichte Beiträge", "contenuti pubblicati", "contenidos publicados", "conteúdos publicados"],
         "r_cont_d": ["publications Instagram et vidéos YouTube", "Instagram posts and YouTube videos", "Instagram-Beiträge und YouTube-Videos",
                      "post Instagram e video YouTube", "publicaciones de Instagram y vídeos de YouTube", "publicações do Instagram e vídeos do YouTube"],
-        "s_titre": ["Site", "Site", "Website", "Sito", "Sitio", "Site"],
+        "s_titre": ["Ce que contient le site", "Site", "Website", "Sito", "Sitio", "Site"],
         "s_date": ["compté le", "counted on", "gezählt am", "contato il", "contado el", "contado em"],
         "s_off": ["offres de stage", "course offers", "Kursangebote", "offerte di corsi", "ofertas de cursos", "ofertas de cursos"],
         "s_eco": ["écoles, dans {p} pays", "schools, in {p} countries", "Schulen, in {p} Ländern", "scuole, in {p} paesi", "escuelas, en {p} países", "escolas, em {p} países"],
@@ -406,9 +406,12 @@ def refondre(html: str, racine: Path) -> str:
     # les titres et la description du gabarit suivent la nouvelle promesse
     tete = html[:i_body]
     tete = re.sub(r"<title>.*?</title>", f"<title>{T['fr']['titre']}</title>", tete, flags=re.S)
-    desc = "Stages, régates et cours de voile : les offres de stage, le calendrier des régates, les règles de course, le lexique."
+    # Audit SEO du 24/11/2026, correction 4 : texte de l'audit, les trois nombres viennent des mesures.
+    sp_ = lambda v: f"{v:,}".replace(",", " ")
+    desc = (f"{sp_(x['offres'])} stages de voile à prix publiés dans {x['pays_offres']} pays, {sp_(x['regates'])} "
+            "régates à venir, un cours théorique gratuit et les règles de course en clair. Le média de la voile.")
     tete = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{desc}">', tete)
-    tete = re.sub(r'<meta property="og:title" content="[^"]*">', '<meta property="og:title" content="Sailing More — stages, régates et cours de voile">', tete)
+    tete = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{T["fr"]["titre"]}">', tete)
     tete = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{desc}">', tete)
     return tete + "\n\n" + mid + corps(x, T)
 

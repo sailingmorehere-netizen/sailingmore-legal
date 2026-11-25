@@ -265,17 +265,18 @@ def construire(d: dict | None = None) -> str:
 def _html(d: dict) -> str:
     import html as H
     import site_blocks  # la barre du site et le menu : un seul endroit
+    # Audit SEO du 24/11/2026, correction 4 : textes de l'audit ; les trois compteurs viennent des données.
+    seo_titre = "Stages de voile en Europe, prix publiés | Sailing More"
+    seo_desc = (f"Comparez {len(d['offres'])} stages de voile de {len(d['ecoles'])} écoles dans "
+                f"{len(d['pays'])} pays : croisière, dériveur, RYA ou FFVoile. Prix, dates et niveau "
+                "affichés, lien direct vers l'école.")
     corps = ("<!doctype html><html lang=\"fr\"><head><meta charset=\"utf-8\">"
              "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
-             f"<title>{H.escape(UI['fr']['titre'])} — Sailing More</title>"
+             f"<title>{H.escape(seo_titre)}</title>"
              "<link rel=\"canonical\" href=\"https://sailingmore.fr/stages.html\">"
              f"{__import__('jsonld').page_simple('stages.html', UI['fr']['titre'])}"
-             "<meta name=\"description\" content=\"Stages et cours de voile vendus par des écoles "
-             "européennes : prix publiés, destination, langue, lien direct vers la fiche de l'école.\">"
-             + __import__('jsonld').social(
-                 "stages.html", "Stages de voile — Sailing More",
-                 "Stages et cours de voile vendus par des écoles européennes : prix publiés, destination, "
-                 "langue, lien direct vers la fiche de l'école.") +
+             f"<meta name=\"description\" content=\"{H.escape(seo_desc, quote=True)}\">"
+             + __import__('jsonld').social("stages.html", seo_titre, seo_desc) +
              f"<style>{site_blocks.ENTETE_CSS}{CSS}</style></head><body>\n"
              f"{site_blocks.entete_site('stages.html', site_blocks.LANGUES)}\n<main class=\"page\">"
              f"<a class=\"retour\" href=\"/\" data-t=\"retour\">{H.escape(UI['fr']['retour'])}</a>"
