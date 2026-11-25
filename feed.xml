@@ -5,7 +5,7 @@
   <link>https://sailingmore.fr/</link>
   <description>Stages de voile, calendrier des régates d&#x27;Europe, cours théoriques, règles de course : les pages de Sailing More, mises à jour au fil de l&#x27;eau.</description>
   <language>fr-fr</language>
-  <lastBuildDate>Wed, 25 Nov 2026 10:43:16 +0000</lastBuildDate>
+  <lastBuildDate>Wed, 25 Nov 2026 11:17:19 +0000</lastBuildDate>
   <atom:link href="https://sailingmore.fr/feed.xml" rel="self" type="application/rss+xml"/>
   <ttl>720</ttl>
   <copyright>Sailing More</copyright>
@@ -14,8 +14,49 @@
     <title>Stages de voile en Europe, prix publiés | Sailing More</title>
     <link>https://sailingmore.fr/stages.html</link>
     <guid isPermaLink="true">https://sailingmore.fr/stages.html</guid>
-    <pubDate>Wed, 25 Nov 2026 10:31:28 +0000</pubDate>
+    <pubDate>Wed, 25 Nov 2026 11:16:01 +0000</pubDate>
     <description>Comparez 493 stages de voile de 39 écoles dans 18 pays : croisière, dériveur, RYA ou FFVoile. Prix, dates et niveau affichés, lien direct vers l&#x27;école.</description>
+  </item>
+  <item>
+    <title>Calendrier des régates : Léman, France, monde | Sailing More</title>
+    <link>https://sailingmore.fr/regates.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/regates.html</guid>
+    <pubDate>Wed, 25 Nov 2026 11:16:01 +0000</pubDate>
+    <description>921 régates à venir dans 45 pays : dates, lieux, clubs et classes. Filtrez le Léman, la France ou le monde et trouvez votre prochaine course.</description>
+  </item>
+  <item>
+    <title>Stages, régates et cours de voile en Europe | Sailing More</title>
+    <link>https://sailingmore.fr/</link>
+    <guid isPermaLink="true">https://sailingmore.fr/</guid>
+    <pubDate>Wed, 25 Nov 2026 11:16:01 +0000</pubDate>
+    <description>659 stages de voile à prix publiés dans 18 pays, 994 régates à venir, un cours théorique gratuit et les règles de course en clair. Le média de la voile.</description>
+  </item>
+  <item>
+    <title>Publicité voile : formules annonceurs | Sailing More</title>
+    <link>https://sailingmore.fr/annonceurs.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/annonceurs.html</guid>
+    <pubDate>Wed, 25 Nov 2026 11:16:01 +0000</pubDate>
+    <description>Touchez les abonnés voile de Sailing More sur Facebook et Instagram : formules de 440 à 3 900 € HT, jeu concours compris, rapport de portée sous 72 h.</description>
+  </item>
+  <item>
+    <title>Chants de marins : paroles et histoire | Sailing More</title>
+    <link>https://sailingmore.fr/chants-de-marin.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/chants-de-marin.html</guid>
+    <pubDate>Wed, 25 Nov 2026 11:16:01 +0000</pubDate>
+    <description>101 chants de marins expliqués : à quoi ils servaient à bord, et les paroles du domaine public dans leur langue d&#x27;origine.</description>
+  </item>
+  <item>
+    <title>Le Léman — préparer une sortie</title>
+    <link>https://sailingmore.fr/carte.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/carte.html</guid>
+    <pubDate>Wed, 25 Nov 2026 11:16:01 +0000</pubDate>
+  </item>
+  <item>
+    <title>Cours théorique de voile gratuit | Sailing More</title>
+    <link>https://sailingmore.fr/cours.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/cours.html</guid>
+    <pubDate>Wed, 25 Nov 2026 11:16:01 +0000</pubDate>
+    <description>Apprenez la théorie de la voile gratuitement : allures, réglages, cartes, marées, météo, balisage, RIPAM et règles de course, avec exercices corrigés.</description>
   </item>
   <item>
     <title>Simulateur de priorités — règles de course et RIPAM — Sailing More</title>
@@ -32,13 +73,6 @@
     <description>Toutes les règles de course à la voile 2025-2028 résumées en clair, avec un exemple pour chaque règle. Cherchez une règle par numéro ou par mot.</description>
   </item>
   <item>
-    <title>Calendrier des régates : Léman, France, monde | Sailing More</title>
-    <link>https://sailingmore.fr/regates.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/regates.html</guid>
-    <pubDate>Wed, 25 Nov 2026 10:31:28 +0000</pubDate>
-    <description>921 régates à venir dans 45 pays : dates, lieux, clubs et classes. Filtrez le Léman, la France ou le monde et trouvez votre prochaine course.</description>
-  </item>
-  <item>
     <title>Ports du monde et marinas : carte et annuaire | Sailing More</title>
     <link>https://sailingmore.fr/ports.html</link>
     <guid isPermaLink="true">https://sailingmore.fr/ports.html</guid>
@@ -53,13 +87,6 @@
     <description>Bôme, choquer, lofer, empanner : 194 mots de la voile définis en une phrase, classés par thème (bateau, manœuvre, allures, météo, course), en 6 langues.</description>
   </item>
   <item>
-    <title>Stages, régates et cours de voile en Europe | Sailing More</title>
-    <link>https://sailingmore.fr/</link>
-    <guid isPermaLink="true">https://sailingmore.fr/</guid>
-    <pubDate>Wed, 25 Nov 2026 10:31:28 +0000</pubDate>
-    <description>659 stages de voile à prix publiés dans 18 pays, 994 régates à venir, un cours théorique gratuit et les règles de course en clair. Le média de la voile.</description>
-  </item>
-  <item>
     <title>Le jeu concours — Sailing More</title>
     <link>https://sailingmore.fr/jeux.html</link>
     <guid isPermaLink="true">https://sailingmore.fr/jeux.html</guid>
@@ -67,38 +94,11 @@
     <description>Le jeu concours Sailing More : cinq jours de stories, du mardi au samedi, un tirage le dimanche.</description>
   </item>
   <item>
-    <title>Chants de marins : paroles et histoire | Sailing More</title>
-    <link>https://sailingmore.fr/chants-de-marin.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/chants-de-marin.html</guid>
-    <pubDate>Wed, 25 Nov 2026 10:31:28 +0000</pubDate>
-    <description>93 chants de marins expliqués : à quoi ils servaient à bord, et les paroles du domaine public dans leur langue d&#x27;origine.</description>
-  </item>
-  <item>
     <title>Nomenclature des voiliers, pièce par pièce | Sailing More</title>
     <link>https://sailingmore.fr/bateaux.html</link>
     <guid isPermaLink="true">https://sailingmore.fr/bateaux.html</guid>
     <pubDate>Wed, 25 Nov 2026 10:31:28 +0000</pubDate>
     <description>Les pièces de 9 bateaux sur un schéma : X35, Hobie 16, Laser, 49er, iQFOiL, kite, wingfoil, IMOCA et Ultim. Chaque mot renvoie au lexique.</description>
-  </item>
-  <item>
-    <title>Publicité voile : formules annonceurs | Sailing More</title>
-    <link>https://sailingmore.fr/annonceurs.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/annonceurs.html</guid>
-    <pubDate>Wed, 25 Nov 2026 10:31:28 +0000</pubDate>
-    <description>Touchez les abonnés voile de Sailing More sur Facebook et Instagram : formules de 440 à 3 900 € HT, jeu concours compris, rapport de portée sous 72 h.</description>
-  </item>
-  <item>
-    <title>Cours théorique de voile gratuit | Sailing More</title>
-    <link>https://sailingmore.fr/cours.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/cours.html</guid>
-    <pubDate>Wed, 25 Nov 2026 10:31:28 +0000</pubDate>
-    <description>Apprenez la théorie de la voile gratuitement : allures, réglages, cartes, marées, météo, balisage, RIPAM et règles de course, avec exercices corrigés.</description>
-  </item>
-  <item>
-    <title>Le Léman — préparer une sortie</title>
-    <link>https://sailingmore.fr/carte.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/carte.html</guid>
-    <pubDate>Wed, 25 Nov 2026 07:02:14 +0000</pubDate>
   </item>
 </channel>
 </rss>
