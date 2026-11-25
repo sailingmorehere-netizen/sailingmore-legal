@@ -129,9 +129,9 @@ def textes(x: dict) -> dict:
                "Corsi di vela, regate e lezioni, in Europa e oltre.",
                "Cursos de vela, regatas y clases, en Europa y más allá.",
                "Cursos de vela, regatas e aulas, na Europa e além."],
-        "sous": ["Média indépendant de la voile, fait par des passionnés.", "An independent sailing outlet, made by enthusiasts.",
-                 "Unabhängiges Segelmedium, von Enthusiasten gemacht.", "Media indipendente di vela, fatto da appassionati.",
-                 "Medio independiente de vela, hecho por apasionados.", "Meio independente de vela, feito por apaixonados."],
+        "sous": ["Une plateforme de passionnés, faite par des passionnés.", "A platform of enthusiasts, made by enthusiasts.",
+                 "Eine Plattform von Begeisterten, gemacht von Begeisterten.", "Una piattaforma di appassionati, fatta da appassionati.",
+                 "Una plataforma de aficionados, hecha por aficionados.", "Uma plataforma de apaixonados, feita por apaixonados."],
         "c_stages": ["Stages", "Courses", "Segelkurse", "Corsi", "Cursos", "Cursos"],
         "c_regates": ["Régates", "Regattas", "Regatten", "Regate", "Regatas", "Regatas"],
         "c_cours": ["Cours", "Lessons", "Theorie", "Lezioni", "Clases", "Aulas"],
@@ -270,7 +270,7 @@ def corps(x: dict, T: dict) -> str:
         return re.sub(r'data-t="([^"]+)"></(b|span)>', lambda m: f'data-t="{m.group(1)}">{f[m.group(1)]}</{m.group(2)}>', h)
 
     grandes = "".join(cas(True, n, h) for n, h in [("stages", "stages.html"), ("regates", "regates.html"), ("cours", "cours.html")])
-    petites = "".join(cas(False, n, h) for n, h in [("lexique", "lexique.html"), ("leman", "carte.html"), ("regles", "regles-de-course.html"),
+    petites = "".join(cas(False, n, h) for n, h in [("leman", "carte.html"), ("regles", "regles-de-course.html"), ("lexique", "lexique.html"),
                                                       ("ports", "ports.html"), ("bateaux", "bateaux.html"), ("chants", "chants-de-marin.html")])
 
     def nb(cle_n, cle_l, cle_d=None, exact=""):
