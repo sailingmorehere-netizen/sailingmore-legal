@@ -1898,6 +1898,18 @@ def tete_pages_legales(nom: str, html: str) -> str:
     return html
 
 
+def _sans_onglet_interne(html: str) -> str:
+    """Retire target="_blank" rel="noopener" des liens internes (audit 24/11, correction 3)."""
+    def rempl(m):
+        tag = m.group(0)
+        h = re.search(r'href="([^"]*)"', tag)
+        if "_blank" not in tag or (h and h.group(1).startswith(("http://", "https://", "//"))
+                                   and "sailingmore.fr" not in h.group(1)):
+            return tag
+        return re.sub(r'\s+(?:target="_blank"|rel="noopener")', "", tag)
+    return re.sub(r"<a\b[^>]*>", rempl, html)
+
+
 def habillage_pages_legales(html: str) -> str:
     """Les pages légales passent au même marine que le site, sans toucher au texte.
 
@@ -1919,7 +1931,7 @@ def habillage_pages_legales(html: str) -> str:
         corps = corps[: -len("</div>")].rstrip()
     corps = ('\n<div class="page">\n<a class="retour" href="/">← Sailing More</a>\n'
              + corps.strip() + "\n</div>\n")
-    return tete + "<body>" + corps + "</body>\n</html>\n"
+    return tete + "<body>" + _sans_onglet_interne(corps) + "</body>\n</html>\n"
 
 
 def page_annonceurs() -> str:
