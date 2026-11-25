@@ -103,7 +103,7 @@
     var l = null;
     try{ l = localStorage.getItem("sm-langue"); }catch(e){}
     if(SIX.indexOf(l) >= 0) return l;
-    var cand = (navigator.languages || [navigator.language || "fr"]);
+    var cand = ["fr"];
     for(var i = 0; i < cand.length; i++){
       var b = String(cand[i]).toLowerCase().slice(0, 2);
       if(SIX.indexOf(b) >= 0) return b;
