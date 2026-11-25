@@ -1,6 +1,38 @@
 <!doctype html>
 <html lang="fr">
-<head>
+<head><!--langue-debut--><script id="sm-langue-detecteur">
+(function(){
+  var L = ["fr", "en", "it", "es", "pt", "de"], ALIAS = {"nb": "no", "nn": "no", "iw": "he", "in": "id", "ji": "yi", "jw": "jv", "mo": "ro", "sh": "hr", "tl": "fil"};
+  function lu(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function ec(k,v){ try{ if(v===null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){} }
+  function base(c){ c = String(c||'').toLowerCase().replace(/_/g,'-'); var b = c.split('-')[0]; return ALIAS[b]||b; }
+  function connue(b){ return b === 'bzh' || L.indexOf(b) >= 0; }
+  /* Le choix d'une langue, mémorisé pour toutes les pages. Le breton garde le texte français. */
+  function retenir(v){
+    if(v === 'auto'){ ec('sm-bzh', null); ec('sm-langue', 'auto'); }
+    else if(v === 'bzh'){ ec('sm-bzh', '1'); ec('sm-langue', 'fr'); }
+    else { ec('sm-bzh', null); ec('sm-langue', v); }
+  }
+  window.smLangue = function(){
+    /* 1. l'adresse demandée */
+    var q = null; try{ q = new URLSearchParams(location.search).get('lang'); }catch(e){}
+    if(q){ var b = base(q); if(connue(b)){ retenir(b); return b; } }
+    /* 2. le choix du visiteur, s'il en a fait un */
+    var v = lu('sm-langue');
+    if(v && v !== 'auto' && connue(v)) return (v === 'fr' && lu('sm-bzh') === '1') ? 'bzh' : v;
+    /* 3. le français, toujours : aucune détection par le navigateur (25/11/2026) */
+    return 'fr';
+  };
+  window.smChoisirLangue = function(v){ retenir(v); };
+  window.SM_LANGUES = L;
+  /* Avant le premier pixel : la langue retenue dans l'attribut, pour le CSS et pour les pages. */
+  try{
+    var retenu = window.smLangue();
+    document.documentElement.setAttribute('data-sm-langue', retenu);
+    if(retenu !== 'bzh') document.documentElement.setAttribute('lang', retenu);
+  }catch(e){}
+})();
+</script><!--langue-fin-->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sailing More — Mentions légales</title>
@@ -33,12 +65,660 @@
   th{color:#9db2c6;font-weight:500;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase}
   strong{color:#fff;font-weight:500}
 </style>
+  <link rel="alternate" type="application/rss+xml" title="Sailing More" href="https://sailingmore.fr/feed.xml">
+<link rel="canonical" href="https://sailingmore.fr/mentions-legales.html"><meta name="description" content="Éditeur, hébergeur et conditions d'utilisation du site Sailing More."><style id="equilibre">
+/* Rééquilibrage design — 20/11/2026. Posé en dernier dans chaque page : il l'emporte sur les styles d'origine. */
+
+/* 1. Une police de marque, la même sur tous les appareils (Inter, licence SIL OFL, hébergée sur le site) */
+@font-face{font-family:"Inter SM";src:url(fonts/inter-light.woff) format("woff");font-weight:300;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-regular.woff) format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-semibold.woff) format("woff");font-weight:500 700;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-black.woff) format("woff");font-weight:800 900;font-display:swap}
+body,button,input,textarea,select{font-family:"Inter SM",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+
+/* 2. Les couleurs de la charte : marine, panneaux, crème, rouge. Le turquoise et l'or rentrent dans le rang. */
+:root{--eau:#f4efe4;--ambre:#f4efe4}
+.grand b{color:#f4efe4!important}
+
+/* 3. « Le rouge souligne, il n'écrit pas » */
+.accroche .rouge{color:inherit!important;text-decoration:underline;text-decoration-color:#e23a3e;
+  text-decoration-thickness:2px;text-underline-offset:.24em}
+.bulle i,.bulle i span{color:#f4efe4!important}
+.bulle{border-left:2px solid #e23a3e!important}
+
+/* 4. « Filets droits, rien de franchement arrondi » */
+.cadre,.carte-kit,.planisphere,.bulle,.carte-jeu,.cookies,.cookies button,.langues button,
+.anneau,.anneau img,.vignette img{border-radius:0!important}
+.cadre,.carte-kit,.carte-jeu{background-image:none!important;background-color:#0f2438!important;
+  border:1px solid rgba(244,239,228,.12)!important;box-shadow:none!important}
+.anneau{background:rgba(244,239,228,.22)!important}
+
+/* 5. Rien sous 12 px : le cœur de cible a souvent plus de 50 ans */
+.grand span,.tarif-ce,.tarif-notes,.kit-note,label span,.bulle b,.bulle i,.bulle i span,
+figcaption strong,figcaption span:not(.siecle),.retour,.ann-carte,.page h2,.date,.geste,.bouton span{font-size:12px!important}
+.siecle{font-size:11px!important;color:rgba(195,214,230,.75)!important}
+
+/* 6. Réseaux en crème, couleur d'origine au survol */
+.reseau svg{filter:grayscale(1) brightness(2.4);transition:filter .2s}
+.reseau:hover svg,.reseau:focus-visible svg{filter:none}
+
+/* 7. Bandeau cookies : une ligne fine sous l'en-tête, dans le vide du haut de page, qui ne cache plus les chiffres */
+.cookies{top:3.4rem!important;bottom:auto!important;left:50%!important;right:auto!important;transform:translateX(-50%);
+  width:max-content;max-width:calc(100% - 1.2rem)!important;margin:0!important;display:flex!important;align-items:center;gap:.9rem;
+  padding:.45rem .55rem .45rem .9rem!important;font-size:12px!important;line-height:1.35;background:#0f2438!important;
+  border:1px solid rgba(244,239,228,.15)!important;border-left:2px solid #e23a3e!important;box-shadow:none!important;animation:none!important}
+.cookies[hidden]{display:none!important}
+.cookies p{margin:0!important}
+.cookies button{flex:none;background:transparent!important;color:#f4efe4!important;border:1px solid #e23a3e!important;
+  padding:.35rem .8rem!important;font-size:12px!important;margin:0!important}
+.cookies a{text-decoration:underline;text-decoration-color:#e23a3e}
+body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
+
+/* 8. En-tête mobile : le nom sur une ligne */
+.entete .nom{white-space:nowrap}
+@media (max-width:480px){
+  .entete .nom{font-size:.72rem;letter-spacing:.1em}
+  .langues button{padding-left:.3rem!important;padding-right:.3rem!important}
+  .accroche{padding:0 1.2rem}
+  .cookies{top:auto!important;bottom:.6rem!important;left:.6rem!important;right:.6rem!important;transform:none;width:auto;
+    max-width:none!important;gap:.6rem;padding:.4rem .45rem .4rem .7rem!important;font-size:11.5px!important}
+  .cookies button{padding:.3rem .6rem!important}
+}
+
+/* 9. Un seul style de titre pour les pages secondaires */
+.page h1{font-weight:300;text-transform:uppercase;letter-spacing:.02em}
+</style>
 </head>
-<body><div class="mer-fond mer-fond-commandes">
+<body><!--entete-debut--><style>
+.entete{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:.6rem;width:100%;
+  padding:.55rem .9rem;background:rgba(10,26,43,.96);border-bottom:1px solid rgba(226,58,62,.45);
+  color:#e8eef4;box-sizing:border-box;backdrop-filter:blur(6px)}
+.entete .nom{font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem;
+  color:#9fb3c4;text-decoration:none;white-space:nowrap}
+.entete .nom:hover{color:#fff}
+.entete .menu-d{margin-left:auto}
+.entete .menu-d>summary{list-style:none;cursor:pointer;font-size:.74rem;letter-spacing:.1em;
+  text-transform:uppercase;color:#e8eef4;border-bottom:1px solid rgba(226,58,62,.6);padding-bottom:1px}
+.entete .menu-d>summary::-webkit-details-marker{display:none}
+.entete .menu-d>nav{position:absolute;right:.6rem;top:calc(100% + .4rem);z-index:70;background:#0e2338;
+  border:1px solid rgba(255,255,255,.16);border-radius:.5rem;padding:.5rem;display:grid;
+  grid-template-columns:1fr 1fr;gap:.15rem .8rem;min-width:min(22rem,86vw);
+  box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.entete .menu-d>nav a{color:#dbe6ef;text-decoration:none;font-size:.82rem;padding:.35rem .4rem;border-radius:.35rem}
+.entete .menu-d>nav a:hover{background:rgba(255,255,255,.08)}
+.entete .menu-d>nav a[aria-current="page"]{color:#fff;box-shadow:inset 2px 0 0 #e23a3e}
+body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:flex-start}
+@media (max-width:520px){.entete{padding:.45rem .6rem;gap:.4rem}.entete .nom{font-size:.68rem}}
+/* Téléphone : le panneau du menu en une colonne, texte de 16 px et lignes de 48 px (23/11/2026 :
+   « refais le menu il est illisible sur tel »). Cette feuille sert les pages hors feuille d'accueil
+   (stages, lexique, jeux, mentions légales) : elles avaient le même panneau serré en deux colonnes. */
+@media (max-width:600px){
+  .entete .menu-d>summary{font-size:.78rem;min-height:44px;display:flex;align-items:center;
+    padding:0 .15rem}
+  .entete .menu-d>nav{left:.4rem;right:.4rem;top:calc(100% + .3rem);width:auto;min-width:0;
+    grid-template-columns:1fr;gap:.1rem;padding:.45rem;background:#081624;
+    max-height:calc(100vh - 3.6rem);overflow-y:auto}
+  .entete .menu-d>nav a{display:flex;align-items:center;min-height:48px;
+    padding:.6rem .8rem;font-size:1rem;line-height:1.25}
+  .entete .menu-d>nav a.legal{min-height:42px;font-size:.9rem;padding:.5rem .8rem}
+  .entete .menu-d>nav a.legal:first-of-type{margin-top:.35rem;
+    border-top:1px solid rgba(238,243,247,.14);padding-top:.7rem}
+}
+</style><header class="entete"><a class="nom" href="/">Sailing More</a><div class="lg"><span hidden>Langue</span><span class="globe" aria-hidden="true"></span><span class="code" aria-hidden="true">FR</span><span class="chev" aria-hidden="true"></span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto (langue du navigateur)</option><option value="fr">FR · Français</option><option value="en">EN · English</option><option value="it">IT · Italiano</option><option value="es">ES · Español</option><option value="pt">PT · Português</option><option value="de">DE · Deutsch</option><option value="bzh">BZH · Brezhoneg</option></select></div><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button><button data-lang="de" aria-pressed="false">DE</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="/">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html">Règles de course</a><a href="stages.html">Stages de voile</a><a href="cours.html">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="carte.html">Carte du Léman</a><a href="lexique.html">Lexique</a><a href="chants-de-marin.html">Chants de marins</a><a href="ports.html">Ports du monde</a><a href="simulateur.html">Simulateur de priorités</a><a href="annonceurs.html">Annonceurs</a></nav></details></header><style>
+/* La langue : une pastille du site, pas un contrôle du système (Nicolas, 23/11/2026 : « pour la barre
+   des langues il faut un truc plus joli »). Plus de cadre blanc : un globe, le code de la langue en
+   capitales comme les libellés de la barre, le filet rouge de MENU dessous, et le <select> natif posé
+   transparent par-dessus — la roue iOS/Android et les lecteurs d'écran gardent leur menu à eux. */
+.lg{position:relative;display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .1rem;margin-left:.25rem;
+  border-bottom:1px solid rgba(226,58,62,.6);cursor:pointer;line-height:1}
+.lg:hover{border-bottom-color:#fff}
+.lg:focus-within{outline:1px solid #e23a3e;outline-offset:4px}
+.lg .globe{width:.86rem;height:.86rem;flex:0 0 auto;opacity:.85;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e8eef4' stroke-width='1.7'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cellipse cx='12' cy='12' rx='4' ry='9'/%3E%3Cpath d='M3 12h18'/%3E%3C/svg%3E") center/contain no-repeat}
+.lg .code{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:#e8eef4}
+.lg .chev{width:.36rem;height:.36rem;margin:-.14rem .1rem 0 .18rem;opacity:.7;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
+.lg select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:1rem;
+  appearance:none;-webkit-appearance:none;border:0;background:transparent;color:transparent}
+.lg select:focus{outline:none}
+.lg option{color:#10161f;background:#fff}
+@media (max-width:520px){.lg{padding:.3rem .1rem}}
+@media (pointer:coarse){.lg{min-height:44px;min-width:3.4rem;justify-content:center;gap:.34rem}}
+</style><script>
+(function(){
+  var d = document.querySelector('.entete .menu-d');
+  if(!d) return;
+  document.addEventListener('click', function(e){ if(!d.contains(e.target)) d.open = false; });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') d.open = false; });
+})();
+</script><script>
+(function(){
+  /* La carte plein écran se cale sous la barre du site : elle en mesure la hauteur réelle.
+     Avant tout le reste — une page sans menu de langues a quand même une carte à caler. */
+  function caler(){
+    var b = document.querySelector(".entete"), c = document.querySelector(".cl.m-carte");
+    if(b && c) document.documentElement.style.setProperty("--barre", b.offsetHeight + "px");
+  }
+  caler(); addEventListener("load", caler); addEventListener("resize", caler); setTimeout(caler, 300);
+  var sel = document.getElementById("langue-sel"), zone = document.getElementById("langues");
+  if(!sel || !zone) return;
+  /* Le breton (valeur « bzh ») n'a pas de bloc de texte dans les pages : choisi, il laisse la page en
+     français (clé `sm-langue` = fr, que les pages savent lire) et pose un drapeau `sm-bzh`. Ce script
+     ajoute alors l'encart, garde `lang="br"` (le code IANA ; « bzh » n'y est pas) et la pastille BZH.
+     `?lang=xx` choisit la langue avant que les scripts des pages ne la lisent. */
+  var SIX = ["fr", "en", "it", "es", "pt", "de"];
+  function st(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function ec(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
+  /* Plus aucune détection ici : le socle l'a faite dans le <head>, avant le premier pixel
+     (24/11/2026, une seule règle pour tout le site). `?lang=` et le choix du visiteur y sont déjà
+     rangeés sous `sm-langue`. */
+  var LANGUES = (typeof window !== "undefined" && window.SM_LANGUES) || SIX;
+  function bzh(){
+    var l = (typeof window.smLangue === "function") ? window.smLangue() : null;
+    if(l === "bzh") return true;
+    if(l) return false;                       /* une langue choisie l'emporte sur le drapeau */
+    return st("sm-bzh") === "1";
+  }
+  function encart(){
+    var e = document.getElementById("encart-bzh"), actif = bzh();
+    if(document.querySelector('meta[name="sm-bzh"]')) actif = false;      /* page dont le breton existe */
+    if(!actif){ if(e) e.remove(); return; }
+    if(e) return;
+    var h = document.querySelector(".entete");
+    if(!h) return;
+    e = document.createElement("p");
+    e.id = "encart-bzh"; e.setAttribute("role", "note");
+    e.style.cssText = "margin:0;padding:.6rem .9rem;background:#0e2338;color:#e8eef4;font-size:.9rem;" +
+      "border-bottom:1px solid rgba(255,255,255,.16)";
+    e.appendChild(document.createTextNode("Cette page n’est pas encore traduite en breton. Écrivez-nous à "));
+    var a = document.createElement("a");
+    a.className = "courriel"; a.style.color = "inherit";
+    a.setAttribute("data-a", "hello.sailingmore"); a.setAttribute("data-b", "gmail.com");
+    var ad = "hello.sailingmore" + "@" + "gmail.com";
+    a.href = "mailto:" + ad; a.textContent = ad;
+    e.appendChild(a);
+    e.appendChild(document.createTextNode(" pour proposer la traduction."));
+    h.parentNode.insertBefore(e, h.nextSibling);
+  }
+  function balise(){
+    if(bzh() && document.documentElement.lang !== "br") document.documentElement.lang = "br";
+  }
+  /* Le code affiché sur la pastille : la langue choisie, ou celle que la page affiche en mode auto. */
+  var code = document.querySelector(".lg .code");
+  function etiq(v){
+    if(!code) return;
+    if(bzh()){ code.textContent = "BZH"; return; }
+    if(v && v !== "auto" && v !== "bzh"){ code.textContent = v.toUpperCase(); return; }
+    var l = (document.documentElement.lang || "fr").slice(0, 2).toUpperCase();
+    code.textContent = l || "FR";
+  }
+  function lire(){
+    if(st("sm-bzh") === "1" && st("sm-langue") !== "auto" && st("sm-langue")) return "bzh";
+    return st("sm-langue") || "auto";
+  }
+  function poser(){
+    balise(); encart();
+    var v = lire(), o = sel.options;
+    for(var i = 0; i < o.length; i++){ if(o[i].value === v){ sel.value = v; etiq(v); return; } }
+    sel.value = "auto"; etiq("auto");
+  }
+  sel.addEventListener("change", function(){
+    var v = sel.value, bs = zone.querySelectorAll("button[data-lang]");
+    var cible = (v === "bzh") ? "fr" : v;             /* le breton s'affiche sur le texte français */
+    ec("sm-bzh", v === "bzh" ? "1" : null);
+    for(var i = 0; i < bs.length; i++){
+      if(bs[i].getAttribute("data-lang") === cible){ bs[i].click(); break; }
+    }
+    ec("sm-bzh", v === "bzh" ? "1" : null);
+    balise(); encart(); etiq(v);
+  });
+  /* la page change de langue sans passer par le menu (auto, bouton, retour arrière) */
+  if(window.MutationObserver){
+    new MutationObserver(function(){ balise(); encart(); etiq(sel.value); })
+      .observe(document.documentElement, {attributes: true, attributeFilter: ["lang"]});
+  }
+  poser();
+  addEventListener("load", poser);
+  setTimeout(poser, 400);
+
+})();
+</script><!--entete-fin--><div class="mer-fond mer-fond-commandes">
   <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
 </div>
 <div class="page">
-<a class="retour" href="index.html">← Sailing More</a>
+<a class="retour" href="/">← Sailing More</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -70,11 +750,15 @@
 
 
 <h1>Sailing More — Mentions légales</h1>
-<p><small>Dernière mise à jour : 19 novembre 2026</small></p>
+<p><small>Dernière mise à jour : 25 novembre 2026</small></p>
 
 <h2>Éditeur du site</h2>
-<p><strong>Sailing More</strong> — média indépendant consacré à la voile et à la course au large,
-édité par <strong>Nicolas Baudu</strong>, personne physique, Lugrin (Haute-Savoie), France.<br>
+<p><strong>Sailing More</strong> — média indépendant consacré à la voile et à la course au large.<br>
+Éditeur : <strong>Nicolas Baudu</strong>, entrepreneur individuel, <strong>74500 Lugrin</strong>, France.<br>
+SIREN 133 272 302 — immatriculé au registre du commerce et des sociétés de Thonon-les-Bains le 24 novembre 2026.<br>
+Adresse postale complète : communiquée sur simple demande écrite, à l'adresse de contact ci-dessous.<br>
+Activités déclarées : publicité et communication ; enseignement de la voile à titre accessoire.<br>
+TVA : franchise en base, article 293 B du code général des impôts — aucun numéro de TVA intracommunautaire.<br>
 Directeur de la publication : Nicolas Baudu.<br>
 Contact : <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">l'adresse de contact</a>.</p>
 
@@ -111,11 +795,15 @@ compétents ; une solution amiable sera toujours recherchée d'abord, par écrit
 
 <hr>
 <h1 id="en">Sailing More — Legal notice</h1>
-<p><small>Last updated: 19 November 2026</small></p>
+<p><small>Last updated: 25 November 2026</small></p>
 
 <h2>Publisher</h2>
-<p><strong>Sailing More</strong> — an independent outlet covering sailing and offshore racing,
-published by <strong>Nicolas Baudu</strong>, an individual, Lugrin (Haute-Savoie), France.<br>
+<p><strong>Sailing More</strong> — an independent outlet covering sailing and offshore racing.<br>
+Publisher: <strong>Nicolas Baudu</strong>, sole trader, <strong>74500 Lugrin</strong>, France.<br>
+SIREN 133 272 302 — registered with the trade and companies register of Thonon-les-Bains on 24 November 2026.<br>
+Full postal address: available on simple written request, at the contact address below.<br>
+Declared activities: advertising and communication; sailing instruction as a secondary activity.<br>
+VAT: flat-rate exemption, article 293 B of the French tax code — no intra-community VAT number.<br>
 Publication director: Nicolas Baudu. Contact: <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">l'adresse de contact</a>.</p>
 
 <h2>Hosting</h2>
@@ -143,6 +831,294 @@ document.querySelectorAll('a.courriel').forEach(a => a.addEventListener('click',
   window.location.href = lien;
 }));
 </script>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 </div>
@@ -315,7 +1291,7 @@ document.querySelectorAll('a.courriel').forEach(a => a.addEventListener('click',
   .mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{transition:none}
 }
 </style>
-<script src="mer-louvoyage.js?v=1" defer></script>
+<script src="mer-louvoyage.js?v=ec6f832f" defer></script>
 <script>
 /* les commandes de la scène s'effacent dès qu'on a quitté le haut de la page */
 (function(){
