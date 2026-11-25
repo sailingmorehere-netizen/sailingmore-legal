@@ -5,11 +5,39 @@
   <link>https://sailingmore.fr/</link>
   <description>Stages de voile, calendrier des régates d&#x27;Europe, cours théoriques, règles de course : les pages de Sailing More, mises à jour au fil de l&#x27;eau.</description>
   <language>fr-fr</language>
-  <lastBuildDate>Wed, 25 Nov 2026 21:14:36 +0000</lastBuildDate>
+  <lastBuildDate>Wed, 25 Nov 2026 21:19:14 +0000</lastBuildDate>
   <atom:link href="https://sailingmore.fr/feed.xml" rel="self" type="application/rss+xml"/>
   <ttl>720</ttl>
   <copyright>Sailing More</copyright>
   <generator>sailingmore.fr/feed_rss.py</generator>
+  <item>
+    <title>Lexique de la voile : 505 mots définis | Sailing More</title>
+    <link>https://sailingmore.fr/lexique.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/lexique.html</guid>
+    <pubDate>Wed, 25 Nov 2026 21:19:14 +0000</pubDate>
+    <description>Bôme, choquer, lofer, empanner : 505 mots de la voile définis en une phrase, classés par thème, en six langues, chacune avec le chapitre du cours et le stage qui vont avec.</description>
+  </item>
+  <item>
+    <title>Chants de marins : paroles et histoire | Sailing More</title>
+    <link>https://sailingmore.fr/chants-de-marin.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/chants-de-marin.html</guid>
+    <pubDate>Wed, 25 Nov 2026 21:19:14 +0000</pubDate>
+    <description>101 chants de marins expliqués : à quoi ils servaient à bord, et les paroles du domaine public dans leur langue d&#x27;origine.</description>
+  </item>
+  <item>
+    <title>Règles de course à la voile (RCV 2025-2028) | Sailing More</title>
+    <link>https://sailingmore.fr/regles-de-course.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/regles-de-course.html</guid>
+    <pubDate>Wed, 25 Nov 2026 21:19:14 +0000</pubDate>
+    <description>Toutes les règles de course à la voile 2025-2028 résumées en clair, avec un exemple pour chaque règle. Cherchez une règle par numéro ou par mot.</description>
+  </item>
+  <item>
+    <title>Nomenclature des voiliers, pièce par pièce | Sailing More</title>
+    <link>https://sailingmore.fr/bateaux.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/bateaux.html</guid>
+    <pubDate>Wed, 25 Nov 2026 21:19:14 +0000</pubDate>
+    <description>Les pièces de 9 bateaux sur un schéma : X35, Hobie 16, Laser, 49er, iQFOiL, kite, wingfoil, IMOCA et Ultim. Chaque mot renvoie au lexique.</description>
+  </item>
   <item>
     <title>Stages de voile en Europe, prix publiés | Sailing More</title>
     <link>https://sailingmore.fr/stages.html</link>
@@ -23,13 +51,6 @@
     <guid isPermaLink="true">https://sailingmore.fr/regates.html</guid>
     <pubDate>Wed, 25 Nov 2026 21:14:36 +0000</pubDate>
     <description>921 régates à venir dans 45 pays : dates, lieux, clubs et classes. Filtrez le Léman, la France ou le monde et trouvez votre prochaine course.</description>
-  </item>
-  <item>
-    <title>Lexique de la voile : 505 mots définis | Sailing More</title>
-    <link>https://sailingmore.fr/lexique.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/lexique.html</guid>
-    <pubDate>Wed, 25 Nov 2026 21:14:36 +0000</pubDate>
-    <description>Bôme, choquer, lofer, empanner : 505 mots de la voile définis en une phrase, classés par thème, en six langues, chacune avec le chapitre du cours et le stage qui vont avec.</description>
   </item>
   <item>
     <title>Stages, régates et cours de voile en Europe | Sailing More</title>
@@ -46,31 +67,10 @@
     <description>Apprenez la théorie de la voile gratuitement : allures, réglages, cartes, marées, météo, balisage, RIPAM et règles de course, avec exercices corrigés.</description>
   </item>
   <item>
-    <title>Chants de marins : paroles et histoire | Sailing More</title>
-    <link>https://sailingmore.fr/chants-de-marin.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/chants-de-marin.html</guid>
-    <pubDate>Wed, 25 Nov 2026 21:14:36 +0000</pubDate>
-    <description>101 chants de marins expliqués : à quoi ils servaient à bord, et les paroles du domaine public dans leur langue d&#x27;origine.</description>
-  </item>
-  <item>
     <title>Le Léman — préparer une sortie</title>
     <link>https://sailingmore.fr/carte.html</link>
     <guid isPermaLink="true">https://sailingmore.fr/carte.html</guid>
     <pubDate>Wed, 25 Nov 2026 21:14:36 +0000</pubDate>
-  </item>
-  <item>
-    <title>Règles de course à la voile (RCV 2025-2028) | Sailing More</title>
-    <link>https://sailingmore.fr/regles-de-course.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/regles-de-course.html</guid>
-    <pubDate>Wed, 25 Nov 2026 21:14:36 +0000</pubDate>
-    <description>Toutes les règles de course à la voile 2025-2028 résumées en clair, avec un exemple pour chaque règle. Cherchez une règle par numéro ou par mot.</description>
-  </item>
-  <item>
-    <title>Nomenclature des voiliers, pièce par pièce | Sailing More</title>
-    <link>https://sailingmore.fr/bateaux.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/bateaux.html</guid>
-    <pubDate>Wed, 25 Nov 2026 21:14:36 +0000</pubDate>
-    <description>Les pièces de 9 bateaux sur un schéma : X35, Hobie 16, Laser, 49er, iQFOiL, kite, wingfoil, IMOCA et Ultim. Chaque mot renvoie au lexique.</description>
   </item>
   <item>
     <title>Simulateur de priorités — règles de course et RIPAM — Sailing More</title>
