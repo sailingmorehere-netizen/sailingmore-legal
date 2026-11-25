@@ -551,14 +551,20 @@ _MENU_JS = """<script>
 NOMS_LANGUES = {"fr": "Français", "en": "English", "it": "Italiano", "es": "Español",
                 "pt": "Português", "de": "Deutsch", "nl": "Nederlands", "bzh": "Brezhoneg",
                 "el": "Ελληνικά", "hr": "Hrvatski", "sv": "Svenska", "da": "Dansk",
-                "no": "Norsk", "pl": "Polski"}
+                "no": "Norsk", "pl": "Polski", "tr": "Türkçe"}
 
 # UNE SEULE liste des langues du site (23/11/2026) : les pages l'importent, aucune ne la recopie.
 # LANGUES = les six langues dont les pages ont un texte complet. BZH s'y ajoute dans le sélecteur
 # (sept entrées partout) mais n'a aucun bloc de texte : tant qu'un brittophone n'a pas relu une page,
 # elle s'affiche en français avec un encart (jamais de breton produit par un modèle). La valeur
 # interne et `?lang=bzh` sont « bzh » ; la balise `lang` et le `hreflang` valent « br » (BCP-47).
-LANGUES = ["fr", "en", "it", "es", "pt", "de"]
+# Les quatorze langues à servir, dans l'ordre voulu par Nicolas (24/11/2026). LANGUES_PRETES = celles dont
+# TOUS les textes existent (règle 7 : jamais de mélange). Pour en ouvrir une, l'ajouter à LANGUES_PRETES
+# une fois ses textes complets ; la liste LANGUES (utilisée partout : sélecteur, détecteur, hreflang,
+# sitemap) en découle, il n'y en a pas d'autre.
+LANGUES_CIBLES = ["fr", "en", "de", "it", "es", "pt", "nl", "el", "hr", "sv", "da", "no", "pl", "tr"]
+LANGUES_PRETES = {"fr", "en", "it", "es", "pt", "de"}
+LANGUES = [l for l in LANGUES_CIBLES if l in LANGUES_PRETES]
 LANGUE_BZH = "bzh"
 LANGUES_INTERFACE = LANGUES + [LANGUE_BZH]
 BALISE_LANG = {"bzh": "br"}
