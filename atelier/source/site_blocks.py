@@ -569,14 +569,14 @@ PAGES_BZH: set[str] = set()
 # ── LE DÉTECTEUR UNIQUE DE LANGUE (24/11/2026) ──────────────────────────────────────────────────
 # Nicolas : « le détecteur auto pour la langue doit être auto ». Il existait déjà, recopié dans treize
 # générateurs avec treize règles : `stages_page` mémorisait sous la clé `lang`, `bateaux_page` et
-# `cours_page` ne lisaient que `navigator.language`, le repli était tantôt `en` tantôt `fr`.
+# `cours_page` ne lisaient que la langue du navigateur, le repli était tantôt `en` tantôt `fr`.
 # Ici, une seule fonction, posée dans le `<head>` de chaque page par `poser_langue_partout()`.
 # Les pages ne détectent plus rien : elles appellent `window.smLangue()`.
 #
 # Ordre (25/11/2026, Nicolas) : `?lang=` → choix mémorisé (`sm-langue`) → **français**. Plus de lecture
-# de `navigator.languages`, plus de repli anglais : le robot de Google se présente comme américain.
-# Le breton n'est servi que sur choix explicite. Le code régional est ramené (de-AT → de,
-# fr-CH → fr, pt-BR → pt, nb/nn → no). `br` (breton du navigateur) donne l'interface bretonne `bzh`.
+# des langues du navigateur, plus de repli anglais : le robot de Google se présente comme américain.
+# Le breton n'est servi que sur choix explicite (`?lang=bzh` ou sélecteur). Le code régional est ramené
+# (de-AT → de, fr-CH → fr, pt-BR → pt, nb/nn → no).
 # Elle tourne avant le premier pixel : les textes de toutes les langues sont déjà dans le HTML, seul
 # l'affichage change — donc aucun clignotement français → allemand.
 ALIAS_LANGUE = {"nb": "no", "nn": "no", "iw": "he", "in": "id", "ji": "yi", "jw": "jv",
