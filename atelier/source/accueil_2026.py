@@ -270,7 +270,7 @@ def corps(x: dict, T: dict) -> str:
         return re.sub(r'data-t="([^"]+)"></(b|span)>', lambda m: f'data-t="{m.group(1)}">{f[m.group(1)]}</{m.group(2)}>', h)
 
     grandes = "".join(cas(True, n, h) for n, h in [("stages", "stages.html"), ("regates", "regates.html"), ("cours", "cours.html")])
-    petites = "".join(cas(False, n, h) for n, h in [("leman", "carte.html"), ("regles", "regles-de-course.html"), ("lexique", "lexique.html"),
+    petites = "".join(cas(False, n, h) for n, h in [("lexique", "lexique.html"), ("leman", "carte.html"), ("regles", "regles-de-course.html"),
                                                       ("ports", "ports.html"), ("bateaux", "bateaux.html"), ("chants", "chants-de-marin.html")])
 
     def nb(cle_n, cle_l, cle_d=None, exact=""):
