@@ -38,33 +38,78 @@ UI = {
            "retour": "← Sailing More", "placeholder": "Un mot, une pièce du bateau, une définition…",
            "aria": "Rechercher dans le lexique", "tous": "Tous", "theme": "Thème",
            "un": "terme", "n": "termes", "aucun": "Aucun terme ne correspond à cette recherche.",
-           "desole": "Désolé pour le français : le breton de ce mot manque encore."},
+           "desole": "Désolé pour le français : le breton de ce mot manque encore.",
+           "cours": "Le cours", "stage": "Un stage à réserver", "trad": "Traduction"},
     "en": {"titre": "Sailing glossary",
            "chapo": "The words of sailing, each explained in one sentence and translated into six languages.",
            "retour": "← Sailing More", "placeholder": "A word, a part of the boat, a definition…",
            "aria": "Search the glossary", "tous": "All", "theme": "Theme",
-           "un": "term", "n": "terms", "aucun": "No term matches this search."},
+           "un": "term", "n": "terms", "aucun": "No term matches this search.",
+           "cours": "The lesson", "stage": "Book a course", "trad": "Translation"},
     "it": {"titre": "Lessico della vela",
            "chapo": "Le parole della vela, ciascuna spiegata in una frase e tradotta in sei lingue.",
            "retour": "← Sailing More", "placeholder": "Una parola, un pezzo della barca, una definizione…",
            "aria": "Cerca nel lessico", "tous": "Tutti", "theme": "Tema",
-           "un": "termine", "n": "termini", "aucun": "Nessun termine corrisponde a questa ricerca."},
+           "un": "termine", "n": "termini", "aucun": "Nessun termine corrisponde a questa ricerca.",
+           "cours": "La lezione", "stage": "Prenota un corso", "trad": "Traduzione"},
     "es": {"titre": "Léxico de vela",
            "chapo": "Las palabras de la vela, cada una explicada en una frase y traducida a seis idiomas.",
            "retour": "← Sailing More", "placeholder": "Una palabra, una pieza del barco, una definición…",
            "aria": "Buscar en el léxico", "tous": "Todos", "theme": "Tema",
-           "un": "término", "n": "términos", "aucun": "Ningún término coincide con esta búsqueda."},
+           "un": "término", "n": "términos", "aucun": "Ningún término coincide con esta búsqueda.",
+           "cours": "La lección", "stage": "Reservar un curso", "trad": "Traducción"},
     "pt": {"titre": "Léxico de vela",
            "chapo": "As palavras da vela, cada uma explicada numa frase e traduzida para seis línguas.",
            "retour": "← Sailing More", "placeholder": "Uma palavra, uma peça do barco, uma definição…",
            "aria": "Pesquisar no léxico", "tous": "Todos", "theme": "Tema",
-           "un": "termo", "n": "termos", "aucun": "Nenhum termo corresponde a esta pesquisa."},
+           "un": "termo", "n": "termos", "aucun": "Nenhum termo corresponde a esta pesquisa.",
+           "cours": "A lição", "stage": "Reservar um curso", "trad": "Tradução"},
     "de": {"titre": "Segel-Lexikon",
            "chapo": "Die Wörter des Segelns, jedes in einem Satz erklärt und in sechs Sprachen übersetzt.",
            "retour": "← Sailing More", "placeholder": "Ein Wort, ein Bootsteil, eine Definition…",
            "aria": "Im Lexikon suchen", "tous": "Alle", "theme": "Thema",
-           "un": "Begriff", "n": "Begriffe", "aucun": "Kein Begriff passt zu dieser Suche."},
+           "un": "Begriff", "n": "Begriffe", "aucun": "Kein Begriff passt zu dieser Suche.",
+           "cours": "Die Lektion", "stage": "Kurs buchen", "trad": "Übersetzung"},
 }
+
+# Chaque mot renvoie à deux endroits (Nicolas, 25/11/2026 : « il faut que les mots des lexiques renvoient
+# vers une proposition de cours lié ») : le chapitre du cours qui traite son thème, puis un stage à
+# réserver. Le chapitre se choisit par thème — un mot isolé n'a pas de leçon à lui, et une table de
+# 500 entrées une par une serait une devinette. `stages.html?q=<mot français>` ouvre la recherche déjà
+# remplie : les stages sont écrits en français, on cherche donc toujours le mot français.
+COURS_PAR_THEME = {
+    "bateau": "vocabulaire", "manoeuvre": "manoeuvres", "allures": "vent", "meteo": "meteo",
+    "course": "priorites", "securite": "securite", "navigation": "cap",
+    "accastillage": "equiper", "types-de-bateaux": "vocabulaire", "vie-a-bord": "embarquer",
+}
+COURS_DEFAUT = "vocabulaire"
+
+# Le nom de chaque langue dans sa propre langue, pour la barre de traduction en tête de page.
+NOMS_LANGUES = {"fr": "français", "en": "English", "de": "Deutsch",
+                "it": "italiano", "es": "español", "pt": "português"}
+
+
+def numero_chapitre() -> dict[str, int]:
+    """Le numéro de chaque chapitre, lu dans `cours_page.CHAPITRES` — l'ordre de ce fichier décide,
+    donc un chapitre déplacé déplace les liens sans qu'on retouche cette page."""
+    from cours_page import CHAPITRES
+    return {c["id"]: i + 1 for i, c in enumerate(CHAPITRES)}
+
+
+def ancre_cours(cle_theme: str) -> str:
+    """L'ancre réelle dans `cours.html` : `#ch<N>-<langue>`, la langue étant celle de la page."""
+    return COURS_PAR_THEME.get(cle_theme, COURS_DEFAUT)
+
+
+def liens_vers(x: dict, cle_theme: str, lang: str) -> str:
+    """Les deux liens d'un mot : son chapitre de cours, puis le stage à réserver."""
+    from urllib.parse import quote
+    e = _html.escape
+    u = UI.get(lang, UI["fr"])
+    n = numero_chapitre().get(ancre_cours(cle_theme), 1)
+    langue = lang if lang in LANGUES else "fr"
+    return (f'<p class="vers"><a href="cours.html#ch{n}-{langue}">{e(u["cours"])}</a>'
+            f'<a href="stages.html?q={quote(x["mot"]["fr"])}">{e(u["stage"])}</a></p>')
 
 # Mêmes variables et mêmes gestes que regates_page.py : charte Signal B, filets droits, rouge qui
 # souligne et n'écrit pas (jamais de texte courant en rouge).
@@ -88,7 +133,14 @@ a.retour:hover{color:#fff}
 h1{font-size:clamp(1.9rem,6vw,2.7rem);line-height:1.04;margin:1.6rem 0 0;letter-spacing:-.01em;
   color:#fff;font-weight:300;text-transform:uppercase}
 h1::after{content:"";display:block;width:3.4rem;height:3px;background:var(--rouge);margin:1.3rem 0 1.6rem}
-.chapo{color:var(--gris);font-size:.95rem;max-width:34rem;margin:0 0 2.2rem}
+.chapo{color:var(--gris);font-size:.95rem;max-width:34rem;margin:0 0 1.5rem}
+.trad{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin:0 0 2rem}
+.trad .dit{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:#6f8598;margin-right:.45rem}
+.trad button{background:none;border:1px solid rgba(157,178,198,.32);color:#9db2c6;border-radius:999px;
+  padding:.3rem .75rem;font:inherit;font-size:.78rem;line-height:1.2;cursor:pointer;
+  transition:color .15s,border-color .15s,background .15s}
+.trad button:hover{color:#fff;border-color:#9db2c6}
+.trad button[aria-pressed="true"]{border-color:var(--rouge);color:#fff;background:rgba(226,58,62,.14)}
 a{color:#fff;text-decoration:none}
 :focus-visible{outline:2px solid #fff;outline-offset:2px}
 
@@ -136,6 +188,10 @@ a{color:#fff;text-decoration:none}
 .terme .autres .manque{opacity:.75}
 .terme .autres .manque i{font-style:italic;color:#8fa3b5}
 .terme .autres .manque sup{font-size:.85em;vertical-align:.2em}
+.terme .vers{margin:.55rem 0 0;display:flex;gap:1rem;flex-wrap:wrap;font-size:.7rem;
+  letter-spacing:.04em;text-transform:uppercase}
+.terme .vers a{color:#9db2c6;border-bottom:1px solid rgba(226,58,62,.45);padding-bottom:1px}
+.terme .vers a:hover{color:#fff;border-bottom-color:var(--rouge)}
 .vide{padding:3rem 0;color:var(--gris);font-size:.9rem}
 .pied{margin-top:3.6rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,.09);
   color:#6f8598;font-size:.72rem;line-height:1.8}
@@ -189,8 +245,8 @@ JS = r"""
     zoneThemes.innerHTML = h;
   }
 
-  function carte(x){
-    var autres = LANGUES.filter(function(l){return l!==lang;}).map(function(l){
+  function carte(x, t){
+    var u = UI[lang], autres = LANGUES.filter(function(l){return l!==lang;}).map(function(l){
       return '<span lang="' + l + '">' + l + ' <b>' + esc(x.mot[l]) + '</b></span>'; }).join('');
     // Le breton : le mot s'il est attesté, sinon le français avec le petit mot d'excuse (Nicolas,
     // 24/11/2026 : « ceux que t'as pas, tu les fais en français […] désolé pour le français »).
@@ -203,7 +259,11 @@ JS = r"""
     return '<article class="terme" id="' + esc(x.cle) + '">'
       + '<h3><a href="#' + esc(x.cle) + '">' + esc(x.mot[lang]) + '</a></h3>'
       + '<p class="def">' + esc(x.def[lang]) + '</p>'
-      + '<p class="autres">' + autres + '</p></article>';
+      + '<p class="autres">' + autres + '</p>'
+      + '<p class="vers"><a href="cours.html#ch' + (data.cours[t.cle] || data.cours_defaut)
+      + '-' + (lang === 'bzh' ? 'fr' : lang) + '">'
+      + esc(u.cours) + '</a><a href="stages.html?q=' + encodeURIComponent(x.mot.fr) + '">'
+      + esc(u.stage) + '</a></p></article>';
   }
 
   function dessine(){
@@ -215,7 +275,7 @@ JS = r"""
       gardes.sort(function(a,b){ return a.mot[lang].localeCompare(b.mot[lang], lang); });
       total += gardes.length;
       h += '<section class="theme"><h2>' + esc(t.nom[lang]) + '<span>' + gardes.length + '</span></h2>'
-        + gardes.map(carte).join('') + '</section>';
+        + gardes.map(function(x){ return carte(x, t); }).join('') + '</section>';
     });
     liste.innerHTML = h || '<p class="vide">' + esc(u.aucun) + '</p>';
     compte.innerHTML = '<b>' + total + '</b> ' + (total > 1 ? u.n : u.un);
@@ -228,8 +288,8 @@ JS = r"""
     document.querySelectorAll('[data-t]').forEach(function(el){ el.textContent = u[el.dataset.t]; });
     champ.placeholder = u.placeholder;
     champ.setAttribute('aria-label', u.aria);
-    var actif = stocke();
-    document.querySelectorAll('#langues button').forEach(function(b){
+    var actif = lang;  // l'état affiché suit la langue réellement en cours, pas le stockage
+    document.querySelectorAll('#langues button, #trad button').forEach(function(b){
       b.setAttribute('aria-pressed', String(b.dataset.lang === actif)); });
     boutonsThemes();
     dessine();
@@ -251,6 +311,14 @@ JS = r"""
     b.addEventListener('click', function(){
       try{ localStorage.setItem('sm-langue', b.dataset.lang); }catch(e){}
       lang = choisir(); traduit();
+    });
+  });
+  // La barre de traduction commande directement la langue : passer par `choisir()` la faisait
+  // dépendre du stockage local, qui lève sur certains navigateurs en aperçu local.
+  document.querySelectorAll('#trad button').forEach(function(b){
+    b.addEventListener('click', function(){
+      try{ localStorage.setItem('sm-langue', b.dataset.lang); }catch(e){}
+      lang = b.dataset.lang; traduit();
     });
   });
   zoneThemes.addEventListener('click', function(ev){
@@ -300,7 +368,8 @@ def liste_statique(d: dict, lang: str = "fr") -> str:
             cartes.append(
                 f'<article class="terme" id="{e(x["cle"])}">'
                 f'<h3><a href="#{e(x["cle"])}">{e(x["mot"][lang])}</a></h3>'
-                f'<p class="def">{e(x["def"][lang])}</p><p class="autres">{autres}</p></article>')
+                f'<p class="def">{e(x["def"][lang])}</p><p class="autres">{autres}</p>'
+                + liens_vers(x, t["cle"], lang) + '</article>')
         sortie.append(f'<section class="theme"><h2>{e(t["nom"][lang])}<span>{len(termes)}</span></h2>'
                       + "".join(cartes) + "</section>")
     return "".join(sortie)
@@ -324,7 +393,9 @@ def page_lexique(d: dict | None = None) -> str:
     themes = themes_affichables(d)
     total = sum(len(t["termes"]) for t in themes)
     ui = UI["fr"]
-    donnees = {"langues": LANGUES, "ui": UI, "themes": themes}
+    donnees = {"langues": LANGUES, "ui": UI, "themes": themes,
+               "cours": {c: numero_chapitre().get(a, 1) for c, a in COURS_PAR_THEME.items()},
+               "cours_defaut": numero_chapitre().get(COURS_DEFAUT, 1)}
     # `</` dans un JSON embarqué fermerait le <script> : on l'échappe.
     brut = json.dumps(donnees, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     # La barre du site (nom, menu, langues) vient d'un seul endroit : site_blocks (23/11/2026).
@@ -338,7 +409,7 @@ def page_lexique(d: dict | None = None) -> str:
     # Audit SEO du 24/11/2026, correction 4 : textes de l'audit, le compteur vient de `total` (les termes).
     seo_titre = f"Lexique de la voile : {total} mots définis | Sailing More"
     seo_desc = (f"Bôme, choquer, lofer, empanner : {total} mots de la voile définis en une phrase, classés par "
-                "thème (bateau, manœuvre, allures, météo, course), en 6 langues.")
+                "thème, en six langues, chacune avec le chapitre du cours et le stage qui vont avec.")
     return (
         '<!doctype html>\n<html lang="fr"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
@@ -352,6 +423,10 @@ def page_lexique(d: dict | None = None) -> str:
         '<main class="page">'
         '<h1 data-t="titre">' + ui["titre"] + "</h1>"
         '<p class="chapo" data-t="chapo">' + ui["chapo"] + "</p>"
+        '<nav class="trad" id="trad" aria-label="' + ui["trad"] + '">'
+        '<span class="dit" data-t="trad">' + ui["trad"] + "</span>"
+        + "".join(f'<button type="button" data-lang="{l}">{NOMS_LANGUES[l]}</button>' for l in LANGUES)
+        + "</nav>"
         '<div class="panneau">'
         '<div class="recherche"><div class="champ">'
         '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">'
