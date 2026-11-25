@@ -5,11 +5,80 @@
   <link>https://sailingmore.fr/</link>
   <description>Stages de voile, calendrier des régates d&#x27;Europe, cours théoriques, règles de course : les pages de Sailing More, mises à jour au fil de l&#x27;eau.</description>
   <language>fr-fr</language>
-  <lastBuildDate>Wed, 25 Nov 2026 07:02:14 +0000</lastBuildDate>
+  <lastBuildDate>Wed, 25 Nov 2026 07:50:24 +0000</lastBuildDate>
   <atom:link href="https://sailingmore.fr/feed.xml" rel="self" type="application/rss+xml"/>
   <ttl>720</ttl>
   <copyright>Sailing More</copyright>
   <generator>sailingmore.fr/feed_rss.py</generator>
+  <item>
+    <title>Stages de voile en Europe, prix publiés | Sailing More</title>
+    <link>https://sailingmore.fr/stages.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/stages.html</guid>
+    <pubDate>Wed, 25 Nov 2026 07:02:14 +0000</pubDate>
+    <description>Comparez 493 stages de voile de 39 écoles dans 18 pays : croisière, dériveur, RYA ou FFVoile. Prix, dates et niveau affichés, lien direct vers l&#x27;école.</description>
+  </item>
+  <item>
+    <title>Simulateur de priorités — règles de course et RIPAM — Sailing More</title>
+    <link>https://sailingmore.fr/simulateur.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/simulateur.html</guid>
+    <pubDate>Wed, 25 Nov 2026 07:02:14 +0000</pubDate>
+    <description>50 scénarios pour s&#x27;entraîner aux priorités en mer : règles de course, RIPAM de jour et feux de nuit. Schéma, règle applicable et explication en une phrase, en six langues.</description>
+  </item>
+  <item>
+    <title>Règles de course à la voile (RCV 2025-2028) | Sailing More</title>
+    <link>https://sailingmore.fr/regles-de-course.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/regles-de-course.html</guid>
+    <pubDate>Wed, 25 Nov 2026 07:02:14 +0000</pubDate>
+    <description>Toutes les règles de course à la voile 2025-2028 résumées en clair, avec un exemple pour chaque règle. Cherchez une règle par numéro ou par mot.</description>
+  </item>
+  <item>
+    <title>Calendrier des régates : Léman, France, monde | Sailing More</title>
+    <link>https://sailingmore.fr/regates.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/regates.html</guid>
+    <pubDate>Wed, 25 Nov 2026 07:02:14 +0000</pubDate>
+    <description>921 régates à venir dans 45 pays : dates, lieux, clubs et classes. Filtrez le Léman, la France ou le monde et trouvez votre prochaine course.</description>
+  </item>
+  <item>
+    <title>Ports du monde et marinas : carte et annuaire | Sailing More</title>
+    <link>https://sailingmore.fr/ports.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/ports.html</guid>
+    <pubDate>Wed, 25 Nov 2026 07:02:14 +0000</pubDate>
+    <description>Annuaire de 1298 ports, marinas et mouillages (données OpenStreetMap) : recherche par nom, liste par pays, carte et distance à vol d&#x27;oiseau entre deux ports.</description>
+  </item>
+  <item>
+    <title>Stages, régates et cours de voile en Europe | Sailing More</title>
+    <link>https://sailingmore.fr/</link>
+    <guid isPermaLink="true">https://sailingmore.fr/</guid>
+    <pubDate>Wed, 25 Nov 2026 07:02:14 +0000</pubDate>
+    <description>659 stages de voile à prix publiés dans 18 pays, 994 régates à venir, un cours théorique gratuit et les règles de course en clair. Le média de la voile.</description>
+  </item>
+  <item>
+    <title>Le jeu concours — Sailing More</title>
+    <link>https://sailingmore.fr/jeux.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/jeux.html</guid>
+    <pubDate>Wed, 25 Nov 2026 07:02:14 +0000</pubDate>
+    <description>Le jeu concours Sailing More : cinq jours de stories, du mardi au samedi, un tirage le dimanche.</description>
+  </item>
+  <item>
+    <title>Cours théorique de voile gratuit | Sailing More</title>
+    <link>https://sailingmore.fr/cours.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/cours.html</guid>
+    <pubDate>Wed, 25 Nov 2026 07:02:14 +0000</pubDate>
+    <description>Apprenez la théorie de la voile gratuitement : allures, réglages, cartes, marées, météo, balisage, RIPAM et règles de course, avec exercices corrigés.</description>
+  </item>
+  <item>
+    <title>Publicité voile : formules annonceurs | Sailing More</title>
+    <link>https://sailingmore.fr/annonceurs.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/annonceurs.html</guid>
+    <pubDate>Wed, 25 Nov 2026 07:02:14 +0000</pubDate>
+    <description>Touchez les abonnés voile de Sailing More sur Facebook et Instagram : formules de 440 à 3 900 € HT, jeu concours compris, rapport de portée sous 72 h.</description>
+  </item>
+  <item>
+    <title>Le Léman — préparer une sortie</title>
+    <link>https://sailingmore.fr/carte.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/carte.html</guid>
+    <pubDate>Wed, 25 Nov 2026 07:02:14 +0000</pubDate>
+  </item>
   <item>
     <title>Chants de marins — Sailing More</title>
     <link>https://sailingmore.fr/chants-de-marin.html</link>
@@ -30,75 +99,6 @@
     <guid isPermaLink="true">https://sailingmore.fr/bateaux.html</guid>
     <pubDate>Wed, 25 Nov 2026 07:02:13 +0000</pubDate>
     <description>Nomenclature illustrée de neuf bateaux de voile — voilier habitable X35, Hobie 16, Laser, 49er, planche iQFOiL, Formula Kite, wingfoil, IMOCA, Ultim : chaque pièce nommée et reliée à sa définition du lexique.</description>
-  </item>
-  <item>
-    <title>Stages de voile en Europe, prix publiés | Sailing More</title>
-    <link>https://sailingmore.fr/stages.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/stages.html</guid>
-    <pubDate>Wed, 25 Nov 2026 07:00:24 +0000</pubDate>
-    <description>Comparez 493 stages de voile de 39 écoles dans 18 pays : croisière, dériveur, RYA ou FFVoile. Prix, dates et niveau affichés, lien direct vers l&#x27;école.</description>
-  </item>
-  <item>
-    <title>Simulateur de priorités — règles de course et RIPAM — Sailing More</title>
-    <link>https://sailingmore.fr/simulateur.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/simulateur.html</guid>
-    <pubDate>Wed, 25 Nov 2026 07:00:24 +0000</pubDate>
-    <description>50 scénarios pour s&#x27;entraîner aux priorités en mer : règles de course, RIPAM de jour et feux de nuit. Schéma, règle applicable et explication en une phrase, en six langues.</description>
-  </item>
-  <item>
-    <title>Règles de course à la voile (RCV 2025-2028) | Sailing More</title>
-    <link>https://sailingmore.fr/regles-de-course.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/regles-de-course.html</guid>
-    <pubDate>Wed, 25 Nov 2026 07:00:24 +0000</pubDate>
-    <description>Toutes les règles de course à la voile 2025-2028 résumées en clair, avec un exemple pour chaque règle. Cherchez une règle par numéro ou par mot.</description>
-  </item>
-  <item>
-    <title>Calendrier des régates : Léman, France, monde | Sailing More</title>
-    <link>https://sailingmore.fr/regates.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/regates.html</guid>
-    <pubDate>Wed, 25 Nov 2026 07:00:24 +0000</pubDate>
-    <description>921 régates à venir dans 45 pays : dates, lieux, clubs et classes. Filtrez le Léman, la France ou le monde et trouvez votre prochaine course.</description>
-  </item>
-  <item>
-    <title>Ports du monde et marinas : carte et annuaire | Sailing More</title>
-    <link>https://sailingmore.fr/ports.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/ports.html</guid>
-    <pubDate>Wed, 25 Nov 2026 07:00:24 +0000</pubDate>
-    <description>Annuaire de 1298 ports, marinas et mouillages (données OpenStreetMap) : recherche par nom, liste par pays, carte et distance à vol d&#x27;oiseau entre deux ports.</description>
-  </item>
-  <item>
-    <title>Stages, régates et cours de voile en Europe | Sailing More</title>
-    <link>https://sailingmore.fr/</link>
-    <guid isPermaLink="true">https://sailingmore.fr/</guid>
-    <pubDate>Wed, 25 Nov 2026 07:00:24 +0000</pubDate>
-    <description>659 stages de voile à prix publiés dans 18 pays, 994 régates à venir, un cours théorique gratuit et les règles de course en clair. Le média de la voile.</description>
-  </item>
-  <item>
-    <title>Le jeu concours — Sailing More</title>
-    <link>https://sailingmore.fr/jeux.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/jeux.html</guid>
-    <pubDate>Wed, 25 Nov 2026 07:00:24 +0000</pubDate>
-    <description>Le jeu concours Sailing More : cinq jours de stories, du mardi au samedi, un tirage le dimanche.</description>
-  </item>
-  <item>
-    <title>Cours théorique de voile gratuit | Sailing More</title>
-    <link>https://sailingmore.fr/cours.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/cours.html</guid>
-    <pubDate>Wed, 25 Nov 2026 07:00:24 +0000</pubDate>
-    <description>Apprenez la théorie de la voile gratuitement : allures, réglages, cartes, marées, météo, balisage, RIPAM et règles de course, avec exercices corrigés.</description>
-  </item>
-  <item>
-    <title>Le Léman — préparer une sortie</title>
-    <link>https://sailingmore.fr/carte.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/carte.html</guid>
-    <pubDate>Wed, 25 Nov 2026 07:00:24 +0000</pubDate>
-  </item>
-  <item>
-    <title>Publicité voile : formules annonceurs | Sailing More</title>
-    <link>https://sailingmore.fr/annonceurs.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/annonceurs.html</guid>
-    <pubDate>Wed, 25 Nov 2026 07:00:24 +0000</pubDate>
-    <description>Touchez les abonnés voile de Sailing More sur Facebook et Instagram : formules de 440 à 3 900 € HT, jeu concours compris, rapport de portée sous 72 h.</description>
   </item>
 </channel>
 </rss>
