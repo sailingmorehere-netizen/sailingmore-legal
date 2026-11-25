@@ -28,7 +28,8 @@ function dessiner(){
   l.forEach(function(x){if(vus.length<4&&!ecoles[x.o[4]]){ecoles[x.o[4]]=1;vus.push(x)}});
   host.innerHTML='<h2 style="font-size:1.1rem;margin:0 0 .6rem">'+esc(X.titre)+'</h2><div style="display:grid;gap:.6rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))">'
    +vus.map(function(x){var o=x.o,loin=x.d==null?'':((o[2]?'~':'')+Math.round(x.d).toLocaleString(L)+' '+X.dist+' · ');
-     var vis='<span style="display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;font-weight:700;font-size:.75rem;margin-bottom:.4rem;background:hsl('+teinte(o[4])+',38%,22%);color:#dff3ef">'+esc(sigle(o[4]))+'</span>';
+     var vis=o[11]?'<img src="/'+esc(o[11])+'" alt="'+esc(o[3]+' — '+o[4])+'" loading="lazy" width="400" height="150" style="width:100%;height:96px;object-fit:cover;border-radius:8px;display:block;margin-bottom:.4rem">'
+       :'<span style="display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;font-weight:700;font-size:.75rem;margin-bottom:.4rem;background:hsl('+teinte(o[4])+',38%,22%);color:#dff3ef">'+esc(sigle(o[4]))+'</span>';
      return '<a href="'+esc(o[10])+'" rel="noopener nofollow" target="_blank" style="display:block;text-decoration:none;color:inherit;border:1px solid rgba(157,178,199,.3);border-radius:10px;padding:.7rem">'
        +vis+'<b style="display:block;font-size:.95rem">'+esc(o[3])+'</b><span style="font-size:.82rem;opacity:.8">'+esc(o[4])+'</span><br><span style="font-size:.82rem;opacity:.8">'
        +loin+esc(o[5]||o[6])+' · '+(o[8]!=null?o[8].toLocaleString(L)+' '+esc(o[9]):esc(X.prix))+'</span></a>'}).join('')
