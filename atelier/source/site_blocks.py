@@ -218,12 +218,19 @@ def villes(combien: int = 50) -> list[dict]:
 IG_PROFIL = "https://www.instagram.com/sailingmorehere/"
 
 
+def _cible(href: str) -> str:
+    """Nouvel onglet pour les liens externes seulement (audit 24/11, correction 3)."""
+    if href.startswith(("http://", "https://", "//")) and "sailingmore.fr" not in href:
+        return ' target="_blank" rel="noopener"'
+    return ""
+
+
 def html_stories(items: list[dict]) -> str:
     """Bande de stories : six feuilles en carrousel, de la plus ancienne (à gauche) à la plus récente."""
     if not items:
         return ""
     vignettes = "".join(
-        f'<a class="vignette" href="{x.get("lien") or IG_PROFIL}" target="_blank" rel="noopener" '
+        f'<a class="vignette" href="{x.get("lien") or IG_PROFIL}"{_cible(x.get("lien") or IG_PROFIL)} '
         f'aria-label="Story du {x["jour"]} — {"ouvrir la story" if x.get("lien") else "voir sur notre Instagram"}">'
         f'<span class="anneau"><img src="{x["vignette"]}" alt="Story SailingMore.fr du {x["jour"]} : aperçu de la première feuille" loading="lazy"></span>'
         '</a>'
@@ -311,7 +318,7 @@ def html_reels(items: list[dict]) -> str:
                     '<circle cx="12" cy="12" r="4.3" fill="none" stroke="#fff" stroke-width="1.9"/>'
                     '<circle cx="17.4" cy="6.6" r="1.35" fill="#fff"/></svg></span>')
         if x["lien"]:
-            cadre = f'<a class="reel" href="{x["lien"]}" target="_blank" rel="noopener">{vignette}</a>'
+            cadre = f'<a class="reel" href="{x["lien"]}"{_cible(x["lien"])}>{vignette}</a>'
         else:
             cadre = (f'<a class="reel" href="{IG_PROFIL}" target="_blank" rel="noopener">'
                      f'{vignette}</a>')
@@ -517,7 +524,8 @@ def menu_site(actuelle: str = "index.html") -> str:
     for fichier, titre, genre in MENU_PAGES:
         courant = ' aria-current="page"' if fichier == actuelle else ""
         classe = f' class="{genre}"' if genre else ""
-        liens.append(f'<a href="{fichier}"{classe}{courant}>{titre}</a>')
+        cible = "/" if fichier == "index.html" else fichier
+        liens.append(f'<a href="{cible}"{classe}{courant}>{titre}</a>')
     return ('<details class="menu-d"><summary>Menu</summary>'
             f'<nav aria-label="Toutes les pages du site">{"".join(liens)}</nav></details>')
 
@@ -525,7 +533,7 @@ def menu_site(actuelle: str = "index.html") -> str:
 def liens_pages(actuelle: str) -> str:
     """Une ligne de liens vers les pages de contenu, pour les pages qui n'ont pas encore la barre
     complète (cours, régates). Sans dépendance de style : fonctionne dans n'importe quelle feuille."""
-    liens = " · ".join(f'<a href="{f}" style="color:inherit">{t}</a>'
+    liens = " · ".join(f'<a href="{"/" if f == "index.html" else f}" style="color:inherit">{t}</a>'
                        for f, t, g in MENU_PAGES if not g and f != actuelle)
     return f'<nav aria-label="Pages du site" style="font-size:.85rem;opacity:.85;margin:.6rem 0">{liens}</nav>'
 
@@ -565,8 +573,9 @@ PAGES_BZH: set[str] = set()
 # Ici, une seule fonction, posée dans le `<head>` de chaque page par `poser_langue_partout()`.
 # Les pages ne détectent plus rien : elles appellent `window.smLangue()`.
 #
-# Ordre : `?lang=` → choix mémorisé (`sm-langue`) → `navigator.languages` dans l'ordre → **anglais**.
-# Jamais le français en repli : le marché est l'Europe. Le code régional est ramené (de-AT → de,
+# Ordre (25/11/2026, Nicolas) : `?lang=` → choix mémorisé (`sm-langue`) → **français**. Plus de lecture
+# de `navigator.languages`, plus de repli anglais : le robot de Google se présente comme américain.
+# Le breton n'est servi que sur choix explicite. Le code régional est ramené (de-AT → de,
 # fr-CH → fr, pt-BR → pt, nb/nn → no). `br` (breton du navigateur) donne l'interface bretonne `bzh`.
 # Elle tourne avant le premier pixel : les textes de toutes les langues sont déjà dans le HTML, seul
 # l'affichage change — donc aucun clignotement français → allemand.
@@ -598,15 +607,8 @@ def script_langue() -> str:
     /* 2. le choix du visiteur, s'il en a fait un */
     var v = lu('sm-langue');
     if(v && v !== 'auto' && connue(v)) return (v === 'fr' && lu('sm-bzh') === '1') ? 'bzh' : v;
-    /* 3. les langues du navigateur, dans l'ordre */
-    var p = navigator.languages || (navigator.language ? [navigator.language] : []);
-    for(var i = 0; i < p.length; i++){
-      var x = base(p[i]);
-      if(x === 'br') return 'bzh';            /* breton du navigateur : interface bretonne */
-      if(L.indexOf(x) >= 0) return x;
-    }
-    /* 4. l'anglais, jamais le français */
-    return 'en';
+    /* 3. le français, toujours : aucune détection par le navigateur (25/11/2026) */
+    return 'fr';
   };
   window.smChoisirLangue = function(v){ retenir(v); };
   window.SM_LANGUES = L;
@@ -837,7 +839,7 @@ def entete_site(actuelle: str, langues: list[str], auto: bool = True) -> str:
     """
     # Le menu passe en dernier : son panneau ouvert s'ancre sur le bord droit de la barre. Placé
     # avant les langues, il se décalait de la largeur du sélecteur et sortait de l'écran.
-    return ('<header class="entete"><a class="nom" href="index.html">Sailing More</a>'
+    return ('<header class="entete"><a class="nom" href="/">Sailing More</a>'
             f'{selecteur_langue(langues, auto)}'
             f'{menu_site(actuelle)}</header>'
             + _LANGUE_CSS + _MENU_JS + _LANGUE_JS + balises_favoris(actuelle) + balises_comptes(actuelle))
@@ -1244,7 +1246,7 @@ def encart_france(items: list[dict] | None = None) -> str:
             anime = ' data-pts="' + json.dumps(pts, separators=(",", ":")) + '" data-vif="1"'
             bx, by = pts[0][0], pts[0][1]
         marques.append(
-            f'<a class="pt-b{classe}"{anime} href="{b["lien"]}" target="_blank" rel="noopener" '
+            f'<a class="pt-b{classe}"{anime} href="{b["lien"]}"{_cible(b["lien"])} '
             f'title="{titre}" aria-label="{titre}, {mot}" style="left:{bx:.1f}%;top:{by:.1f}%">'
             f'{icone}{bulle}</a>')
     return ('<div class="encart-france" role="group" aria-label="Zoom sur la France">'
@@ -1394,12 +1396,12 @@ def marques_bourses(items: list[dict] | None = None) -> str:
         type_mot = "groupe de vente" if b.get("colis") else "bourse aux équipiers"
         if anime:
             sortie.append(
-                f'<a class="{classe}"{anime} href="{b["lien"]}" target="_blank" rel="noopener" '
+                f'<a class="{classe}"{anime} href="{b["lien"]}"{_cible(b["lien"])} '
                 f'title="{titre}" aria-label="{titre}, {type_mot}" '
                 f'style="left:{bx / 10:.2f}%;top:{ty / 5:.2f}%">{icone}{bulle}</a>')
             continue
         sortie.append(
-            f'<a class="{classe}" href="{b["lien"]}" target="_blank" rel="noopener" title="{titre}" '
+            f'<a class="{classe}" href="{b["lien"]}"{_cible(b["lien"])} title="{titre}" '
             f'aria-label="{titre}, {type_mot}" '
             f'style="left:{bx / 10:.2f}%;top:{ty / 5:.2f}%">{icone}{bulle}</a>')
     if liens:

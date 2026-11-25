@@ -323,8 +323,8 @@ function teinte(s){var h=0;s=s||'';for(var i=0;i<s.length;i++)h=(h*31+s.charCode
 function dt(s){if(!s)return '';var p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0].slice(2)}
 function sym(d){return {EUR:'€',GBP:'£',CHF:'CHF',USD:'$',NOK:'NOK',SEK:'SEK',DKK:'DKK'}[d]||d}
 /* langue et pays proposés par défaut : ceux du navigateur, quand des offres y répondent */
-var nav=(navigator.language||'fr-FR');var navLang=nav.slice(0,2).toLowerCase();
-var m=nav.match(/[-_]([A-Za-z]{2})$/);var navPays=m?m[1].toUpperCase():'';
+var nav='fr';var navLang='fr';
+var m=null;var navPays='';
 var ISO2ISO3={FR:'FRA',DE:'DEU',NL:'NLD',GB:'GBR',IE:'IRL',ES:'ESP',IT:'ITA',PT:'PRT',GR:'GRC',HR:'HRV',TR:'TUR',
 BE:'BEL',CH:'CHE',AT:'AUT',DK:'DNK',SE:'SWE',NO:'NOR',FI:'FIN',PL:'POL',SI:'SVN',MT:'MLT',CY:'CYP',EE:'EST',
 LV:'LVA',LT:'LTU',IS:'ISL',US:'USA',CA:'CAN',SE:'SWE',ZA:'ZAF',AU:'AUS'};
@@ -563,7 +563,7 @@ function hav(a,b,c,d){var r=Math.PI/180,p=(c-a)*r,q=(d-b)*r,h=Math.sin(p/2)*Math
 function teinte(s){var h=0;s=s||'';for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%360;return h}
 function sigle(n){var m=(n||'?').replace(/[^\p{L} ]/gu,'').split(/\s+/).filter(Boolean);return m.length>1?(m[0][0]+m[1][0]).toUpperCase():((m[0]||'?').slice(0,2).toUpperCase())}
 var ISO={FR:'FRA',DE:'DEU',NL:'NLD',GB:'GBR',IE:'IRL',ES:'ESP',IT:'ITA',PT:'PRT',GR:'GRC',HR:'HRV',TR:'TUR',BE:'BEL',CH:'CHE',AT:'AUT',DK:'DNK',SE:'SWE',NO:'NOR',FI:'FIN',PL:'POL',SI:'SVN',MT:'MLT',CY:'CYP'};
-var m=(navigator.language||'').match(/[-_]([A-Za-z]{2})$/),navPays=m?ISO[m[1].toUpperCase()]||'':'';
+var m=null,navPays='';
 var DATA=null,POS=null,posFaite=false,vu=false;
 function position(fin){
   function ip(){fetch('https://ipwho.is/?fields=latitude,longitude,success').then(function(r){return r.json()})

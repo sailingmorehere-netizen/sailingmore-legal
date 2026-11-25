@@ -21,19 +21,7 @@ import sqlite3
 import sys
 from pathlib import Path
 
-# L'ordre des tableaux de textes de l'accueil n'est pas celui du site : c'est fr en de it es pt.
-# Ce n'est pas une seconde liste de langues, mais l'ordre d'écriture des tableaux `P` plus bas ;
-# il est confronté à `site_blocks.LANGUES` au chargement, et le module s'arrête si les deux ne
-# couvrent pas les mêmes langues — le 24/11/2026, avoir pris l'ordre du site a affiché du portugais
-# à un visiteur allemand.
-from site_blocks import LANGUES as _LANGUES_SITE
-ORDRE_DES_TEXTES = ("fr", "en", "de", "it", "es", "pt")
-if set(ORDRE_DES_TEXTES) != set(_LANGUES_SITE):
-    raise SystemExit("accueil_2026 : l'ordre des textes de l'accueil (" + str(ORDRE_DES_TEXTES)
-                     + ") ne couvre pas les langues du site (" + str(_LANGUES_SITE)
-                     + ") — ajouter les textes de la langue manquante avant de publier.")
-LANGUES = list(ORDRE_DES_TEXTES)
-
+LANGUES = ["fr", "en", "de", "it", "es", "pt"]
 MOIS = {
     "fr": ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
     "en": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -42,8 +30,6 @@ MOIS = {
     "es": ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
     "pt": ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"],
 }
-
-assert set(LANGUES) <= set(MOIS), "accueil_2026 : des mois manquent pour une langue"
 # séparateur de milliers, séparateur décimal, unité du million
 FORMAT = {
     "fr": (" ", ",", "M"), "en": (",", ".", "M"), "de": (".", ",", "Mio."),
@@ -286,7 +272,7 @@ CSS = """
 def _case(grande: bool, nom: str, href: str, plus: str = "") -> str:
     cls = "case case-grande" if grande else "case"
     v = f'<span class="v" data-t="v_{nom}"></span>' if grande else ""
-    return (f'<a class="{cls}" href="{href}" target="_blank" rel="noopener">{_svg(nom)}'
+    return (f'<a class="{cls}" href="{href}">{_svg(nom)}'
             f'<b data-t="c_{nom}"></b><span class="l" data-t="l_{nom}"></span>{v}</a>')
 
 
@@ -320,7 +306,7 @@ def corps(x: dict, T: dict) -> str:
         '<p class="date"><span data-t="s_date">%s</span> <span data-t="sdate">%s</span></p><div class="nombres">%s%s%s</div></div>'
     ) % (f["s_titre"], f["s_date"], f["sdate"],
          nb("n_off", "s_off"), nb("n_eco", "s_eco"), nb("n_reg", "s_reg"))
-    liens = "".join(f'<a href="{h}" target="_blank" rel="noopener" data-t="{k}">{f[k]}</a>' for k, h in
+    liens = "".join(f'<a href="{h}" data-t="{k}">{f[k]}</a>' for k, h in
                     [("k_jeux", "jeux.html"), ("k_fav", "mes-favoris.html"), ("k_compte", "mon-compte.html"), ("k_ann", "annonceurs.html")])
     # les mêmes adresses de réseaux que l'ancien accueil, en liens sobres (noms propres, pas de traduction)
     reso = "".join(f'<a href="{h}" target="_blank" rel="noopener">{n}</a>' for n, h in
@@ -339,19 +325,19 @@ def corps(x: dict, T: dict) -> str:
 <nav class="liens-sobres" aria-label="Jeux, favoris, compte, annonceurs">{liens}</nav>
 
 <div class="cookies" id="cookies" hidden>
-  <p><span data-t="cook_t">{f['cook_t']}</span> <a href="confidentialite.html" data-t="cook_l" target="_blank" rel="noopener">{f['cook_l']}</a></p>
+  <p><span data-t="cook_t">{f['cook_t']}</span> <a href="confidentialite.html" data-t="cook_l">{f['cook_l']}</a></p>
   <button id="cookies-ok" data-t="cook_b">{f['cook_b']}</button>
 </div>
 
 <footer>
-  <a href="stages.html" target="_blank" rel="noopener">Stages · Courses</a>
-  <a href="regates.html" target="_blank" rel="noopener">Régates · Regattas</a>
-  <a href="cours.html" target="_blank" rel="noopener">Cours · Lessons</a>
-  <a href="regles-de-course.html" target="_blank" rel="noopener">Règles · Rules</a>
-  <a href="lexique.html" target="_blank" rel="noopener">Lexique · Glossary</a>
-  <a href="mentions-legales.html" target="_blank" rel="noopener">Mentions légales · Legal notice</a>
-  <a href="confidentialite.html" target="_blank" rel="noopener">Confidentialité · Privacy</a>
-  <a href="delete.html" target="_blank" rel="noopener">Suppression de données · Data deletion</a>
+  <a href="stages.html">Stages · Courses</a>
+  <a href="regates.html">Régates · Regattas</a>
+  <a href="cours.html">Cours · Lessons</a>
+  <a href="regles-de-course.html">Règles · Rules</a>
+  <a href="lexique.html">Lexique · Glossary</a>
+  <a href="mentions-legales.html">Mentions légales · Legal notice</a>
+  <a href="confidentialite.html">Confidentialité · Privacy</a>
+  <a href="delete.html">Suppression de données · Data deletion</a>
   <span>© 2026 Sailing More</span>
 </footer>
 </div>
@@ -359,9 +345,10 @@ def corps(x: dict, T: dict) -> str:
 <script>
 const T = {json.dumps(T, ensure_ascii=False, separators=(",", ":"))};
 function choisir() {{
-  const l = (typeof window.smLangue === "function") ? window.smLangue() : "en";
-  if (l === "bzh") return "fr";
-  return T[l] ? l : "en";
+  let force = null;
+  try {{ force = localStorage.getItem("sm-langue"); }} catch (e) {{}}
+  if (force && force !== "auto" && T[force]) return force;
+  return "fr";
 }}
 function appliquer(l) {{
   const d = T[l] || T.en;

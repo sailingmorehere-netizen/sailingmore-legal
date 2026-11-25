@@ -15,9 +15,21 @@ ORG_ID = f"{SITE}/#organisation"
 SITE_ID = f"{SITE}/#site"
 
 
+# Profils officiels, ceux que la page d'accueil lie déjà. Relevé 25/11/2026 : Facebook, Telegram et X
+# répondent 200 avec le nom « Sailing More » ; YouTube répond 200 sans titre lisible ; Instagram
+# répond 429 (mesure impossible) — à revérifier à la main avant publication.
+SAME_AS = [
+    "https://www.facebook.com/SailingMore",
+    "https://www.instagram.com/sailingmorehere/",
+    "https://www.youtube.com/@SailingMore",
+    "https://t.me/sailingmorehere",
+    "https://x.com/SailingMore",
+]
+
+
 def organisation() -> dict:
     return {"@type": "Organization", "@id": ORG_ID, "name": NOM, "url": f"{SITE}/",
-            "logo": f"{SITE}/icon-512.png"}
+            "logo": f"{SITE}/icon-512.png", "sameAs": list(SAME_AS)}
 
 
 def site_web() -> dict:

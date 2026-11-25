@@ -602,9 +602,9 @@ def citations_pour_js(cites: list[dict]) -> str:
 
 
 def _nouvel_onglet(html: str) -> str:
-    """Tout lien du site s'ouvre dans un nouvel onglet, pages internes comprises.
+    """Seuls les liens externes s'ouvrent dans un nouvel onglet (audit 24/11, correction 3).
 
-    Les ancres internes (#) en sont exclues : elles font défiler la page courante.
+    Les liens internes et les ancres restent dans l'onglet courant : le bouton retour doit marcher.
     Un lien qui porte déjà sa cible n'est pas retouché.
     """
     def rempl(m):
@@ -612,7 +612,7 @@ def _nouvel_onglet(html: str) -> str:
         if "target=" in tag:
             return tag
         h = re.search(r'href="([^"]*)"', tag)
-        if not h or h.group(1).startswith("#"):
+        if not h or not h.group(1).startswith(("http://", "https://", "//")) or "sailingmore.fr" in h.group(1):
             return tag
         return tag[:-1].rstrip() + ' target="_blank" rel="noopener">'
     return re.sub(r"<a\b[^>]*>", rempl, html)
@@ -643,7 +643,7 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
   <h1>Sailing<span>More</span></h1>
   <div class="filet"></div>
   <p class="accroche" data-t="accroche">Média <span class='rouge'>indépendant</span> de la voile et de la course au large, fait par des <span class='rouge'>passionnés</span>, pour des <span class='rouge'>passionnés</span>.</p>
-  <a class="bouton bouton-hero" href="annonceurs.html" target="_blank" rel="noopener"><span data-t="hero_cta">Annoncer sur Sailing More</span> <span class="fleche" aria-hidden="true">→</span></a>""")
+  <a class="bouton bouton-hero" href="annonceurs.html"><span data-t="hero_cta">Annoncer sur Sailing More</span> <span class="fleche" aria-hidden="true">→</span></a>""")
 
     bandeau = "".join(bloc_citation(i, x) for i, x in enumerate(cites))
     cites_js = citations_pour_js(cites)
@@ -1093,7 +1093,7 @@ def page_jeu(jeu: str) -> str:
 </head>
 <body>
 <div class="page">
-  <a class="retour" href="index.html">← Sailing More</a>
+  <a class="retour" href="/">← Sailing More</a>
   <h1>Le jeu <span>concours</span></h1>
   <div class="filet"></div>
   <p>Un jeu par mois, offert à un annonceur : une place dans nos stories du soir pendant cinq jours,
@@ -1621,8 +1621,8 @@ liste.addEventListener('click',function(e){
 def poser_langue_partout() -> int:
     """Le détecteur unique de langue dans le `<head>` de chaque page (24/11/2026).
 
-    Une seule fonction pour tout le site : `?lang=` → choix du visiteur → langues du navigateur →
-    anglais. Posée **dans la tête**, donc exécutée avant le premier pixel : le visiteur allemand voit
+    Une seule fonction pour tout le site : `?lang=` → choix du visiteur → français (25/11/2026 :
+    plus de détection par le navigateur). Posée **dans la tête**, donc exécutée avant le premier pixel : le visiteur allemand voit
     l'allemand d'emblée, sans le clignotement français → allemand qu'on avait avec treize détecteurs
     recopiés qui tournaient chacun à la fin de leur page.
 
@@ -1636,7 +1636,7 @@ def poser_langue_partout() -> int:
         html = page.read_text(encoding="utf-8")
         avant = html
         if "<!--langue-debut-->" in html:
-            html = re.sub(r"<!--langue-debut-->.*?<!--langue-fin-->", lambda m: bloc, html, count=1)
+            html = re.sub(r"<!--langue-debut-->.*?<!--langue-fin-->", lambda m: bloc, html, count=1, flags=re.S)
         elif ('data-lang="fr"' in html or 'data-l="' in html) and re.search(r"<head[^>]*>", html):
             html = re.sub(r"(<head[^>]*>)", lambda m: m.group(1) + bloc, html, count=1)
         if html != avant:
@@ -1868,7 +1868,7 @@ def habillage_pages_legales(html: str) -> str:
     corps = corps.rstrip()
     while corps.endswith("</div>"):
         corps = corps[: -len("</div>")].rstrip()
-    corps = ('\n<div class="page">\n<a class="retour" href="index.html">← Sailing More</a>\n'
+    corps = ('\n<div class="page">\n<a class="retour" href="/">← Sailing More</a>\n'
              + corps.strip() + "\n</div>\n")
     return tete + "<body>" + corps + "</body>\n</html>\n"
 
@@ -1889,7 +1889,7 @@ def page_annonceurs() -> str:
                               + ".page.page-annonceurs>.ann-carte{margin-top:3.2rem}"
                               + ".ann-carte{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;"
                                 "color:#9db2c6;margin:3.4rem 0 1rem}</style>") +
-            "</head><body><div class=\"page page-annonceurs\"><a class=\"retour\" href=\"index.html\">← Sailing More</a>"
+            "</head><body><div class=\"page page-annonceurs\"><a class=\"retour\" href=\"/\">← Sailing More</a>"
             "<h1 data-t=\"kit_titre\">Annonceurs</h1>"
             + f"<p data-t=\"ann_intro\">{TEXTES['fr']['ann_intro']}</p>"
             "<div class=\"carte-kit\">"
@@ -1927,11 +1927,11 @@ def page_merci() -> str:
             "<title>Merci — Sailing More</title>"
             "<meta name=\"robots\" content=\"noindex\">"
             + CSS_LEGAL +
-            "</head><body><div class=\"page\"><a class=\"retour\" href=\"index.html\">← Sailing More</a>"
+            "</head><body><div class=\"page\"><a class=\"retour\" href=\"/\">← Sailing More</a>"
             "<h1>Merci.</h1>"
             "<p>Votre demande est partie. Je réponds moi-même, sous 24 heures, du lundi au vendredi.</p>"
             "<p>En attendant, la grille est là : quatre formules, de l'essai d'une semaine au trimestre.</p>"
-            "<p><a href=\"index.html#annonceurs\">Revenir à la page des annonceurs</a></p>"
+            "<p><a href=\"/#annonceurs\">Revenir à la page des annonceurs</a></p>"
             "</div></body></html>\n")
 
 

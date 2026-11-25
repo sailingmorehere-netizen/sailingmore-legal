@@ -113,7 +113,7 @@ JS_COMPTES_UI = r'''/* comptes-ui.js — les écrans connexion / inscription / m
 (function(){
   "use strict";
   var C = window.SMCompte;
-  var SIX = window.SM_LANGUES || ["en"];   /* liste unique, posée par le détecteur (24/11/2026) */
+  var SIX = ["fr", "en", "it", "es", "pt", "de"];
 
   var T = {
     fr: { retour: "← Sailing More", ferme: "Les comptes ouvrent le 1er décembre. D'ici là, rien n'est enregistré ici : vos favoris restent sur cet appareil.",
@@ -212,11 +212,13 @@ JS_COMPTES_UI = r'''/* comptes-ui.js — les écrans connexion / inscription / m
     var l = null;
     try{ l = localStorage.getItem("sm-langue"); }catch(e){}
     if(SIX.indexOf(l) >= 0) return l;
-    /* Une seule détection pour tout le site, dans le <head> (24/11/2026). */
-    var d = (typeof window.smLangue === "function") ? window.smLangue()
-            : (document.documentElement.getAttribute("lang") || "en").slice(0, 2);
-    if(d === "bzh") d = "fr";
-    return SIX.indexOf(d) >= 0 ? d : "en";
+    var cand = (navigator.languages || [navigator.language || "fr"]);
+    for(var i = 0; i < cand.length; i++){
+      var b = String(cand[i]).toLowerCase().slice(0, 2);
+      if(SIX.indexOf(b) >= 0) return b;
+    }
+    var h = (document.documentElement.getAttribute("lang") || "fr").slice(0, 2);
+    return SIX.indexOf(h) >= 0 ? h : "fr";
   }
   function t(k){
     var s = (T[lg()] || T.fr)[k] || T.fr[k] || k;
@@ -393,7 +395,7 @@ HTML_PAGE = r'''<!doctype html>
   a:hover{text-decoration-color:#e23a3e}
 </style></head><body>
 <div class="page">
-<a class="retour" href="index.html" data-cpt-retour>← Sailing More</a>
+<a class="retour" href="/" data-cpt-retour>← Sailing More</a>
 <h1 data-cpt-titre>@H1@</h1>
 <div id="comptes" data-ecran="@ECRAN@"><p>Les comptes ouvrent le 1er décembre. D'ici là, rien n'est enregistré ici : vos favoris restent sur cet appareil.</p></div>
 <noscript><p>Cette page a besoin de JavaScript.</p></noscript>

@@ -16,7 +16,7 @@ P = {
     109: (325, E), 110: (450, E), 111: (600, E),     # EZS
     112: (350, E),                                   # Grosse Freiheit (SBF Binnen Motor ab 350)
     117: (50, C),                                    # Lagoo (leçon privée ab CHF 50)
-    174: (190, E),                                   # Reichenau étudiants (SBF See théorie)
+    173: (240, E), 174: (190, E),                                # Reichenau étudiants (SBF See théorie)
     228: (1100, E), 230: (105, E),                   # Soleil
     273: (600, G),                                   # Solent Sail (day sail avec skipper, hiver)
     311: (310, E), 312: (550, E), 314: (399, E),     # Überlingen

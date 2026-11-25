@@ -110,7 +110,7 @@ _PAYS_CENTRE = {"FRA": (46.6, 2.5), "SUI": (46.8, 8.2), "ITA": (42.5, 12.5), "GE
                 "ESP": (40.2, -3.7), "BEL": (50.6, 4.6), "NED": (52.2, 5.3), "GBR": (53.0, -1.5),
                 "POR": (39.6, -8.0), "DEN": (56.0, 10.0), "SWE": (60.0, 15.0), "NOR": (60.5, 8.5),
                 "FIN": (62.5, 26.0), "AUT": (47.5, 14.5), "MON": (43.74, 7.42), "CRO": (45.1, 15.2),
-                "GRE": (39.0, 22.0), "IRL": (53.3, -8.0), "POL": (52.0, 19.0), "TUR": (39.0, 35.0)}
+                "HKG": (22.3, 114.2), "GRE": (39.0, 22.0), "IRL": (53.3, -8.0), "POL": (52.0, 19.0), "TUR": (39.0, 35.0)}
 
 
 def _sans_accent(s: str) -> str:
@@ -904,17 +904,35 @@ def ld_epreuves(epreuves: list[dict]) -> list[dict]:
     return out
 
 
+def pays_iso2(code: str) -> str:
+    """Code pays du site (World Sailing/FFVoile, 3 lettres) -> ISO 3166-1 alpha-2, par la table
+    `regates_lieux.ISO2` inversée (une seule source). '' si inconnu."""
+    import regates_lieux
+    pref = {"FRA": "FR", "GBR": "GB", "USA": "US", "TAH": "PF"}
+    if code in pref:
+        return pref[code]
+    for a2, a3 in regates_lieux.ISO2.items():
+        if a3 == code:
+            return a2
+    return ""
+
+
 def _ld_regates(epreuves: list[dict]) -> str:
     """JSON-LD : fil d'Ariane + ItemList des LD_MAX prochaines épreuves des douze mois à venir
     (voir `ld_epreuves`). Aucun prix, aucune note."""
     import jsonld
     items = []
     for e in ld_epreuves(epreuves):
+        adresse = {"@type": "PostalAddress"}
+        if e["ville"]:
+            adresse["addressLocality"] = e["ville"]
+        iso2 = pays_iso2(e["pays"])
+        if iso2:  # schema.org attend ISO 3166-1 alpha-2 ; sans code sûr on omet plutôt que d'inventer
+            adresse["addressCountry"] = iso2
         ev = {"@type": "SportsEvent", "name": e["nom"], "startDate": e["debut"],
               "endDate": e["fin"] or e["debut"],
-              "location": {"@type": "Place", "name": e["ville"],
-                           "address": {"@type": "PostalAddress", "addressLocality": e["ville"],
-                                       "addressCountry": e["pays_fr"] or e["pays"]}}}
+              "location": {"@type": "Place", "name": e["ville"] or e["pays_fr"] or e["pays"],
+                           "address": adresse}}
         if e["club"]:
             ev["organizer"] = {"@type": "Organization", "name": e["club"]}
         if e["lien"]:
@@ -1020,7 +1038,7 @@ def construire(d: dict) -> str:
         'monde. Dates, lieux, clubs, classes, inscriptions. Recherche et filtres.">'
         "<style>" + CSS + "</style></head><body>" + sprite +
         '<div class="page">'
-        '<a class="retour" href="index.html">← Sailing More</a>'
+        '<a class="retour" href="/">← Sailing More</a>'
         # Plus de ligne de liens ici : la barre du site porte le menu sur toutes les pages
         # (Nicolas, 23/11/2026), une seconde liste ne servait qu'à l'alourdir.
         +

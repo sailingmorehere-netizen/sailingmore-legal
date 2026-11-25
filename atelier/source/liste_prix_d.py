@@ -1,10 +1,11 @@
-import json, os, re
+import json, os, sys
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-src = open(os.path.join(R, 'scripts/verifie_stages_champ.py')).read()
-d = json.load(open(os.path.join(R, 'projets/sailingmore/site/stages-proches.json')))
-noms = re.findall(r"'([^']+)'", re.search(r"'prix_d': \[(.*?)\],\n\}", src, re.S).group(1))
-print({k: (v if k != 'o' else '...') for k, v in d.items()})
-print(d['o'][0])
-for i, o in enumerate(d['o']):
-    if o[4] in noms and o[8] in (None, '', 0):
+sys.argv = ['x']
+src = open(os.path.join(R, 'scripts/verifie_stages_champ.py')).read().split('COL =')[0]
+ns = {'__file__': os.path.join(R, 'scripts/verifie_stages_champ.py')}
+exec(src, ns)
+L = json.load(open(ns['F']))['o']
+S = ns['LOTS']['prix_d']
+for i, o in enumerate(L):
+    if o[4] in S and not o[8]:
         print(i, o)

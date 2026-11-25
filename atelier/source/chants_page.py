@@ -44,12 +44,13 @@ PAGE = "chants-de-marin.html"
 from site_blocks import LANGUES as _LANGUES_SITE  # noqa: E402  (une seule liste pour toutes les pages)
 LANGUES = tuple(_LANGUES_SITE)
 
-NB_FICHES, NB_AUDIO = 6, 4
+NB_FICHES_MIN = 6   # plancher ; le compte réel est celui du JSON (chaque chant doit citer sa source)
 ANNEES = {"haul": "~1840", "wellerman": "~1865", "merck": "1622–1626", "lurrighan": "≤1900",
-          "trimartolod": "~1800", "santiano": "~1850"}
-CLES_UI = ("titrePage", "chapo", "chercher", "famille", "tous", "hisser", "virer", "festif", "melancolique",
+          "trimartolod": "~1800", "santiano": "~1850"}   # les six d'origine ; les autres portent « ≤ année du livre »
+FAMILLES = ("hisser", "virer", "pompe", "festif", "melancolique")   # ordre des groupes et du sommaire
+CLES_UI = ("titrePage", "chapo", "chercher", "famille", "tous", "hisser", "virer", "pompe", "festif", "melancolique",
            "compte", "comptes", "paroles", "ecouter", "accords", "tonalite", "dp", "pro", "aucun", "faqT",
-           "cockpit", "quitter", "pied", "note", "video", "lic", "an", "faq")
+           "cockpit", "quitter", "pied", "note", "video", "lic", "an", "faq", "sommaire", "srcLib")
 
 CSS = """
 :root{--panneau:#0f2438;--ivoire:#eef3f7;--gris:#9db2c6;--rouge:#e23a3e}
@@ -77,6 +78,12 @@ h1::after{content:"";display:block;width:3.4rem;height:3px;background:var(--roug
 .compte{font-size:.68rem;color:#6f8598;margin-left:auto;letter-spacing:.06em}
 .fiche{border-top:1px solid rgba(255,255,255,.09);padding:1.05rem .2rem 1.35rem;display:grid;gap:1rem;grid-template-columns:1.5fr 1fr}
 .fiche:first-of-type{border-top:0}
+.sommaire{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin:0 0 1rem}
+.sommaire a{border:1px solid rgba(255,255,255,.18);padding:.35rem .7rem;font-size:.78rem;color:#fff}
+.sommaire a b{color:var(--gris);font-weight:400;margin-left:.3rem}
+.groupe{scroll-margin-top:7rem}
+.gt{margin:1.6rem 0 .2rem;font-size:.82rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gris);font-weight:600;border-bottom:2px solid var(--rouge);padding-bottom:.4rem}
+.gt span{color:#6f8598;font-weight:400;margin-left:.4rem}
 @media(max-width:52rem){.fiche{grid-template-columns:1fr}}
 .entete-f{display:flex;justify-content:space-between;align-items:flex-start;gap:.8rem;flex-wrap:wrap}
 .titre{margin:0;font-size:1.08rem;color:#fff;font-weight:400}
@@ -134,10 +141,14 @@ body.cockpit-on .paroles{font-size:1.2rem;line-height:2}
 # barre du site (`localStorage` « sm-langue », boutons cachés `#langues button[data-lang]`), puis du navigateur.
 JS = r"""
 (function(){
-var D=JSON.parse(document.getElementById('chants-donnees').textContent),SIX=D.langues,L='fr',fam='tous',T=D.ui.fr;
+var D=JSON.parse(document.getElementById('chants-donnees').textContent),SIX=D.langues,L='fr',fam='tous',T=D.ui.fr,FAM=['hisser','virer','pompe','festif','melancolique'];
 function choisir(){
-  var l=(typeof window.smLangue==='function')?window.smLangue():'en';
-  if(l==='bzh')l='fr';return SIX.indexOf(l)>=0?l:'en'}
+  try{var q=new URLSearchParams(location.search).get('lang');if(q&&SIX.indexOf(q)>=0)return q}catch(e){}
+  var v='auto';try{v=localStorage.getItem('sm-langue')||'auto'}catch(e){}
+  if(v!=='auto')return SIX.indexOf(v)>=0?v:'fr';
+  var p=navigator.languages||[navigator.language||'en'];
+  for(var i=0;i<p.length;i++){var b=String(p[i]).toLowerCase().slice(0,2);if(b==='br')return 'fr';if(SIX.indexOf(b)>=0)return b}
+  return 'en'}
 function pick(o){return (o&&(o[L]||o.en||o.fr))||''}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function fmt(s){if(!isFinite(s))return '–:––';var m=Math.floor(s/60),x=Math.floor(s%60);return m+':'+(x<10?'0':'')+x}
@@ -156,7 +167,7 @@ function fiche(c){
   return '<article class="fiche" data-fam="'+c.type+'" data-id="'+c.id+'"><div><div class="entete-f"><h2 class="titre" lang="'+esc(c.lg)+'">'+esc(c.titre)+'<span class="fam">'+esc(T[c.type])+' · '+esc(nom)+'</span></h2>'+
     '<div class="badges"><span class="badge '+(c.prot?'pro':'dp')+'">'+esc(c.prot?T.pro:T.dp)+'</span><span class="badge lng">'+esc(c.lg)+'</span></div></div>'+
     '<p class="annee">'+esc(T.an.l)+' : <b>'+esc(anneeTxt(c.annees,T.an))+'</b><em> · '+esc(T.an.a)+'</em></p>'+
-    '<p class="txt">'+esc(pick(c.resume))+'</p>'+paroles+'</div>'+
+    '<p class="txt">'+esc(pick(c.resume))+'</p>'+paroles+(c.source?'<p class="src">'+esc(T.srcLib)+' : '+esc(c.source)+'</p>':'')+'</div>'+
     '<div><h3>'+esc(T.ecouter)+'</h3>'+son+liens+accords+(c.audio?'<p class="src">'+esc(noteAudio(c.audio))+'</p>':'')+'<div class="emplacement-video" data-chant="'+c.id+'">'+vid+'</div></div></article>'}
 function rendre(){
   L=choisir();T=D.ui[L]||D.ui.fr;stopper();
@@ -170,15 +181,20 @@ function rendre(){
   document.getElementById('pied-r').textContent=T.pied;
   document.getElementById('faq-t').textContent=T.faqT;
   document.getElementById('filtres').innerHTML='<span class="etiq">'+esc(T.famille)+'</span>'+
-    ['tous','hisser','virer','festif','melancolique'].map(function(f){return '<button class="puce" data-f="'+f+'" aria-pressed="'+(f===fam)+'">'+esc(T[f])+'</button>'}).join('')+'<span class="compte" id="compte"></span>';
+    ['tous'].concat(FAM).map(function(f){return '<button class="puce" data-f="'+f+'" aria-pressed="'+(f===fam)+'">'+esc(T[f])+'</button>'}).join('')+'<span class="compte" id="compte"></span>';
   document.getElementById('faq').innerHTML=T.faq.map(function(q){return '<details><summary>'+esc(q[0])+'</summary><p>'+esc(q[1])+'</p></details>'}).join('');
-  document.getElementById('liste').innerHTML=D.chants.map(fiche).join('');
+  var gr=FAM.map(function(f){return D.chants.filter(function(c){return c.type===f})}),som=[];
+  document.getElementById('liste').innerHTML=FAM.map(function(f,i){if(!gr[i].length)return '';
+    som.push('<a href="#g-'+f+'">'+esc(T[f])+' <b>'+gr[i].length+'</b></a>');
+    return '<section class="groupe" data-g="'+f+'" id="g-'+f+'"><h2 class="gt">'+esc(T[f])+' <span>'+gr[i].length+'</span></h2>'+gr[i].map(fiche).join('')+'</section>'}).join('');
+  document.getElementById('sommaire').innerHTML='<span class="etiq">'+esc(T.sommaire)+'</span>'+som.join('');
   filtre();cabler()}
 function filtre(){
   var t=(document.getElementById('q').value||'').toLowerCase(),n=0;
   document.querySelectorAll('.fiche').forEach(function(f){
     var ok=(fam==='tous'||f.dataset.fam===fam)&&(!t||f.textContent.toLowerCase().indexOf(t)>-1);
     f.style.display=ok?'':'none';if(ok)n++});
+  document.querySelectorAll('.groupe').forEach(function(g){var v=g.querySelector('.fiche:not([style*="none"])');g.style.display=v?'':'none'});
   document.getElementById('compte').textContent=n+' '+(n>1?T.comptes:T.compte)}
 function cabler(){
   var noms=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -234,10 +250,11 @@ def verifier(d: dict) -> list[str]:
     """Les décisions de Nicolas, une par une. Un écart = la page n'est pas écrite."""
     pb = []
     ui, chants = d.get("ui", {}), d.get("chants", [])
-    if len(chants) != NB_FICHES:
-        pb.append(f"{len(chants)} fiche(s) au lieu de {NB_FICHES}")
-    if sum(1 for c in chants if c.get("audio")) != NB_AUDIO:
-        pb.append(f"{sum(1 for c in chants if c.get('audio'))} lecteur(s) audio au lieu de {NB_AUDIO}")
+    if len(chants) < NB_FICHES_MIN:
+        pb.append(f"{len(chants)} fiche(s), moins que le plancher {NB_FICHES_MIN}")
+    ids = [c.get("id") for c in chants]
+    if len(set(ids)) != len(ids):
+        pb.append("identifiants en double")
     for l in LANGUES:
         if l not in ui:
             pb.append(f"interface absente en {l}")
@@ -249,10 +266,18 @@ def verifier(d: dict) -> list[str]:
         pb.append("bloc `bzh` interdit : jamais de breton produit par un modèle")
     for c in chants:
         i = c.get("id", "?")
-        if ANNEES.get(i) != c.get("annees"):
+        if i in ANNEES and ANNEES[i] != c.get("annees"):
             pb.append(f"{i} : année {c.get('annees')!r} au lieu de {ANNEES.get(i)!r}")
-        if not isinstance(c.get("resume"), dict) or any(l not in c["resume"] for l in LANGUES):
-            pb.append(f"{i} : résumé manquant dans une des six langues")
+        elif not c.get("annees"):
+            pb.append(f"{i} : année manquante")
+        if c.get("type") not in FAMILLES:
+            pb.append(f"{i} : famille inconnue {c.get('type')!r}")
+        if not str(c.get("source", "")).strip():
+            pb.append(f"{i} : champ `source` manquant (livre et page, ou URL)")
+        if c.get("paroles") and i not in ANNEES and not c.get("livre"):
+            pb.append(f"{i} : paroles sans livre d'origine")
+        if not isinstance(c.get("resume"), dict) or not all(c["resume"].get(l) for l in ("fr", "en")):
+            pb.append(f"{i} : résumé fr/en manquant")
         if isinstance(c.get("titre"), dict):
             pb.append(f"{i} : le titre ne se traduit pas")
         a = c.get("audio")
@@ -310,7 +335,8 @@ def fiche_html(c: dict, d: dict, L: str = "fr") -> str:
             f'<h2 class="titre" lang="{e(c["lg"])}">{e(c["titre"])}<span class="fam">{e(T[c["type"]])} · {e(nom)}</span></h2>'
             f'<div class="badges"><span class="badge {badge}">{e(T[badge])}</span><span class="badge lng">{e(c["lg"])}</span></div></div>'
             f'<p class="annee">{e(T["an"]["l"])} : <b>{e(_annee(c["annees"], T["an"]))}</b><em> · {e(T["an"]["a"])}</em></p>'
-            f'<p class="txt">{e(c["resume"].get(L) or c["resume"]["fr"])}</p>{paroles}</div>'
+            f'<p class="txt">{e(c["resume"].get(L) or c["resume"]["fr"])}</p>{paroles}'
+            + (f'<p class="src">{e(T["srcLib"])} : {e(c["source"])}</p>' if c.get("source") else "") + '</div>'
             f'<div><h3>{e(T["ecouter"])}</h3>{son}{liens}{accords}'
             + (f'<p class="src">{e(_note_audio(c["audio"], T))}</p>' if c.get("audio") else "")
             + f'<div class="emplacement-video" data-chant="{c["id"]}">{vid}</div></div></article>')
@@ -347,8 +373,8 @@ def construire(d: dict) -> str:
     import jsonld
     import site_blocks
     fr = d["ui"]["fr"]
-    description = ("Les chants de marins : ce qu'ils faisaient à bord, les paroles du domaine public "
-                   "et un enregistrement libre à écouter pour chacun.")
+    description = (f"{len(d['chants'])} chants de marins : ce qu'ils faisaient à bord, les paroles du domaine public "
+                   "dans leur langue d'origine, chacune adossée à un livre cité (Terry, Whall, Smith).")
     donnees = {"langues": list(LANGUES), "ui": {l: d["ui"][l] for l in LANGUES},
                "langueNoms": d["langueNoms"], "chants": d["chants"]}
     brut = json.dumps(donnees, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
@@ -374,9 +400,18 @@ def construire(d: dict) -> str:
              f'<input id="q" type="search" aria-label="{H.escape(fr["chercher"], quote=True)}" placeholder="{H.escape(fr["chercher"], quote=True)}"></div>'
              f'<div class="filtres" id="filtres"><span class="etiq">{H.escape(fr["famille"])}</span>'
              + "".join(f'<button class="puce" data-f="{f}" aria-pressed="{"true" if f == "tous" else "false"}">{H.escape(fr[f])}</button>'
-                       for f in ("tous", "hisser", "virer", "festif", "melancolique"))
+                       for f in ("tous",) + FAMILLES)
              + f'<span class="compte" id="compte">{n} {H.escape(fr["comptes"])}</span></div></div>'
-             f'<div id="liste">{"".join(fiche_html(c, d) for c in d["chants"])}</div></div>'
+             f'<nav class="sommaire" id="sommaire"><span class="etiq">{H.escape(fr["sommaire"])}</span>'
+             + "".join(f'<a href="#g-{f}">{H.escape(fr[f])} <b>{sum(1 for c in d["chants"] if c["type"] == f)}</b></a>'
+                       for f in FAMILLES if any(c["type"] == f for c in d["chants"]))
+             + '</nav>'
+             f'<div id="liste">' + "".join(
+                 f'<section class="groupe" data-g="{f}" id="g-{f}"><h2 class="gt">{H.escape(fr[f])} '
+                 f'<span>{sum(1 for c in d["chants"] if c["type"] == f)}</span></h2>'
+                 + "".join(fiche_html(c, d) for c in d["chants"] if c["type"] == f) + "</section>"
+                 for f in FAMILLES if any(c["type"] == f for c in d["chants"]))
+             + '</div></div>'
              f'<section class="section"><h2 class="sec" id="faq-t">{H.escape(fr["faqT"])}</h2><div class="faq" id="faq">'
              + "".join(f"<details><summary>{H.escape(q)}</summary><p>{H.escape(r)}</p></details>" for q, r in fr["faq"])
              + "</div></section>"

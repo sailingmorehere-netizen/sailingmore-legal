@@ -93,8 +93,8 @@ def main() -> int:
     manque = sorted({a for a, _, _ in bat.liens if a not in lex.ids})
     print(f"étiquettes : {len(bat.liens)} liens, {len({a for a, _, _ in bat.liens})} ancres distinctes, ancres absentes du lexique : {manque or 'aucune'}")
     pb += [f"ancre absente du lexique : {a}" for a in manque]
-    if any(t != "_blank" or r != "noopener" for _, t, r in bat.liens):
-        pb.append("un lien sans target=_blank rel=noopener")
+    if any(t or r for _, t, r in bat.liens):
+        pb.append("un lien interne avec target ou rel (même onglet depuis le 25/11/2026)")
     print(f"lexique : {len(lex.ids)} ancres")
     # 2. bateaux.json : aucune ancre absente de la page
     js = json.loads((SITE / "bateaux.json").read_text(encoding="utf-8"))
