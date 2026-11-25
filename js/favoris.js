@@ -8,7 +8,7 @@
 (function(){
   "use strict";
   var TYPES = ["regle", "bateau", "port", "stage"];
-  var LANGUES = window.SM_LANGUES || ["en"];   /* liste unique, posée par le détecteur (24/11/2026) */
+  var LANGUES = ["fr", "en", "it", "es", "pt", "de"];
   var CLE = "sm-favoris";
   var MAX = 2000;            /* plafond de la liste : un import ne peut pas remplir le stockage */
   var MAX_ID = 300;
@@ -18,11 +18,11 @@
   function base(){ return String(cfg().api || "https://api.sailingmore.fr").replace(/\/+$/, ""); }
 
   function langue(){
-    /* Une seule détection pour tout le site, dans le <head> (24/11/2026). */
-    var l = (typeof window.smLangue === "function") ? window.smLangue()
-            : (document.documentElement.getAttribute("lang") || "").slice(0, 2).toLowerCase();
-    if(l === "bzh") l = "fr";
-    return LANGUES.indexOf(l) >= 0 ? l : "en";
+    var l = null;
+    try{ l = localStorage.getItem("sm-langue"); }catch(e){}
+    if(LANGUES.indexOf(l) >= 0) return l;
+    var h = (document.documentElement.getAttribute("lang") || "").slice(0, 2).toLowerCase();
+    return LANGUES.indexOf(h) >= 0 ? h : "fr";
   }
 
   /* Un favori valide, ou null. Tout ce qui vient d'un import est suspect : on ne garde que les quatre champs. */

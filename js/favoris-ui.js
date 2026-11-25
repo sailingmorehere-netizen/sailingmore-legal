@@ -4,7 +4,7 @@
   "use strict";
   var F = window.SMFav;
   if(!F) return;
-  var SIX = window.SM_LANGUES || ["en"];   /* idem : une seule liste pour tout le site */
+  var SIX = ["fr", "en", "it", "es", "pt", "de"];
 
   var T = {
     fr: { enr: "Enregistrer", enrOk: "Enregistré", enrTitre: "Garder dans mes favoris", retTitre: "Retirer de mes favoris",
@@ -64,10 +64,16 @@
   };
 
   function lg(){
-    var l = (typeof window.smLangue === "function") ? window.smLangue()
-            : (document.documentElement.getAttribute("lang") || "en").slice(0, 2).toLowerCase();
-    if(l === "bzh") l = "fr";
-    return SIX.indexOf(l) >= 0 ? l : "en";
+    var l = null;
+    try{ l = localStorage.getItem("sm-langue"); }catch(e){}
+    if(SIX.indexOf(l) >= 0) return l;
+    var cand = (navigator.languages || [navigator.language || "fr"]);
+    for(var i = 0; i < cand.length; i++){
+      var b = String(cand[i]).toLowerCase().slice(0, 2);
+      if(SIX.indexOf(b) >= 0) return b;
+    }
+    var h = (document.documentElement.getAttribute("lang") || "fr").slice(0, 2);
+    return SIX.indexOf(h) >= 0 ? h : "fr";
   }
   function t(k){ return (T[lg()] || T.fr)[k] || T.fr[k] || k; }
 

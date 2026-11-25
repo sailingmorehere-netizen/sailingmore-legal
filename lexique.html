@@ -19,15 +19,8 @@
     /* 2. le choix du visiteur, s'il en a fait un */
     var v = lu('sm-langue');
     if(v && v !== 'auto' && connue(v)) return (v === 'fr' && lu('sm-bzh') === '1') ? 'bzh' : v;
-    /* 3. les langues du navigateur, dans l'ordre */
-    var p = navigator.languages || (navigator.language ? [navigator.language] : []);
-    for(var i = 0; i < p.length; i++){
-      var x = base(p[i]);
-      if(x === 'br') return 'bzh';            /* breton du navigateur : interface bretonne */
-      if(L.indexOf(x) >= 0) return x;
-    }
-    /* 4. l'anglais, jamais le français */
-    return 'en';
+    /* 3. le français, toujours : aucune détection par le navigateur (25/11/2026) */
+    return 'fr';
   };
   window.smChoisirLangue = function(v){ retenir(v); };
   window.SM_LANGUES = L;
@@ -449,7 +442,8 @@ body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:fl
   traduit();
   versLAncre();
 })();
-</script><!--stages-proches--><section id="stages-proches" style="max-width:60rem;margin:2rem auto;padding:0 1.2rem" hidden></section><script src="/stages-proches.js" defer></script><!--mer-debut-->
+</script><!--stages-proches--><section id="stages-proches" style="max-width:60rem;margin:2rem auto;padding:0 1.2rem" hidden></section><script src="/stages-proches.js" defer></script>
+<!--mer-debut-->
 <div class="mer-fond" id="cadre">
 
   <canvas id="mer" aria-hidden="true"></canvas>

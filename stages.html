@@ -18,15 +18,8 @@
     /* 2. le choix du visiteur, s'il en a fait un */
     var v = lu('sm-langue');
     if(v && v !== 'auto' && connue(v)) return (v === 'fr' && lu('sm-bzh') === '1') ? 'bzh' : v;
-    /* 3. les langues du navigateur, dans l'ordre */
-    var p = navigator.languages || (navigator.language ? [navigator.language] : []);
-    for(var i = 0; i < p.length; i++){
-      var x = base(p[i]);
-      if(x === 'br') return 'bzh';            /* breton du navigateur : interface bretonne */
-      if(L.indexOf(x) >= 0) return x;
-    }
-    /* 4. l'anglais, jamais le français */
-    return 'en';
+    /* 3. le français, toujours : aucune détection par le navigateur (25/11/2026) */
+    return 'fr';
   };
   window.smChoisirLangue = function(v){ retenir(v); };
   window.SM_LANGUES = L;
@@ -239,7 +232,7 @@ body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
 </head><body><div class="mer-fond mer-fond-commandes">
   <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
 </div>
-<header class="entete"><a class="nom" href="index.html">Sailing More</a><div class="lg"><span hidden>Langue</span><span class="globe" aria-hidden="true"></span><span class="code" aria-hidden="true">FR</span><span class="chev" aria-hidden="true"></span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto (langue du navigateur)</option><option value="fr">FR · Français</option><option value="en">EN · English</option><option value="it">IT · Italiano</option><option value="es">ES · Español</option><option value="pt">PT · Português</option><option value="de">DE · Deutsch</option><option value="bzh">BZH · Brezhoneg</option></select></div><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button><button data-lang="de" aria-pressed="false">DE</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="index.html">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html">Règles de course</a><a href="stages.html" aria-current="page">Stages de voile</a><a href="cours.html">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="carte.html">Carte du Léman</a><a href="lexique.html">Lexique</a><a href="chants-de-marin.html">Chants de marins</a><a href="ports.html">Ports du monde</a><a href="simulateur.html">Simulateur de priorités</a><a href="annonceurs.html">Annonceurs</a></nav></details></header><style>
+<header class="entete"><a class="nom" href="/">Sailing More</a><div class="lg"><span hidden>Langue</span><span class="globe" aria-hidden="true"></span><span class="code" aria-hidden="true">FR</span><span class="chev" aria-hidden="true"></span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto (langue du navigateur)</option><option value="fr">FR · Français</option><option value="en">EN · English</option><option value="it">IT · Italiano</option><option value="es">ES · Español</option><option value="pt">PT · Português</option><option value="de">DE · Deutsch</option><option value="bzh">BZH · Brezhoneg</option></select></div><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button><button data-lang="de" aria-pressed="false">DE</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="/">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html">Règles de course</a><a href="stages.html" aria-current="page">Stages de voile</a><a href="cours.html">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="carte.html">Carte du Léman</a><a href="lexique.html">Lexique</a><a href="chants-de-marin.html">Chants de marins</a><a href="ports.html">Ports du monde</a><a href="simulateur.html">Simulateur de priorités</a><a href="annonceurs.html">Annonceurs</a></nav></details></header><style>
 /* La langue : une pastille du site, pas un contrôle du système (Nicolas, 23/11/2026 : « pour la barre
    des langues il faut un truc plus joli »). Plus de cadre blanc : un globe, le code de la langue en
    capitales comme les libellés de la barre, le filet rouge de MENU dessous, et le <select> natif posé
@@ -495,8 +488,8 @@ function teinte(s){var h=0;s=s||'';for(var i=0;i<s.length;i++)h=(h*31+s.charCode
 function dt(s){if(!s)return '';var p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0].slice(2)}
 function sym(d){return {EUR:'€',GBP:'£',CHF:'CHF',USD:'$',NOK:'NOK',SEK:'SEK',DKK:'DKK'}[d]||d}
 /* langue et pays proposés par défaut : ceux du navigateur, quand des offres y répondent */
-var nav=(navigator.language||'fr-FR');var navLang=nav.slice(0,2).toLowerCase();
-var m=nav.match(/[-_]([A-Za-z]{2})$/);var navPays=m?m[1].toUpperCase():'';
+var nav='fr';var navLang='fr';
+var m=null;var navPays='';
 var ISO2ISO3={FR:'FRA',DE:'DEU',NL:'NLD',GB:'GBR',IE:'IRL',ES:'ESP',IT:'ITA',PT:'PRT',GR:'GRC',HR:'HRV',TR:'TUR',
 BE:'BEL',CH:'CHE',AT:'AUT',DK:'DNK',SE:'SWE',NO:'NOR',FI:'FIN',PL:'POL',SI:'SVN',MT:'MLT',CY:'CYP',EE:'EST',
 LV:'LVA',LT:'LTU',IS:'ISL',US:'USA',CA:'CAN',SE:'SWE',ZA:'ZAF',AU:'AUS'};
