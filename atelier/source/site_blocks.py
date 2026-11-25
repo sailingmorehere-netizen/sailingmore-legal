@@ -1714,6 +1714,33 @@ ENTETE_CSS = """
 }
 """ + MENU_CSS + BARRE_CSS
 
+# Les carrés (`.cases` / `.case` / `.case-grande`) : un seul composant pour l'accueil et la page des cours.
+# Constante à part, pas ajoutée à CSS : CSS est dans une dizaine d'autres pages, qui ne doivent pas bouger.
+CASES_CSS = """
+.cases{max-width:62rem;margin:0 auto;padding:0 1.4rem;display:grid;gap:.9rem;grid-template-columns:repeat(3,1fr)}
+.case{display:flex;flex-direction:column;gap:.35rem;padding:1.1rem 1.2rem;background:rgba(10,26,43,.82);
+  border:1px solid rgba(126,214,214,.2);border-radius:4px;color:#eef3f7;min-width:0}
+.case:hover,.case:focus-visible{border-color:#e23a3e;background:rgba(15,36,56,.95)}
+.case:focus-visible{outline:2px solid #a8ecec;outline-offset:3px}
+.case svg{width:1.7rem;height:1.7rem;color:#e23a3e;flex:0 0 auto}
+.case b{font-size:1.02rem;letter-spacing:.01em}
+.case span.l{font-size:.86rem;line-height:1.35;color:#9db2c6}
+.case-grande{min-height:11.5rem;border-top:3px solid #e23a3e;padding:1.4rem}
+.case-grande svg{width:2.8rem;height:2.8rem}
+.case-grande b{font-size:1.5rem;letter-spacing:-.01em}
+.case-grande span.l{font-size:.95rem;color:#c9d6e2}
+.case-grande .v{margin-top:auto;font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#eef3f7}
+@media (max-width:760px){
+  .cases{grid-template-columns:1fr;gap:.6rem}
+  .case-grande{min-height:0;flex-direction:row;flex-wrap:wrap;align-items:center;column-gap:.9rem;row-gap:.1rem;padding:1rem 1.1rem}
+  .case-grande svg{width:2.2rem;height:2.2rem}
+  .case-grande b{flex:1 1 0}
+  .case-grande span.l{flex:1 0 100%}
+  .case-grande .v{display:none}
+  .case{padding:.8rem 1rem}
+}
+"""
+
 CSS = """
   .stories,.reels,.monde{max-width:62rem;margin:0 auto 6.5rem;padding:0 1.4rem}
   /* Nicolas, 20/11/2026 : « d'un coup il y a un grand espace, d'un coup moins ». Un seul rythme entre

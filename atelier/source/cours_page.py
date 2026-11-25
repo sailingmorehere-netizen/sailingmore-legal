@@ -28,6 +28,142 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from site_blocks import LANGUES  # noqa: E402  (une seule liste pour toutes les pages)
 URL_RRS = "https://sailing.org/inside-world-sailing/rules-regulations/racingrules/"
 
+
+# ── LE CATALOGUE : une donnée, pas du HTML. L'entrée en carrés de `cours.html` est générée d'ici. ───────
+# Écrire un cours = ajouter sa ligne dans COURS + son texte dans CHAPITRES / TEXTES. Rien d'autre à toucher.
+# Plan de référence (statuts, ordre, notes) : projets/sailingmore/9-cours/PLAN-DES-COURS.md.
+#   famille : clé de FAMILLES (l'ordre des familles est celui de FAMILLES, l'ordre des cours celui de COURS)
+#   ancre   : id du chapitre dans CHAPITRES (ou "revision") → le carré pointe vers #chN-<langue>
+#   t       : titre par langue ; None = le titre du chapitre lui-même (une seule source)
+#   d       : une ligne par langue (fr, en, it, es, pt, de)
+#   statut  : "écrit" → carré ; tout autre statut → pas de carré (jamais de tuile qui promet une page vide)
+def _l(fr, en, it, es, pt, de):
+    return {"fr": fr, "en": en, "it": it, "es": es, "pt": pt, "de": de}
+
+
+FAMILLES = [
+    {"id": "commencer", "t": _l("Commencer la voile", "Start sailing", "Iniziare a vela", "Empezar a navegar",
+                                 "Começar a velejar", "Segeln lernen"),
+     "s": _l("De zéro à la première sortie.", "From zero to your first outing.", "Da zero alla prima uscita.",
+             "De cero a la primera salida.", "Do zero à primeira saída.", "Von null zum ersten Törn.")},
+    {"id": "permis", "t": _l("Permis et diplôme", "Licences and certificates", "Patenti e diplomi",
+                             "Titulaciones y diplomas", "Cartas e diplomas", "Scheine und Zeugnisse"),
+     "s": _l("Ce qui est interrogé à l'examen.", "What the exam asks.", "Ciò che si chiede all'esame.",
+             "Lo que se pregunta en el examen.", "O que é perguntado no exame.", "Was in der Prüfung gefragt wird.")},
+    {"id": "perfectionnement", "t": _l("Perfectionnement", "Improve", "Perfezionamento", "Perfeccionamiento",
+                                       "Aperfeiçoamento", "Für Fortgeschrittene"),
+     "s": _l("Une fois qu'on sait déjà naviguer.", "Once you can already sail.", "Quando già si sa navigare.",
+             "Cuando ya sabes navegar.", "Quando já se sabe navegar.", "Wenn man schon segeln kann.")},
+    {"id": "regate", "t": _l("Régate", "Racing", "Regata", "Regata", "Regata", "Regatta"),
+     "s": _l("Se mesurer, en respectant les règles.", "Measure yourself, by the rules.", "Misurarsi, rispettando le regole.",
+             "Medirse, respetando las reglas.", "Medir forças, respeitando as regras.", "Sich messen, nach den Regeln.")},
+]
+
+# Textes de l'entrée (titre de section, lien du carré, sommaire replié).
+ENTREE = {
+    "h2": _l("Choisir un cours", "Choose a course", "Scegli un corso", "Elige un curso", "Escolha um curso", "Kurs wählen"),
+    "lire": _l("Lire le cours", "Read the course", "Leggi il corso", "Leer el curso", "Ler o curso", "Kurs lesen"),
+    "sommaire": _l("Sommaire", "Contents", "Indice", "Índice", "Índice", "Inhalt"),
+}
+
+# Pictogrammes au trait, 24 × 24, même style que l'accueil.
+ICONES = {
+    "bateau": '<path d="M3 15h18l-3 5H6zM12 3v12M12 4l6 9h-6"/>',
+    "vent": '<path d="M3 8h11a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h7"/>',
+    "voiles": '<path d="M12 3v14M12 4c4 2 6 6 6 11h-6M12 7c-3 2-5 5-5 8h5M4 19h16l-2 2H6z"/>',
+    "cap": '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
+    "marees": '<path d="M3 9c3 0 3-2 6-2s3 2 6 2 3-2 6-2M3 15c3 0 3-2 6-2s3 2 6 2 3-2 6-2"/>',
+    "meteo": '<path d="M7 18a4 4 0 0 1-.5-8A6 6 0 0 1 18 11a3.5 3.5 0 0 1-.5 7z"/>',
+    "balisage": '<path d="M12 3v5M9 8h6l2 9H7zM5 21h14"/>',
+    "abordage": '<path d="M4 18 10 6l2 12zM20 18 14 6l-2 12z"/>',
+    "depart": '<path d="M6 21V4M6 4h11l-2 4 2 4H6"/>',
+    "priorites": '<path d="M4 8h12M12 4l4 4-4 4M20 16H8M12 12l-4 4 4 4"/>',
+    "marques": '<circle cx="12" cy="15" r="5"/><path d="M12 10V3l5 2-5 2"/>',
+    "securite": '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="m5.6 5.6 3.6 3.6M14.8 14.8l3.6 3.6M18.4 5.6l-3.6 3.6M9.2 14.8l-3.6 3.6"/>',
+    "pavillons": '<path d="M5 21V3M5 4h14v7H5M12 4v7"/>',
+    "vhf": '<rect x="8" y="3" width="8" height="18" rx="2"/><path d="M11 17h2M10 7h4"/>',
+    "examen": '<path d="M5 4h14v16H5zM8 9l2 2 3-4M8 16h8"/>',
+}
+
+COURS = [
+    # 1. Commencer la voile
+    {"famille": "commencer", "id": "vocabulaire", "ancre": "vocabulaire", "icone": "bateau", "statut": "écrit", "t": None,
+     "d": _l("Les parties du bateau et les mots pour les nommer.", "The parts of the boat and the words to name them.",
+             "Le parti della barca e le parole per nominarle.", "Las partes del barco y las palabras para nombrarlas.",
+             "As partes do barco e as palavras para as nomear.", "Die Teile des Bootes und ihre Namen.")},
+    {"famille": "commencer", "id": "vent", "ancre": "vent", "icone": "vent", "statut": "écrit", "t": None,
+     "d": _l("D'où vient le vent, et les allures par rapport à lui.", "Where the wind comes from, and the points of sail.",
+             "Da dove viene il vento e le andature rispetto a esso.", "De dónde viene el viento y los rumbos respecto a él.",
+             "De onde vem o vento e os andamentos em relação a ele.", "Woher der Wind weht und die Kurse zum Wind.")},
+    {"famille": "commencer", "id": "equiper", "ancre": "equiper", "icone": "securite", "statut": "écrit", "t": None,
+     "d": _l("Gilet, harnais, vêtements : ce qui sauve avant ce qui sert.", "Lifejacket, harness, clothing: what saves before what serves.",
+             "Giubbotto, imbracatura, abiti: ciò che salva prima di ciò che serve.", "Chaleco, arnés, ropa: lo que salva antes de lo que sirve.",
+             "Colete, arnês, roupa: o que salva antes do que serve.", "Weste, Gurt, Kleidung: erst was rettet, dann was nützt.")},
+    {"famille": "commencer", "id": "embarquer", "ancre": "embarquer", "icone": "bateau", "statut": "écrit", "t": None,
+     "d": _l("Les trois premières minutes : monter à bord, larguer, sortir du port.", "The first three minutes: stepping aboard, casting off, leaving harbour.",
+             "I primi tre minuti: salire a bordo, mollare, uscire dal porto.", "Los tres primeros minutos: embarcar, largar, salir del puerto.",
+             "Os três primeiros minutos: embarcar, largar, sair do porto.", "Die ersten drei Minuten: einsteigen, ablegen, den Hafen verlassen.")},
+    {"famille": "commencer", "id": "pavillons", "ancre": "pavillons", "icone": "pavillons", "statut": "écrit", "t": None,
+     "d": _l("Les 42 pavillons de l'alphabet marin, un par un.", "The 42 flags of the nautical alphabet, one by one.",
+             "Le 42 bandiere dell'alfabeto nautico, una per una.", "Las 42 banderas del alfabeto marino, una a una.",
+             "As 42 bandeiras do alfabeto marítimo, uma a uma.", "Die 42 Flaggen des Flaggenalphabets, eine nach der anderen.")},
+    # 2. Permis et diplôme
+    {"famille": "permis", "id": "cap", "ancre": "cap", "icone": "cap", "statut": "écrit", "t": None,
+     "d": _l("Lire la carte, tenir un cap, estimer sa position.", "Read the chart, hold a course, estimate your position.",
+             "Leggere la carta, tenere la rotta, stimare la posizione.", "Leer la carta, mantener un rumbo, estimar la posición.",
+             "Ler a carta, manter um rumo, estimar a posição.", "Karte lesen, Kurs halten, Position schätzen.")},
+    {"famille": "permis", "id": "marees", "ancre": "marees", "icone": "marees", "statut": "écrit", "t": None,
+     "d": _l("Pleine mer, basse mer, amplitude et courants.", "High and low water, tidal range and streams.",
+             "Alta e bassa marea, escursione e correnti.", "Pleamar, bajamar, amplitud y corrientes.",
+             "Preia-mar, baixa-mar, amplitude e correntes.", "Hoch- und Niedrigwasser, Tidenhub und Strom.")},
+    {"famille": "permis", "id": "meteo", "ancre": "meteo", "icone": "meteo", "statut": "écrit", "t": None,
+     "d": _l("Lire un bulletin, comprendre le vent et le ciel.", "Read a forecast, understand wind and sky.",
+             "Leggere un bollettino, capire vento e cielo.", "Leer un parte, entender el viento y el cielo.",
+             "Ler um boletim, perceber o vento e o céu.", "Wetterbericht lesen, Wind und Himmel verstehen.")},
+    {"famille": "permis", "id": "balisage", "ancre": "balisage", "icone": "balisage", "statut": "écrit", "t": None,
+     "d": _l("Les bouées et les feux, région A (AISM/IALA).", "Buoys and lights, region A (IALA).",
+             "Boe e fari, regione A (IALA).", "Boyas y luces, región A (AISM/IALA).",
+             "Bóias e luzes, região A (AISM/IALA).", "Tonnen und Feuer, Region A (IALA).")},
+    {"famille": "permis", "id": "abordage", "ancre": "abordage", "icone": "abordage", "statut": "écrit", "t": None,
+     "d": _l("Qui s'écarte de qui en mer : COLREG / RIPAM.", "Who gives way to whom at sea: COLREG.",
+             "Chi dà la precedenza in mare: COLREG.", "Quién cede el paso en el mar: COLREG.",
+             "Quem cede passagem no mar: COLREG.", "Wer wem auf See ausweicht: KVR/COLREG.")},
+    {"famille": "permis", "id": "revision", "ancre": "revision", "icone": "examen", "statut": "écrit", "t": None,
+     "d": _l("Quatre questions qui reprennent tout le cours.", "Four questions covering the whole course.",
+             "Quattro domande che riprendono tutto il corso.", "Cuatro preguntas que retoman todo el curso.",
+             "Quatro perguntas que retomam todo o curso.", "Vier Fragen zum ganzen Kurs.")},
+    {"famille": "permis", "id": "vhf", "ancre": "vhf", "icone": "vhf", "statut": "écrit", "t": None,
+     "d": _l("Canal 16, MAYDAY, procédure et canaux.", "Channel 16, MAYDAY, procedure and channels.",
+             "Canale 16, MAYDAY, procedura e canali.", "Canal 16, MAYDAY, procedimiento y canales.",
+             "Canal 16, MAYDAY, procedimento e canais.", "Kanal 16, MAYDAY, Verfahren und Kanäle.")},
+    # 3. Perfectionnement
+    {"famille": "perfectionnement", "id": "manoeuvres", "ancre": "manoeuvres", "icone": "voiles", "statut": "écrit", "t": None,
+     "d": _l("Régler les voiles selon l'allure et manœuvrer.", "Trim the sails for the point of sail and manoeuvre.",
+             "Regolare le vele secondo l'andatura e manovrare.", "Regular las velas según el rumbo y maniobrar.",
+             "Regular as velas conforme o andamento e manobrar.", "Segel nach dem Kurs trimmen und manövrieren.")},
+    {"famille": "perfectionnement", "id": "securite", "ancre": "securite", "icone": "securite", "statut": "écrit", "t": None,
+     "d": _l("Ce qui protège l'équipage, et ce que la règle 1 impose.", "What protects the crew, and what rule 1 requires.",
+             "Ciò che protegge l'equipaggio e ciò che impone la regola 1.", "Lo que protege a la tripulación y lo que exige la regla 1.",
+             "O que protege a tripulação e o que a regra 1 exige.", "Was die Crew schützt und was Regel 1 verlangt.")},
+    # 4. Régate
+    {"famille": "regate", "id": "depart", "ancre": "depart", "icone": "depart", "statut": "écrit", "t": None,
+     "d": _l("La procédure de départ, les rappels, les pénalités.", "The starting sequence, recalls and penalties.",
+             "La procedura di partenza, i richiami, le penalità.", "El procedimiento de salida, las llamadas, las penalizaciones.",
+             "O procedimento de partida, as chamadas, as penalizações.", "Startablauf, Rückrufe, Strafen.")},
+    {"famille": "regate", "id": "priorites", "ancre": "priorites", "icone": "priorites", "statut": "écrit", "t": None,
+     "d": _l("Qui a la priorité entre deux bateaux, avec 50 situations.", "Who has right of way between two boats, with 50 situations.",
+             "Chi ha la precedenza tra due barche, con 50 situazioni.", "Quién tiene prioridad entre dos barcos, con 50 situaciones.",
+             "Quem tem prioridade entre dois barcos, com 50 situações.", "Wer zwischen zwei Booten Wegerecht hat, mit 50 Situationen.")},
+    {"famille": "regate", "id": "marques", "ancre": "marques", "icone": "marques", "statut": "écrit", "t": None,
+     "d": _l("Place à la marque, obstacles et pénalités.", "Mark-room, obstructions and penalties.",
+             "Spazio alla boa, ostacoli e penalità.", "Espacio en la baliza, obstáculos y penalizaciones.",
+             "Espaço na marca, obstáculos e penalizações.", "Raum an der Tonne, Hindernisse und Strafen.")},
+    {"famille": "regate", "id": "signaux_course", "ancre": "signaux_course", "icone": "pavillons", "statut": "écrit", "t": None,
+     "d": _l("Les 16 signaux de course, chacun avec sa règle.", "The 16 race signals, each with its rule.",
+             "I 16 segnali di regata, ciascuno con la sua regola.", "Las 16 señales de regata, cada una con su regla.",
+             "Os 16 sinais de regata, cada um com a sua regra.", "Die 16 Wettfahrtsignale, jedes mit seiner Regel.")},
+]
+
 # ── Le plan : l'ordre est la progression. Chaque chapitre ne suppose que les précédents. ──────────────
 # regles : clés "rrs:<numéro>" ou "col:<numéro>", rendues avec leur numéro et leur intitulé exacts.
 # schemas : clés (cle) de regles.json dont on injecte le schéma, via regles_page.schema_statique().
@@ -1093,6 +1229,22 @@ a.haut-lien{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:v
 .schemas{margin-top:.6rem}
 """
 
+# L'entrée en carrés : le composant (.cases/.case) vient de site_blocks.CASES_CSS ; ici, seulement l'ajustement
+# à la colonne du cours (48 rem, déjà rembourrée) et le lien en petites capitales espacées.
+CSS_ENTREE = """
+.entree{margin:1.6rem 0}
+.entree .famille{margin:1.2rem 0 0}
+.entree h3{margin:0 0 .15rem}
+.entree .sous-fam{margin:0 0 .6rem;color:var(--gris);font-size:.9rem}
+.entree .cases{max-width:none;padding:0}
+.entree a.case{text-decoration:none}
+.entree .case .v{margin-top:auto;padding-top:.3rem;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+@media (min-width:761px){.entree .cases{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1000px){.entree .cases{grid-template-columns:repeat(3,1fr)}}
+.sommaire details{margin:0}
+.sommaire summary{color:var(--ivoire);font-weight:600}
+"""
+
 JS = """
 (function(){
   var L=__LANGUES__;
@@ -1124,6 +1276,11 @@ import pavillons_cours  # noqa: E402
 
 pavillons_cours.CHAPITRE_PAVILLONS = [c["id"] for c in CHAPITRES].index("pavillons") + 1
 pavillons_cours.poser_textes(TEXTES)
+
+# Les cours neufs (tâche 68) : chapitres ajoutés À LA FIN de CHAPITRES, les ancres existantes ne bougent pas.
+import cours_neufs  # noqa: E402
+
+cours_neufs.poser(CHAPITRES, TEXTES)
 
 _LEX = re.compile(r"\{([a-z0-9-]+)\|([^}]+)\}")
 _donnees_regles = None
@@ -1162,6 +1319,13 @@ def verifier() -> None:
             raise ValueError(f"{lang} : incomplet ({manque})")
         if len(t["ch"]) != len(ids):
             raise ValueError(f"{lang} : {len(t['ch'])} chapitres pour {len(ids)} au plan")
+        for c in COURS:
+            if c["famille"] not in {f["id"] for f in FAMILLES} or c["icone"] not in ICONES:
+                raise ValueError(f"COURS/{c['id']} : famille ou icône inconnue")
+            if c["ancre"] != "revision" and c["ancre"] not in ids:
+                raise ValueError(f"COURS/{c['id']} : ancre {c['ancre']} absente de CHAPITRES")
+            if not c["d"].get(lang) or (c["t"] is not None and not c["t"].get(lang)):
+                raise ValueError(f"COURS/{c['id']} : texte {lang} vide")
         if len(t["revision"]) != 4:
             raise ValueError(f"{lang} : {len(t['revision'])} questions de révision au lieu de 4")
         for i in ids:
@@ -1238,6 +1402,42 @@ def _chapitre(n: int, ch: dict, lang: str) -> str:
             f'<p><a class="haut-lien" href="#sommaire-{lang}">{_e(t["haut"])}</a></p></section>')
 
 
+def _ancre(cours: dict, lang: str) -> str:
+    """#chN-<langue> (N = rang du chapitre dans CHAPITRES) ; #revision-<langue> pour la révision."""
+    if cours["ancre"] == "revision":
+        return f"revision-{lang}"
+    ids = [c["id"] for c in CHAPITRES]
+    return f"ch{ids.index(cours['ancre']) + 1}-{lang}"
+
+
+def _titre_cours(cours: dict, lang: str) -> str:
+    if cours["t"]:
+        return cours["t"][lang]
+    t = TEXTES[lang]
+    return _brut(t["rev"] if cours["ancre"] == "revision" else t["ch"][cours["ancre"]]["t"])
+
+
+def _carre(cours: dict, lang: str) -> str:
+    svg = ('<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" '
+           'stroke-linecap="round" stroke-linejoin="round">' + ICONES[cours["icone"]] + "</svg>")
+    return (f'<a class="case" href="#{_ancre(cours, lang)}">{svg}<b>{_e(_titre_cours(cours, lang))}</b>'
+            f'<span class="l">{_e(cours["d"][lang])}</span><span class="v">{_e(ENTREE["lire"][lang])}</span></a>')
+
+
+def _entree(lang: str) -> str:
+    """L'entrée de la page : un <h2>, puis quatre familles (<h3> + sous-titre + grille de carrés).
+    Rendu serveur, dans le HTML statique. Un cours qui n'est pas « écrit » n'a pas de carré."""
+    blocs = []
+    for fam in FAMILLES:
+        carres = "".join(_carre(c, lang) for c in COURS if c["famille"] == fam["id"] and c["statut"] == "écrit")
+        if not carres:
+            continue
+        blocs.append(f'<div class="famille"><h3>{_e(fam["t"][lang])}</h3><p class="sous-fam">{_e(fam["s"][lang])}</p>'
+                     f'<div class="cases">{carres}</div></div>')
+    return (f'<section class="entree" id="entree-{lang}" aria-labelledby="entree-h-{lang}">'
+            f'<h2 id="entree-h-{lang}">{_e(ENTREE["h2"][lang])}</h2>{"".join(blocs)}</section>')
+
+
 def _langue(lang: str) -> str:
     t = TEXTES[lang]
     n = len(CHAPITRES)
@@ -1249,8 +1449,9 @@ def _langue(lang: str) -> str:
     rev = "".join(f"<p><b>{i}.</b> {_txt(q)}</p><details><summary>{_e(t['corr'])}</summary><p>{_txt(a)}</p></details>"
                   for i, (q, a) in enumerate(t["revision"], 1))
     return (f'<div data-l="{lang}"{cache}>\n<h1>{_e(t["h1"])}</h1>\n<p class="intro">{_e(t["intro"].replace("{n}", str(n)))}</p>\n'
+            f'{_entree(lang)}\n'
             f'<nav class="sommaire" id="sommaire-{lang}" aria-label="{_e(t["sommaire"].replace("{n}", str(n)))}">'
-            f'<h2>{_e(t["sommaire"].replace("{n}", str(n)))}</h2><ol>{lis}</ol></nav>\n{chapitres}\n'
+            f'<details><summary>{_e(ENTREE["sommaire"][lang])}</summary><ol>{lis}</ol></details></nav>\n{chapitres}\n'
             f'<section class="chap" id="revision-{lang}"><h2>{_e(t["rev"])}</h2><p class="rev-intro">{_e(t["rev_intro"])}</p>{rev}'
             f'<p><a class="haut-lien" href="#sommaire-{lang}">{_e(t["haut"])}</a></p></section>\n'
             f'<p class="note">{_e(t["note"]).replace("{lien}", lien)}</p>\n</div>')
@@ -1288,7 +1489,7 @@ def page_cours() -> str:
             f'{_ld_cours(desc)}'
             f'<meta name="description" content="{_html.escape(seo_desc, quote=True)}">'
             + __import__("jsonld").social("cours.html", seo_titre, seo_desc) +
-            f'<style>{site_blocks.ENTETE_CSS}{CSS}{pavillons_cours.CSS}{_css_schemas()}</style></head><body>\n'
+            f'<style>{site_blocks.ENTETE_CSS}{CSS}{site_blocks.CASES_CSS}{CSS_ENTREE}{pavillons_cours.CSS}{_css_schemas()}</style></head><body>\n'
             f'{site_blocks.entete_site("cours.html", LANGUES)}{regles_page.SPRITE}\n<div class="page">\n{corps}\n</div>\n'
             f'<script>{JS.replace("__LANGUES__", json.dumps(LANGUES))}</script>\n</body></html>\n')
 

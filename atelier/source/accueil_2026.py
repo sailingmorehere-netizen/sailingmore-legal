@@ -226,20 +226,7 @@ CSS = """
 .tete h1{display:block;font-size:clamp(1.7rem,5.6vw,2.9rem);line-height:1.08;letter-spacing:-.02em;text-transform:none;
   font-weight:800;max-width:40rem;text-wrap:balance}
 .tete .sous{margin:.8rem 0 0;color:#9db2c6;font-size:.95rem}
-.cases{max-width:62rem;margin:0 auto;padding:0 1.4rem;display:grid;gap:.9rem;grid-template-columns:repeat(3,1fr)}
 .cases-2{margin-top:.9rem}
-.case{display:flex;flex-direction:column;gap:.35rem;padding:1.1rem 1.2rem;background:rgba(10,26,43,.82);
-  border:1px solid rgba(126,214,214,.2);border-radius:4px;color:#eef3f7;min-width:0}
-.case:hover,.case:focus-visible{border-color:#e23a3e;background:rgba(15,36,56,.95)}
-.case:focus-visible{outline:2px solid #a8ecec;outline-offset:3px}
-.case svg{width:1.7rem;height:1.7rem;color:#e23a3e;flex:0 0 auto}
-.case b{font-size:1.02rem;letter-spacing:.01em}
-.case span.l{font-size:.86rem;line-height:1.35;color:#9db2c6}
-.case-grande{min-height:11.5rem;border-top:3px solid #e23a3e;padding:1.4rem}
-.case-grande svg{width:2.8rem;height:2.8rem}
-.case-grande b{font-size:1.5rem;letter-spacing:-.01em}
-.case-grande span.l{font-size:.95rem;color:#c9d6e2}
-.case-grande .v{margin-top:auto;font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#eef3f7}
 .chiffres-2026{max-width:62rem;margin:2.4rem auto 0;padding:0 1.4rem;display:grid;gap:1.4rem;grid-template-columns:3fr 2fr}
 .blocn{border-top:1px solid rgba(226,58,62,.55);padding-top:.8rem;background:rgba(6,18,33,.6)}
 .blocn h2{margin:0;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:#eef3f7}
@@ -253,20 +240,18 @@ CSS = """
 .liens-sobres a{border-bottom:1px dotted rgba(159,179,200,.5)}
 .liens-sobres a:hover{color:#fff}
 @media (max-width:760px){
-  .cases{grid-template-columns:1fr;gap:.6rem}
   .cases-2{margin-top:.6rem}
-  .case-grande{min-height:0;flex-direction:row;flex-wrap:wrap;align-items:center;column-gap:.9rem;row-gap:.1rem;padding:1rem 1.1rem}
-  .case-grande svg{width:2.2rem;height:2.2rem}
-  .case-grande b{flex:1 1 0}
-  .case-grande span.l{flex:1 0 100%}
-  .case-grande .v{display:none}
-  .case{padding:.8rem 1rem}
   .tete{padding:1.4rem 1.4rem 1rem}
   .chiffres-2026{grid-template-columns:1fr}
   .nombres{grid-template-columns:1fr 1fr 1fr;gap:.7rem}
 }
 @media (max-width:420px){.nombres{grid-template-columns:1fr 1fr}}
 """
+
+import site_blocks  # noqa: E402  (le composant des carrés : une seule feuille, accueil et cours)
+
+CSS = site_blocks.CASES_CSS + CSS
+
 
 
 def _case(grande: bool, nom: str, href: str, plus: str = "") -> str:
