@@ -5,11 +5,18 @@
   <link>https://sailingmore.fr/</link>
   <description>Stages de voile, calendrier des régates d&#x27;Europe, cours théoriques, règles de course : les pages de Sailing More, mises à jour au fil de l&#x27;eau.</description>
   <language>fr-fr</language>
-  <lastBuildDate>Wed, 25 Nov 2026 20:16:16 +0000</lastBuildDate>
+  <lastBuildDate>Wed, 25 Nov 2026 20:24:43 +0000</lastBuildDate>
   <atom:link href="https://sailingmore.fr/feed.xml" rel="self" type="application/rss+xml"/>
   <ttl>720</ttl>
   <copyright>Sailing More</copyright>
   <generator>sailingmore.fr/feed_rss.py</generator>
+  <item>
+    <title>Ports et marinas du monde : carte et annuaire | Sailing More</title>
+    <link>https://sailingmore.fr/ports.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/ports.html</guid>
+    <pubDate>Wed, 25 Nov 2026 20:23:14 +0000</pubDate>
+    <description>22139 ports, marinas et mouillages (OpenStreetMap et EMODnet) : cherchez par nom ou par pays, voyez la carte et calculez la distance entre deux ports.</description>
+  </item>
   <item>
     <title>Calendrier des régates : Léman, France, monde | Sailing More</title>
     <link>https://sailingmore.fr/regates.html</link>
@@ -37,13 +44,6 @@
     <guid isPermaLink="true">https://sailingmore.fr/annonceurs.html</guid>
     <pubDate>Wed, 25 Nov 2026 20:15:45 +0000</pubDate>
     <description>Touchez les abonnés voile de Sailing More sur Facebook et Instagram : formules de 440 à 3 900 € HT, jeu concours compris, rapport de portée sous 72 h.</description>
-  </item>
-  <item>
-    <title>Ports et marinas du monde : carte et annuaire | Sailing More</title>
-    <link>https://sailingmore.fr/ports.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/ports.html</guid>
-    <pubDate>Wed, 25 Nov 2026 20:15:10 +0000</pubDate>
-    <description>22139 ports, marinas et mouillages (OpenStreetMap et EMODnet) : cherchez par nom ou par pays, voyez la carte et calculez la distance entre deux ports.</description>
   </item>
   <item>
     <title>Stages de voile en Europe, prix publiés | Sailing More</title>
