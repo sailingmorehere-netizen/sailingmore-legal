@@ -750,7 +750,7 @@
   {
    "id": "noir",
    "code": "noir",
-   "otan": "Pavillon noir",
+   "otan": "Noir",
    "type": "special",
    "image": "pavillons/noir.svg",
    "forme": {
@@ -770,7 +770,7 @@
   {
    "id": "rouge",
    "code": "rouge",
-   "otan": "Pavillon rouge",
+   "otan": "Rouge",
    "type": "special",
    "image": "pavillons/rouge.svg",
    "forme": {

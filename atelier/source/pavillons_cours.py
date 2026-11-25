@@ -163,7 +163,9 @@ def _grille(lang: str) -> str:
         cartes = "".join(
             f'<a class="pav-carte" href="pavillon-{p["id"]}.html">'
             f'{_img(p["id"], "pav-img")}'
-            f'<b>{_e(p["code"])}</b><span>{_e(p["otan"])}</span></a>' for p in items)
+            f'<b>{_e(p["code"])}</b>'
+            + (f'<span>{_e(p["otan"])}</span>' if p["code"].lower() != p["otan"].lower() else "")
+            + '</a>' for p in items)
         morceaux.append(f'<div class="pav-groupe"><h3>{titre if not en else _GR["en"][typ]}</h3>'
                         f'<div class="pav-grille">{cartes}</div></div>')
     return f'<div class="pav-grille-tout">{"".join(morceaux)}</div>'
