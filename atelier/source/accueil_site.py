@@ -54,7 +54,7 @@ LANGUES = site_blocks.LANGUES      # une seule liste, celle de site_blocks (le b
 TEXTES = {
     "fr": {
         "surtitre": "Le large, chaque soir.",
-        "accroche": "Média <span class='rouge'>indépendant</span> de la voile et de la course au large, fait par des <span class='rouge'>passionnés</span>, pour des <span class='rouge'>passionnés</span>.",
+        "accroche": "Une plateforme de <span class='rouge'>passionnés</span>, faite par des <span class='rouge'>passionnés</span>.",
         "chiffres": "Sailing More en chiffres",
         "reseaux": "Nos réseaux",
         "citations": "Ils l'ont dit avant nous",
@@ -123,7 +123,7 @@ TEXTES = {
     },
     "en": {
         "surtitre": "The open sea, every evening.",
-        "accroche": "An <span class='rouge'>independent</span> sailing and offshore racing outlet, made by <span class='rouge'>enthusiasts</span>, for <span class='rouge'>enthusiasts</span>.",
+        "accroche": "A platform of <span class='rouge'>enthusiasts</span>, made by <span class='rouge'>enthusiasts</span>.",
         "chiffres": "Sailing More in numbers",
         "reseaux": "Our channels",
         "citations": "They said it before us",
@@ -192,7 +192,7 @@ TEXTES = {
     },
     "it": {
         "surtitre": "Il largo, ogni sera.",
-        "accroche": "Un media <span class='rouge'>indipendente</span> di vela e altura, fatto da <span class='rouge'>appassionati</span>, per <span class='rouge'>appassionati</span>.",
+        "accroche": "Una piattaforma di <span class='rouge'>appassionati</span>, fatta da <span class='rouge'>appassionati</span>.",
         "chiffres": "Sailing More in numeri",
         "reseaux": "I nostri canali",
         "citations": "L'hanno detto prima di noi",
@@ -261,7 +261,7 @@ TEXTES = {
     },
     "es": {
         "surtitre": "El mar abierto, cada noche.",
-        "accroche": "Un medio <span class='rouge'>independiente</span> de vela y regata oceánica, hecho por <span class='rouge'>aficionados</span>, para <span class='rouge'>aficionados</span>.",
+        "accroche": "Una plataforma de <span class='rouge'>aficionados</span>, hecha por <span class='rouge'>aficionados</span>.",
         "chiffres": "Sailing More en cifras",
         "reseaux": "Nuestras redes",
         "citations": "Lo dijeron antes que nosotros",
@@ -330,7 +330,7 @@ TEXTES = {
     },
     "pt": {
         "surtitre": "O largo, todas as noites.",
-        "accroche": "Um meio <span class='rouge'>independente</span> de vela e regata oceânica, feito por <span class='rouge'>apaixonados</span>, para <span class='rouge'>apaixonados</span>.",
+        "accroche": "Uma plataforma de <span class='rouge'>apaixonados</span>, feita por <span class='rouge'>apaixonados</span>.",
         "chiffres": "Sailing More em números",
         "reseaux": "As nossas redes",
         "citations": "Disseram-no antes de nós",
@@ -399,7 +399,7 @@ TEXTES = {
     },
     "de": {
         "surtitre": "Die Weite, jeden Abend.",
-        "accroche": "Ein <span class='rouge'>unabhängiges</span> Segel- und Hochseerenne-Medium, von <span class='rouge'>Begeisterten</span> für <span class='rouge'>Begeisterte</span>.",
+        "accroche": "Eine Plattform von <span class='rouge'>Begeisterten</span>, gemacht von <span class='rouge'>Begeisterten</span>.",
         "chiffres": "Sailing More in Zahlen",
         "reseaux": "Unsere Kanäle",
         "citations": "Sie sagten es vor uns",
@@ -642,7 +642,7 @@ def page(jeu: str, blocs: str = "", carte: str = "", mer: str = "", kit: str = "
     heros = mer_louvoyage.hero(f"""
   <h1>Sailing<span>More</span></h1>
   <div class="filet"></div>
-  <p class="accroche" data-t="accroche">Média <span class='rouge'>indépendant</span> de la voile et de la course au large, fait par des <span class='rouge'>passionnés</span>, pour des <span class='rouge'>passionnés</span>.</p>
+  <p class="accroche" data-t="accroche">Une plateforme de <span class='rouge'>passionnés</span>, faite par des <span class='rouge'>passionnés</span>.</p>
   <a class="bouton bouton-hero" href="annonceurs.html"><span data-t="hero_cta">Annoncer sur Sailing More</span> <span class="fleche" aria-hidden="true">→</span></a>""")
 
     bandeau = "".join(bloc_citation(i, x) for i, x in enumerate(cites))
@@ -1369,6 +1369,11 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
     try:
         import regates_page
         print(f"calendrier des régates : {regates_page.ecrire_page(SITE)} épreuves")
+        # L'abonnement par adresse (26/11/2026) : la page fabrique un .ics dans le navigateur, ce qui ne
+        # marche ni sur Android ni en abonnement. On publie donc un vrai fichier, à la même date.
+        import regates_ics
+        chemin, n_ics = regates_ics.ecrire()
+        print(f"abonnement agenda : {chemin.name} · {n_ics} épreuves à venir")
     except SystemExit as e:
         print(f"calendrier des régates non écrit : {e}")
     # Règles de course (22/11/2026) : même chemin ; ecrire_page() rend 0 sans rien écrire tant que
