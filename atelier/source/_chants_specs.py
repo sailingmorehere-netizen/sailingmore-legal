@@ -271,6 +271,31 @@ SPECS = [
  ("st-helena-soldier", "St. Helena Soldier", "hisser", W, [], [],
   "Shanty populaire pour les derniers coups de « sweating-up », que Whall n'a jamais vu imprimé ; « bleeding » était alors l'euphémisme de « bloody », comme « blooming » aujourd'hui.",
   "A popular shanty for last sweating-up hauls which Whall had never seen in print; 'bleeding' used to be euphonious for 'bloody', as 'blooming' is now."),
+ # ------------------------------------------------------------------ ajouts du 25/11/2026 (3e passe, tâche n°4) : Smith et Terry I
+ ("rio-grande-smith", "Rio Grande", "virer", S, [(1548, 1630)], [],
+  "Chant « d'aller » dont l'air est très mélancolique, selon Smith, qui range « Valparaiso », « Round the Horn » et « Santa Anna » dans le même style.",
+  "An outward-bound chanty whose tune is very mournful; Smith says 'Valparaiso', 'Round the Horn' and 'Santa Anna' are all much in the same style."),
+ ("haulin-the-bowlin", "Haulin' the Bowlin'", "hisser", S, [(1736, 1746)], [],
+  "Autre version du célèbre chant de la bouline, de popularité presque égale à « Haul Away » au temps passé ; au mot « Haul », qui termine chaque distique, les marins donnent une formidable secousse au cordage.",
+  "Another version of 'Haulin' the Bowlin''; at the word 'Haul', which terminates each couplet, the tars give a tremendous jerk on the rope."),
+ ("bull-chimes", "Run, Let the Bull Chimes Run", "pompe", S, [(2463, 2484)], [],
+  "Autre chant de pompe favori : n'importe quel air vif, qui conviendrait pour manœuvrer une pompe à incendie, sert pour un chant de pompe, et les paroles varient au gré de chacun.",
+  "Another favourite pumping song; any quick, lively tune to which you might work a fire-engine will serve for a pumping song, and the words vary with every fancy."),
+ ("whisky-for-my-johnny", "Whisky for My Johnny", "hisser", S, [(2798, 2838)], [],
+  "Chant à nombreux couplets, tous plus ou moins sur le même sujet et sans grande délicatesse ; envoyé à Smith de plusieurs côtés, il devait être assez connu et peut-être très aimé des marins.",
+  "The chanty known as 'Whisky for my Johnny' or 'Whisky Johnny' has many different verses, all more or less bearing upon the same subject; sent to Smith from several quarters, it must be fairly well known amongst sailors."),
+ ("sally-brown-smith", "Sally Brown (Smith)", "virer", S, [(4063, 4097)], [],
+  "Autre chant de cabestan connu aussi sous le nom de « Sally Brown » ; Smith note que les couplets, trop nombreux pour être cités en entier, ne sont pas toujours cohérents avec le chant suivant.",
+  "Another capstan chanty known also as 'Sally Brown'; the verses are too numerous to quote in full and not at all times consistent with the next song."),
+ ("bonny", "Bonny", "hisser", S, [(4487, 4541)], [4495, 4515, 4516, 4517, 4518],
+  "Autre chant de halage, dans le style de « Whisky Johnny » ; il raconte la carrière de Bonaparte, de Moscou à Sainte-Hélène, en dix-neuf couplets, avec une prononciation de marin (« Wae ! Hae ! Ha ! »).",
+  "Another hauling chanty, somewhat after the style of 'Whisky Johnny'; it tells Bonaparte's career from Moscow to St. Helena in nineteen verses."),
+ ("ali-alo", "Ali ! alo !", "hisser", S, [], [],
+  "Chant français né chez les marins et les dockers du port de Dunkerque ; son rythme leur plaît tant qu'il sert presque toujours d'air à toutes leurs « plaintes ».",
+  "The French chanty popularly known as 'Ali! alo!' originates with the sailors and dock-labourers of the Port of Dunkerque; its rhythm nearly always serves as the tune for all their 'complaints'."),
+ ("toms-gone-to-hilo", "Tom's Gone to Hilo", "hisser", T1, [], [],
+  "Version proche de celle de Whall (« John's Gone to Hilo ») ; Terry donne les couplets de M. Vickers sur « Victory » et « Trafalgar », qu'il n'a entendus d'aucun autre marin, et omet les innombrables distiques de noms de lieux.",
+  "Closely resembles Whall's 'John's Gone to Hilo'; Terry gives Mr. Vickers's verses about the Victory and Trafalgar, which he never heard from another seaman, and omits the endless couplets of place names."),
 ]
 
 # lignes de l'OCR qui prolongent la ligne précédente (retour à la ligne de la colonne du livre) : jointes, jamais réécrites
@@ -287,7 +312,7 @@ JOHNNY_BOKER = "\n\n".join(f"Oh do my Johnny Boker,\n{v}\nDo my Johnny, etc." fo
 ST_HELENA = ("You stole my boots, you Saint Helena soldier. . . You stole my boots. Ha! ha!\n"
              "\"You stole my boots so early in the morning,\" &c.\n\n"
              "My bleedin' fancy man, he's a R'yl Artil'ry man—he wears spurs.")
-MANUEL = {"johnny-boker": JOHNNY_BOKER, "st-helena-soldier": ST_HELENA}
+MANUEL = {"johnny-boker": JOHNNY_BOKER, "st-helena-soldier": ST_HELENA}   # + ali-alo et toms-gone-to-hilo, ajoutés plus bas
 # raison du manque, par chant (sinon : la mention générique « notés sous la portée »)
 RAISON = {
  "sally-racket": "paroles complètes du texte imprimé", "pay-me-the-money-down": "paroles partielles : des lignes manquent dans le scan",
@@ -305,8 +330,21 @@ RAISON = {
  "so-handy-my-girls": "paroles partielles : le refrain seul, le livre ne donne pas de couplets de soliste",
  "a-yankee-ship": "paroles partielles : un couplet omis (terme injurieux, non reproduit)",
  "st-helena-soldier": "paroles partielles : trois lignes lisibles, le reste est noté sous la portée",
+ "sally-brown-smith": "paroles partielles : Smith dit que les couplets sont trop nombreux pour être cités en entier",
+ "ali-alo": "paroles partielles : deux vers et le refrain ; le premier vers (« pour Mascheroo ») est illisible dans le scan",
+ "toms-gone-to-hilo": "paroles partielles : couplets 2 à 7 (deux colonnes entrelacées dans le scan, lues telles quelles) ; le premier est noté sous la portée",
 }
-COMPLETS_AJOUTS = {"sally-racket", "home-dearie-home", "old-storm-along", "tommys-gone-to-hilo", "south-australia"}
+COMPLETS_AJOUTS = {"sally-racket", "home-dearie-home", "old-storm-along", "tommys-gone-to-hilo", "south-australia",
+                   "rio-grande-smith", "haulin-the-bowlin", "bull-chimes", "whisky-for-my-johnny", "bonny"}
+ALI_ALO = ("Il mang' la viande et nous donn' les os.\nIl boit le vin et nous donn' de l'eau.\n\n"
+           "Ali, ali, ali, alo,\nAli, ali, alo.")
+TOMS_GONE = ("Tommy's gone to Liverpool,\nAway, &c.\nOh, Tommy's gone to Liverpool,\nTom's gone to Hilo.\n\n"
+             "Tommy's gone to Mobile Bay.\nOh, Tommy's gone to Mobile Bay.\n\n"
+             "Tommy's gone, what shall I do?\nOh, Tommy's gone, what shall I do?\n\n"
+             "Tommy fought at Trafalgar.\nOh, Tommy fought at Trafalgar.\n\n"
+             "The old Victory led the way.\nThe brave old Victory led the way.\n\n"
+             "Tommy's gone for evermore.\nOh, Tommy's gone for evermore.")
+MANUEL.update({"ali-alo": ALI_ALO, "toms-gone-to-hilo": TOMS_GONE})
 
 # livre -> (fichier, intitulé court, année du livre, URL de la numérisation)
 LIVRES = {
@@ -318,7 +356,9 @@ LIVRES = {
 PAGES_SMITH = {"handy-jim": "pp. 52-53", "ved-balasthjoning": "p. 220", "sally-racket": "pp. 22-23", "pay-me-the-money-down": "pp. 23-24",
                "home-dearie-home": "pp. 25-26", "john-brown": "pp. 40-41", "plains-of-mexico": "p. 47", "heave-away-my-johnny": "pp. 55-56",
                "old-storm-along": "pp. 16-17", "so-handy-my-girls": "p. 17", "tommys-gone-to-hilo": "pp. 33-34",
-               "south-australia": "pp. 49-50", "a-yankee-ship": "pp. 38-39"}
+               "south-australia": "pp. 49-50", "a-yankee-ship": "pp. 38-39",
+               "rio-grande-smith": "pp. 10-12", "haulin-the-bowlin": "p. 14", "bull-chimes": "pp. 24-25", "whisky-for-my-johnny": "p. 29",
+               "sally-brown-smith": "pp. 48-49", "bonny": "pp. 53-54", "ali-alo": "pp. 145-146"}
 
 # numéro du chant dans le livre (Terry) et pages certaines (lues dans la table des matières propre)
 NUMERO = {"bound-rio-grande": (2, 4), "wild-goose-shanty": (12, 26), "drunken-sailor": (14, 30), "good-morning-ladies": (18, 38),
@@ -329,7 +369,7 @@ NUMERO = {"bound-rio-grande": (2, 4), "wild-goose-shanty": (12, 26), "drunken-sa
           "shallow-brown": (17, None), "round-the-corner-sally": (22, None), "my-tommys-gone-away": (24, None),
           "sing-fare-you-well": (25, None), "lizer-lee": (28, None), "hundred-years-eastern-shore": (29, None),
           "sailor-likes-his-bottle": (34, None), "johnny-boker": (27, None), "haul-away-joe-terry": (28, None),
-          "miss-lucy-long": (13, None), "hilo-john-brown": (20, None), "bully-boat": (23, None), "hilonday": (31, None)}
+          "miss-lucy-long": (13, None), "hilo-john-brown": (20, None), "bully-boat": (23, None), "hilonday": (31, None), "toms-gone-to-hilo": (24, 50)}
 
 # Billy Boy : deux colonnes entrelacées dans le scan, recopié tel quel (couplets 2 à 4 ; le 1er est dans la partition)
 BILLY_BOY = ("Is she fit to be yor wife,\nBilly Boy, Billy Boy?\nIs she fit to be yor wife, me Billy Boy?\n"

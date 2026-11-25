@@ -899,7 +899,7 @@ def _ld_regles(d: dict) -> str:
     return jsonld.bloc(jsonld.fil("regles-de-course.html", "Règles de course"), article, jsonld.organisation())
 
 
-def page_regles(d: dict | None = None) -> str:
+def page_regles(d: dict | None = None, apercu: bool = False) -> str:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     import site_blocks  # la barre du site : un seul endroit
     d = d or charger()
@@ -932,7 +932,8 @@ def page_regles(d: dict | None = None) -> str:
         '<!doctype html>\n<html lang="fr"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         f"<title>{seo_titre}</title>"
-        '<link rel="canonical" href="https://sailingmore.fr/regles-de-course.html">'
+        + ('<meta name="robots" content="noindex,nofollow">' if apercu else
+           '<link rel="canonical" href="https://sailingmore.fr/regles-de-course.html">')
         + _ld_regles(d) +
         f'<meta name="description" content="{seo_desc}">'
         + __import__("jsonld").social("regles-de-course.html", seo_titre, seo_desc) +
@@ -1014,7 +1015,7 @@ def main() -> int:
                 print("ÉCHEC · " + p)
             return 1
         SITE.mkdir(parents=True, exist_ok=True)
-        page = page_regles(d)
+        page = page_regles(d, apercu=True)
         (SITE / "regles-apercu.html").write_text(page, encoding="utf-8")
         print(f"{SITE / 'regles-apercu.html'} · {len(page):,} car · {len(d['regles'])} entrées (aperçu, non publiable)"
               .replace(",", " "))

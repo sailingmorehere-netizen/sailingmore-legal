@@ -1449,6 +1449,7 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         for f in src.iterdir():
             if f.is_file():
                 shutil.copy2(f, SITE / dossier / f.name)
+    print(f"canonique posée sur {poser_canoniques()} page(s)")
     # Bloc « stages près de chez vous » (22/11/2026) : posé quand toutes les pages sont écrites, une seule fois par page.
     try:
         import stages_page
@@ -1856,6 +1857,25 @@ def avec_section_alertes(html: str) -> str:
     return html[:i] + SECTION_ALERTES + html[i:]
 
 
+def poser_canoniques() -> int:
+    """Contrôle du 25/11/2026 : `carte.html` (recopiée de son atelier) et les pages `stories/AAAA-MM-JJ.html`
+    (copiées de la sortie) étaient indexables sans `<link rel="canonical">`. Posé ici, juste après leur copie,
+    sur toute page qui n'est pas `noindex` et qui n'en a pas. Idempotent. Rend le nombre de pages modifiées."""
+    cibles = [SITE / "carte.html", *sorted((SITE / "stories").glob("*.html"))]
+    n = 0
+    for f in cibles:
+        if not f.exists():
+            continue
+        h = f.read_text(encoding="utf-8")
+        if 'rel="canonical"' in h or re.search(r'<meta[^>]+name=["\']robots["\'][^>]*noindex', h, re.I):
+            continue
+        rel = f.relative_to(SITE).as_posix()
+        h = h.replace("</head>", f'<link rel="canonical" href="https://sailingmore.fr/{rel}">\n</head>', 1)
+        f.write_text(h, encoding="utf-8")
+        n += 1
+    return n
+
+
 _DESC_LEGALES = {
     "mentions-legales.html": "Éditeur, hébergeur et conditions d'utilisation du site Sailing More.",
     "confidentialite.html": "Les données que Sailing More collecte, ce qu'il en fait et comment exercer vos droits.",
@@ -1942,7 +1962,7 @@ def page_annonceurs() -> str:
 def _script_langue_annonceurs() -> str:
     """La page portait 56 `data-t` sans aucune table ni script : elle restait en français pour tous.
     Mesure du 22/11/2026 (scripts/etude_six_langues.py). On reprend les chaînes déjà dans TEXTES (celles
-    de l'accueil), même choix de langue que l'accueil (sm-langue, sinon navigator.languages), et le
+    de l'accueil), même choix de langue que l'accueil (sm-langue, sinon français), et le
     titre et la description suivent la langue à partir de `kit_titre` et `ann_intro`."""
     table = json.dumps(TEXTES, ensure_ascii=False)
     return ("<script>(function(){var T=" + table + ";"

@@ -16,6 +16,9 @@ from _chants_specs import SPECS, LIVRES, NUMERO, BILLY_BOY, BILLY_NOTE, PAGES_SM
 from _chants_specs import JOINS, MANUEL, RAISON, COMPLETS_AJOUTS  # noqa: E402
 
 ECARTS = {"home-dearie-home": 5}   # écart de lignes OCR qui sépare deux couplets (3 par défaut)
+# Rio Grande (Smith) : lignes de l'OCR où s'ouvre un couplet (solo, solo, chœur, « &c. ») ; l'écart de lignes ne les sépare pas
+DEBUTS = {"rio-grande-smith": {1548, 1551, 1556, 1569, 1575, 1581, 1587, 1593, 1599, 1605, 1610, 1621, 1627},
+          "whisky-for-my-johnny": {2798, 2806, 2819, 2827, 2836}, "sally-brown-smith": {4063, 4072, 4081}}
 
 COUPURES = {"pen-", "thou-"}   # mots coupés en fin de ligne dans le livre (pen-non, thou-sand), recollés
 ENTETE = re.compile(r"OF THE W\s?[A-Z]\s?[A-Z]")   # titre courant de Smith, en capitales dans l'OCR ; sensible à la casse : « think of the wife » est un vers
@@ -29,7 +32,7 @@ OCR_T2 = [(r"\bDont\b", "Don't"), (r"\bCant\b", "Can't"), (r"\bIts\b", "It's"), 
 COMPLETS = {"dreadnought", "reuben-ranzo", "cheerly-man", "saucy-arethusa", "handy-jim", "ved-balasthjoning"}
 
 
-NUM = re.compile(r"^\s*(\d{1,2}|[&B])[\.,]\s+|^\s*[\.,]\s+")
+NUM = re.compile(r"^\s*(\d{1,2}|[&B])[\.,]\s+|^\s*[\.,]\s+|^\s*\d\s\d[\.,]\s+")   # le dernier : « 1 8. » (numéro à deux chiffres coupé par l'OCR, Bonny)
 BRUIT = [(r"\}", ""), (r"\bQO\b", "O"), (r"\bOQ\b", "O"), (r"\b0'", "o'"), (r"\(tw[a-z0-9¢]{1,3}ce\)", "(twice)"),
          (r"\(tatce\)", "(twice)"), (r"\(thrtce\)", "(thrice)"), (r"\(tw7ce\)", "(twice)"), (r"\(¢wice\)", "(twice)"),
          (r"^\[n ", "In "), (r"^\[had ", "I had "), (r"^OI ", "O I "), (r"Tommy[\"?](?= gone)", "Tommy's"),
@@ -38,7 +41,8 @@ BRUIT = [(r"\}", ""), (r"\bQO\b", "O"), (r"\bOQ\b", "O"), (r"\b0'", "o'"), (r"\(
          (r"oh\*\.", "oh."), (r"^1 For it blows", "For it blows"), (r"\bpen-non\b", "pennon"), (r"(?<=Scott,) 1$", ""),
          (r"(?<=mail\.\") 2$", ""), (r"(?<=meal\.) 3$", ""), (r", luna\)$", ","), (r"\s*\|\s*\(twice$", ""),
          (r"^%\s+", ""), (r"hundied", "hundred"), (r"thefosey", "the Josey"), (r"^Chorus\s+(?=\w)", ""),
-         (r"^Solo & Chorus\.\s*", ""), (r"^So[/lI1]o\.\s*", ""), (r"^Solo\.\s+(?=South Australia is)", ""), (r"^,\s*\d{1,2}\.\s+", ""), (r"\bete\.$", "etc."), (r"^I\.\s+", ""), (r"^\d{1,2}\.\s+(?=King Louis)", "")]
+         (r"^Solo & Chorus\.\s*", ""), (r"^So[/lI1]o\.\s*", ""), (r"^Solo\.\s+(?=South Australia is)", ""), (r"^,\s*\d{1,2}\.\s+", ""), (r"\bete\.$", "etc."), (r"^I\.\s+", ""), (r"^\d{1,2}\.\s+(?=King Louis)", ""),
+         (r"^S\.olo\.\s*-?\s*", ""), (r"(?<=o'foyre\.) 1$", ""), (r"(?<=Elbow,) 2$", ""), (r"\bW T hisky\b", "Whisky"), (r"\bmy johnny\b", "my Johnny")]
 
 
 def nettoyer(t: str, livre: str):
@@ -73,7 +77,7 @@ def pages_whall(lignes):
     return [(n, int(s)) for n, s in ((i, l.strip()) for i, l in enumerate(lignes, 1)) if n >= 1706 and re.fullmatch(r"\d{1,3}", s)]
 
 
-def extraire(lignes, plages, excl, livre, joins=frozenset(), ecart=3):
+def extraire(lignes, plages, excl, livre, joins=frozenset(), ecart=3, debuts=frozenset()):
     gardes = []
     for a, b in plages:
         for n in range(a, b + 1):
@@ -95,7 +99,7 @@ def extraire(lignes, plages, excl, livre, joins=frozenset(), ecart=3):
     numerote = livre != W and sum(1 for g in gardes if g[2]) >= 2
     couplets, cur, prec = [], [], None
     for n, c, num in gardes:
-        coupure = num if numerote else (prec is not None and n - prec >= ecart)
+        coupure = (n in debuts) if debuts else (num if numerote else (prec is not None and n - prec >= ecart))
         if coupure and cur:
             couplets.append("\n".join(cur))
             cur = []
@@ -151,13 +155,13 @@ def main():
     marq = pages_whall(cache[W])
     rejets = []
     for cle, titre, typ, livre, plages, excl, nfr, nen in SPECS:
-        txt, debut = extraire(cache[livre], plages, set(excl), livre, JOINS.get(cle, frozenset()), ECARTS.get(cle, 3))
+        txt, debut = extraire(cache[livre], plages, set(excl), livre, JOINS.get(cle, frozenset()), ECARTS.get(cle, 3), DEBUTS.get(cle, frozenset()))
         if cle in MANUEL:
             txt = MANUEL[cle]
         if len(txt.splitlines()) < 4:
             rejets.append((titre, "moins de 4 vers lisibles"))
             continue
-        lg = {"capitaine-du-mexico": "fr", "ved-balasthjoning": "no"}.get(cle, "en")
+        lg = {"capitaine-du-mexico": "fr", "ved-balasthjoning": "no", "ali-alo": "fr"}.get(cle, "en")
         c = {"id": cle, "type": typ, "lg": lg, "titre": titre,
              "annees": "≤" + LIVRES[livre][2], "livre": livre,
              "resume": {"fr": nfr, "en": nen}, "paroles": txt, "accords": "", "audio": None, "video": None,
