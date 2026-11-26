@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>voile : définition, traduction et questions | Lexique de voile</title><link rel="canonical" href="https://sailingmore.fr/lexique/voile.html"><script id="sm-langue-detecteur">
+(function(){
+  var L = ["fr", "en", "de", "it", "es", "pt"], ALIAS = {"nb": "no", "nn": "no", "iw": "he", "in": "id", "ji": "yi", "jw": "jv", "mo": "ro", "sh": "hr", "tl": "fil"};
+  function lu(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function ec(k,v){ try{ if(v===null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){} }
+  function base(c){ c = String(c||'').toLowerCase().replace(/_/g,'-'); var b = c.split('-')[0]; return ALIAS[b]||b; }
+  function connue(b){ return b === 'bzh' || L.indexOf(b) >= 0; }
+  /* Le choix d'une langue, mémorisé pour toutes les pages. Le breton garde le texte français. */
+  function retenir(v){
+    if(v === 'auto'){ ec('sm-bzh', null); ec('sm-langue', 'auto'); }
+    else if(v === 'bzh'){ ec('sm-bzh', '1'); ec('sm-langue', 'fr'); }
+    else { ec('sm-bzh', null); ec('sm-langue', v); }
+  }
+  window.smLangue = function(){
+    /* 1. l'adresse demandée */
+    var q = null; try{ q = new URLSearchParams(location.search).get('lang'); }catch(e){}
+    if(q){ var b = base(q); if(connue(b)){ retenir(b); return b; } }
+    /* 2. le choix du visiteur, s'il en a fait un */
+    var v = lu('sm-langue');
+    if(v && v !== 'auto' && connue(v)) return (v === 'fr' && lu('sm-bzh') === '1') ? 'bzh' : v;
+    /* 3. le français, toujours : aucune détection par le navigateur (25/11/2026) */
+    return 'fr';
+  };
+  window.smChoisirLangue = function(v){ retenir(v); };
+  window.SM_LANGUES = L;
+  /* Avant le premier pixel : la langue retenue dans l'attribut, pour le CSS et pour les pages. */
+  try{
+    var retenu = window.smLangue();
+    document.documentElement.setAttribute('data-sm-langue', retenu);
+    if(retenu !== 'bzh') document.documentElement.setAttribute('lang', retenu);
+  }catch(e){}
+})();
+</script><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Sailing More","item":"https://sailingmore.fr/"},{"@type":"ListItem","position":2,"name":"Lexique de voile","item":"https://sailingmore.fr/lexique.html"},{"@type":"ListItem","position":3,"name":"voile","item":"https://sailingmore.fr/lexique/voile.html"}]},{"@type":"DefinedTerm","@id":"https://sailingmore.fr/lexique/voile.html","name":"voile","description":"La voile est la pièce de toile ou de tissu technique qui capte le vent pour faire avancer le bateau ou la planche.","url":"https://sailingmore.fr/lexique/voile.html","inDefinedTermSet":{"@id":"https://sailingmore.fr/lexique.html#lexique"},"inLanguage":"fr"}]}</script><meta name="description" content="La voile est la pièce de toile ou de tissu technique qui capte le vent pour faire avancer le bateau ou la planche."><meta property="og:title" content="voile : définition, traduction et questions | Lexique de voile"><meta property="og:description" content="La voile est la pièce de toile ou de tissu technique qui capte le vent pour faire avancer le bateau ou la planche."><meta property="og:url" content="https://sailingmore.fr/lexique/voile.html"><meta property="og:type" content="website"><meta property="og:locale" content="fr_FR"><meta property="og:site_name" content="Sailing More"><meta property="og:image" content="https://sailingmore.fr/og-image.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://sailingmore.fr/og-image.jpg"><style>
+:root{--nuit:#0a1a2b;--panneau:#0f2438;--ivoire:#eef3f7;--gris:#9db2c6;--rouge:#e23a3e}
+*{box-sizing:border-box}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:#071c31;color:var(--ivoire);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  line-height:1.6;-webkit-font-smoothing:antialiased}
+.page{max-width:64rem;margin:0 auto;padding:3.6rem 1.4rem 5rem}
+.haut{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+a.retour{color:var(--gris);text-decoration:none;font-size:.64rem;letter-spacing:.14em;
+  text-transform:uppercase;font-weight:500}
+a.retour:hover{color:#fff}
+.langues{display:flex;gap:.15rem;align-items:center}
+.langues button{background:none;border:0;color:var(--gris);font:inherit;font-size:.72rem;
+  padding:.2rem .45rem;border-radius:2px;cursor:pointer;letter-spacing:.04em}
+.langues button:hover{color:#fff}
+.langues button[aria-pressed="true"]{color:#fff;box-shadow:inset 0 -2px 0 var(--rouge)}
+h1{font-size:clamp(1.9rem,6vw,2.7rem);line-height:1.04;margin:1.6rem 0 0;letter-spacing:-.01em;
+  color:#fff;font-weight:300;text-transform:uppercase}
+h1::after{content:"";display:block;width:3.4rem;height:3px;background:var(--rouge);margin:1.3rem 0 1.6rem}
+.chapo{color:var(--gris);font-size:.95rem;max-width:34rem;margin:0 0 1.5rem}
+.trad{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin:0 0 2rem}
+.trad .dit{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:#6f8598;margin-right:.45rem}
+.trad button{background:none;border:1px solid rgba(157,178,198,.32);color:#9db2c6;border-radius:999px;
+  padding:.3rem .75rem;font:inherit;font-size:.78rem;line-height:1.2;cursor:pointer;
+  transition:color .15s,border-color .15s,background .15s}
+.trad button:hover{color:#fff;border-color:#9db2c6}
+.trad button[aria-pressed="true"]{border-color:var(--rouge);color:#fff;background:rgba(226,58,62,.14)}
+/* Deux mots côte à côte : le même terme dans la langue de la page et dans celle qu'on a choisie. */
+.terme.double{display:grid;grid-template-columns:1fr 1fr;column-gap:1.8rem;row-gap:.2rem}
+.terme.double .col h3{margin-top:0}
+.terme.double .vers{grid-column:1 / -1}
+@media (max-width:700px){.terme.double{grid-template-columns:1fr;column-gap:0}
+  .terme.double .col+.col{margin-top:.4rem;padding-top:.6rem;border-top:1px solid rgba(255,255,255,.07)}}
+a{color:#fff;text-decoration:none}
+:focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+.panneau{background:#0a1f33;border:1px solid rgba(255,255,255,.09);border-radius:2px;
+  padding:0 1.2rem 1.4rem;margin:0 0 1rem;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.recherche{position:sticky;top:0;z-index:20;background:#0a1f33;
+  padding:.9rem 1.2rem 1rem;margin:0 -1.2rem .4rem}
+.champ{display:flex;align-items:center;gap:.6rem;background:var(--panneau);
+  border:1px solid rgba(255,255,255,.13);border-radius:3px;padding:.62rem .8rem}
+.champ:focus-within{border-color:rgba(226,58,62,.7)}
+.champ input{flex:1;background:none;border:0;color:var(--ivoire);font-size:.95rem;outline:none;
+  font-family:inherit;min-width:0}
+.champ input::placeholder{color:#6f8598}
+.champ svg{flex:0 0 auto;opacity:.55}
+.filtres{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;margin-top:.7rem}
+.filtres .etiq{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:#6f8598;
+  margin-right:.2rem}
+.puce{font:inherit;font-size:.72rem;letter-spacing:.04em;color:var(--gris);background:none;
+  border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:.28rem .6rem;cursor:pointer}
+.puce:hover{color:#fff;border-color:rgba(255,255,255,.4)}
+.puce[aria-pressed="true"]{color:#fff;border-color:var(--rouge);background:rgba(226,58,62,.14)}
+@media (prefers-reduced-motion:no-preference){
+  .puce{transition:color .15s,border-color .15s,background .15s}}
+.compte{color:var(--gris);font-size:.72rem;letter-spacing:.06em;margin:.9rem 0 .2rem}
+.compte b{color:#fff;font-weight:500}
+
+.theme{margin:0 0 2.2rem}
+.theme h2{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gris);
+  font-weight:500;margin:0 0 .2rem;padding-top:1rem;border-top:1px solid rgba(226,58,62,.22)}
+.theme h2 span{color:#6f8598;letter-spacing:.1em;margin-left:.5rem}
+.terme{padding:.95rem 0 .9rem .9rem;border-bottom:1px solid rgba(255,255,255,.07);
+  border-left:3px solid transparent;scroll-margin-top:9rem}
+.terme:hover{background:rgba(255,255,255,.025)}
+.terme:target{border-left-color:var(--rouge);background:rgba(226,58,62,.06)}
+.terme h3{margin:0;font-size:1.05rem;font-weight:500;color:#fff;line-height:1.35}
+.terme h3 a:hover{text-decoration:underline;text-decoration-color:rgba(226,58,62,.7);
+  text-underline-offset:.25em}
+.terme .def{margin:.25rem 0 0;color:#c9d6e2;font-size:.92rem;max-width:44rem}
+.terme .autres{margin:.45rem 0 0;color:#6f8598;font-size:.7rem;letter-spacing:.04em;
+  display:flex;flex-wrap:wrap;gap:.25rem .8rem}
+/* `nowrap` seul laissait la ligne des cinq équivalents déborder de la page sur un écran étroit
+   (scrollWidth 1042 pour 780 px de fenêtre, 21/11/2026) : le flex-wrap garantit le repli. */
+.terme .autres span{white-space:nowrap;min-width:0;overflow-wrap:anywhere}
+.terme .autres b{color:var(--gris);font-weight:500}
+.terme .autres .manque{opacity:.75}
+.terme .autres .manque i{font-style:italic;color:#8fa3b5}
+.terme .autres .manque sup{font-size:.85em;vertical-align:.2em}
+.terme .vers{margin:.55rem 0 0;display:flex;gap:1rem;flex-wrap:wrap;font-size:.7rem;
+  letter-spacing:.04em;text-transform:uppercase}
+.terme .vers a{color:#9db2c6;border-bottom:1px solid rgba(226,58,62,.45);padding-bottom:1px}
+.terme .vers a:hover{color:#fff;border-bottom-color:var(--rouge)}
+.vide{padding:3rem 0;color:var(--gris);font-size:.9rem}
+.pied{margin-top:3.6rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,.09);
+  color:#6f8598;font-size:.72rem;line-height:1.8}
+
+@media (max-width:640px){
+  .page{padding:2.4rem 1rem 4rem}
+  .recherche{padding:.7rem 0 .8rem}
+  .filtres .etiq{width:100%}
+  .terme{padding-left:.6rem;scroll-margin-top:11rem}
+}
+
+.mot-tete{margin:0 0 .4rem}
+.fil{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:#6f8598;margin:1.4rem 0 0}
+.fil a{color:#9db2c6}
+.fil a:hover{color:#fff}
+.def{font-size:1.02rem;color:#dbe6f0;max-width:38rem;margin:.2rem 0 1.6rem}
+.bloc{border-top:1px solid rgba(255,255,255,.09);padding:1.3rem 0 .3rem;margin-top:1.2rem}
+.bloc h2{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9db2c6;
+  font-weight:500;margin:0 0 .8rem}
+.citation{margin:0 0 .8rem;padding-left:.9rem;border-left:2px solid var(--rouge);
+  color:#cfe0ee;font-size:.95rem;max-width:40rem}
+.chap-lien{display:inline-block;color:#fff;border-bottom:1px solid rgba(226,58,62,.6);
+  font-size:.9rem;padding-bottom:1px}
+.chap-lien:hover{color:var(--rouge)}
+table.trad{width:100%;border-collapse:collapse;font-size:.92rem;max-width:34rem}
+table.trad th,table.trad td{text-align:left;padding:.32rem 0;border-bottom:1px solid rgba(255,255,255,.06);
+  font-weight:400}
+table.trad th{width:9rem;color:#9db2c6;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+.q{margin:0 0 1.2rem}
+.q p{margin:0 0 .5rem;font-size:.95rem}
+.q .choix{display:flex;gap:.4rem;flex-wrap:wrap}
+.q button{background:none;border:1px solid rgba(157,178,198,.32);color:#cfe0ee;border-radius:999px;
+  padding:.34rem .8rem;font:inherit;font-size:.86rem;cursor:pointer}
+.q button:hover{border-color:#9db2c6;color:#fff}
+.q button.juste{border-color:#3fbf7f;color:#8ff0c0}
+.q button.faux{border-color:var(--rouge);color:#ffb3b5}
+.q .dit{font-size:.78rem;color:#9db2c6;margin-top:.4rem;min-height:1em}
+.voisins ul{list-style:none;padding:0;margin:0;display:flex;gap:.4rem .9rem;flex-wrap:wrap}
+.voisins a{font-size:.88rem;color:#cfe0ee;border-bottom:1px solid rgba(226,58,62,.35)}
+.voisins a:hover{color:#fff}
+.pas{display:flex;justify-content:space-between;gap:1rem;margin-top:2.4rem;font-size:.82rem;
+  border-top:1px solid rgba(255,255,255,.09);padding-top:1rem}
+.pas a{color:#9db2c6}
+.pas a:hover{color:#fff}
+.stage-lien{display:inline-block;margin-top:.2rem;border:1px solid rgba(226,58,62,.7);color:#fff;
+  border-radius:2px;padding:.55rem 1rem;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase}
+.stage-lien:hover{background:rgba(226,58,62,.16)}
+</style></head><body><div class="mer-fond mer-fond-commandes">
+  <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
+</div><style>
+.entete{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:.6rem;width:100%;
+  padding:.55rem .9rem;background:rgba(10,26,43,.96);border-bottom:1px solid rgba(226,58,62,.45);
+  color:#e8eef4;box-sizing:border-box;backdrop-filter:blur(6px)}
+.entete .nom{font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem;
+  color:#9fb3c4;text-decoration:none;white-space:nowrap}
+.entete .nom:hover{color:#fff}
+.entete .menu-d{margin-left:auto}
+.entete .menu-d>summary{list-style:none;cursor:pointer;font-size:.74rem;letter-spacing:.1em;
+  text-transform:uppercase;color:#e8eef4;border-bottom:1px solid rgba(226,58,62,.6);padding-bottom:1px}
+.entete .menu-d>summary::-webkit-details-marker{display:none}
+.entete .menu-d>nav{position:absolute;right:.6rem;top:calc(100% + .4rem);z-index:70;background:#0e2338;
+  border:1px solid rgba(255,255,255,.16);border-radius:.5rem;padding:.5rem;display:grid;
+  grid-template-columns:1fr 1fr;gap:.15rem .8rem;min-width:min(22rem,86vw);
+  box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.entete .menu-d>nav a{color:#dbe6ef;text-decoration:none;font-size:.82rem;padding:.35rem .4rem;border-radius:.35rem}
+.entete .menu-d>nav a:hover{background:rgba(255,255,255,.08)}
+.entete .menu-d>nav a[aria-current="page"]{color:#fff;box-shadow:inset 2px 0 0 #e23a3e}
+.entete .menu-d>nav>.sous-m{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.14);margin-top:.35rem}
+.entete .menu-d>nav>.sous-m>summary{list-style:none;cursor:pointer;font-size:.72rem;letter-spacing:.12em;
+  text-transform:uppercase;color:#9fb3c4;padding:.5rem .4rem}
+.entete .menu-d>nav>.sous-m>summary::-webkit-details-marker{display:none}
+.entete .menu-d>nav>.sous-m[open]>summary::after{content:" B4"}
+.entete .menu-d>nav>.sous-m>summary::after{content:" BE"}
+.entete .menu-d>nav .sous-liste{display:grid;grid-template-columns:1fr 1fr;gap:.1rem .5rem;
+  max-height:48vh;overflow-y:auto;overscroll-behavior:contain;padding:.1rem .1rem .3rem}
+.entete .menu-d>nav .sous-liste a{font-size:.78rem;padding:.24rem .35rem;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+@media (max-width:600px){.entete .menu-d>nav .sous-liste{grid-template-columns:1fr;max-height:none}}
+/* Sous-menu des chants (26/11/2026) : il prend les deux colonnes du panneau et défile tout seul. */
+.entete .menu-d>nav>.sous-m{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.14);margin-top:.35rem}
+.entete .menu-d>nav>.sous-m>summary{list-style:none;cursor:pointer;font-size:.72rem;letter-spacing:.12em;
+  text-transform:uppercase;color:#9fb3c4;padding:.5rem .4rem}
+.entete .menu-d>nav>.sous-m>summary::-webkit-details-marker{display:none}
+.entete .menu-d>nav>.sous-m>summary::after{content:" ▾"}
+.entete .menu-d>nav>.sous-m[open]>summary::after{content:" ▴"}
+.entete .menu-d>nav .sous-liste{display:grid;grid-template-columns:1fr 1fr;gap:.1rem .5rem;
+  max-height:48vh;overflow-y:auto;overscroll-behavior:contain;padding:.1rem .1rem .3rem}
+.entete .menu-d>nav .sous-liste a{font-size:.78rem;padding:.24rem .35rem;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+@media (max-width:600px){.entete .menu-d>nav .sous-liste{grid-template-columns:1fr;max-height:none}}
+body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:flex-start}
+@media (max-width:520px){.entete{padding:.45rem .6rem;gap:.4rem}.entete .nom{font-size:.68rem}}
+/* Téléphone : le panneau du menu en une colonne, texte de 16 px et lignes de 48 px (23/11/2026 :
+   « refais le menu il est illisible sur tel »). Cette feuille sert les pages hors feuille d'accueil
+   (stages, lexique, jeux, mentions légales) : elles avaient le même panneau serré en deux colonnes. */
+@media (max-width:600px){
+  .entete .menu-d>summary{font-size:.78rem;min-height:44px;display:flex;align-items:center;
+    padding:0 .15rem}
+  .entete .menu-d>nav{left:.4rem;right:.4rem;top:calc(100% + .3rem);width:auto;min-width:0;
+    grid-template-columns:1fr;gap:.1rem;padding:.45rem;background:#081624;
+    max-height:calc(100vh - 3.6rem);overflow-y:auto}
+  .entete .menu-d>nav a{display:flex;align-items:center;min-height:48px;
+    padding:.6rem .8rem;font-size:1rem;line-height:1.25}
+  .entete .menu-d>nav a.legal{min-height:42px;font-size:.9rem;padding:.5rem .8rem}
+  .entete .menu-d>nav a.legal:first-of-type{margin-top:.35rem;
+    border-top:1px solid rgba(238,243,247,.14);padding-top:.7rem}
+}
+</style><header class="entete"><a class="nom" href="/">Sailing More</a><div class="lg"><span hidden>Langue</span><span class="globe" aria-hidden="true"></span><span class="code" aria-hidden="true">FR</span><span class="chev" aria-hidden="true"></span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto (langue du navigateur)</option><option value="fr">FR · Français</option><option value="en">EN · English</option><option value="de">DE · Deutsch</option><option value="it">IT · Italiano</option><option value="es">ES · Español</option><option value="pt">PT · Português</option><option value="bzh">BZH · Brezhoneg</option></select></div><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="de" aria-pressed="false">DE</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="/">Accueil</a><a href="../regates.html">Calendrier des régates</a><a href="../regles-de-course.html">Règles de course</a><a href="../stages.html">Stages de voile</a><a href="../cours.html">Cours théoriques</a><a href="../jeux.html">Jeux</a><a href="../bateaux.html">Bateaux</a><a href="../bourse-equipiers.html">Bourse aux équipiers</a><a href="../carte.html">Carte du Léman</a><a href="../lexique.html" aria-current="page">Lexique</a><a href="../chants-de-marin.html">Chants de marins</a><details class="sous-m" data-sous="chants"><summary>Les 130 chants de marins</summary><nav class="sous-liste" aria-label="Chants de marins"><a href="../chant-haul.html">Haul Away Joe</a><a href="../chant-wellerman.html">Wellerman</a><a href="../chant-merck.html">Merck toch hoe sterck</a><a href="../chant-lurrighan.html">Leis a Lurrighan</a><a href="../chant-trimartolod.html">Tri Martolod</a><a href="../chant-santiano.html">Santiano</a><a href="../chant-shenandoah.html">Shenandoah</a><a href="../chant-adieu-maimuna.html">Adieu to Maimuna</a><a href="../chant-homeward-bound.html">Homeward Bound</a><a href="../chant-rolling-home.html">Rolling Home</a><a href="../chant-dreadnought.html">The Dreadnought</a><a href="../chant-la-pique.html">La Pique</a><a href="../chant-doo-me-ama.html">Doo me ama</a><a href="../chant-farewell-and-adieu.html">Farewell and Adieu</a><a href="../chant-blow-ye-winds-morning.html">Blow Ye Winds, in the Morning</a><a href="../chant-unmooring.html">Unmooring</a><a href="../chant-boston.html">Boston</a><a href="../chant-female-smuggler.html">The Female Smuggler</a><a href="../chant-come-loose-every-sail.html">Come, Loose Every Sail to the Breeze</a><a href="../chant-sally-brown.html">Sally Brown</a><a href="../chant-will-watch.html">Will Watch</a><a href="../chant-shannon-chesapeake.html">Shannon and Chesapeake</a><a href="../chant-good-bye-fare-you-well.html">Good-bye, Fare You Well</a><a href="../chant-across-western-ocean.html">Across the Western Ocean</a><a href="../chant-johns-gone-to-hilo.html">John's Gone to Hilo</a><a href="../chant-one-more-day.html">One More Day</a><a href="../chant-were-all-bound-to-go.html">We're All Bound to Go</a><a href="../chant-lowlands.html">Lowlands</a><a href="../chant-a-roving.html">A-Roving</a><a href="../chant-reuben-ranzo.html">Reuben Ranzo</a><a href="../chant-stand-to-your-ground.html">Stand to Your Ground</a><a href="../chant-stormalong.html">Stormalong</a><a href="../chant-blow-the-man-down.html">Blow the Man Down</a><a href="../chant-blow-boys-blow.html">Blow, Boys, Blow</a><a href="../chant-the-whale.html">The Whale</a><a href="../chant-the-fishes.html">The Fishes</a><a href="../chant-admiral-benbow.html">Admiral Benbow</a><a href="../chant-high-barbaree.html">High Barbaree</a><a href="../chant-cheerly-man.html">Cheer'ly Man</a><a href="../chant-hog-eye-man.html">The Hog-Eye Man</a><a href="../chant-saucy-arethusa.html">The Saucy Arethusa</a><a href="../chant-boney.html">Boney</a><a href="../chant-well-ranzo-way.html">We'll Ranzo-Way</a><a href="../chant-clear-de-track.html">Clear de Track, Let de Bulgine Run</a><a href="../chant-jamboree.html">Jamboree</a><a href="../chant-o-fare-you-well.html">O, Fare You Well, My Bonny Young Girls</a><a href="../chant-dead-horse.html">The Dead Horse</a><a href="../chant-capitaine-du-mexico.html">C'est le capitaine du « Mexico »</a><a href="../chant-bound-rio-grande.html">Bound for the Rio Grande</a><a href="../chant-wild-goose-shanty.html">The Wild Goose Shanty</a><a href="../chant-drunken-sailor.html">What Shall We Do with the Drunken Sailor?</a><a href="../chant-good-morning-ladies.html">Good Morning, Ladies All</a><a href="../chant-hanging-johnny.html">Hanging Johnny</a><a href="../chant-hilo-somebody.html">Hilo Somebody</a><a href="../chant-run-let-the-bullgine.html">Oh, Run, Let the Bullgine Run</a><a href="../chant-whisky-johnny.html">Whisky Johnny</a><a href="../chant-haul-the-bowlin.html">We'll Haul the Bowlin'</a><a href="../chant-black-ball-line.html">The Black Ball Line</a><a href="../chant-a-roving-ii.html">A-Roving (II)</a><a href="../chant-banks-of-sacramento.html">The Banks of Sacramento</a><a href="../chant-the-shaver.html">The Shaver</a><a href="../chant-paddy-works-railway.html">Paddy Works on the Railway</a><a href="../chant-cant-you-dance-polka.html">Can't You Dance the Polka?</a><a href="../chant-fire-down-below.html">Fire Down Below</a><a href="../chant-shallow-brown.html">Shallow Brown</a><a href="../chant-round-the-corner-sally.html">Round the Corner Sally</a><a href="../chant-my-tommys-gone-away.html">My Tommy's Gone Away</a><a href="../chant-sing-fare-you-well.html">Sing Fare You Well</a><a href="../chant-lizer-lee.html">Lizer Lee</a><a href="../chant-hundred-years-eastern-shore.html">A Hundred Years on the Eastern Shore</a><a href="../chant-sailor-likes-his-bottle.html">The Sailor Likes His Bottle, O</a><a href="../chant-handy-jim.html">Handy Jim</a><a href="../chant-ved-balasthjoning.html">Ved Balasthjoning</a><a href="../chant-sally-racket.html">Sally Racket</a><a href="../chant-pay-me-the-money-down.html">Pay Me the Money Down</a><a href="../chant-home-dearie-home.html">Home, Dearie, Home</a><a href="../chant-john-brown.html">John Brown</a><a href="../chant-plains-of-mexico.html">The Plains of Mexico</a><a href="../chant-heave-away-my-johnny.html">Heave Away, My Johnny</a><a href="../chant-johnny-boker.html">Johnny Boker</a><a href="../chant-haul-away-joe-terry.html">Haul Away, Joe</a><a href="../chant-miss-lucy-long.html">Miss Lucy Long</a><a href="../chant-hilo-john-brown.html">Hilo, John Brown</a><a href="../chant-bully-boat.html">The Bully Boat Is Coming</a><a href="../chant-hilonday.html">Hilonday</a><a href="../chant-voice-of-her-i-love.html">The Voice of Her I Love</a><a href="../chant-old-storm-along.html">Old Storm Along</a><a href="../chant-so-handy-my-girls.html">So Handy, My Girls</a><a href="../chant-tommys-gone-to-hilo.html">Tommy's Gone to Hilo</a><a href="../chant-south-australia.html">South Australia</a><a href="../chant-a-yankee-ship.html">A Yankee Ship</a><a href="../chant-st-helena-soldier.html">St. Helena Soldier</a><a href="../chant-rio-grande-smith.html">Rio Grande</a><a href="../chant-haulin-the-bowlin.html">Haulin' the Bowlin'</a><a href="../chant-bull-chimes.html">Run, Let the Bull Chimes Run</a><a href="../chant-whisky-for-my-johnny.html">Whisky for My Johnny</a><a href="../chant-sally-brown-smith.html">Sally Brown (Smith)</a><a href="../chant-bonny.html">Bonny</a><a href="../chant-ali-alo.html">Ali ! alo !</a><a href="../chant-toms-gone-to-hilo.html">Tom's Gone to Hilo</a><a href="../chant-billy-boy.html">Billy Boy</a><a href="../chant-chanson-de-matelots.html">Chanson de Matelots</a><a href="../chant-chanson-maritime.html">Chanson Maritime</a><a href="../chant-hamburg-ist-ein-schones-stadtchen.html">Hamburg ist ein schones Stadtchen</a><a href="../chant-le-trente-et-un-du-mois-d-aout.html">Le trente et un du mois d'aout</a><a href="../chant-poor-paddy-works-on-the-railway.html">Poor Paddy Works on the Railway</a><a href="../chant-sling-the-flowing-bowl.html">Sling the Flowing Bowl</a><a href="../chant-the-twenty-fourth-of-february.html">The Twenty-fourth of February</a><a href="../chant-wenn-das-atlantische-meer.html">Wenn das Atlantische Meer</a><a href="../chant-blow-my-bully-boys.html">Blow, my bully boys</a><a href="../chant-cheer-ly-men.html">Cheer'ly, men</a><a href="../chant-it-s-time-for-us-to-leave-her.html">It's time for us to leave her</a><a href="../chant-whisky.html">Whisky</a><a href="../chant-breton-sailors-litany.html">Breton Sailors' Litany</a><a href="../chant-fenesta-vascia.html">Fenesta vascia</a><a href="../chant-la-fata-di-amalfi.html">La Fata di Amalfi</a><a href="../chant-le-petit-navire.html">Le Petit Navire</a><a href="../chant-le-retour-du-mousse.html">Le Retour du Mousse</a><a href="../chant-les-marins-de-groix.html">Les Marins de Groix</a><a href="../chant-morgen-muss-ich-fort-von-hier.html">Morgen muss ich fort von hier</a><a href="../chant-nagareymna.html">Nagareymna</a><a href="../chant-och-nan-och.html">Och nan och</a><a href="../chant-pauvre-pierre.html">Pauvre Pierre</a><a href="../chant-santa-lucia.html">Santa Lucia</a><a href="../chant-wandrer-s-nacht-lied.html">Wandrer's Nacht-Lied</a><a href="../chant-la-chanson-des-mariniers.html">La Chanson des Mariniers</a><a href="../chant-les-enfants-de-la-mer.html">Les Enfants de la Mer</a><a href="../chant-the-drummer-and-the-cook.html">The Drummer and the Cook</a><a href="../chant-ved-balasthioning.html">Ved Balasthioning</a><a href="../chant-whoop-jamboree.html">Whoop Jamboree</a></nav></details><a href="../ports.html">Ports du monde</a><a href="../simulateur.html">Simulateur de priorités</a><a href="../annonceurs.html">Annonceurs</a></nav></details></header><style>
+/* La langue : une pastille du site, pas un contrôle du système (Nicolas, 23/11/2026 : « pour la barre
+   des langues il faut un truc plus joli »). Plus de cadre blanc : un globe, le code de la langue en
+   capitales comme les libellés de la barre, le filet rouge de MENU dessous, et le <select> natif posé
+   transparent par-dessus — la roue iOS/Android et les lecteurs d'écran gardent leur menu à eux. */
+.lg{position:relative;display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .1rem;margin-left:.25rem;
+  border-bottom:1px solid rgba(226,58,62,.6);cursor:pointer;line-height:1}
+.lg:hover{border-bottom-color:#fff}
+.lg:focus-within{outline:1px solid #e23a3e;outline-offset:4px}
+.lg .globe{width:.86rem;height:.86rem;flex:0 0 auto;opacity:.85;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e8eef4' stroke-width='1.7'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cellipse cx='12' cy='12' rx='4' ry='9'/%3E%3Cpath d='M3 12h18'/%3E%3C/svg%3E") center/contain no-repeat}
+.lg .code{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:#e8eef4}
+.lg .chev{width:.36rem;height:.36rem;margin:-.14rem .1rem 0 .18rem;opacity:.7;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
+.lg select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:1rem;
+  appearance:none;-webkit-appearance:none;border:0;background:transparent;color:transparent}
+.lg select:focus{outline:none}
+.lg option{color:#10161f;background:#fff}
+@media (max-width:520px){.lg{padding:.3rem .1rem}}
+@media (pointer:coarse){.lg{min-height:44px;min-width:3.4rem;justify-content:center;gap:.34rem}}
+</style><script>
+(function(){
+  var d = document.querySelector('.entete .menu-d');
+  if(!d) return;
+  document.addEventListener('click', function(e){ if(!d.contains(e.target)) d.open = false; });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') d.open = false; });
+})();
+</script><script>
+(function(){
+  /* La carte plein écran se cale sous la barre du site : elle en mesure la hauteur réelle.
+     Avant tout le reste — une page sans menu de langues a quand même une carte à caler. */
+  function caler(){
+    var b = document.querySelector(".entete"), c = document.querySelector(".cl.m-carte");
+    if(b && c) document.documentElement.style.setProperty("--barre", b.offsetHeight + "px");
+  }
+  caler(); addEventListener("load", caler); addEventListener("resize", caler); setTimeout(caler, 300);
+  var sel = document.getElementById("langue-sel"), zone = document.getElementById("langues");
+  if(!sel || !zone) return;
+  /* Le breton (valeur « bzh ») n'a pas de bloc de texte dans les pages : choisi, il laisse la page en
+     français (clé `sm-langue` = fr, que les pages savent lire) et pose un drapeau `sm-bzh`. Ce script
+     ajoute alors l'encart, garde `lang="br"` (le code IANA ; « bzh » n'y est pas) et la pastille BZH.
+     `?lang=xx` choisit la langue avant que les scripts des pages ne la lisent. */
+  var SIX = ["fr", "en", "de", "it", "es", "pt"];
+  function st(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function ec(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
+  /* Plus aucune détection ici : le socle l'a faite dans le <head>, avant le premier pixel
+     (24/11/2026, une seule règle pour tout le site). `?lang=` et le choix du visiteur y sont déjà
+     rangeés sous `sm-langue`. */
+  var LANGUES = (typeof window !== "undefined" && window.SM_LANGUES) || SIX;
+  function bzh(){
+    var l = (typeof window.smLangue === "function") ? window.smLangue() : null;
+    if(l === "bzh") return true;
+    if(l) return false;                       /* une langue choisie l'emporte sur le drapeau */
+    return st("sm-bzh") === "1";
+  }
+  function encart(){
+    var e = document.getElementById("encart-bzh"), actif = bzh();
+    if(document.querySelector('meta[name="sm-bzh"]')) actif = false;      /* page dont le breton existe */
+    if(!actif){ if(e) e.remove(); return; }
+    if(e) return;
+    var h = document.querySelector(".entete");
+    if(!h) return;
+    e = document.createElement("p");
+    e.id = "encart-bzh"; e.setAttribute("role", "note");
+    e.style.cssText = "margin:0;padding:.6rem .9rem;background:#0e2338;color:#e8eef4;font-size:.9rem;" +
+      "border-bottom:1px solid rgba(255,255,255,.16)";
+    e.appendChild(document.createTextNode("Cette page n’est pas encore traduite en breton. Écrivez-nous à "));
+    var a = document.createElement("a");
+    a.className = "courriel"; a.style.color = "inherit";
+    a.setAttribute("data-a", "hello.sailingmore"); a.setAttribute("data-b", "gmail.com");
+    var ad = "hello.sailingmore" + "@" + "gmail.com";
+    a.href = "mailto:" + ad; a.textContent = ad;
+    e.appendChild(a);
+    e.appendChild(document.createTextNode(" pour proposer la traduction."));
+    h.parentNode.insertBefore(e, h.nextSibling);
+  }
+  function balise(){
+    if(bzh() && document.documentElement.lang !== "br") document.documentElement.lang = "br";
+  }
+  /* Le code affiché sur la pastille : la langue choisie, ou celle que la page affiche en mode auto. */
+  var code = document.querySelector(".lg .code");
+  function etiq(v){
+    if(!code) return;
+    if(bzh()){ code.textContent = "BZH"; return; }
+    if(v && v !== "auto" && v !== "bzh"){ code.textContent = v.toUpperCase(); return; }
+    var l = (document.documentElement.lang || "fr").slice(0, 2).toUpperCase();
+    code.textContent = l || "FR";
+  }
+  function lire(){
+    if(st("sm-bzh") === "1" && st("sm-langue") !== "auto" && st("sm-langue")) return "bzh";
+    return st("sm-langue") || "auto";
+  }
+  function poser(){
+    balise(); encart();
+    var v = lire(), o = sel.options;
+    for(var i = 0; i < o.length; i++){ if(o[i].value === v){ sel.value = v; etiq(v); return; } }
+    sel.value = "auto"; etiq("auto");
+  }
+  sel.addEventListener("change", function(){
+    var v = sel.value, bs = zone.querySelectorAll("button[data-lang]");
+    var cible = (v === "bzh") ? "fr" : v;             /* le breton s'affiche sur le texte français */
+    ec("sm-bzh", v === "bzh" ? "1" : null);
+    for(var i = 0; i < bs.length; i++){
+      if(bs[i].getAttribute("data-lang") === cible){ bs[i].click(); break; }
+    }
+    ec("sm-bzh", v === "bzh" ? "1" : null);
+    balise(); encart(); etiq(v);
+  });
+  /* la page change de langue sans passer par le menu (auto, bouton, retour arrière) */
+  if(window.MutationObserver){
+    new MutationObserver(function(){ balise(); encart(); etiq(sel.value); })
+      .observe(document.documentElement, {attributes: true, attributeFilter: ["lang"]});
+  }
+  poser();
+  addEventListener("load", poser);
+  setTimeout(poser, 400);
+
+})();
+</script><main class="page"><p class="fil"><a id="l-retour" href="../index.html">← Sailing More</a> · <a id="l-lexique" href="../lexique.html">Lexique</a> · <a id="lien-theme" href="../lexique.html#bateau">Le bateau</a></p><h1 class="mot-tete" id="titre">voile</h1><p class="def" id="def">La voile est la pièce de toile ou de tissu technique qui capte le vent pour faire avancer le bateau ou la planche.</p><section class="bloc"><h2 id="t-trad">Le mot dans six langues</h2><table class="trad"><tr><th>français</th><td data-lg="fr">voile</td></tr><tr><th>English</th><td data-lg="en">sail</td></tr><tr><th>Deutsch</th><td data-lg="de">Segel</td></tr><tr><th>italiano</th><td data-lg="it">vela</td></tr><tr><th>español</th><td data-lg="es">vela</td></tr><tr><th>português</th><td data-lg="pt">vela</td></tr></table></section><section class="bloc"><h2 id="t-ou">Où l'apprendre</h2><div id="zone-cours"><p class="citation">« Le mât porte les voiles: la grand-voile, fixée au mât et à la bôme, et, à l&#x27;avant, le foc ou le génois. »</p><a class="chap-lien" href="../cours.html#ch1-fr">Le bateau et son vocabulaire</a></div></section><section class="bloc"><h2 id="t-questions">Deux questions pour l'apprendre</h2><div id="zone-q"><div class="q" data-i="0"><p>Quel mot manque ? « Le mât porte les voiles: la grand-…, fixée au mât et à la bôme, et, à l&#x27;avant, le foc ou le génois. »</p><div class="choix"><button type="button" data-bon="0">aile de rappel</button><button type="button" data-bon="0">ancre</button><button type="button" data-bon="1">voile</button></div><div class="dit"></div></div><div class="q" data-i="1"><p>Comment dit-on « voile » en anglais ?</p><div class="choix"><button type="button" data-bon="1">sail</button><button type="button" data-bon="0">wing</button><button type="button" data-bon="0">wing</button></div><div class="dit"></div></div><div class="q" data-i="2"><p>Et en allemand ?</p><div class="choix"><button type="button" data-bon="1">Segel</button><button type="button" data-bon="0">Anker</button><button type="button" data-bon="0">Flügel</button></div><div class="dit"></div></div></div></section><section class="bloc"><h2 id="t-stage">Un stage à réserver</h2><a class="stage-lien" id="lien-stage" href="../stages.html?q=voile">Réserver un stage</a></section><section class="bloc voisins"><h2 id="t-voisins">Les mots de la même famille</h2><ul><li><a href="../aile-avant.html">aile avant</a></li><li><a href="../aile-de-kite.html">aile de kite</a></li><li><a href="../aile-de-rappel.html">aile de rappel</a></li><li><a href="../aile-de-wing.html">aile de wing</a></li><li><a href="../ancre.html">ancre</a></li></ul></section><nav class="pas"><a href="../voie-d-eau.html">← voie d&#x27;eau</a><a href="../voilier-a-foils.html">voilier à foils →</a></nav></main><script type="application/json" id="mot-donnees">{"langues":["fr","en","de","it","es","pt"],"cle":"voile","ui":{"fr":{"ou":"Où l'apprendre","questions":"Deux questions pour l'apprendre","stage":"Réserver un stage","voisins":"Les mots de la même famille","prec":"Mot précédent","suiv":"Mot suivant","cours":"Le cours","traductions":"Le mot dans six langues","juste":"Bonne réponse.","faux":"Non — la bonne réponse était :","lexique":"Lexique","retour":"← Sailing More","detail":"Le mot en détail"},"en":{"ou":"Where to learn it","questions":"Two questions to learn it","stage":"Book a course","voisins":"Words of the same family","prec":"Previous word","suiv":"Next word","cours":"The lesson","traductions":"The word in six languages","juste":"Correct.","faux":"No — the right answer was:","lexique":"Glossary","retour":"← Sailing More","detail":"The word in detail"},"de":{"ou":"Wo man es lernt","questions":"Zwei Fragen zum Lernen","stage":"Kurs buchen","voisins":"Wörter derselben Familie","prec":"Voriges Wort","suiv":"Nächstes Wort","cours":"Die Lektion","traductions":"Das Wort in sechs Sprachen","juste":"Richtig.","faux":"Nein — richtig war:","lexique":"Lexikon","retour":"← Sailing More","detail":"Das Wort im Detail"},"it":{"ou":"Dove impararlo","questions":"Due domande per impararlo","stage":"Prenota un corso","voisins":"Le parole della stessa famiglia","prec":"Parola precedente","suiv":"Parola successiva","cours":"La lezione","traductions":"La parola in sei lingue","juste":"Risposta giusta.","faux":"No — la risposta giusta era:","lexique":"Lessico","retour":"← Sailing More","detail":"La parola in dettaglio"},"es":{"ou":"Dónde aprenderlo","questions":"Dos preguntas para aprenderlo","stage":"Reservar un curso","voisins":"Las palabras de la misma familia","prec":"Palabra anterior","suiv":"Palabra siguiente","cours":"La lección","traductions":"La palabra en seis idiomas","juste":"Respuesta correcta.","faux":"No — la respuesta correcta era:","lexique":"Léxico","retour":"← Sailing More","detail":"La palabra en detalle"},"pt":{"ou":"Onde o aprender","questions":"Duas perguntas para o aprender","stage":"Reservar um curso","voisins":"As palavras da mesma família","prec":"Palavra anterior","suiv":"Palavra seguinte","cours":"A lição","traductions":"A palavra em seis línguas","juste":"Resposta certa.","faux":"Não — a resposta certa era:","lexique":"Léxico","retour":"← Sailing More","detail":"A palavra em detalhe"}},"theme":{"cle":"bateau","nom":{"fr":"Le bateau","en":"The boat","it":"La barca","es":"El barco","pt":"O barco","de":"Das Boot"}},"mot":{"fr":"voile","en":"sail","de":"Segel","it":"vela","es":"vela","pt":"vela"},"def":{"fr":"La voile est la pièce de toile ou de tissu technique qui capte le vent pour faire avancer le bateau ou la planche.","en":"The sail is the piece of cloth or technical fabric that catches the wind to drive the boat or the board forward.","de":"Das Segel ist das Stück Tuch oder technische Gewebe, das den Wind einfängt und Boot oder Board vorantreibt.","it":"La vela è il pezzo di tela o di tessuto tecnico che cattura il vento per far avanzare la barca o la tavola.","es":"La vela es la pieza de tela o de tejido técnico que capta el viento para hacer avanzar el barco o la tabla.","pt":"A vela é a peça de pano ou de tecido técnico que capta o vento para fazer avançar o barco ou a prancha."},"cours":{"fr":{"n":1,"titre":"Le bateau et son vocabulaire","phrase":"Le mât porte les voiles: la grand-voile, fixée au mât et à la bôme, et, à l'avant, le foc ou le génois."},"en":{"n":2,"titre":"The wind and the points of sail","phrase":"2 The wind and the points of sail The wind is named after where it comes from: a north wind blows toward the south."},"de":{"n":1,"titre":"Das Boot und sein Vokabular","phrase":"Der Mast trägt die Segel: das Großsegel, am Mast und am Baum befestigt, und vorn die Fock oder die Genua."},"it":{"n":1,"titre":"La barca e il suo vocabolario","phrase":"1 La barca e il suo vocabolario Una barca a vela si descrive con le sue parti."},"es":{"n":7,"titre":"Balizamiento y luces","phrase":"De noche, un velero a vela lleva una luz roja a babor, una verde a estribor y una blanca a popa; a motor añade una luz blanca de tope."},"pt":{"n":7,"titre":"Balizagem e luzes","phrase":"De noite, um veleiro a navegar à vela mostra uma luz vermelha a bombordo, uma verde a estibordo e uma branca à popa; a motor acrescenta uma luz branca de topo."}},"questions":{"fr":[{"q":"Quel mot manque ? « Le mât porte les voiles: la grand-…, fixée au mât et à la bôme, et, à l'avant, le foc ou le génois. »","a":["aile de rappel","ancre","voile"],"bon":2},{"q":"Comment dit-on « voile » en anglais ?","a":["sail","wing","wing"],"bon":0},{"q":"Et en allemand ?","a":["Segel","Anker","Flügel"],"bon":0}],"en":[{"q":"Which word is missing? « 2 The wind and the points of … The wind is named after where it comes from: a north wind blows toward the south. »","a":["wing","wing","sail"],"bon":2},{"q":"How do you say « sail » in French?","a":["aile de wing","aile de rappel","voile"],"bon":2},{"q":"And in German?","a":["Kite","Frontflügel","Segel"],"bon":2}],"de":[{"q":"Welches Wort fehlt? « Der Mast trägt die …: das Großsegel, am Mast und am Baum befestigt, und vorn die Fock oder die Genua. »","a":["Wing","Frontflügel","Segel"],"bon":2},{"q":"Wie sagt man « Segel » auf Französisch?","a":["ancre","voile","aile de kite"],"bon":1},{"q":"Und auf Englisch?","a":["wing","sail","kite"],"bon":1}],"it":[{"q":"Quale parola manca? « 1 La barca e il suo vocabolario Una barca a … si descrive con le sue parti. »","a":["wing","ala anteriore","vela"],"bon":2},{"q":"Come si dice « vela » in francese?","a":["voile","aile de rappel","ancre"],"bon":0},{"q":"E in inglese?","a":["sail","wing","anchor"],"bon":0}],"es":[{"q":"¿Qué palabra falta? « De noche, un velero a … lleva una luz roja a babor, una verde a estribor y una blanca a popa; a motor añade una luz blanca de tope. »","a":["ancla","ala","vela"],"bon":2},{"q":"¿Cómo se dice « vela » en francés?","a":["aile de wing","aile de rappel","voile"],"bon":2},{"q":"¿Y en inglés?","a":["anchor","sail","kite"],"bon":1}],"pt":[{"q":"Que palavra falta? « De noite, um veleiro a navegar à … mostra uma luz vermelha a bombordo, uma verde a estibordo e uma branca à popa; a motor acrescenta uma luz branca de topo. »","a":["vela","asa","kite"],"bon":0},{"q":"Como se diz « vela » em francês?","a":["voile","ancre","aile de wing"],"bon":0},{"q":"E em inglês?","a":["wing","wing","sail"],"bon":2}]},"voisins":[{"cle":"aile-avant","mot":{"fr":"aile avant","en":"front wing","it":"ala anteriore","es":"ala delantera","pt":"asa dianteira","de":"Frontflügel"}},{"cle":"aile-de-kite","mot":{"fr":"aile de kite","en":"kite","it":"kite","es":"kite","pt":"kite","de":"Kite"}},{"cle":"aile-de-rappel","mot":{"fr":"aile de rappel","en":"wing","it":"ala","es":"ala","pt":"asa","de":"Flügel"}},{"cle":"aile-de-wing","mot":{"fr":"aile de wing","en":"wing","it":"wing","es":"wing","pt":"wing","de":"Wing"}},{"cle":"ancre","mot":{"fr":"ancre","en":"anchor","it":"ancora","es":"ancla","pt":"âncora","de":"Anker","bzh":"eor"}}]}</script><script>
+(function(){
+  var D = null;
+  try{ D = JSON.parse(document.getElementById('mot-donnees').textContent); }catch(e){ return; }
+  var L = (typeof window.smLangue === 'function') ? window.smLangue() : 'fr';
+  if(L === 'bzh' || L.indexOf) {}
+  if(D.langues.indexOf(L) < 0) L = 'fr';
+  var u = D.ui[L] || D.ui.fr;
+  function txt(id, v){ var e = document.getElementById(id); if(e && v != null) e.textContent = v; }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function questions(){
+    var z = document.getElementById('zone-q'); if(!z) return;
+    var qs = D.questions[L] || [], out = '';
+    qs.forEach(function(q, i){
+      out += '<div class="q" data-i="' + i + '"><p>' + esc(q.q) + '</p><div class="choix">';
+      q.a.forEach(function(c, j){ out += '<button type="button" data-bon="' + (j === q.bon ? 1 : 0) + '">' + esc(c) + '</button>'; });
+      out += '</div><div class="dit"></div></div>';
+    });
+    z.innerHTML = out;
+  }
+
+  function cours(){
+    var z = document.getElementById('zone-cours'); if(!z) return;
+    var c = D.cours[L] || D.cours.fr;
+    if(!c){ z.innerHTML = ''; return; }
+    z.innerHTML = (c.phrase ? '<p class="citation">« ' + esc(c.phrase) + ' »</p>' : '')
+      + '<a class="chap-lien"></a>';
+    var a = z.querySelector('.chap-lien');
+    if(a){ a.textContent = c.titre; a.href = '../cours.html#ch' + c.n + '-' + L; }
+  }
+
+  function apply(){
+    txt('titre', D.mot[L]); txt('def', D.def[L]);
+    txt('t-ou', u.ou); txt('t-questions', u.questions); txt('t-stage', u.stage);
+    txt('t-voisins', u.voisins); txt('t-trad', u.traductions);
+    txt('l-lexique', u.lexique); txt('l-retour', u.retour);
+    var stage = document.getElementById('lien-stage'); if(stage) stage.textContent = u.stage;
+    var th = document.getElementById('lien-theme'); if(th) th.textContent = D.theme.nom[L];
+    questions(); cours();
+    document.querySelectorAll('.voisins a').forEach(function(a, i){
+      var v = D.voisins[i]; if(v) a.textContent = v.mot[L];
+    });
+    document.querySelectorAll('td[data-lg]').forEach(function(c){ c.textContent = D.mot[c.dataset.lg]; });
+  }
+
+  document.addEventListener('click', function(ev){
+    var b = ev.target.closest ? ev.target.closest('.q button') : null;
+    if(!b) return;
+    var box = b.closest('.q'), dit = box.querySelector('.dit');
+    box.querySelectorAll('button').forEach(function(x){ x.classList.remove('juste','faux'); });
+    var bon = b.dataset.bon === '1';
+    b.classList.add(bon ? 'juste' : 'faux');
+    var i = +box.dataset.i, q = (D.questions[L] || [])[i];
+    if(bon){ dit.textContent = u.juste; }
+    else{
+      box.querySelectorAll('button').forEach(function(x){ if(x.dataset.bon === '1') x.classList.add('juste'); });
+      dit.textContent = u.faux + ' ' + (q ? q.a[q.bon] : '');
+    }
+  });
+
+  apply();
+})();
+</script><script src="../auto-trad.js" defer></script>
+<!--mer-debut-->
+<div class="mer-fond" id="cadre">
+
+  <canvas id="mer" aria-hidden="true"></canvas>
+  <div class="mer-ombre" aria-hidden="true"></div>
+  
+  <button class="rejouer" id="rejouer" type="button" hidden>Rejouer</button>
+  <div class="vent">
+    <div class="cadran" id="cadran" role="slider" tabindex="0" aria-label="Direction d'où vient le vent"
+      aria-valuemin="0" aria-valuemax="359" aria-valuenow="0" aria-valuetext="Vent du 000 degrés">
+      <svg viewBox="0 0 104 104" aria-hidden="true">
+        <circle cx="52" cy="52" r="44" fill="none" stroke="#f4f7fa" stroke-opacity=".28" stroke-width="1"/>
+        <g id="rose" stroke="#f4f7fa" stroke-opacity=".5" stroke-width="1">
+          <line x1="52" y1="8" x2="52" y2="15"/><line x1="96" y1="52" x2="89" y2="52"/>
+          <line x1="52" y1="96" x2="52" y2="89"/><line x1="8" y1="52" x2="15" y2="52"/>
+        </g>
+        <g id="fleche">
+          <line x1="52" y1="10" x2="52" y2="66" stroke="#f4f7fa" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M52 76 L44.5 61 L52 65 L59.5 61 Z" fill="#f4f7fa"/>
+          <circle cx="52" cy="10" r="4.2" fill="#E2232E"/>
+        </g>
+      </svg>
+    </div>
+    <span class="valeur" id="ventValeur">Vent du 000°</span>
+    <span class="geste">Faites-le tourner</span>
+  </div>
+</div>
+<style>
+/* ---- la mer en fond : fixe, derrière tout le contenu (Nicolas, 19/11/2026) ---- */
+.mer-fond{position:fixed;inset:0;z-index:0;overflow:hidden;background:#071c31;
+  isolation:isolate;pointer-events:none}
+.mer-fond canvas{position:absolute;inset:0;width:100%;height:100%;display:block;
+  opacity:0;transition:opacity 1.1s cubic-bezier(.23,1,.32,1);cursor:grab;pointer-events:auto}
+.mer-fond.pret canvas{opacity:1}
+.mer-fond.fondu canvas{opacity:0;transition-duration:.22s}
+/* voile : l'eau reste visible comme fond, le texte reste lisible par-dessus */
+.mer-fond .mer-ombre{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(120% 85% at 50% 28%,rgba(5,16,30,.20) 0%,rgba(5,16,30,.34) 55%,rgba(5,16,30,.52) 100%),
+             linear-gradient(180deg,rgba(6,18,33,.30) 0%,rgba(6,18,33,.12) 30%,rgba(6,18,33,.40) 78%,rgba(5,15,28,.62) 100%)}
+.contenu{position:relative;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,18,33,0) 0,rgba(6,18,33,0) 62vh,
+    rgba(6,18,33,.55) 96vh,rgba(6,18,33,.55) 100%)}
+
+/* les commandes de la scène : posées sur la mer, elles s'effacent dès qu'on descend */
+.mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{
+  transition:opacity .45s ease,transform .45s ease}
+.mer-fond.loin .heure,.mer-fond.loin .choix,.mer-fond.loin .vent,.mer-fond.loin .legende,
+.mer-fond.loin .rejouer{opacity:0;pointer-events:none;transform:translateY(-6px)}
+
+/* Le tableau de bord détaché des pages annexes : mêmes commandes, hors de la couche du fond
+   (z-index -1) qui les rendrait invisibles et incliquables. */
+.mer-fond.mer-fond-commandes{position:relative;inset:auto;height:auto;width:100%;max-width:100%;
+  background:none;overflow:visible;z-index:60;pointer-events:none;display:flex;flex-direction:column;
+  align-items:flex-start;gap:.55rem;padding:1rem 1.1rem .2rem}
+.mer-fond.mer-fond-commandes .heure,.mer-fond.mer-fond-commandes .choix{position:relative!important;
+  left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
+  margin:0!important;pointer-events:auto}
+.mer-fond .heure{position:absolute;left:14px;top:80px;z-index:4;height:46px;padding:0 8px 0 14px;
+  display:flex;align-items:center;gap:10px;border-radius:999px;width:min(360px,calc(100% - 28px));
+  background:rgba(6,18,33,.66);color:var(--creme,#f4efe4);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto}
+.mer-fond .heure .lue{flex:none;min-width:4.6em;font-size:14px;font-weight:600;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.mer-fond .heure .piste{flex:1 1 auto;min-width:0;height:42px;margin:0;background:transparent;
+  cursor:pointer;-webkit-appearance:none;appearance:none;touch-action:none;outline:none}
+.mer-fond .heure .piste::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:linear-gradient(90deg,#0b1730 0%,#0b1730 21%,#d9879a 27%,#f2c48a 31%,#6fb1e6 42%,#3f97e6 56%,#7fb6e0 72%,#f5b56b 81%,#d9694f 85%,#3a2c55 89%,#0b1730 93%,#0b1730 100%)}
+.mer-fond .heure .piste::-moz-range-track{height:8px;border-radius:4px;background:linear-gradient(90deg,#0b1730 0%,#0b1730 21%,#d9879a 27%,#f2c48a 31%,#6fb1e6 42%,#3f97e6 56%,#7fb6e0 72%,#f5b56b 81%,#d9694f 85%,#3a2c55 89%,#0b1730 93%,#0b1730 100%)}
+.mer-fond .heure .piste::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;
+  margin-top:-7px;border-radius:50%;background:var(--creme,#f4efe4);border:0;box-shadow:0 1px 5px rgba(0,0,0,.5)}
+.mer-fond .heure .piste::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--creme,#f4efe4);
+  border:0;box-shadow:0 1px 5px rgba(0,0,0,.5)}
+.mer-fond .heure .auto{flex:none;display:flex;align-items:center;gap:6px;height:34px;padding:0 11px 0 9px;
+  border-radius:999px;font:600 12.5px/1 system-ui,sans-serif;color:var(--creme,#f4efe4);
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);cursor:pointer}
+.mer-fond .heure .auto .pastille{width:8px;height:8px;border-radius:50%;background:#93a8bc}
+.mer-fond .heure .auto[aria-checked="true"]{background:var(--creme,#f4efe4);color:#08162a;border-color:var(--creme,#f4efe4)}
+.mer-fond .heure .auto[aria-checked="true"] .pastille{background:var(--rouge,#e23a3e)}
+
+/* le choix du bateau */
+.mer-fond .choix{position:absolute;left:14px;top:80px;z-index:4;display:flex;flex-direction:column;
+  align-items:stretch;gap:4px;padding:4px;border-radius:22px;background:rgba(6,18,33,.66);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto;width:max-content}
+.mer-fond .choix button{font:600 13px/1 system-ui,sans-serif;color:#e8eff5;background:transparent;
+  border:0;border-radius:18px;min-height:36px;padding:0 14px;cursor:pointer;white-space:nowrap;
+  text-align:left;transition:background-color .15s ease,color .15s ease}
+.mer-fond .choix button[aria-checked="true"]{background:var(--creme,#f4efe4);color:#08162a}
+.mer-fond .choix button:focus-visible{outline:3px solid var(--rouge,#e23a3e);outline-offset:2px}
+
+/* plus de girouette : le vent ne se règle plus à la main (Nicolas, 19/11/2026) */
+.mer-fond .vent{display:none!important}
+/* le cadran du vent, en bas à droite */
+.mer-fond .vent{position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:4;width:104px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--creme,#f4efe4);text-align:center;
+  pointer-events:auto}
+.mer-fond .vent .cadran{width:96px;height:96px;border-radius:50%;background:rgba(6,18,33,.62);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);touch-action:none;cursor:grab;outline:none;
+  -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.mer-fond .vent .cadran:active{cursor:grabbing}
+.mer-fond .vent svg{display:block;width:100%;height:100%}
+.mer-fond .vent .valeur{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;
+  text-shadow:0 1px 4px rgba(0,0,0,.85)}
+.mer-fond .vent .geste{font-size:10.5px;color:#c3d2e0;text-shadow:0 1px 4px rgba(0,0,0,.85)}
+
+/* la légende de la manœuvre, en bas à gauche */
+.mer-fond .legende{position:absolute;left:14px;bottom:14px;z-index:4;width:min(330px,calc(100% - 150px));
+  background:rgba(6,18,33,.66);color:var(--creme,#f4efe4);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-radius:12px;padding:12px 14px 10px;display:flex;flex-direction:column;gap:4px;text-align:left;
+  pointer-events:auto}
+.mer-fond .legende .oeil{margin:0;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#a8bccc}
+.mer-fond .legende .phase{margin:0;font-weight:700;font-size:17px;line-height:1.2;min-height:1.2em}
+.mer-fond .legende .detail{margin:0;font-size:12.5px;line-height:1.35;color:#b9cbdc;min-height:2.7em}
+.mer-fond .instruments{display:flex;gap:16px;margin:5px 0 0;padding:7px 0 0;
+  border-top:1px solid rgba(255,255,255,.16)}
+.mer-fond .instruments div{display:flex;flex-direction:column;min-width:0}
+.mer-fond .instruments dt{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#a8bccc}
+.mer-fond .instruments dd{margin:0;font-variant-numeric:tabular-nums;font-size:16px;font-weight:600;white-space:nowrap}
+.mer-fond .instruments dd small{font-size:10.5px;font-weight:500;color:#a8bccc;margin-left:2px}
+
+.mer-fond .rejouer{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:4;
+  font:600 13.5px/1 system-ui,sans-serif;color:#08162a;background:var(--creme,#f4efe4);border:0;border-radius:999px;
+  padding:10px 17px;min-height:42px;cursor:pointer;pointer-events:auto}
+.mer-fond .rejouer:active{transform:translateX(-50%) scale(.97)}
+.mer-fond .secours{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:24px;text-align:center;color:var(--creme,#f4efe4);z-index:2}
+
+/* le héros : plus qu'un texte posé sur l'eau */
+.hero.hero-mer{position:relative;max-width:none;margin:0;padding:0;text-align:center;
+  min-height:100svh;display:flex;align-items:center;justify-content:center;background:transparent;pointer-events:none}
+.hero-mer .hero-texte{position:relative;z-index:3;padding:2rem 1.4rem 7.75rem;pointer-events:none}
+.contenu a,.contenu button,.contenu input,.contenu select,.contenu textarea,
+.contenu summary,.contenu [tabindex],.contenu video,.contenu audio{pointer-events:auto}
+
+@media (max-width:820px){
+  .mer-fond .choix{left:10px;top:64px}
+  .mer-fond .legende{display:none}
+  .mer-fond .vent{top:auto;bottom:150px;left:8px;right:auto;transform:none;width:84px}
+  .mer-fond .vent .cadran{width:78px;height:78px}
+  .mer-fond .rejouer{bottom:12px}
+  .hero.hero-mer{align-items:flex-start}
+  .hero-mer .hero-texte{padding:13.2rem 1.2rem .5rem}
+  .hero-mer .reseaux-barre{gap:1.3rem;flex-wrap:wrap;margin-top:2.2rem}
+}
+@media (prefers-reduced-motion: reduce){
+  .mer-fond canvas{transition-duration:.2s}
+  .mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{transition:none}
+}
+</style>
+<script src="../mer-louvoyage.js?v=ec6f832f" defer></script>
+<script>
+/* les commandes de la scène s'effacent dès qu'on a quitté le haut de la page */
+(function(){
+  var m=document.getElementById('cadre'); if(!m) return;
+  function maj(){ var s=window.scrollY||window.pageYOffset||0;
+    m.classList.toggle('loin', s > window.innerHeight*0.72); }
+  window.addEventListener('scroll', maj, {passive:true});
+  window.addEventListener('resize', maj); maj();
+})();
+</script>
+<style>.mer-fond{z-index:-1}.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer,.mer-fond .geste{display:none!important}</style><!--mer-fin-->
+</body></html>

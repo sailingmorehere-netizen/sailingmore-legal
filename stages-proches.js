@@ -13,8 +13,10 @@ var DATA=null,POS=null,posFaite=false,vu=false;
 function position(fin){
   function ip(){fetch('https://ipwho.is/?fields=latitude,longitude,success').then(function(r){return r.json()})
     .then(function(d){if(d&&d.success&&d.latitude!=null)POS=[d.latitude,d.longitude]}).catch(function(){}).then(fin)}
-  if(!navigator.geolocation){ip();return}
-  navigator.geolocation.getCurrentPosition(function(p){POS=[p.coords.latitude,p.coords.longitude];fin()},ip,{timeout:6000,maximumAge:600000});
+  /* demande unique : geo-accueil.js (26/11/2026) ; ici on lit seulement la position déjà accordée */
+  var g=window.smGeo&&window.smGeo.get();
+  if(g){POS=[g.lat,g.lon];fin();return}
+  ip();
 }
 function dessiner(){
   var a=new Date().toISOString().slice(0,10);

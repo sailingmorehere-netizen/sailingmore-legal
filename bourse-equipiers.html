@@ -1,0 +1,824 @@
+<!doctype html><html lang="fr"><head><!--langue-debut--><script id="sm-langue-detecteur">
+(function(){
+  var L = ["fr", "en", "de", "it", "es", "pt"], ALIAS = {"nb": "no", "nn": "no", "iw": "he", "in": "id", "ji": "yi", "jw": "jv", "mo": "ro", "sh": "hr", "tl": "fil"};
+  function lu(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function ec(k,v){ try{ if(v===null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){} }
+  function base(c){ c = String(c||'').toLowerCase().replace(/_/g,'-'); var b = c.split('-')[0]; return ALIAS[b]||b; }
+  function connue(b){ return b === 'bzh' || L.indexOf(b) >= 0; }
+  /* Le choix d'une langue, mémorisé pour toutes les pages. Le breton garde le texte français. */
+  function retenir(v){
+    if(v === 'auto'){ ec('sm-bzh', null); ec('sm-langue', 'auto'); }
+    else if(v === 'bzh'){ ec('sm-bzh', '1'); ec('sm-langue', 'fr'); }
+    else { ec('sm-bzh', null); ec('sm-langue', v); }
+  }
+  window.smLangue = function(){
+    /* 1. l'adresse demandée */
+    var q = null; try{ q = new URLSearchParams(location.search).get('lang'); }catch(e){}
+    if(q){ var b = base(q); if(connue(b)){ retenir(b); return b; } }
+    /* 2. le choix du visiteur, s'il en a fait un */
+    var v = lu('sm-langue');
+    if(v && v !== 'auto' && connue(v)) return (v === 'fr' && lu('sm-bzh') === '1') ? 'bzh' : v;
+    /* 3. le français, toujours : aucune détection par le navigateur (25/11/2026) */
+    return 'fr';
+  };
+  window.smChoisirLangue = function(v){ retenir(v); };
+  window.SM_LANGUES = L;
+  /* Avant le premier pixel : la langue retenue dans l'attribut, pour le CSS et pour les pages. */
+  try{
+    var retenu = window.smLangue();
+    document.documentElement.setAttribute('data-sm-langue', retenu);
+    if(retenu !== 'bzh') document.documentElement.setAttribute('lang', retenu);
+  }catch(e){}
+})();
+</script><!--langue-fin--><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bourse aux équipiers : 13 groupes Facebook pour embarquer | Sailing More</title><link rel="canonical" href="https://sailingmore.fr/bourse-equipiers.html"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://sailingmore.fr/"},{"@type":"ListItem","position":2,"name":"La bourse aux équipiers","item":"https://sailingmore.fr/bourse-equipiers.html"}]}]}</script><meta name="description" content="La carte des groupes Facebook où l&#x27;on trouve un équipier ou un bateau : 13 groupes, 426 620 membres. Léman, France, Atlantique, Pacifique, Caraïbes, monde entier."><meta property="og:title" content="Bourse aux équipiers : 13 groupes Facebook pour embarquer | Sailing More"><meta property="og:description" content="La carte des groupes Facebook où l&#x27;on trouve un équipier ou un bateau : 13 groupes, 426 620 membres. Léman, France, Atlantique, Pacifique, Caraïbes, monde entier."><meta property="og:url" content="https://sailingmore.fr/bourse-equipiers.html"><meta property="og:type" content="website"><meta property="og:locale" content="fr_FR"><meta property="og:site_name" content="Sailing More"><meta property="og:image" content="https://sailingmore.fr/og-image.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://sailingmore.fr/og-image.jpg"><style>
+.entete{display:flex;align-items:center;justify-content:space-between;padding:0 1.2rem;
+  background:rgba(6,16,32,.96);border-bottom:1px solid rgba(126,214,214,.14);
+  --creme:#eef3f7;--gris:#9db2c6;--rouge:#e23a3e}
+.entete .nom{font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.82rem;
+  color:var(--gris);text-decoration:none}
+.entete .langues{display:flex;gap:.15rem;align-items:center;margin:0}
+.entete .langues button{background:none;border:0;color:var(--gris);font:inherit;font-size:.72rem;
+  letter-spacing:.06em;text-transform:uppercase;padding:.28rem .45rem;margin:0;border-radius:.35rem;
+  cursor:pointer}
+.entete .langues button:hover{color:#fff}
+.entete .langues button[aria-pressed="true"]{color:#0a1a2b;background:#7ed6d6;font-weight:700}
+@media(max-width:600px){
+  .entete .nom{font-size:.6rem;letter-spacing:.1em}
+  .entete .langues{gap:0}
+  .entete .langues button{font-size:.56rem;padding:.15rem .26rem;letter-spacing:0}
+}
+
+  .entete .menu-d{position:relative;margin-left:auto;margin-right:1.1rem}
+  .entete .menu-d summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:.45rem;
+    font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--creme);
+    border-bottom:1px solid rgba(226,58,62,.55);padding-bottom:1px}
+  .entete .menu-d summary::-webkit-details-marker{display:none}
+  .entete .menu-d summary::after{content:"";width:0;height:0;border:4px solid transparent;
+    border-top-color:currentColor;transform:translateY(1px);transition:transform .18s ease}
+  .entete .menu-d[open] summary{color:#fff;border-bottom-color:var(--rouge)}
+  .entete .menu-d[open] summary::after{transform:translateY(-1px) rotate(180deg)}
+  .entete .menu-d nav{position:absolute;right:0;top:calc(100% + .4rem);z-index:40;
+    display:grid;grid-template-columns:1fr 1fr;gap:.2rem;width:min(86vw,23rem);padding:.55rem;
+    max-height:calc(100vh - var(--h-entete) - 1rem);overflow-y:auto;
+    border-radius:.9rem;background:linear-gradient(180deg,rgba(12,27,44,.985),rgba(7,17,29,.985));
+    border:1px solid rgba(238,243,247,.14);box-shadow:0 24px 48px -18px rgba(0,0,0,.92);
+    animation:menu-descend .16s ease both}
+  @keyframes menu-descend{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  .entete .menu-d nav a{padding:.6rem .7rem;border-radius:.55rem;font-size:.82rem;line-height:1.2;
+    color:#e9f1f7;transition:background .14s ease,color .14s ease}
+  .entete .menu-d nav a:hover,.entete .menu-d nav a:focus-visible{background:rgba(126,214,214,.14);
+    color:#fff;outline:none}
+  .entete .menu-d nav a[aria-current="page"]{color:#fff;box-shadow:inset 2px 0 0 var(--rouge);
+    background:rgba(226,58,62,.10)}
+  .entete .menu-d nav a.legal{font-size:.74rem;color:var(--gris)}
+  .entete .menu-d nav a.legal:hover{color:#fff}
+  /* Téléphone : une seule colonne, du texte lisible, des lignes qu'on touche (23/11/2026 : « refais le
+     menu il est illisible sur tel »). En deux colonnes sur 390 px, les libellés se coupaient
+     (« Calendrier des / régates ») et chaque ligne mesurait 35 px, sous la cible tactile de 48 px. */
+  @media(max-width:600px){
+    .entete .menu-d{position:static;margin-right:.4rem}
+    .entete .menu-d summary{font-size:.78rem;min-height:44px;padding:0 .15rem}
+    .entete .menu-d nav{left:.4rem;right:.4rem;top:calc(100% + .3rem);width:auto;
+      grid-template-columns:1fr;gap:.1rem;padding:.45rem;background:#081624}
+    .entete .menu-d nav a{display:flex;align-items:center;min-height:48px;
+      padding:.6rem .8rem;font-size:1rem;line-height:1.25}
+    .entete .menu-d nav a.legal{min-height:42px;font-size:.9rem;padding:.5rem .8rem}
+    .entete .menu-d nav a.legal:first-of-type{margin-top:.35rem;
+      border-top:1px solid rgba(238,243,247,.14);padding-top:.7rem}
+  }
+
+:root{--h-entete:3.2rem}
+html{scroll-padding-top:calc(var(--h-entete) + .6rem)}
+[id]{scroll-margin-top:calc(var(--h-entete) + .6rem)}
+header.entete{position:sticky;top:0;z-index:30;height:var(--h-entete);flex-wrap:nowrap;
+  padding-top:0;padding-bottom:0}
+@media(max-width:600px){
+  :root{--h-entete:48px}
+  header.entete{padding-left:.7rem;padding-right:.7rem;gap:.4rem}
+  header.entete .nom{white-space:nowrap}
+}
+
+:root{--fond:#0a1a2b;--carte:#0f2438;--trait:#1d3549;--encre:#e8eef5;--doux:#9db2c7;--accent:#5fd3c4}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fond);color:var(--encre);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:inherit}
+.page{max-width:72rem;margin:0 auto;padding:11rem 1.4rem 5rem;
+  background:linear-gradient(180deg,rgba(8,20,32,0) 0,rgba(8,20,32,.55) 6rem,
+    rgba(8,20,32,.94) 13rem,#081420 18rem)}
+.page h1{font-size:clamp(1.7rem,3.6vw,2.6rem);margin:.2rem 0 .7rem}
+.chapo{color:var(--doux);max-width:46rem;margin:0 0 .4rem}
+/* L'annonce de l'application (Nicolas, 26/11/2026 : « tu peux dire en haut qu'on développe une
+   application nouvelle génération ») : en haut, avant l'accroche, sur un filet d'accent. */
+.annonce{margin:0 0 1rem;padding:.68rem .95rem;max-width:46rem;color:var(--encre);font-size:.94rem;
+  background:rgba(95,211,196,.07);border:1px solid rgba(95,211,196,.28);border-left:3px solid var(--accent);
+  border-radius:8px}
+.total{color:var(--doux);font-size:.86rem;margin:0 0 1.6rem}
+.retour{display:inline-block;color:var(--doux);text-decoration:none;font-size:.9rem;margin-bottom:.6rem}
+.bourses{display:flex;flex-direction:column;gap:.4rem;margin:1rem 0 0}
+.bourse{display:grid;grid-template-columns:minmax(0,1fr) auto 1.1rem;align-items:center;gap:.9rem;
+  padding:.62rem .9rem;background:var(--carte);border:1px solid var(--trait);border-radius:10px;
+  text-decoration:none;min-width:0}
+.bourse:hover,.bourse:focus-visible{border-color:var(--accent);background:#12293e}
+.bourse .b-tete{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;min-width:0}
+.bourse strong{font-weight:600;font-size:.98rem;line-height:1.25}
+.bourse .ou{color:var(--doux);font-size:.78rem;letter-spacing:.04em;text-transform:uppercase}
+.bourse .nb{color:var(--accent);font-size:.86rem;white-space:nowrap}
+.bourse .fl{color:var(--doux);font-size:1rem;text-align:right}
+.bourse .badge{align-self:flex-start;color:var(--doux);border:1px solid var(--trait);border-radius:99px;
+  padding:.05rem .5rem;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase}
+.note{margin-top:1.6rem;color:var(--doux);font-size:.86rem;border-top:1px solid var(--trait);padding-top:1rem}
+/* La carte : même brique que l'accueil, et le titre de section au même réglage que les autres cartes
+   du site (.74rem/.06em/400) — seule la couleur reste celle de cet endroit (Nicolas, 26/11/2026). */
+.monde{max-width:62rem;margin:0 auto 2.4rem;padding:0 .2rem}
+.monde h2{font-size:.74rem;letter-spacing:.06em;font-weight:400;text-transform:uppercase;
+  color:var(--doux);margin:1.4rem 0 .5rem}
+.planisphere{position:relative;border:1px solid var(--trait);border-radius:12px;overflow:hidden;
+  background:#081521}
+.planisphere img{display:block;width:100%;height:auto;opacity:.92}
+/* La mini-carte France se pose en bas à droite DANS la carte (Nicolas, 26/11/2026 : « la mini carte
+   doit être en bas à droite dans la carte reçue »). Elle recouvre le Pacifique sud, la seule zone de
+   la carte où aucun bateau ne navigue. Sur téléphone, elle repasse dessous en pleine largeur. */
+.planisphere .encart-france{position:absolute;right:.7rem;bottom:.7rem;width:min(250px,40%);
+  margin:0;z-index:4;box-shadow:0 8px 22px rgba(3,8,14,.5)}
+@media (max-width:700px){.planisphere .encart-france{position:static;width:100%;margin:.6rem 0 0;
+  box-shadow:none}}
+/* Le sélecteur de bateau de la mer de fond (F50, TP52, 19 pieds) n'a rien à faire ici : il se pose
+   en haut à gauche et passe par-dessus le titre (vu le 26/11/2026 à la première capture). La mer de
+   fond reste, elle ne sert qu'à l'ambiance. */
+.mer-fond #choix{display:none}
+</style><script id="sm-langue-detecteur">
+(function(){
+  var L = ["fr", "en", "de", "it", "es", "pt"], ALIAS = {"nb": "no", "nn": "no", "iw": "he", "in": "id", "ji": "yi", "jw": "jv", "mo": "ro", "sh": "hr", "tl": "fil"};
+  function lu(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function ec(k,v){ try{ if(v===null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){} }
+  function base(c){ c = String(c||'').toLowerCase().replace(/_/g,'-'); var b = c.split('-')[0]; return ALIAS[b]||b; }
+  function connue(b){ return b === 'bzh' || L.indexOf(b) >= 0; }
+  /* Le choix d'une langue, mémorisé pour toutes les pages. Le breton garde le texte français. */
+  function retenir(v){
+    if(v === 'auto'){ ec('sm-bzh', null); ec('sm-langue', 'auto'); }
+    else if(v === 'bzh'){ ec('sm-bzh', '1'); ec('sm-langue', 'fr'); }
+    else { ec('sm-bzh', null); ec('sm-langue', v); }
+  }
+  window.smLangue = function(){
+    /* 1. l'adresse demandée */
+    var q = null; try{ q = new URLSearchParams(location.search).get('lang'); }catch(e){}
+    if(q){ var b = base(q); if(connue(b)){ retenir(b); return b; } }
+    /* 2. le choix du visiteur, s'il en a fait un */
+    var v = lu('sm-langue');
+    if(v && v !== 'auto' && connue(v)) return (v === 'fr' && lu('sm-bzh') === '1') ? 'bzh' : v;
+    /* 3. le français, toujours : aucune détection par le navigateur (25/11/2026) */
+    return 'fr';
+  };
+  window.smChoisirLangue = function(v){ retenir(v); };
+  window.SM_LANGUES = L;
+  /* Avant le premier pixel : la langue retenue dans l'attribut, pour le CSS et pour les pages. */
+  try{
+    var retenu = window.smLangue();
+    document.documentElement.setAttribute('data-sm-langue', retenu);
+    if(retenu !== 'bzh') document.documentElement.setAttribute('lang', retenu);
+  }catch(e){}
+})();
+</script>  <link rel="alternate" type="application/rss+xml" title="Sailing More" href="https://sailingmore.fr/feed.xml">
+<style id="equilibre">
+/* Rééquilibrage design — 20/11/2026. Posé en dernier dans chaque page : il l'emporte sur les styles d'origine. */
+
+/* 1. Une police de marque, la même sur tous les appareils (Inter, licence SIL OFL, hébergée sur le site) */
+@font-face{font-family:"Inter SM";src:url(fonts/inter-light.woff) format("woff");font-weight:300;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-regular.woff) format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-semibold.woff) format("woff");font-weight:500 700;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-black.woff) format("woff");font-weight:800 900;font-display:swap}
+body,button,input,textarea,select{font-family:"Inter SM",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+
+/* 2. Les couleurs de la charte : marine, panneaux, crème, rouge. Le turquoise et l'or rentrent dans le rang. */
+:root{--eau:#f4efe4;--ambre:#f4efe4}
+.grand b{color:#f4efe4!important}
+
+/* 3. « Le rouge souligne, il n'écrit pas » */
+.accroche .rouge{color:inherit!important;text-decoration:underline;text-decoration-color:#e23a3e;
+  text-decoration-thickness:2px;text-underline-offset:.24em}
+.bulle i,.bulle i span{color:#f4efe4!important}
+.bulle{border-left:2px solid #e23a3e!important}
+
+/* 4. « Filets droits, rien de franchement arrondi » */
+.cadre,.carte-kit,.planisphere,.bulle,.carte-jeu,.cookies,.cookies button,.langues button,
+.anneau,.anneau img,.vignette img{border-radius:0!important}
+.cadre,.carte-kit,.carte-jeu{background-image:none!important;background-color:#0f2438!important;
+  border:1px solid rgba(244,239,228,.12)!important;box-shadow:none!important}
+.anneau{background:rgba(244,239,228,.22)!important}
+
+/* 5. Rien sous 12 px : le cœur de cible a souvent plus de 50 ans */
+.grand span,.tarif-ce,.tarif-notes,.kit-note,label span,.bulle b,.bulle i,.bulle i span,
+figcaption strong,figcaption span:not(.siecle),.retour,.ann-carte,.page h2,.date,.geste,.bouton span{font-size:12px!important}
+.siecle{font-size:11px!important;color:rgba(195,214,230,.75)!important}
+
+/* 6. Réseaux en crème, couleur d'origine au survol */
+.reseau svg{filter:grayscale(1) brightness(2.4);transition:filter .2s}
+.reseau:hover svg,.reseau:focus-visible svg{filter:none}
+
+/* 7. Bandeau cookies : une ligne fine sous l'en-tête, dans le vide du haut de page, qui ne cache plus les chiffres */
+.cookies{top:3.4rem!important;bottom:auto!important;left:50%!important;right:auto!important;transform:translateX(-50%);
+  width:max-content;max-width:calc(100% - 1.2rem)!important;margin:0!important;display:flex!important;align-items:center;gap:.9rem;
+  padding:.45rem .55rem .45rem .9rem!important;font-size:12px!important;line-height:1.35;background:#0f2438!important;
+  border:1px solid rgba(244,239,228,.15)!important;border-left:2px solid #e23a3e!important;box-shadow:none!important;animation:none!important}
+.cookies[hidden]{display:none!important}
+.cookies p{margin:0!important}
+.cookies button{flex:none;background:transparent!important;color:#f4efe4!important;border:1px solid #e23a3e!important;
+  padding:.35rem .8rem!important;font-size:12px!important;margin:0!important}
+.cookies a{text-decoration:underline;text-decoration-color:#e23a3e}
+body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
+
+/* 8. En-tête mobile : le nom sur une ligne */
+.entete .nom{white-space:nowrap}
+@media (max-width:480px){
+  .entete .nom{font-size:.72rem;letter-spacing:.1em}
+  .langues button{padding-left:.3rem!important;padding-right:.3rem!important}
+  .accroche{padding:0 1.2rem}
+  .cookies{top:auto!important;bottom:.6rem!important;left:.6rem!important;right:.6rem!important;transform:none;width:auto;
+    max-width:none!important;gap:.6rem;padding:.4rem .45rem .4rem .7rem!important;font-size:11.5px!important}
+  .cookies button{padding:.3rem .6rem!important}
+}
+
+/* 9. Un seul style de titre pour les pages secondaires */
+.page h1{font-weight:300;text-transform:uppercase;letter-spacing:.02em}
+</style>
+</head><body><div class="mer-fond mer-fond-commandes">
+  <div class="choix" id="choix" role="radiogroup" aria-label="Bateau"></div>
+</div>
+<header class="entete"><a class="nom" href="/">Sailing More</a><div class="lg"><span hidden>Langue</span><span class="globe" aria-hidden="true"></span><span class="code" aria-hidden="true">FR</span><span class="chev" aria-hidden="true"></span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto (langue du navigateur)</option><option value="fr">FR · Français</option><option value="en">EN · English</option><option value="de">DE · Deutsch</option><option value="it">IT · Italiano</option><option value="es">ES · Español</option><option value="pt">PT · Português</option><option value="bzh">BZH · Brezhoneg</option></select></div><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="de" aria-pressed="false">DE</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="/">Accueil</a><a href="regates.html">Calendrier des régates</a><a href="regles-de-course.html">Règles de course</a><a href="stages.html">Stages de voile</a><a href="cours.html">Cours théoriques</a><a href="jeux.html">Jeux</a><a href="bateaux.html">Bateaux</a><a href="bourse-equipiers.html" aria-current="page">Bourse aux équipiers</a><a href="carte.html">Carte du Léman</a><a href="lexique.html">Lexique</a><a href="chants-de-marin.html">Chants de marins</a><details class="sous-m" data-sous="chants"><summary>Les 130 chants de marins</summary><nav class="sous-liste" aria-label="Chants de marins"><a href="chant-haul.html">Haul Away Joe</a><a href="chant-wellerman.html">Wellerman</a><a href="chant-merck.html">Merck toch hoe sterck</a><a href="chant-lurrighan.html">Leis a Lurrighan</a><a href="chant-trimartolod.html">Tri Martolod</a><a href="chant-santiano.html">Santiano</a><a href="chant-shenandoah.html">Shenandoah</a><a href="chant-adieu-maimuna.html">Adieu to Maimuna</a><a href="chant-homeward-bound.html">Homeward Bound</a><a href="chant-rolling-home.html">Rolling Home</a><a href="chant-dreadnought.html">The Dreadnought</a><a href="chant-la-pique.html">La Pique</a><a href="chant-doo-me-ama.html">Doo me ama</a><a href="chant-farewell-and-adieu.html">Farewell and Adieu</a><a href="chant-blow-ye-winds-morning.html">Blow Ye Winds, in the Morning</a><a href="chant-unmooring.html">Unmooring</a><a href="chant-boston.html">Boston</a><a href="chant-female-smuggler.html">The Female Smuggler</a><a href="chant-come-loose-every-sail.html">Come, Loose Every Sail to the Breeze</a><a href="chant-sally-brown.html">Sally Brown</a><a href="chant-will-watch.html">Will Watch</a><a href="chant-shannon-chesapeake.html">Shannon and Chesapeake</a><a href="chant-good-bye-fare-you-well.html">Good-bye, Fare You Well</a><a href="chant-across-western-ocean.html">Across the Western Ocean</a><a href="chant-johns-gone-to-hilo.html">John's Gone to Hilo</a><a href="chant-one-more-day.html">One More Day</a><a href="chant-were-all-bound-to-go.html">We're All Bound to Go</a><a href="chant-lowlands.html">Lowlands</a><a href="chant-a-roving.html">A-Roving</a><a href="chant-reuben-ranzo.html">Reuben Ranzo</a><a href="chant-stand-to-your-ground.html">Stand to Your Ground</a><a href="chant-stormalong.html">Stormalong</a><a href="chant-blow-the-man-down.html">Blow the Man Down</a><a href="chant-blow-boys-blow.html">Blow, Boys, Blow</a><a href="chant-the-whale.html">The Whale</a><a href="chant-the-fishes.html">The Fishes</a><a href="chant-admiral-benbow.html">Admiral Benbow</a><a href="chant-high-barbaree.html">High Barbaree</a><a href="chant-cheerly-man.html">Cheer'ly Man</a><a href="chant-hog-eye-man.html">The Hog-Eye Man</a><a href="chant-saucy-arethusa.html">The Saucy Arethusa</a><a href="chant-boney.html">Boney</a><a href="chant-well-ranzo-way.html">We'll Ranzo-Way</a><a href="chant-clear-de-track.html">Clear de Track, Let de Bulgine Run</a><a href="chant-jamboree.html">Jamboree</a><a href="chant-o-fare-you-well.html">O, Fare You Well, My Bonny Young Girls</a><a href="chant-dead-horse.html">The Dead Horse</a><a href="chant-capitaine-du-mexico.html">C'est le capitaine du « Mexico »</a><a href="chant-bound-rio-grande.html">Bound for the Rio Grande</a><a href="chant-wild-goose-shanty.html">The Wild Goose Shanty</a><a href="chant-drunken-sailor.html">What Shall We Do with the Drunken Sailor?</a><a href="chant-good-morning-ladies.html">Good Morning, Ladies All</a><a href="chant-hanging-johnny.html">Hanging Johnny</a><a href="chant-hilo-somebody.html">Hilo Somebody</a><a href="chant-run-let-the-bullgine.html">Oh, Run, Let the Bullgine Run</a><a href="chant-whisky-johnny.html">Whisky Johnny</a><a href="chant-haul-the-bowlin.html">We'll Haul the Bowlin'</a><a href="chant-black-ball-line.html">The Black Ball Line</a><a href="chant-a-roving-ii.html">A-Roving (II)</a><a href="chant-banks-of-sacramento.html">The Banks of Sacramento</a><a href="chant-the-shaver.html">The Shaver</a><a href="chant-paddy-works-railway.html">Paddy Works on the Railway</a><a href="chant-cant-you-dance-polka.html">Can't You Dance the Polka?</a><a href="chant-fire-down-below.html">Fire Down Below</a><a href="chant-shallow-brown.html">Shallow Brown</a><a href="chant-round-the-corner-sally.html">Round the Corner Sally</a><a href="chant-my-tommys-gone-away.html">My Tommy's Gone Away</a><a href="chant-sing-fare-you-well.html">Sing Fare You Well</a><a href="chant-lizer-lee.html">Lizer Lee</a><a href="chant-hundred-years-eastern-shore.html">A Hundred Years on the Eastern Shore</a><a href="chant-sailor-likes-his-bottle.html">The Sailor Likes His Bottle, O</a><a href="chant-handy-jim.html">Handy Jim</a><a href="chant-ved-balasthjoning.html">Ved Balasthjoning</a><a href="chant-sally-racket.html">Sally Racket</a><a href="chant-pay-me-the-money-down.html">Pay Me the Money Down</a><a href="chant-home-dearie-home.html">Home, Dearie, Home</a><a href="chant-john-brown.html">John Brown</a><a href="chant-plains-of-mexico.html">The Plains of Mexico</a><a href="chant-heave-away-my-johnny.html">Heave Away, My Johnny</a><a href="chant-johnny-boker.html">Johnny Boker</a><a href="chant-haul-away-joe-terry.html">Haul Away, Joe</a><a href="chant-miss-lucy-long.html">Miss Lucy Long</a><a href="chant-hilo-john-brown.html">Hilo, John Brown</a><a href="chant-bully-boat.html">The Bully Boat Is Coming</a><a href="chant-hilonday.html">Hilonday</a><a href="chant-voice-of-her-i-love.html">The Voice of Her I Love</a><a href="chant-old-storm-along.html">Old Storm Along</a><a href="chant-so-handy-my-girls.html">So Handy, My Girls</a><a href="chant-tommys-gone-to-hilo.html">Tommy's Gone to Hilo</a><a href="chant-south-australia.html">South Australia</a><a href="chant-a-yankee-ship.html">A Yankee Ship</a><a href="chant-st-helena-soldier.html">St. Helena Soldier</a><a href="chant-rio-grande-smith.html">Rio Grande</a><a href="chant-haulin-the-bowlin.html">Haulin' the Bowlin'</a><a href="chant-bull-chimes.html">Run, Let the Bull Chimes Run</a><a href="chant-whisky-for-my-johnny.html">Whisky for My Johnny</a><a href="chant-sally-brown-smith.html">Sally Brown (Smith)</a><a href="chant-bonny.html">Bonny</a><a href="chant-ali-alo.html">Ali ! alo !</a><a href="chant-toms-gone-to-hilo.html">Tom's Gone to Hilo</a><a href="chant-billy-boy.html">Billy Boy</a><a href="chant-chanson-de-matelots.html">Chanson de Matelots</a><a href="chant-chanson-maritime.html">Chanson Maritime</a><a href="chant-hamburg-ist-ein-schones-stadtchen.html">Hamburg ist ein schones Stadtchen</a><a href="chant-le-trente-et-un-du-mois-d-aout.html">Le trente et un du mois d'aout</a><a href="chant-poor-paddy-works-on-the-railway.html">Poor Paddy Works on the Railway</a><a href="chant-sling-the-flowing-bowl.html">Sling the Flowing Bowl</a><a href="chant-the-twenty-fourth-of-february.html">The Twenty-fourth of February</a><a href="chant-wenn-das-atlantische-meer.html">Wenn das Atlantische Meer</a><a href="chant-blow-my-bully-boys.html">Blow, my bully boys</a><a href="chant-cheer-ly-men.html">Cheer'ly, men</a><a href="chant-it-s-time-for-us-to-leave-her.html">It's time for us to leave her</a><a href="chant-whisky.html">Whisky</a><a href="chant-breton-sailors-litany.html">Breton Sailors' Litany</a><a href="chant-fenesta-vascia.html">Fenesta vascia</a><a href="chant-la-fata-di-amalfi.html">La Fata di Amalfi</a><a href="chant-le-petit-navire.html">Le Petit Navire</a><a href="chant-le-retour-du-mousse.html">Le Retour du Mousse</a><a href="chant-les-marins-de-groix.html">Les Marins de Groix</a><a href="chant-morgen-muss-ich-fort-von-hier.html">Morgen muss ich fort von hier</a><a href="chant-nagareymna.html">Nagareymna</a><a href="chant-och-nan-och.html">Och nan och</a><a href="chant-pauvre-pierre.html">Pauvre Pierre</a><a href="chant-santa-lucia.html">Santa Lucia</a><a href="chant-wandrer-s-nacht-lied.html">Wandrer's Nacht-Lied</a><a href="chant-la-chanson-des-mariniers.html">La Chanson des Mariniers</a><a href="chant-les-enfants-de-la-mer.html">Les Enfants de la Mer</a><a href="chant-the-drummer-and-the-cook.html">The Drummer and the Cook</a><a href="chant-ved-balasthioning.html">Ved Balasthioning</a><a href="chant-whoop-jamboree.html">Whoop Jamboree</a></nav></details><a href="ports.html">Ports du monde</a><a href="simulateur.html">Simulateur de priorités</a><a href="annonceurs.html">Annonceurs</a></nav></details></header><style>
+/* La langue : une pastille du site, pas un contrôle du système (Nicolas, 23/11/2026 : « pour la barre
+   des langues il faut un truc plus joli »). Plus de cadre blanc : un globe, le code de la langue en
+   capitales comme les libellés de la barre, le filet rouge de MENU dessous, et le <select> natif posé
+   transparent par-dessus — la roue iOS/Android et les lecteurs d'écran gardent leur menu à eux. */
+.lg{position:relative;display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .1rem;margin-left:.25rem;
+  border-bottom:1px solid rgba(226,58,62,.6);cursor:pointer;line-height:1}
+.lg:hover{border-bottom-color:#fff}
+.lg:focus-within{outline:1px solid #e23a3e;outline-offset:4px}
+.lg .globe{width:.86rem;height:.86rem;flex:0 0 auto;opacity:.85;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e8eef4' stroke-width='1.7'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cellipse cx='12' cy='12' rx='4' ry='9'/%3E%3Cpath d='M3 12h18'/%3E%3C/svg%3E") center/contain no-repeat}
+.lg .code{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:#e8eef4}
+.lg .chev{width:.36rem;height:.36rem;margin:-.14rem .1rem 0 .18rem;opacity:.7;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
+.lg select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:1rem;
+  appearance:none;-webkit-appearance:none;border:0;background:transparent;color:transparent}
+.lg select:focus{outline:none}
+.lg option{color:#10161f;background:#fff}
+@media (max-width:520px){.lg{padding:.3rem .1rem}}
+@media (pointer:coarse){.lg{min-height:44px;min-width:3.4rem;justify-content:center;gap:.34rem}}
+</style><script>
+(function(){
+  var d = document.querySelector('.entete .menu-d');
+  if(!d) return;
+  document.addEventListener('click', function(e){ if(!d.contains(e.target)) d.open = false; });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') d.open = false; });
+})();
+</script><script>
+(function(){
+  /* La carte plein écran se cale sous la barre du site : elle en mesure la hauteur réelle.
+     Avant tout le reste — une page sans menu de langues a quand même une carte à caler. */
+  function caler(){
+    var b = document.querySelector(".entete"), c = document.querySelector(".cl.m-carte");
+    if(b && c) document.documentElement.style.setProperty("--barre", b.offsetHeight + "px");
+  }
+  caler(); addEventListener("load", caler); addEventListener("resize", caler); setTimeout(caler, 300);
+  var sel = document.getElementById("langue-sel"), zone = document.getElementById("langues");
+  if(!sel || !zone) return;
+  /* Le breton (valeur « bzh ») n'a pas de bloc de texte dans les pages : choisi, il laisse la page en
+     français (clé `sm-langue` = fr, que les pages savent lire) et pose un drapeau `sm-bzh`. Ce script
+     ajoute alors l'encart, garde `lang="br"` (le code IANA ; « bzh » n'y est pas) et la pastille BZH.
+     `?lang=xx` choisit la langue avant que les scripts des pages ne la lisent. */
+  var SIX = ["fr", "en", "de", "it", "es", "pt"];
+  function st(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function ec(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
+  /* Plus aucune détection ici : le socle l'a faite dans le <head>, avant le premier pixel
+     (24/11/2026, une seule règle pour tout le site). `?lang=` et le choix du visiteur y sont déjà
+     rangeés sous `sm-langue`. */
+  var LANGUES = (typeof window !== "undefined" && window.SM_LANGUES) || SIX;
+  function bzh(){
+    var l = (typeof window.smLangue === "function") ? window.smLangue() : null;
+    if(l === "bzh") return true;
+    if(l) return false;                       /* une langue choisie l'emporte sur le drapeau */
+    return st("sm-bzh") === "1";
+  }
+  function encart(){
+    var e = document.getElementById("encart-bzh"), actif = bzh();
+    if(document.querySelector('meta[name="sm-bzh"]')) actif = false;      /* page dont le breton existe */
+    if(!actif){ if(e) e.remove(); return; }
+    if(e) return;
+    var h = document.querySelector(".entete");
+    if(!h) return;
+    e = document.createElement("p");
+    e.id = "encart-bzh"; e.setAttribute("role", "note");
+    e.style.cssText = "margin:0;padding:.6rem .9rem;background:#0e2338;color:#e8eef4;font-size:.9rem;" +
+      "border-bottom:1px solid rgba(255,255,255,.16)";
+    e.appendChild(document.createTextNode("Cette page n’est pas encore traduite en breton. Écrivez-nous à "));
+    var a = document.createElement("a");
+    a.className = "courriel"; a.style.color = "inherit";
+    a.setAttribute("data-a", "hello.sailingmore"); a.setAttribute("data-b", "gmail.com");
+    var ad = "hello.sailingmore" + "@" + "gmail.com";
+    a.href = "mailto:" + ad; a.textContent = ad;
+    e.appendChild(a);
+    e.appendChild(document.createTextNode(" pour proposer la traduction."));
+    h.parentNode.insertBefore(e, h.nextSibling);
+  }
+  function balise(){
+    if(bzh() && document.documentElement.lang !== "br") document.documentElement.lang = "br";
+  }
+  /* Le code affiché sur la pastille : la langue choisie, ou celle que la page affiche en mode auto. */
+  var code = document.querySelector(".lg .code");
+  function etiq(v){
+    if(!code) return;
+    if(bzh()){ code.textContent = "BZH"; return; }
+    if(v && v !== "auto" && v !== "bzh"){ code.textContent = v.toUpperCase(); return; }
+    var l = (document.documentElement.lang || "fr").slice(0, 2).toUpperCase();
+    code.textContent = l || "FR";
+  }
+  function lire(){
+    if(st("sm-bzh") === "1" && st("sm-langue") !== "auto" && st("sm-langue")) return "bzh";
+    return st("sm-langue") || "auto";
+  }
+  function poser(){
+    balise(); encart();
+    var v = lire(), o = sel.options;
+    for(var i = 0; i < o.length; i++){ if(o[i].value === v){ sel.value = v; etiq(v); return; } }
+    sel.value = "auto"; etiq("auto");
+  }
+  sel.addEventListener("change", function(){
+    var v = sel.value, bs = zone.querySelectorAll("button[data-lang]");
+    var cible = (v === "bzh") ? "fr" : v;             /* le breton s'affiche sur le texte français */
+    ec("sm-bzh", v === "bzh" ? "1" : null);
+    for(var i = 0; i < bs.length; i++){
+      if(bs[i].getAttribute("data-lang") === cible){ bs[i].click(); break; }
+    }
+    ec("sm-bzh", v === "bzh" ? "1" : null);
+    balise(); encart(); etiq(v);
+  });
+  /* la page change de langue sans passer par le menu (auto, bouton, retour arrière) */
+  if(window.MutationObserver){
+    new MutationObserver(function(){ balise(); encart(); etiq(sel.value); })
+      .observe(document.documentElement, {attributes: true, attributeFilter: ["lang"]});
+  }
+  poser();
+  addEventListener("load", poser);
+  setTimeout(poser, 400);
+
+})();
+</script>
+<main class="page"><a class="retour" href="/" data-t="retour">← Le site</a><h1 data-t="titre">La bourse aux équipiers</h1><p class="annonce" data-t="annonce">On développe une application nouvelle génération pour la bourse aux équipiers — en attendant, ces groupes restent le meilleur endroit pour embarquer.</p><p class="chapo" data-t="chapo">Ton prochain équipier est déjà là-dedans, en train de chercher un bateau. Treize groupes Facebook où les équipages se font — tu entres, tu te présentes, tu embarques. On ne prend rien, on ne modère rien, on ne s&#x27;interpose pas.</p><p class="total" data-t="total" data-n="13" data-m="426 620">13 groupes, 426 620 membres en tout.</p><section class="monde"><h2 data-t="carte">Où sont les groupes</h2><div class="planisphere"><img src="carte-monde.png" alt="Carte du monde des bourses aux équipiers : un bateau par groupe"><a class="pt-b robot bord-g bas errant promenade" data-errant="1" data-pts="[[31.27,32.89],[39.22,28.2],[43.84,32.84],[42.54,23.66],[40.42,31.96],[40.55,24.58],[38.8,36.61],[31.96,32.88],[38.07,25.71],[43.19,29.16],[41.82,20.51],[37.16,28.56],[39.82,19.8],[38.06,32.09],[40.27,45.78],[43.75,52.25],[38.63,45.41],[38.75,33.47],[42.07,45.66],[34.77,38.42],[40.41,46.16]]" href="https://www.facebook.com/groups/VirtualRegattaOffshore/" target="_blank" rel="noopener" title="Virtual Regatta Offshore — ≈ 39 K participants" aria-label="Virtual Regatta Offshore — ≈ 39 K participants, bourse aux équipiers" style="left:22.61%;top:27.89%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1.2" stroke-linejoin="round"><path d="M.8 20.4h30.4L28 26.4H4z" fill="#f2f5f8"/><path d="M.8 20.4h6.2l-1.6 6H2.2z" fill="#e23a3e"/><path d="M25 20.4h6.2l-1.4 6h-3.2z" fill="#e23a3e"/><path d="M11.2 20.4 13 12.6h6.6l1.8 7.8z" fill="#9db2c6"/></g><path d="M16.4 2.6 27 13.6h-10.6z" fill="#e23a3e" stroke="#08131f" stroke-width="1.2"/><path d="M15.8 13.6V2.4" stroke="#08131f" stroke-width="1.8"/><circle cx="11.6" cy="17.2" r="1.7" fill="#e23a3e" stroke="#08131f" stroke-width=".9"/><circle cx="11.6" cy="17.2" r=".6" fill="#08131f"/><circle cx="15.6" cy="17.2" r="1.7" fill="#e23a3e" stroke="#08131f" stroke-width=".9"/><circle cx="15.6" cy="17.2" r=".6" fill="#08131f"/><path d="M15.8 2.4 18.6.9" stroke="#08131f" stroke-width="1.2"/><circle cx="19.2" cy=".7" r="1.1" fill="#9db2c6" stroke="#08131f" stroke-width=".8"/></svg><span class="bulle"><b>Virtual Regatta Offshore</b><i>≈ 39 K <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b bas promenade vif" data-pts="[[52.9,21.58],[50.22,30.98],[57.98,27.57],[52.7,26.74],[48.86,21.8],[57.43,22.19],[65.89,30.65],[79.32,42.51],[79.5,18.13],[86.34,28.21],[76.22,26.97],[64.36,18.45],[55.6,36.91],[54.55,55.64],[80.06,55.86],[61.37,49.7],[38.5,61.33],[31.41,73.93],[32.2,55.22],[25.31,37.83]]" data-vif="1" href="https://www.facebook.com/groups/buysellsailingboatequipment/" target="_blank" rel="noopener" title="Buy & Sell Sailing Boat Equipment — Monde entier — ≈ 2 K participants" aria-label="Buy & Sell Sailing Boat Equipment — Monde entier — ≈ 2 K participants, groupe de vente" style="left:52.90%;top:21.58%"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.4v8.2" stroke="#08131f" stroke-width="1.6" stroke-linecap="round"/><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/><rect x="8.4" y="11.6" width="15.2" height="10.6" rx=".7" fill="#c8873f"/><path d="M8.4 15.2h15.2" stroke-width=".8"/></g><path d="M14.9 11.6h2.4v10.6h-2.4z" fill="#f2f5f8"/></svg><span class="bulle"><b>Buy & Sell Sailing Boat Equipment</b><span class="zone">Monde entier</span><i>≈ 2 K <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b robot bas promenade vif" data-pts="[[47.3,29.0],[48.52,20.58],[54.54,26.22],[57.11,17.95],[56.17,22.48],[57.83,28.6],[67.05,18.06],[67.79,35.3],[77.62,17.01],[87.01,32.21],[78.24,33.24],[79.93,43.23],[76.53,25.52],[52.27,38.59],[70.47,42.77],[59.94,62.8],[35.56,62.77],[28.69,38.75],[18.3,25.56],[22.27,43.28]]" data-vif="1" href="https://www.facebook.com/groups/virtualregattainshore/" target="_blank" rel="noopener" title="Virtual Regatta Inshore" aria-label="Virtual Regatta Inshore, bourse aux équipiers" style="left:47.30%;top:29.00%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1.2" stroke-linejoin="round"><path d="M.8 20.4h30.4L28 26.4H4z" fill="#f2f5f8"/><path d="M.8 20.4h6.2l-1.6 6H2.2z" fill="#e23a3e"/><path d="M25 20.4h6.2l-1.4 6h-3.2z" fill="#e23a3e"/><path d="M11.2 20.4 13 12.6h6.6l1.8 7.8z" fill="#9db2c6"/></g><path d="M16.4 2.6 27 13.6h-10.6z" fill="#e23a3e" stroke="#08131f" stroke-width="1.2"/><path d="M15.8 13.6V2.4" stroke="#08131f" stroke-width="1.8"/><circle cx="11.6" cy="17.2" r="1.7" fill="#e23a3e" stroke="#08131f" stroke-width=".9"/><circle cx="11.6" cy="17.2" r=".6" fill="#08131f"/><circle cx="15.6" cy="17.2" r="1.7" fill="#e23a3e" stroke="#08131f" stroke-width=".9"/><circle cx="15.6" cy="17.2" r=".6" fill="#08131f"/><path d="M15.8 2.4 18.6.9" stroke="#08131f" stroke-width="1.2"/><circle cx="19.2" cy=".7" r="1.1" fill="#9db2c6" stroke="#08131f" stroke-width=".8"/></svg><span class="bulle"><b>Virtual Regatta Inshore</b></span></a><a class="pt-b errant promenade" data-errant="1" data-pts="[[66.43,49.7],[72.2,60.9],[65.87,75.33],[63.07,81.36],[68.89,69.42],[82.62,76.48],[75.53,82.76],[64.53,72.29],[70.7,61.87],[67.73,50.8],[72.54,61.56],[67.6,67.46],[76.62,66.91],[67.54,60.46],[73.16,53.71],[67.81,58.89],[71.74,54.01],[77.28,60.22],[69.67,62.21],[68.72,48.15],[68.09,63.31]]" href="https://www.facebook.com/groups/SailingCrewFinderWholeWorld/" target="_blank" rel="noopener" title="Bourse aux équipiers monde entier — ≈ 181 K participants" aria-label="Bourse aux équipiers monde entier — ≈ 181 K participants, bourse aux équipiers" style="left:58.93%;top:49.70%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers monde entier</b><i>≈ 181 K <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b bas derive promenade" data-derive="1" data-bx="38.89" data-by="33.33" data-amp="7.00" data-pts="[[38.89,33.33],[40.41,41.87],[36.43,26.01],[38.59,34.19],[42.2,26.93],[36.16,27.76],[44.29,29.51],[42.2,44.88],[38.98,38.87],[44.72,52.53],[41.81,40.24],[36.03,36.56],[41.56,40.52],[36.13,40.48],[37.03,28.2],[36.86,36.28],[43.05,20.89],[41.91,30.69],[33.08,32.75],[40.84,34.77],[38.89,33.33]]" href="https://www.facebook.com/groups/sailingcrewfinderatlantic/" target="_blank" rel="noopener" title="Bourse aux équipiers Atlantique — ≈ 6 K participants" aria-label="Bourse aux équipiers Atlantique — ≈ 6 K participants, bourse aux équipiers" style="left:38.89%;top:33.33%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers Atlantique</b><i>≈ 6 K <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b bord-g derive promenade" data-derive="1" data-bx="5.56" data-by="50.00" data-amp="5.00" data-pts="[[5.56,50.0],[14.4,55.98],[24.49,79.93],[19.34,91.27],[28.22,87.14],[17.93,84.82],[14.93,70.72],[17.25,89.59],[13.25,62.99],[23.3,81.12],[13.95,61.69],[20.71,50.09],[23.94,71.68],[17.37,92.82],[5.94,90.5],[21.52,78.59],[24.34,52.84],[14.15,58.14],[5.97,45.64],[14.41,55.25],[5.56,50.0]]" href="https://www.facebook.com/groups/sailingcrewfinderpacific/" target="_blank" rel="noopener" title="Bourse aux équipiers Pacifique — ≈ 1 K participants" aria-label="Bourse aux équipiers Pacifique — ≈ 1 K participants, bourse aux équipiers" style="left:5.56%;top:50.00%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers Pacifique</b><i>≈ 1 K <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b derive promenade" data-derive="1" data-bx="29.17" data-by="41.67" data-amp="2.50" data-pts="[[33.68,40.03],[37.01,39.28],[38.92,37.74],[36.09,38.89],[37.61,37.3],[39.22,41.82],[39.3,45.53],[38.66,38.67],[37.74,42.09],[35.8,39.4],[38.11,35.93],[35.94,39.9],[39.23,41.29],[37.93,37.6],[33.95,40.27],[34.19,34.98],[35.96,36.82],[37.77,36.21],[34.0,39.36],[37.29,36.38],[33.68,40.03]]" href="https://www.facebook.com/groups/sailingcrewfindercaribbean/" target="_blank" rel="noopener" title="Bourse aux équipiers Caraïbes — ≈ 520 participants" aria-label="Bourse aux équipiers Caraïbes — ≈ 520 participants, bourse aux équipiers" style="left:29.17%;top:41.67%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers Caraïbes</b><i>≈ 520 <span data-t="bulle_participants">participants</span></i></span></a><div class="encart-france" role="group" aria-label="Zoom sur la France"><svg class="fond" viewBox="0 0 1000 632" preserveAspectRatio="none" aria-hidden="true"><path class="cote" d="M1251 735 1235 771 1241 785 1232 808 1197 791 1174 786 1111 763 1117 740 1170 744 1216 739 1251 735ZM964 600 991 632 985 692 964 689 946 704 929 692 927 638 916 612 941 614 964 600ZM980 557 965 592 944 583 934 552 943 535 972 518 980 557ZM237 97 156 124 92 117 129 70 105 24 167 -12 201 -33 239 -35 288 -7 264 24 271 57 237 97ZM1122 -55 1095 -18 1047 -44 1041 -63 1108 -78 1122 -55ZM409 -193 360 -143 407 -150 456 -149 445 -112 404 -72 451 -69 495 -10 526 -3 554 49 567 67 622 75 616 105 593 118 611 141 570 165 510 165 432 177 411 168 381 190 339 185 307 202 283 193 350 145 390 135 319 128 306 110 354 95 329 71 337 41 405 45 412 19 380 -10 325 -18 314 -30 331 -50 316 -63 292 -41 289 -85 266 -108 282 -155 318 -192 354 -189 409 -193ZM5408 -1026 5420 -1004 5462 -1015 5594 -1014 5697 -992 5733 -975 5722 -952 5672 -938 5552 -913 5518 -899 5575 -893 5642 -882 5683 -890 5706 -861 5726 -873 5799 -880 5944 -872 5955 -851 6145 -844 6148 -879 6245 -871 6317 -871 6391 -847 6411 -818 6385 -799 6442 -764 6513 -745 6557 -793 6630 -772 6707 -785 6795 -771 6829 -783 6903 -777 6870 -819 6930 -839 7341 -809 7380 -782 7499 -748 7682 -756 7773 -749 7810 -730 7805 -697 7861 -684 7922 -693 8002 -694 8088 -685 8174 -690 8254 -650 8310 -664 8273 -694 8293 -714 8438 -701 8533 -704 8664 -682 8727 -662 8727 -481 8727 -481 8669 -461 8610 -464 8651 -440 8678 -402 8699 -390 8704 -371 8692 -359 8607 -369 8480 -335 8440 -330 8370 -298 8304 -270 8288 -249 8223 -281 8104 -245 8084 -262 8040 -242 7979 -249 7964 -219 7910 -175 7912 -156 7963 -146 7957 -80 7915 -78 7896 -40 7914 -21 7835 3 7819 54 7751 66 7738 112 7672 154 7655 123 7636 56 7611 -45 7632 -108 7671 -135 7673 -156 7744 -166 7825 -223 7903 -270 7985 -306 8022 -371 7966 -367 7939 -329 7824 -279 7786 -335 7669 -320 7555 -244 7593 -216 7491 -204 7421 -199 7424 -232 7354 -239 7297 -217 7159 -224 7009 -211 6862 -122 6688 -15 6759 -9 6782 19 6826 29 6855 7 6905 10 6970 60 6972 98 6936 144 6932 198 6912 271 6843 336 6828 368 6766 421 6705 473 6676 500 6615 527 6587 527 6558 505 6497 539 6490 554 6473 551 6453 566 6439 582 6441 615 6418 625 6410 633 6392 646 6362 654 6342 666 6341 685 6336 690 6354 698 6380 718 6419 771 6430 801 6430 853 6413 878 6372 887 6336 906 6295 910 6290 885 6298 851 6278 804 6312 796 6281 757 6259 748 6253 757 6240 761 6238 752 6226 748 6214 741 6227 721 6237 715 6233 707 6245 683 6242 675 6215 670 6194 658 6130 671 6097 692 6048 705 6072 684 6063 666 6099 636 6075 612 6035 628 5984 659 5956 689 5911 691 5888 712 5912 743 5949 750 5951 771 5986 784 6037 752 6078 769 6107 770 6115 794 6050 807 6029 832 5985 854 5961 886 6010 911 6028 956 6056 998 6087 1032 6086 1066 6057 1079 6068 1103 6095 1117 6088 1154 6077 1190 6051 1194 6018 1243 5981 1303 5939 1357 5876 1399 5813 1438 5762 1443 5734 1463 5718 1448 5693 1471 5629 1494 5581 1501 5566 1549 5540 1551 5529 1518 5539 1501 5478 1486 5457 1493 5396 1532 5358 1575 5348 1607 5383 1655 5426 1714 5467 1742 5494 1779 5515 1863 5509 1943 5471 1973 5419 2002 5382 2040 5325 2082 5309 2053 5322 2022 5288 1997 5250 1990 5231 1966 5208 1919 5168 1898 5129 1899 5135 1864 5095 1864 5092 1914 5067 1980 5052 2020 5056 2053 5085 2055 5104 2096 5112 2136 5137 2162 5165 2167 5188 2191 5199 2195 5226 2222 5245 2253 5247 2283 5242 2304 5247 2320 5250 2347 5266 2359 5284 2399 5283 2415 5251 2418 5208 2384 5154 2348 5149 2325 5123 2294 5116 2257 5100 2232 5105 2199 5095 2180 5077 2162 5069 2140 5045 2114 5023 2092 5015 2119 5007 2094 5012 2065 5025 2022 5021 1988 5035 1953 5019 1926 5023 1877 5005 1853 4990 1799 4982 1741 4962 1704 4932 1727 4880 1759 4855 1755 4827 1744 4842 1688 4833 1645 4797 1593 4803 1576 4776 1571 4744 1534 4731 1510 4728 1487 4720 1465 4701 1438 4659 1437 4663 1455 4649 1481 4629 1471 4623 1480 4610 1475 4592 1471 4586 1487 4555 1487 4499 1496 4502 1530 4477 1557 4412 1588 4361 1641 4327 1670 4281 1700 4281 1721 4259 1732 4218 1748 4197 1751 4183 1785 4192 1844 4195 1882 4176 1925 4175 2003 4152 2005 4131 2039 4145 2054 4104 2067 4088 2098 4070 2111 4027 2069 4006 2005 3988 1959 3973 1938 3948 1894 3937 1837 3929 1809 3888 1746 3869 1658 3855 1600 3856 1545 3847 1502 3781 1530 3749 1524 3689 1469 3711 1453 3698 1435 3644 1396 3611 1385 3598 1352 3562 1317 3479 1326 3405 1327 3341 1333 3255 1319 3206 1309 3154 1303 3135 1247 3113 1239 3078 1247 3033 1269 2977 1254 2931 1219 2887 1206 2857 1163 2823 1103 2799 1110 2770 1095 2753 1113 2726 1111 2736 1131 2732 1141 2746 1175 2764 1214 2786 1225 2794 1241 2825 1260 2828 1279 2823 1294 2829 1309 2842 1322 2848 1337 2855 1348 2852 1315 2864 1291 2877 1286 2890 1300 2891 1327 2881 1354 2890 1371 2898 1369 2900 1381 2935 1374 2973 1375 3000 1377 3032 1346 3065 1317 3094 1289 3107 1273 3113 1277 3109 1296 3103 1304 3109 1340 3129 1371 3155 1388 3188 1394 3215 1402 3235 1428 3248 1443 3264 1449 3264 1459 3247 1486 3240 1499 3221 1513 3204 1545 3183 1542 3174 1553 3167 1576 3172 1606 3168 1612 3147 1612 3119 1629 3114 1651 3104 1661 3076 1660 3058 1672 3058 1690 3036 1703 3011 1698 2980 1714 2959 1716 2927 1729 2918 1749 2917 1764 2871 1783 2799 1805 2758 1837 2738 1839 2724 1837 2698 1855 2669 1864 2631 1867 2619 1869 2609 1881 2597 1884 2590 1896 2568 1895 2553 1901 2522 1899 2510 1872 2511 1847 2504 1834 2495 1800 2482 1782 2491 1780 2486 1759 2492 1750 2490 1730 2484 1711 2470 1697 2467 1679 2443 1663 2419 1624 2406 1587 2375 1556 2355 1549 2325 1505 2319 1474 2321 1447 2295 1396 2274 1379 2249 1369 2234 1343 2237 1333 2224 1309 2211 1299 2193 1265 2165 1229 2142 1197 2120 1198 2127 1173 2129 1157 2134 1139 2133 1132 2120 1150 2110 1185 2098 1208 2087 1216 2072 1202 2052 1181 2019 1116 2015 1120 2033 1168 2061 1214 2096 1285 2112 1310 2127 1335 2168 1386 2159 1393 2160 1423 2213 1464 2221 1473 2236 1518 2226 1526 2232 1573 2249 1627 2266 1638 2291 1655 2318 1708 2330 1749 2355 1772 2417 1815 2442 1840 2467 1867 2481 1882 2504 1896 2514 1910 2513 1929 2487 1940 2507 1952 2521 1961 2530 1979 2551 1998 2573 1999 2616 1987 2666 1982 2706 1968 2728 1965 2744 1956 2770 1955 2785 1954 2806 1947 2830 1942 2851 1927 2869 1927 2870 1939 2866 1966 2866 1990 2856 2006 2843 2055 2821 2106 2793 2164 2754 2231 2715 2282 2662 2344 2617 2380 2549 2426 2506 2460 2456 2515 2446 2539 2436 2550 2404 2568 2393 2587 2376 2590 2369 2622 2355 2641 2346 2671 2327 2686 2306 2742 2309 2768 2338 2784 2340 2796 2327 2824 2330 2838 2327 2859 2343 2888 2361 2933 2378 2943 2385 2963 2384 3008 2389 3048 2391 3119 2399 3141 2385 3174 2368 3205 2339 3234 2297 3251 2246 3273 2195 3322 2177 3330 2145 3362 2127 3373 2123 3405 2144 3440 2153 3466 2154 3480 2162 3478 2161 3522 2153 3544 2164 3551 2157 3570 2138 3586 2101 3602 2046 3626 2026 3643 2030 3662 2042 3665 2038 3689 2026 3722 2021 3760 2009 3781 1978 3804 1969 3810 1950 3833 1937 3857 1912 3889 1860 3936 1828 3963 1794 3984 1746 4002 1723 4004 1717 4017 1690 4010 1667 4019 1618 4010 1590 4016 1572 4013 1525 4031 1486 4038 1458 4055 1437 4057 1418 4040 1403 4040 1383 4019 1381 4026 1375 4013 1375 3987 1360 3956 1375 3948 1374 3913 1344 3870 1321 3832 1321 3832 1288 3773 1255 3738 1237 3705 1227 3661 1216 3628 1200 3558 1199 3504 1194 3479 1176 3460 1152 3422 1128 3368 1119 3339 1082 3295 1079 3260 1075 3232 1081 3192 1097 3150 1099 3130 1114 3089 1124 3071 1151 3041 1165 3021 1170 2987 1168 2961 1154 2945 1142 2918 1131 2890 1133 2881 1147 2863 1133 2819 1124 2788 1101 2760 1106 2751 1099 2737 1087 2703 1050 2654 1003 2608 973 2571 945 2524 947 2509 957 2494 968 2461 977 2428 968 2421 984 2370 991 2334 973 2304 952 2296 943 2276 931 2269 932 2256 885 2273 867 2270 850 2281 814 2280 789 2251 774 2218 742 2188 708 2189 668 2189 630 2194 594 2204 522 2230 497 2246 456 2259 416 2246 395 2247 363 2238 334 2238 280 2246 249 2260 204 2276 195 2275 183 2275 136 2254 95 2219 56 2194 26 2165 13 2162 -19 2143 -43 2119 -51 2102 -57 2069 -77 2042 -94 2024 -106 2018 -117 2009 -122 1989 -129 1979 -142 1971 -167 1952 -186 1949 -196 1937 -196 1930 -210 1920 -213 1910 -220 1875 -214 1855 -233 1820 -256 1804 -236 1795 -214 1763 -203 1740 -207 1715 -194 1693 -188 1650 -193 1605 -199 1583 -194 1560 -206 1538 -230 1519 -228 1499 -226 1478 -209 1466 -194 1442 -197 1427 -181 1395 -156 1366 -140 1359 -128 1332 -127 1308 -111 1280 -81 1263 -52 1217 -28 1199 14 1194 50 1163 73 1150 111 1112 99 1056 117 1017 123 993 152 962 198 941 231 923 262 875 276 848 309 848 337 867 380 864 427 874 447 874 491 850 540 842 568 823 612 809 689 801 764 797 787 804 830 786 879 786 897 796 928 794 978 775 1010 781 1008 804 1047 787 1050 796 1027 818 1027 839 1043 850 1037 890 1007 913 1015 937 1039 938 1050 960 1068 967 1121 982 1140 979 1178 986 1238 1006 1260 1047 1301 1056 1365 1075 1413 1097 1435 1085 1457 1065 1446 1030 1461 1008 1493 986 1525 980 1586 989 1602 1010 1619 1010 1633 1018 1678 1023 1689 1038 1750 1037 1794 1049 1839 1063 1860 1070 1895 1055 1913 1042 1953 1039 1986 1044 1998 1067 2009 1052 2045 1063 2081 1065 2103 1054 2116 1039 2113 1036 2125 1015 2134 981 2141 969 2142 969 2158 932 2181 900 2182 898 2178 863 2189 845 2172 824 2189 807 2161 811 2123 800 2092 827 2023 832 1986 807 1937 806 1927 825 1895 830 1851 806 1802 807 1775 761 1742 736 1764 701 1735 679 1785 636 1855 634 1875 599 1961 605 2016 576 2069 563 2144 562 2223 594 2289 612 2341 605 2381 609 2434 585 2441 565 2430 534 2403 518 2378 512 2362 499 2304 460 2252 443 2213 416 2246 409 2283 371 2258 353 2325 334 2324 324 2283 332 2247 335 2216 350 2174 353 2135 370 2137 398 2160 409 2206 406 2197 422 2147 430 2086 456 2060 447 2070 426 2021 413 2029 404 2072 389 2059 378 1988 367 1985 350 1943 355 1926 380 1891 414 1892 426 1870 436 1856 431 1844 486 1820 505 1803 538 1818 563 1823 581 1863 596 1855 607 1801 609 1781 623 1744 648 1729 627 1730 617 1702 616 1678 612 1623 623 1655 649 1632 656 1607 657 1582 633 1574 643 1584 670 1607 692 1590 702 1615 722 1638 736 1638 761 1596 749 1610 772 1581 777 1598 817 1568 818 1530 798 1513 762 1505 732 1488 711 1464 685 1461 672 1454 669 1453 659 1428 643 1424 622 1427 591 1434 577 1426 569 1416 566 1404 551 1384 542 1341 525 1315 509 1273 495 1235 462 1244 458 1224 439 1223 424 1194 417 1180 436 1166 421 1167 405 1169 405 1179 401 1143 394 1106 410 1108 433 1103 446 1118 469 1160 492 1183 529 1234 566 1269 566 1280 576 1268 585 1308 601 1342 615 1381 639 1385 647 1377 663 1352 642 1312 635 1293 664 1326 681 1321 705 1302 707 1277 746 1258 750 1259 736 1268 712 1278 702 1260 675 1246 653 1227 647 1214 627 1185 619 1165 601 1131 598 1096 577 1054 548 1023 521 1009 476 986 471 949 456 929 462 902 483 883 487 842 512 753 500 686 515 681 542 684 569 641 599 582 609 578 624 550 649 533 686 551 712 524 732 514 762 480 771 448 806 390 807 347 806 318 822 301 839 279 835 262 820 249 794 207 787 188 798 164 792 141 797 148 762 144 734 123 729 112 712 116 682 134 666 137 647 147 620 146 601 137 585 135 569 137 537 119 517 183 484 238 493 299 492 348 500 386 498 459 499 483 472 491 381 444 334 411 311 341 293 337 260 396 250 472 262 458 210 500 230 606 194 620 157 660 148 696 139 720 126 759 59 822 40 859 42 868 32 906 30 915 40 945 17 935 0 933 -26 915 -51 913 -97 921 -110 934 -123 974 -126 990 -139 1026 -151 1025 -128 1011 -113 1017 -100 1041 -94 1030 -76 1017 -81 984 -49 996 -27 997 -9 1043 2 1043 18 1089 9 1114 -3 1166 15 1187 29 1218 16 1289 -5 1346 -21 1392 -13 1395 -2 1439 -1 1449 -21 1512 -36 1503 -74 1504 -108 1526 -137 1569 -152 1605 -119 1642 -119 1651 -154 1656 -181 1639 -175 1610 -192 1606 -218 1664 -230 1721 -237 1770 -229 1817 -231 1869 -256 1821 -278 1739 -274 1659 -257 1585 -248 1559 -272 1515 -287 1525 -332 1503 -373 1524 -400 1566 -428 1670 -478 1700 -487 1695 -506 1632 -528 1554 -515 1510 -483 1517 -455 1444 -419 1357 -380 1324 -316 1356 -284 1399 -258 1358 -207 1310 -196 1293 -120 1267 -77 1212 -82 1186 -46 1134 -44 1119 -87 1081 -138 1047 -203 1016 -231 926 -178 866 -167 803 -190 787 -239 772 -344 814 -373 934 -412 1024 -459 1107 -522 1216 -610 1293 -644 1417 -701 1517 -721 1592 -718 1661 -756 1744 -754 1826 -763 1968 -730 1909 -718 1959 -689 2006 -705 2081 -678 2205 -667 2377 -615 2412 -594 2415 -563 2364 -540 2290 -527 2087 -562 2054 -556 2128 -523 2134 -455 2192 -441 2228 -430 2234 -452 2205 -472 2235 -488 2345 -460 2383 -471 2353 -505 2459 -549 2501 -546 2543 -531 2570 -562 2532 -589 2554 -616 2521 -644 2648 -630 2674 -604 2616 -599 2616 -573 2652 -558 2722 -568 2734 -597 2829 -618 2987 -657 3021 -655 2977 -628 3033 -623 3066 -638 3151 -640 3218 -658 3270 -631 3322 -661 3274 -687 3298 -702 3432 -689 3495 -675 3660 -623 3690 -646 3644 -670 3643 -680 3588 -685 3603 -706 3578 -742 3577 -756 3661 -797 3691 -839 3725 -848 3845 -836 3854 -810 3811 -773 3840 -759 3854 -727 3844 -665 3894 -637 3874 -607 3785 -542 3837 -535 3855 -552 3906 -563 3918 -586 3957 -607 3930 -633 3952 -663 3902 -667 3891 -692 3927 -738 3868 -775 3950 -806 3939 -838 3962 -839 3986 -814 3968 -770 4016 -762 3996 -795 4072 -812 4166 -815 4250 -789 4210 -827 4205 -875 4284 -884 4393 -882 4492 -888 4455 -912 4508 -942 4560 -943 4648 -966 4768 -972 4783 -984 4903 -988 4940 -978 5042 -1002 5125 -1002 5138 -1021 5181 -1041 5289 -1059 5367 -1045 5305 -1033 5408 -1026ZM-686 -1324 -402 -1288 -486 -1270 -660 -1268 -905 -1264 -882 -1256 -721 -1261 -584 -1245 -496 -1259 -458 -1243 -508 -1216 -392 -1233 -171 -1251 -35 -1242 -9 -1223 -195 -1190 -220 -1180 -366 -1172 -260 -1170 -314 -1137 -350 -1107 -349 -1057 -294 -1027 -365 -1025 -440 -1011 -356 -987 -345 -948 -394 -944 -335 -905 -436 -901 -383 -883 -398 -867 -462 -860 -526 -860 -469 -829 -468 -809 -558 -827 -581 -815 -520 -804 -461 -776 -443 -739 -524 -731 -559 -748 -616 -774 -600 -743 -653 -720 -533 -718 -470 -715 -592 -676 -716 -640 -849 -624 -899 -624 -946 -606 -1009 -558 -1107 -526 -1138 -525 -1199 -513 -1264 -503 -1303 -475 -1304 -443 -1327 -413 -1401 -377 -1383 -341 -1403 -303 -1426 -259 -1490 -256 -1557 -293 -1648 -294 -1692 -319 -1723 -363 -1802 -420 -1825 -449 -1831 -490 -1894 -532 -1877 -565 -1908 -581 -1863 -635 -1794 -652 -1776 -671 -1767 -706 -1819 -690 -1844 -683 -1884 -677 -1940 -692 -1943 -722 -1925 -747 -1883 -747 -1790 -735 -1869 -764 -1909 -780 -1955 -773 -1992 -785 -1942 -827 -1969 -844 -2005 -875 -2060 -923 -2118 -941 -2118 -960 -2239 -987 -2336 -990 -2457 -988 -2568 -985 -2621 -999 -2700 -1028 -2581 -1042 -2489 -1045 -2684 -1056 -2786 -1075 -2780 -1093 -2608 -1115 -2441 -1136 -2424 -1153 -2546 -1169 -2507 -1187 -2350 -1219 -2283 -1224 -2302 -1244 -2195 -1256 -2055 -1264 -1915 -1264 -1866 -1250 -1745 -1275 -1637 -1258 -1573 -1254 -1478 -1239 -1586 -1264 -1580 -1283 -1428 -1311 -1268 -1309 -1210 -1325 -1049 -1330 -686 -1324Z"/><path class="terre" d="M143 13h.1M169 13h.1M195 13h.1M221 13h.1M247 13h.1M429 13h.1M455 13h.1M481 13h.1M507 13h.1M533 13h.1M949 13h.1M975 13h.1M117 39h.1M143 39h.1M169 39h.1M195 39h.1M221 39h.1M247 39h.1M429 39h.1M455 39h.1M481 39h.1M507 39h.1M533 39h.1M871 39h.1M897 39h.1M923 39h.1M949 39h.1M975 39h.1M143 65h.1M169 65h.1M195 65h.1M221 65h.1M247 65h.1M351 65h.1M377 65h.1M403 65h.1M429 65h.1M455 65h.1M481 65h.1M507 65h.1M533 65h.1M559 65h.1M767 65h.1M793 65h.1M819 65h.1M845 65h.1M871 65h.1M897 65h.1M923 65h.1M949 65h.1M975 65h.1M117 91h.1M143 91h.1M169 91h.1M195 91h.1M221 91h.1M351 91h.1M377 91h.1M403 91h.1M429 91h.1M455 91h.1M481 91h.1M507 91h.1M533 91h.1M559 91h.1M585 91h.1M611 91h.1M741 91h.1M767 91h.1M793 91h.1M819 91h.1M845 91h.1M871 91h.1M897 91h.1M923 91h.1M949 91h.1M975 91h.1M91 117h.1M117 117h.1M143 117h.1M169 117h.1M325 117h.1M351 117h.1M377 117h.1M403 117h.1M429 117h.1M455 117h.1M481 117h.1M507 117h.1M533 117h.1M559 117h.1M585 117h.1M741 117h.1M767 117h.1M793 117h.1M819 117h.1M845 117h.1M871 117h.1M897 117h.1M923 117h.1M949 117h.1M975 117h.1M377 143h.1M403 143h.1M429 143h.1M455 143h.1M481 143h.1M507 143h.1M533 143h.1M559 143h.1M585 143h.1M689 143h.1M715 143h.1M741 143h.1M767 143h.1M793 143h.1M819 143h.1M845 143h.1M871 143h.1M897 143h.1M923 143h.1M949 143h.1M975 143h.1M325 169h.1M351 169h.1M377 169h.1M403 169h.1M429 169h.1M455 169h.1M637 169h.1M663 169h.1M689 169h.1M715 169h.1M741 169h.1M767 169h.1M793 169h.1M819 169h.1M845 169h.1M871 169h.1M897 169h.1M923 169h.1M949 169h.1M975 169h.1M299 195h.1M611 195h.1M637 195h.1M663 195h.1M689 195h.1M715 195h.1M741 195h.1M767 195h.1M793 195h.1M819 195h.1M845 195h.1M871 195h.1M897 195h.1M923 195h.1M949 195h.1M975 195h.1M481 221h.1M533 221h.1M559 221h.1M585 221h.1M611 221h.1M637 221h.1M663 221h.1M689 221h.1M715 221h.1M741 221h.1M767 221h.1M793 221h.1M819 221h.1M845 221h.1M871 221h.1M897 221h.1M923 221h.1M949 221h.1M975 221h.1M481 247h.1M507 247h.1M533 247h.1M559 247h.1M585 247h.1M611 247h.1M637 247h.1M663 247h.1M689 247h.1M715 247h.1M741 247h.1M767 247h.1M793 247h.1M819 247h.1M845 247h.1M871 247h.1M897 247h.1M923 247h.1M949 247h.1M975 247h.1M351 273h.1M377 273h.1M403 273h.1M429 273h.1M455 273h.1M481 273h.1M507 273h.1M533 273h.1M559 273h.1M585 273h.1M611 273h.1M637 273h.1M663 273h.1M689 273h.1M715 273h.1M741 273h.1M767 273h.1M793 273h.1M819 273h.1M845 273h.1M871 273h.1M897 273h.1M923 273h.1M949 273h.1M975 273h.1M377 299h.1M403 299h.1M429 299h.1M455 299h.1M481 299h.1M507 299h.1M533 299h.1M559 299h.1M585 299h.1M611 299h.1M637 299h.1M663 299h.1M689 299h.1M715 299h.1M741 299h.1M767 299h.1M793 299h.1M819 299h.1M845 299h.1M871 299h.1M897 299h.1M923 299h.1M949 299h.1M975 299h.1M455 325h.1M481 325h.1M507 325h.1M533 325h.1M559 325h.1M585 325h.1M611 325h.1M637 325h.1M663 325h.1M689 325h.1M715 325h.1M741 325h.1M767 325h.1M793 325h.1M819 325h.1M845 325h.1M871 325h.1M897 325h.1M923 325h.1M949 325h.1M975 325h.1M481 351h.1M507 351h.1M533 351h.1M559 351h.1M585 351h.1M611 351h.1M637 351h.1M663 351h.1M689 351h.1M715 351h.1M741 351h.1M767 351h.1M793 351h.1M819 351h.1M845 351h.1M871 351h.1M897 351h.1M923 351h.1M949 351h.1M975 351h.1M507 377h.1M533 377h.1M559 377h.1M585 377h.1M611 377h.1M637 377h.1M663 377h.1M689 377h.1M715 377h.1M741 377h.1M767 377h.1M793 377h.1M819 377h.1M845 377h.1M871 377h.1M897 377h.1M923 377h.1M949 377h.1M975 377h.1M507 403h.1M533 403h.1M559 403h.1M585 403h.1M611 403h.1M637 403h.1M663 403h.1M689 403h.1M715 403h.1M741 403h.1M767 403h.1M793 403h.1M819 403h.1M845 403h.1M871 403h.1M897 403h.1M923 403h.1M949 403h.1M975 403h.1M507 429h.1M533 429h.1M559 429h.1M585 429h.1M611 429h.1M637 429h.1M663 429h.1M689 429h.1M715 429h.1M741 429h.1M767 429h.1M793 429h.1M819 429h.1M845 429h.1M871 429h.1M897 429h.1M923 429h.1M949 429h.1M975 429h.1M507 455h.1M533 455h.1M559 455h.1M585 455h.1M611 455h.1M637 455h.1M663 455h.1M689 455h.1M715 455h.1M741 455h.1M767 455h.1M793 455h.1M819 455h.1M845 455h.1M871 455h.1M897 455h.1M923 455h.1M949 455h.1M975 455h.1M481 481h.1M507 481h.1M533 481h.1M559 481h.1M585 481h.1M611 481h.1M637 481h.1M663 481h.1M689 481h.1M715 481h.1M741 481h.1M767 481h.1M793 481h.1M819 481h.1M845 481h.1M871 481h.1M897 481h.1M143 507h.1M169 507h.1M195 507h.1M221 507h.1M247 507h.1M273 507h.1M299 507h.1M325 507h.1M351 507h.1M377 507h.1M403 507h.1M429 507h.1M455 507h.1M481 507h.1M507 507h.1M533 507h.1M559 507h.1M585 507h.1M611 507h.1M637 507h.1M663 507h.1M689 507h.1M715 507h.1M819 507h.1M845 507h.1M143 533h.1M169 533h.1M195 533h.1M221 533h.1M247 533h.1M273 533h.1M299 533h.1M325 533h.1M351 533h.1M377 533h.1M403 533h.1M429 533h.1M455 533h.1M481 533h.1M507 533h.1M533 533h.1M559 533h.1M585 533h.1M611 533h.1M637 533h.1M663 533h.1M949 533h.1M975 533h.1M143 559h.1M169 559h.1M195 559h.1M221 559h.1M247 559h.1M273 559h.1M299 559h.1M325 559h.1M351 559h.1M377 559h.1M403 559h.1M429 559h.1M455 559h.1M481 559h.1M507 559h.1M533 559h.1M559 559h.1M585 559h.1M611 559h.1M637 559h.1M663 559h.1M949 559h.1M975 559h.1M143 585h.1M169 585h.1M195 585h.1M221 585h.1M247 585h.1M273 585h.1M299 585h.1M325 585h.1M351 585h.1M377 585h.1M403 585h.1M429 585h.1M455 585h.1M481 585h.1M507 585h.1M533 585h.1M559 585h.1M585 585h.1M611 585h.1M637 585h.1M169 611h.1M195 611h.1M221 611h.1M247 611h.1M273 611h.1M299 611h.1M325 611h.1M351 611h.1M377 611h.1M403 611h.1M429 611h.1M455 611h.1M481 611h.1M507 611h.1M533 611h.1M559 611h.1M949 611h.1"/></svg><a class="pt-b bord-d" href="https://www.facebook.com/groups/BourseEquipierMarseille/" target="_blank" rel="noopener" title="Bourse aux équipiers Marseille — ≈ 6 K participants" aria-label="Bourse aux équipiers Marseille — ≈ 6 K participants, bourse aux équipiers" style="left:79.0%;top:79.9%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers Marseille</b><i>≈ 6 K <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b" href="https://www.facebook.com/groups/bourseauxequipiersbrest/" target="_blank" rel="noopener" title="Bourse aux équipiers Brest — ≈ 5 K participants" aria-label="Bourse aux équipiers Brest — ≈ 5 K participants, bourse aux équipiers" style="left:34.2%;top:43.2%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers Brest</b><i>≈ 5 K <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b bord-d" href="https://www.facebook.com/groups/BourseEquipierVoileLeman/" target="_blank" rel="noopener" title="Bourse aux équipiers Léman — ≈ 3 K participants" aria-label="Bourse aux équipiers Léman — ≈ 3 K participants, bourse aux équipiers" style="left:84.3%;top:57.2%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers Léman</b><i>≈ 3 K <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b" href="https://www.facebook.com/groups/bourseauxequipierslarochelle/" target="_blank" rel="noopener" title="Bourse aux équipiers La Rochelle — ≈ 2 K participants" aria-label="Bourse aux équipiers La Rochelle — ≈ 2 K participants, bourse aux équipiers" style="left:49.3%;top:59.3%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers La Rochelle</b><i>≈ 2 K <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b" data-pts="[[21.8,2.9],[21.8,9.4],[21.8,15.8],[21.8,22.3],[13.6,28.8],[5.5,35.3],[5.5,41.7],[5.5,48.2],[2,54.7],[2,61.2],[2,67.6],[2,74.1],[2,80.6],[2,87.1],[2,93.5],[2,87.1],[2,80.6],[2,74.1],[2,67.6],[2,61.2],[2,54.7],[5.5,48.2],[5.5,41.7],[5.5,35.3],[13.6,28.8],[21.8,22.3],[21.8,15.8],[21.8,9.4]]" data-vif="1" href="https://www.facebook.com/groups/BourseEquipierVoile/" target="_blank" rel="noopener" title="Bourse aux équipiers France — ≈ 138 K participants" aria-label="Bourse aux équipiers France — ≈ 138 K participants, bourse aux équipiers" style="left:21.8%;top:2.9%"><svg viewBox="0 0 32 32" aria-hidden="true"><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M16.4 3.4v17.2h8.4z" fill="#f2f5f8"/><path d="M14.2 8.4 7.4 20.6h6.8z" fill="#d9e0e7"/><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/></g><path d="M16 2.4v20.2" stroke="#08131f" stroke-width="1.5"/></svg><span class="bulle"><b>Bourse aux équipiers France</b><i>≈ 138 K <span data-t="bulle_participants">participants</span></i></span></a><a class="pt-b" data-pts="[[65.5,56.1],[62.9,37.6],[42.4,41.9],[58.8,71.5],[68.0,85.6],[35.9,70.6],[44.4,92.2],[35.9,70.6],[68.0,85.6],[58.8,71.5],[42.4,41.9],[62.9,37.6]]" data-vif="1" href="https://www.facebook.com/groups/LeBonCoinVoile/" target="_blank" rel="noopener" title="Le Bon Coin Voile — ≈ 44 K participants" aria-label="Le Bon Coin Voile — ≈ 44 K participants, groupe de vente" style="left:65.5%;top:56.1%"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.4v8.2" stroke="#08131f" stroke-width="1.6" stroke-linecap="round"/><g stroke="#08131f" stroke-width="1" stroke-linejoin="round"><path d="M2.6 22.6h26.8l-4.1 5.8H6.7z" fill="#e23a3e"/><rect x="8.4" y="11.6" width="15.2" height="10.6" rx=".7" fill="#c8873f"/><path d="M8.4 15.2h15.2" stroke-width=".8"/></g><path d="M14.9 11.6h2.4v10.6h-2.4z" fill="#f2f5f8"/></svg><span class="bulle"><b>Le Bon Coin Voile</b><i>≈ 44 K <span data-t="bulle_participants">participants</span></i></span></a><span class="titre-fr">France</span></div></div></section><h2 data-t="liste" style="margin-top:2.2rem">Les groupes, un par un</h2><div class="bourses"><a class="bourse" href="go.php?id=5708034c&amp;p=bourse" rel="nofollow noopener" title="Ouvrir le groupe : Bourse aux équipiers monde entier"><span class="b-tete"><strong>Bourse aux équipiers monde entier</strong></span><span class="nb">181 000 <span data-t="membres">membres</span></span><span class="fl" aria-hidden="true">↗</span></a><a class="bourse" href="go.php?id=7419b35a&amp;p=bourse" rel="nofollow noopener" title="Ouvrir le groupe : Bourse aux équipiers France"><span class="b-tete"><strong>Bourse aux équipiers France</strong></span><span class="nb">138 000 <span data-t="membres">membres</span></span><span class="fl" aria-hidden="true">↗</span></a><a class="bourse" href="go.php?id=64fad121&amp;p=bourse" rel="nofollow noopener" title="Ouvrir le groupe : Le Bon Coin Voile"><span class="b-tete"><strong>Le Bon Coin Voile</strong></span><span class="nb">44 000 <span data-t="membres">membres</span></span><span class="fl" aria-hidden="true">↗</span></a><a class="bourse" href="go.php?id=07143119&amp;p=bourse" rel="nofollow noopener" title="Ouvrir le groupe : Virtual Regatta Offshore"><span class="b-tete"><strong>Virtual Regatta Offshore</strong><span class="badge" data-t="jeu">jeu en ligne</span></span><span class="nb">39 000 <span data-t="membres">membres</span></span><span class="fl" aria-hidden="true">↗</span></a><a class="bourse" href="go.php?id=c40ffe99&amp;p=bourse" rel="nofollow noopener" title="Ouvrir le groupe : Bourse aux équipiers Atlantique"><span class="b-tete"><strong>Bourse aux équipiers Atlantique</strong></span><span class="nb">5 800 <span data-t="membres">membres</span></span><span class="fl" aria-hidden="true">↗</span></a><a class="bourse" href="go.php?id=7d9a79d4&amp;p=bourse" rel="nofollow noopener" title="Ouvrir le groupe : Bourse aux équipiers Marseille"><span class="b-tete"><strong>Bourse aux équipiers Marseille</strong></span><span class="nb">5 800 <span data-t="membres">membres</span></span><span class="fl" aria-hidden="true">↗</span></a><a class="bourse" href="go.php?id=2c05c2a7&amp;p=bourse" rel="nofollow noopener" title="Ouvrir le groupe : Bourse aux équipiers Brest"><span class="b-tete"><strong>Bourse aux équipiers Brest</strong></span><span class="nb">5 000 <span data-t="membres">membres</span></span><span class="fl" aria-hidden="true">↗</span></a><a class="bourse" href="go.php?id=eca6957e&amp;p=bourse" rel="nofollow noopener" title="Ouvrir le groupe : Bourse aux équipiers Léman"><span class="b-tete"><strong>Bourse aux équipiers Léman</strong></span><span class="nb">2 800 <span data-t="membres">membres</span></span><span class="fl" aria-hidden="true">↗</span></a><a class="bourse" href="go.php?id=36a8c315&amp;p=bourse" rel="nofollow noopener" title="Ouvrir le groupe : Buy &amp; Sell Sailing Boat Equipment"><span class="b-tete"><strong>Buy &amp; Sell Sailing Boat Equipment</strong><span class="ou">Monde entier</span></span><span class="nb">2 000 <span data-t="membres">membres</span></span><span class="fl" aria-hidden="true">↗</span></a><a class="bourse" href="go.php?id=f851998f&amp;p=bourse" rel="nofollow noopener" title="Ouvrir le groupe : Bourse aux équipiers La Rochelle"><span class="b-tete"><strong>Bourse aux équipiers La Rochelle</strong></span><span class="nb">1 500 <span data-t="membres">membres</span></span><span class="fl" aria-hidden="true">↗</span></a><a class="bourse" href="go.php?id=71c0d7c5&amp;p=bourse" rel="nofollow noopener" title="Ouvrir le groupe : Bourse aux équipiers Pacifique"><span class="b-tete"><strong>Bourse aux équipiers Pacifique</strong></span><span class="nb">1 200 <span data-t="membres">membres</span></span><span class="fl" aria-hidden="true">↗</span></a><a class="bourse" href="go.php?id=70eafb7c&amp;p=bourse" rel="nofollow noopener" title="Ouvrir le groupe : Bourse aux équipiers Caraïbes"><span class="b-tete"><strong>Bourse aux équipiers Caraïbes</strong></span><span class="nb">520 <span data-t="membres">membres</span></span><span class="fl" aria-hidden="true">↗</span></a><a class="bourse" href="go.php?id=24bbe8df&amp;p=bourse" rel="nofollow noopener" title="Ouvrir le groupe : Virtual Regatta Inshore"><span class="b-tete"><strong>Virtual Regatta Inshore</strong><span class="badge" data-t="jeu">jeu en ligne</span></span><span class="fl" aria-hidden="true">↗</span></a></div><p class="note" data-t="note">Un groupe manque ? Écris à nicolas.baudu@sailingmore.fr et il rejoint la carte.</p></main>
+<style>
+.planisphere .pt-v{position:absolute;transform:translate(-50%,-50%);background:none;border:0;
+  padding:0;margin:0;width:26px;height:26px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border-radius:50%;line-height:0}
+.planisphere .pt-v i{display:block;border-radius:50%;background:#e23a3e;transition:transform .18s}
+.planisphere .pt-v:hover i,.planisphere .pt-v:focus-visible i{transform:scale(1.8)}
+.planisphere .pt-v:focus-visible{outline:1px solid rgba(238,243,247,.7);outline-offset:4px}
+.planisphere .pt-v[aria-pressed="true"] i{transform:scale(4.2);box-shadow:0 0 0 3px rgba(238,243,247,.3)}
+.planisphere .pt-b.icone{width:20px;height:20px;border-radius:50%;overflow:hidden;
+  box-shadow:0 0 0 1.5px rgba(238,243,247,.9),0 1px 4px rgba(0,0,0,.75)}
+.planisphere .pt-b.icone img{width:100%;height:100%;object-fit:cover;display:block}
+.planisphere .pt-b{position:absolute;transform:translate(-50%,-50%);width:22px;height:22px;
+  display:block;line-height:0;filter:drop-shadow(0 1px 2px rgba(0,0,0,.7));transition:transform .18s;
+  z-index:5;text-decoration:none}
+.planisphere .pt-b svg{width:22px;height:22px;display:block}
+.planisphere .pt-b.robot{border-radius:0;background:none;padding:0}
+.planisphere .pt-b{z-index:7}   /* au-dessus des pastilles : un doigt sur le bateau ouvre le groupe */
+@media(hover:none){.planisphere .pt-b{width:32px;height:32px}}
+.planisphere .pt-b:hover,.planisphere .pt-b:focus-visible{transform:translate(-50%,-50%) scale(1.35)}
+.legende-carte .hors-carte{display:block;margin-top:.35rem;color:var(--gris)}
+.legende-carte .lien-hors-carte{color:var(--toile);text-decoration:underline;text-underline-offset:.18em}
+.planisphere .pt-b:focus-visible{outline:1px solid rgba(238,243,247,.7);outline-offset:3px}
+.planisphere .liens-bourses{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:6}
+.planisphere .liens-bourses .lien-fond{stroke:rgba(6,16,27,.75);stroke-width:3;fill:none;
+  vector-effect:non-scaling-stroke}
+.planisphere .liens-bourses .lien-trait{stroke:#f2f5f8;stroke-width:1.4;fill:none;
+  stroke-dasharray:3.2 2.4;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.planisphere .liens-bourses circle{fill:#f2f5f8;stroke:#08131f;stroke-width:1;
+  vector-effect:non-scaling-stroke}
+/* L'encart est sorti du planisphère : posé dessous, il peut être grand et lisible, et aucun bateau
+   ne passe plus sous lui (Nicolas, 22/11/2026 : « attention que les bateaux de la carte ne naviguent
+   pas sous la mini carte »). */
+.encart-france{position:relative;display:block;width:min(430px,100%);margin:.9rem 0 0;
+  aspect-ratio:1000/632;background:#06121f;border:1px solid rgba(238,243,247,.22);border-radius:7px;
+  overflow:visible;z-index:3;box-shadow:0 6px 18px rgba(3,8,14,.35)}
+/* Le fond est découpé par le svg lui-même : l'encart, lui, laisse sortir les infobulles. */
+.encart-france .fond{position:absolute;inset:0;width:100%;height:100%;
+  border-radius:7px;background:#06121f}
+.encart-france .fond path.cote{fill:none;stroke:#6fa8c8;stroke-width:6;stroke-linejoin:round;opacity:.55}
+.encart-france .fond path.terre{fill:none;stroke:#2f6d90;stroke-width:11;
+  stroke-linecap:round;vector-effect:none;opacity:.9}
+/* Les repères de l'encart portent leur propre positionnement : ils ne sont plus dans le planisphère. */
+.encart-france .pt-b{position:absolute;transform:translate(-50%,-50%);display:block;line-height:0;
+  width:16px;height:16px;z-index:2;text-decoration:none;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.7));transition:transform .18s}
+.encart-france .pt-b svg{width:16px;height:16px}
+/* L'infobulle de l'encart : les mêmes règles que celle de la grande carte, en plus petit — l'encart
+   n'est plus dans le planisphère, il ne reçoit donc plus ces styles par héritage. */
+.encart-france .pt-b .bulle{position:absolute;left:50%;bottom:calc(100% + 9px);
+  transform:translate(-50%,5px);display:grid;gap:1px;padding:5px 8px 6px;border-radius:8px;
+  white-space:normal;width:max-content;max-width:190px;line-height:1.25;
+  background:linear-gradient(180deg,rgba(12,27,44,.97),rgba(7,17,29,.97));
+  border:1px solid rgba(238,243,247,.14);border-top:2px solid #e23a3e;
+  box-shadow:0 10px 22px -10px rgba(0,0,0,.9);
+  opacity:0;pointer-events:none;transition:opacity .15s ease,transform .15s ease}
+.encart-france .pt-b .bulle::after{content:"";position:absolute;top:100%;left:50%;
+  transform:translateX(-50%);border:5px solid transparent;border-top-color:rgba(7,17,29,.97)}
+.encart-france .pt-b .bulle b{font-size:10px;font-weight:700;color:#f2f5f8;line-height:1.2}
+.encart-france .pt-b .bulle span.zone{font-size:8px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(238,243,247,.5)}
+.encart-france .pt-b .bulle i{font-style:normal;font-size:9px;font-weight:700;color:#f05a5e}
+.encart-france .pt-b:hover .bulle,.encart-france .pt-b:focus-visible .bulle{
+  opacity:1;transform:translate(-50%,0)}
+.encart-france .pt-b.bord-g .bulle{left:0;transform:translate(0,5px)}
+.encart-france .pt-b.bord-g:hover .bulle,.encart-france .pt-b.bord-g:focus-visible .bulle{
+  transform:translate(0,0)}
+.encart-france .pt-b.bord-g .bulle::after{left:12px;transform:none}
+.encart-france .pt-b.bord-d .bulle{left:auto;right:0;transform:translate(0,5px)}
+.encart-france .pt-b.bord-d:hover .bulle,.encart-france .pt-b.bord-d:focus-visible .bulle{
+  transform:translate(0,0)}
+.encart-france .pt-b.bord-d .bulle::after{left:auto;right:12px;transform:none}
+.encart-france .pt-b.bas .bulle{top:calc(100% + 9px);bottom:auto;transform:translate(-50%,-5px)}
+.encart-france .pt-b.bas:hover .bulle,.encart-france .pt-b.bas:focus-visible .bulle{
+  transform:translate(-50%,0)}
+.encart-france .pt-b.bas .bulle::after{top:auto;bottom:100%;border-top-color:transparent;
+  border-bottom-color:rgba(7,17,29,.97)}
+.encart-france .pt-b:hover,.encart-france .pt-b:focus-visible{
+  transform:translate(-50%,-50%) scale(1.4)}
+.encart-france .titre-fr{position:absolute;right:6px;bottom:3px;font-size:8px;line-height:1;
+  letter-spacing:.16em;text-transform:uppercase;color:#a9c2d6;opacity:.75}
+@media(max-width:640px){.encart-france{width:100%}}
+.planisphere .pt-b .bulle{position:absolute;left:50%;bottom:calc(100% + 11px);transform:translate(-50%,5px);
+  display:grid;gap:2px;padding:7px 11px 8px;border-radius:10px;white-space:nowrap;
+  line-height:1.25;
+  background:linear-gradient(180deg,rgba(12,27,44,.97),rgba(7,17,29,.97));
+  border:1px solid rgba(238,243,247,.14);border-top:2px solid #e23a3e;
+  box-shadow:0 14px 30px -12px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.05);
+  opacity:0;pointer-events:none;transition:opacity .15s ease,transform .15s ease}
+.planisphere .pt-b .bulle::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:rgba(7,17,29,.97)}
+.planisphere .pt-b .bulle b{font-size:11px;font-weight:700;letter-spacing:.015em;color:#f2f5f8}
+.planisphere .pt-b .bulle span.zone{font-size:9.5px;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;color:rgba(238,243,247,.5)}
+.planisphere .pt-b .bulle i{font-style:normal;font-size:10px;font-weight:700;letter-spacing:.05em;
+  color:#f05a5e;font-variant-numeric:tabular-nums}
+.planisphere .pt-b:hover .bulle,.planisphere .pt-b:focus-visible .bulle{opacity:1;transform:translate(-50%,0)}
+.planisphere .pt-b.bord-g .bulle{left:0;transform:translate(0,5px)}
+.planisphere .pt-b.bord-g:hover .bulle,.planisphere .pt-b.bord-g:focus-visible .bulle{transform:translate(0,0)}
+.planisphere .pt-b.bord-g .bulle::after{left:15px;transform:none}
+.planisphere .pt-b.bord-d .bulle{left:auto;right:0;transform:translate(0,5px)}
+.planisphere .pt-b.bord-d:hover .bulle,.planisphere .pt-b.bord-d:focus-visible .bulle{transform:translate(0,0)}
+.planisphere .pt-b.bord-d .bulle::after{left:auto;right:15px;transform:none}
+.planisphere .pt-b.bas .bulle{top:calc(100% + 11px);bottom:auto;transform:translate(-50%,-5px)}
+.planisphere .pt-b.bas:hover .bulle,.planisphere .pt-b.bas:focus-visible .bulle{transform:translate(-50%,0)}
+.planisphere .pt-b.bas .bulle::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:rgba(7,17,29,.97)}
+.planisphere .pt-b.bas.bord-g .bulle{transform:translate(0,-5px)}
+.planisphere .pt-b.bas.bord-g:hover .bulle,.planisphere .pt-b.bas.bord-g:focus-visible .bulle{transform:translate(0,0)}
+.planisphere .pt-b.bas.bord-d .bulle{transform:translate(0,-5px)}
+.planisphere .pt-b.bas.bord-d:hover .bulle,.planisphere .pt-b.bas.bord-d:focus-visible .bulle{transform:translate(0,0)}
+.planisphere .pt-b.errant{transition:left 8s cubic-bezier(.45,.05,.55,.95),
+  top 8s cubic-bezier(.45,.05,.55,.95),transform .18s ease}
+.planisphere .pt-b.derive{transition:left 20s ease-in-out,top 20s ease-in-out,transform .18s ease}
+/* La promenade d'un océan : un pas toutes les ~28 s et un glissement de 22 s — plus lent que le bateau
+   qui fait le monde (8 s de glissement), pour qu'on voie qu'il se promène et non qu'il saute. */
+/* Il bouge tout le temps, doucement : 22 s de glissement, et le pas suivant part aussitôt — plus de
+   longue attente où le bateau semble posé (Nicolas, 19/11/2026). */
+.planisphere .pt-b.promenade{transition:left 22s linear,top 22s linear,transform .18s ease}
+/* Lui fait le monde : même avec ses points sûrs, il garde son allure de course. */
+.planisphere .pt-b.promenade.vif{transition:left 9s linear,top 9s linear,transform .18s ease}
+.planisphere .pt-b.errant.promenade{transition:left 8s cubic-bezier(.45,.05,.55,.95),top 8s cubic-bezier(.45,.05,.55,.95),transform .18s ease}
+.legende-carte{display:flex;align-items:center;gap:9px;margin:16px 0 0;font-size:12px;
+  letter-spacing:.04em;color:rgba(238,243,247,.62)}
+.legende-carte .mini{flex:0 0 auto;line-height:0}
+.legende-carte .mini svg{width:19px;height:19px;display:block}
+.etiquette-v{position:absolute;z-index:4;display:flex;align-items:center;gap:8px;
+  padding:6px 11px 6px 8px;background:#e23a3e;border:0;border-radius:0;
+  color:#fff;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
+  transform:translate(-50%,calc(-100% - 10px));pointer-events:none}
+.etiquette-v[hidden]{display:none}
+.etiquette-v .drapeau{width:22px;height:auto;display:block;
+  box-shadow:0 0 0 1px rgba(255,255,255,.5)}
+.etiquette-v .nb{display:none}
+@media(max-width:600px){.etiquette-v{font-size:11px;padding:5px 9px 5px 7px}}
+</style>
+<script>window.SM_PAGE_UI={"fr": {"titre": "La bourse aux équipiers", "retour": "← Le site", "chapo": "Ton prochain équipier est déjà là-dedans, en train de chercher un bateau. Treize groupes Facebook où les équipages se font — tu entres, tu te présentes, tu embarques. On ne prend rien, on ne modère rien, on ne s'interpose pas.", "annonce": "On développe une application nouvelle génération pour la bourse aux équipiers — en attendant, ces groupes restent le meilleur endroit pour embarquer.", "carte": "Où sont les groupes", "liste": "Les groupes, un par un", "membres": "membres", "voir": "Ouvrir le groupe", "jeu": "jeu en ligne", "note": "Un groupe manque ? Écris à nicolas.baudu@sailingmore.fr et il rejoint la carte.", "total": "{n} groupes, {m} membres en tout.", "alt": "Carte du monde des bourses aux équipiers : un bateau par groupe"}, "en": {"titre": "Crew finder groups", "retour": "← The site", "chapo": "Your next crew member is already in there, looking for a boat. Thirteen Facebook groups where crews come together — you join, you introduce yourself, you sail. We take nothing, moderate nothing, and step into nothing.", "annonce": "We're building a next-generation app for crew finder — until it's out, these groups are still the best place to get aboard.", "carte": "Where the groups are", "liste": "The groups, one by one", "membres": "members", "voir": "Open the group", "jeu": "online game", "note": "A group missing? Write to nicolas.baudu@sailingmore.fr and it goes on the map.", "total": "{n} groups, {m} members in all.", "alt": "World map of crew finder groups: one boat per group"}};</script>
+<script>
+(function(){
+  document.querySelectorAll('.planisphere').forEach(function(carte){
+    var bulle = carte.querySelector('.etiquette-v');
+    if(!bulle) return;
+    var epingle = null;                     /* la pastille cliquée reste ouverte sous le curseur */
+    function placer(b){
+      var d = carte.getBoundingClientRect(), r = b.getBoundingClientRect();
+      var x = r.left - d.left + r.width / 2;
+      var y = r.top - d.top;
+      var dr = bulle.querySelector('.drapeau');
+      if(b.dataset.d){ dr.src = 'drapeaux/' + b.dataset.d + '.png'; dr.hidden = false; } else { dr.hidden = true; }
+      bulle.querySelector('.nom').textContent = b.dataset.n || '';
+      bulle.querySelector('.nb').textContent = '';   /* le nombre d'abonnés ne s'affiche pas (Nicolas, 19/11/2026) */
+      bulle.hidden = false;
+      var bas = y < 44;                      /* pastille trop haut : la bulle passe dessous */
+      bulle.style.left = Math.min(Math.max(x, 52), d.width - 52) + 'px';
+      bulle.style.top = y + 'px';
+      bulle.style.transform = bas ? 'translate(-50%, 16px)' : 'translate(-50%, calc(-100% - 11px))';
+    }
+    function marquer(b){
+      carte.querySelectorAll('.pt-v').forEach(function(o){ o.setAttribute('aria-pressed','false'); });
+      if(b){ b.setAttribute('aria-pressed','true'); }
+    }
+    function fermer(){ bulle.hidden = true; epingle = null; marquer(null); }
+    function ouvrir(b){ epingle = b; marquer(b); placer(b); }
+    /* au survol et au focus, la ville se nomme sans s'épingler (Nicolas, 19/11/2026) */
+    carte.querySelectorAll('.pt-v').forEach(function(b){
+      b.addEventListener('mouseenter', function(){ if(!epingle){ placer(b); } });
+      b.addEventListener('focus', function(){ if(!epingle){ placer(b); } });
+      b.addEventListener('mouseleave', function(){ if(epingle){ placer(epingle); } else { bulle.hidden = true; } });
+      b.addEventListener('blur', function(){ if(epingle){ placer(epingle); } else { bulle.hidden = true; } });
+    });
+    carte.addEventListener('click', function(e){
+      /* les pastilles se touchent : c'est la plus proche du clic qui gagne, pas la plus haute */
+      var b = null;
+      if(e.detail === 0 && document.activeElement && document.activeElement.classList.contains('pt-v')){
+        b = document.activeElement;                       /* au clavier, la pastille qui a le focus */
+      } else {
+        var d = carte.getBoundingClientRect();
+        var px = e.clientX - d.left, py = e.clientY - d.top, bd = 1e9;
+        carte.querySelectorAll('.pt-v').forEach(function(o){
+          var r = o.getBoundingClientRect();
+          var cx = r.left - d.left + r.width / 2, cy = r.top - d.top + r.height / 2;
+          var dd = (cx - px) * (cx - px) + (cy - py) * (cy - py);
+          if(dd < bd){ bd = dd; b = o; }
+        });
+        if(b && bd > 26 * 26){ b = null; }                 /* trop loin d'une pastille : on ferme */
+      }
+      if(!b){ fermer(); return; }
+      if(b.getAttribute('aria-pressed') === 'true'){ fermer(); } else { ouvrir(b); }
+    });
+    carte.addEventListener('keydown', function(e){ if(e.key === 'Escape') fermer(); });
+  });
+  /* La bourse mondiale se promène : « c'est partout dans le monde, tu pourrais le faire bouger
+     aléatoirement dans le monde ? » (Nicolas, 19/11/2026). Elle s'immobilise sous le curseur, sinon
+     on ne peut ni la lire ni cliquer dessus, et elle ne bouge pas du tout si le visiteur a demandé
+     moins d'animation. */
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    document.querySelectorAll('.planisphere .pt-b[data-errant],.planisphere .pt-b[data-derive],.planisphere .pt-b[data-pts]')
+      .forEach(function(a){
+      var errant = a.hasAttribute('data-errant');
+      var bx = parseFloat(a.dataset.bx), by = parseFloat(a.dataset.by), amp = parseFloat(a.dataset.amp);
+      /* Promenade : les points sont calculés sur la carte (promenade_oceans.py), tous au large.
+         On les enchaîne — jamais de tirage au hasard, donc jamais de bateau sur la terre. */
+      var pts = null;
+      if(a.dataset.pts){ try { pts = JSON.parse(a.dataset.pts); } catch(e){ pts = null; } }
+      var i = 0;
+      if(pts && pts.length > 1){ a.style.left = pts[0][0] + '%'; a.style.top = pts[0][1] + '%'; }
+      /* Sans promenade : l'ancien rythme. Avec : le bateau repart dès qu'il arrive, il ne s'arrête
+         jamais — c'est le glissement de 30 s qui donne la lenteur, pas une pause. */
+      /* Le pas suivant part quand le glissement s'achève : aucune halte, jamais de saut. Le rythme
+         est donc celui de la transition — 30 s pour un bateau d'océan, 8 s pour celui du monde. */
+      var vif = a.hasAttribute('data-vif');
+      var pause = pts ? ((errant ? 8000 : (vif ? 9000 : 22000)) + 150) : (errant ? 9000 : 16000);
+      var hasard = pts ? 300 : (errant ? 5000 : 8000);
+      function ailleurs(){
+        var x, y;
+        if(pts && pts.length > 1){                    /* le point suivant de sa promenade */
+          var precedent = pts[i];
+          i = (i + 1) % pts.length;
+          /* Passage de la ligne de changement de date : la carte est plate, le bateau repasserait
+             par-dessus tout l'océan. On le fait changer de bord d'un coup, sans glissement. */
+          if(Math.abs(pts[i][0] - precedent[0]) > 40){
+            a.style.transition = 'none';
+            a.style.opacity = '.25';
+            a.style.left = pts[i][0].toFixed(2) + '%';
+            a.style.top = pts[i][1].toFixed(2) + '%';
+            requestAnimationFrame(function(){ a.style.transition = ''; a.style.opacity = ''; });
+            return;
+          }
+          a.style.left = pts[i][0].toFixed(2) + '%';
+          a.style.top = pts[i][1].toFixed(2) + '%';
+          return;
+        }
+        if(errant){                                   /* n'importe où dans le monde */
+          x = 6 + Math.random() * 88;
+          y = 13 + Math.random() * 74;
+        } else {                                      /* à petite distance de son large, pour rester dans l'eau */
+          x = Math.min(94, Math.max(6, bx + (Math.random() * 2 - 1) * amp));
+          y = Math.min(87, Math.max(13, by + (Math.random() * 2 - 1) * amp * 0.7));
+        }
+        a.style.left = x.toFixed(2) + '%';
+        a.style.top = y.toFixed(2) + '%';
+      }
+      var t = setInterval(ailleurs, pause + Math.random() * hasard);
+      /* Il part dès le chargement, pas quand on arrive sur la carte : au défilement, il est déjà en
+         route (Nicolas, 19/11/2026 : « faut qu'il bouge avant que ça scroll dessus »). */
+      if(pts){ setTimeout(ailleurs, 150); }
+      /* Sur un téléphone il n'y a pas de survol : le bateau continuait de glisser pendant que le
+         doigt descendait, et le clic tombait à côté. On l'immobilise au premier contact. */
+      a.addEventListener('pointerdown', figer, {passive:true});
+      a.addEventListener('touchstart', figer, {passive:true});
+      /* On la fige là où elle est : sans ça elle finit son glissement pendant qu'on la vise. */
+      function figer(){
+        clearInterval(t);
+        var r = a.getBoundingClientRect(), m = a.parentElement.getBoundingClientRect();
+        a.style.transition = 'none';
+        a.style.left = ((r.left - m.left + r.width / 2) / m.width * 100).toFixed(2) + '%';
+        a.style.top = ((r.top - m.top + r.height / 2) / m.height * 100).toFixed(2) + '%';
+        requestAnimationFrame(function(){ a.style.transition = ''; });
+      }
+      a.addEventListener('mouseenter', figer);
+      a.addEventListener('mouseleave', function(){
+        clearInterval(t); t = setInterval(ailleurs, pause + hasard / 2);
+      });
+      a.addEventListener('focus', function(){ clearInterval(t); });
+    });
+  }
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.planisphere')){
+      document.querySelectorAll('.planisphere .etiquette-v').forEach(function(b){ b.hidden = true; });
+    }
+  });
+})();
+</script>
+<script>
+(function(){
+  var U = window.SM_PAGE_UI || {}, L = 'fr';
+  try{ if(window.smLangue) L = window.smLangue(); }catch(e){}
+  if(!U[L]) L = 'fr';
+  function t(k){ return (U[L] && U[L][k]) || (U.fr && U.fr[k]) || k; }
+  function textes(){
+    document.querySelectorAll('[data-t]').forEach(function(e){
+      var v = t(e.dataset.t);
+      if(v && e.dataset.n !== undefined) v = v.replace('{n}', e.dataset.n).replace('{m}', e.dataset.m || '');
+      if(v) e.textContent = v;
+    });
+  }
+  function choisir(v){
+    if(window.smChoisirLangue) window.smChoisirLangue(v);
+    L = (v === 'bzh') ? 'fr' : v;
+    if(!U[L]) L = 'fr';
+    textes();
+    document.querySelectorAll('#langues button').forEach(function(b){
+      b.setAttribute('aria-pressed', String(b.dataset.lang === v));
+    });
+  }
+  document.querySelectorAll('#langues button').forEach(function(b){
+    b.addEventListener('click', function(){ choisir(b.dataset.lang); });
+  });
+  textes();
+})();
+</script><!--mer-debut-->
+<div class="mer-fond" id="cadre">
+
+  <canvas id="mer" aria-hidden="true"></canvas>
+  <div class="mer-ombre" aria-hidden="true"></div>
+  
+  <button class="rejouer" id="rejouer" type="button" hidden>Rejouer</button>
+  <div class="vent">
+    <div class="cadran" id="cadran" role="slider" tabindex="0" aria-label="Direction d'où vient le vent"
+      aria-valuemin="0" aria-valuemax="359" aria-valuenow="0" aria-valuetext="Vent du 000 degrés">
+      <svg viewBox="0 0 104 104" aria-hidden="true">
+        <circle cx="52" cy="52" r="44" fill="none" stroke="#f4f7fa" stroke-opacity=".28" stroke-width="1"/>
+        <g id="rose" stroke="#f4f7fa" stroke-opacity=".5" stroke-width="1">
+          <line x1="52" y1="8" x2="52" y2="15"/><line x1="96" y1="52" x2="89" y2="52"/>
+          <line x1="52" y1="96" x2="52" y2="89"/><line x1="8" y1="52" x2="15" y2="52"/>
+        </g>
+        <g id="fleche">
+          <line x1="52" y1="10" x2="52" y2="66" stroke="#f4f7fa" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M52 76 L44.5 61 L52 65 L59.5 61 Z" fill="#f4f7fa"/>
+          <circle cx="52" cy="10" r="4.2" fill="#E2232E"/>
+        </g>
+      </svg>
+    </div>
+    <span class="valeur" id="ventValeur">Vent du 000°</span>
+    <span class="geste">Faites-le tourner</span>
+  </div>
+</div>
+<style>
+/* ---- la mer en fond : fixe, derrière tout le contenu (Nicolas, 19/11/2026) ---- */
+.mer-fond{position:fixed;inset:0;z-index:0;overflow:hidden;background:#071c31;
+  isolation:isolate;pointer-events:none}
+.mer-fond canvas{position:absolute;inset:0;width:100%;height:100%;display:block;
+  opacity:0;transition:opacity 1.1s cubic-bezier(.23,1,.32,1);cursor:grab;pointer-events:auto}
+.mer-fond.pret canvas{opacity:1}
+.mer-fond.fondu canvas{opacity:0;transition-duration:.22s}
+/* voile : l'eau reste visible comme fond, le texte reste lisible par-dessus */
+.mer-fond .mer-ombre{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(120% 85% at 50% 28%,rgba(5,16,30,.20) 0%,rgba(5,16,30,.34) 55%,rgba(5,16,30,.52) 100%),
+             linear-gradient(180deg,rgba(6,18,33,.30) 0%,rgba(6,18,33,.12) 30%,rgba(6,18,33,.40) 78%,rgba(5,15,28,.62) 100%)}
+.contenu{position:relative;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,18,33,0) 0,rgba(6,18,33,0) 62vh,
+    rgba(6,18,33,.55) 96vh,rgba(6,18,33,.55) 100%)}
+
+/* les commandes de la scène : posées sur la mer, elles s'effacent dès qu'on descend */
+.mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{
+  transition:opacity .45s ease,transform .45s ease}
+.mer-fond.loin .heure,.mer-fond.loin .choix,.mer-fond.loin .vent,.mer-fond.loin .legende,
+.mer-fond.loin .rejouer{opacity:0;pointer-events:none;transform:translateY(-6px)}
+
+/* Le tableau de bord détaché des pages annexes : mêmes commandes, hors de la couche du fond
+   (z-index -1) qui les rendrait invisibles et incliquables. */
+.mer-fond.mer-fond-commandes{position:relative;inset:auto;height:auto;width:100%;max-width:100%;
+  background:none;overflow:visible;z-index:60;pointer-events:none;display:flex;flex-direction:column;
+  align-items:flex-start;gap:.55rem;padding:1rem 1.1rem .2rem}
+.mer-fond.mer-fond-commandes .heure,.mer-fond.mer-fond-commandes .choix{position:relative!important;
+  left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
+  margin:0!important;pointer-events:auto}
+.mer-fond .heure{position:absolute;left:14px;top:80px;z-index:4;height:46px;padding:0 8px 0 14px;
+  display:flex;align-items:center;gap:10px;border-radius:999px;width:min(360px,calc(100% - 28px));
+  background:rgba(6,18,33,.66);color:var(--creme,#f4efe4);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto}
+.mer-fond .heure .lue{flex:none;min-width:4.6em;font-size:14px;font-weight:600;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.mer-fond .heure .piste{flex:1 1 auto;min-width:0;height:42px;margin:0;background:transparent;
+  cursor:pointer;-webkit-appearance:none;appearance:none;touch-action:none;outline:none}
+.mer-fond .heure .piste::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:linear-gradient(90deg,#0b1730 0%,#0b1730 21%,#d9879a 27%,#f2c48a 31%,#6fb1e6 42%,#3f97e6 56%,#7fb6e0 72%,#f5b56b 81%,#d9694f 85%,#3a2c55 89%,#0b1730 93%,#0b1730 100%)}
+.mer-fond .heure .piste::-moz-range-track{height:8px;border-radius:4px;background:linear-gradient(90deg,#0b1730 0%,#0b1730 21%,#d9879a 27%,#f2c48a 31%,#6fb1e6 42%,#3f97e6 56%,#7fb6e0 72%,#f5b56b 81%,#d9694f 85%,#3a2c55 89%,#0b1730 93%,#0b1730 100%)}
+.mer-fond .heure .piste::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;
+  margin-top:-7px;border-radius:50%;background:var(--creme,#f4efe4);border:0;box-shadow:0 1px 5px rgba(0,0,0,.5)}
+.mer-fond .heure .piste::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--creme,#f4efe4);
+  border:0;box-shadow:0 1px 5px rgba(0,0,0,.5)}
+.mer-fond .heure .auto{flex:none;display:flex;align-items:center;gap:6px;height:34px;padding:0 11px 0 9px;
+  border-radius:999px;font:600 12.5px/1 system-ui,sans-serif;color:var(--creme,#f4efe4);
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);cursor:pointer}
+.mer-fond .heure .auto .pastille{width:8px;height:8px;border-radius:50%;background:#93a8bc}
+.mer-fond .heure .auto[aria-checked="true"]{background:var(--creme,#f4efe4);color:#08162a;border-color:var(--creme,#f4efe4)}
+.mer-fond .heure .auto[aria-checked="true"] .pastille{background:var(--rouge,#e23a3e)}
+
+/* le choix du bateau */
+.mer-fond .choix{position:absolute;left:14px;top:80px;z-index:4;display:flex;flex-direction:column;
+  align-items:stretch;gap:4px;padding:4px;border-radius:22px;background:rgba(6,18,33,.66);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:auto;width:max-content}
+.mer-fond .choix button{font:600 13px/1 system-ui,sans-serif;color:#e8eff5;background:transparent;
+  border:0;border-radius:18px;min-height:36px;padding:0 14px;cursor:pointer;white-space:nowrap;
+  text-align:left;transition:background-color .15s ease,color .15s ease}
+.mer-fond .choix button[aria-checked="true"]{background:var(--creme,#f4efe4);color:#08162a}
+.mer-fond .choix button:focus-visible{outline:3px solid var(--rouge,#e23a3e);outline-offset:2px}
+
+/* plus de girouette : le vent ne se règle plus à la main (Nicolas, 19/11/2026) */
+.mer-fond .vent{display:none!important}
+/* le cadran du vent, en bas à droite */
+.mer-fond .vent{position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:4;width:104px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--creme,#f4efe4);text-align:center;
+  pointer-events:auto}
+.mer-fond .vent .cadran{width:96px;height:96px;border-radius:50%;background:rgba(6,18,33,.62);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);touch-action:none;cursor:grab;outline:none;
+  -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.mer-fond .vent .cadran:active{cursor:grabbing}
+.mer-fond .vent svg{display:block;width:100%;height:100%}
+.mer-fond .vent .valeur{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;
+  text-shadow:0 1px 4px rgba(0,0,0,.85)}
+.mer-fond .vent .geste{font-size:10.5px;color:#c3d2e0;text-shadow:0 1px 4px rgba(0,0,0,.85)}
+
+/* la légende de la manœuvre, en bas à gauche */
+.mer-fond .legende{position:absolute;left:14px;bottom:14px;z-index:4;width:min(330px,calc(100% - 150px));
+  background:rgba(6,18,33,.66);color:var(--creme,#f4efe4);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-radius:12px;padding:12px 14px 10px;display:flex;flex-direction:column;gap:4px;text-align:left;
+  pointer-events:auto}
+.mer-fond .legende .oeil{margin:0;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#a8bccc}
+.mer-fond .legende .phase{margin:0;font-weight:700;font-size:17px;line-height:1.2;min-height:1.2em}
+.mer-fond .legende .detail{margin:0;font-size:12.5px;line-height:1.35;color:#b9cbdc;min-height:2.7em}
+.mer-fond .instruments{display:flex;gap:16px;margin:5px 0 0;padding:7px 0 0;
+  border-top:1px solid rgba(255,255,255,.16)}
+.mer-fond .instruments div{display:flex;flex-direction:column;min-width:0}
+.mer-fond .instruments dt{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#a8bccc}
+.mer-fond .instruments dd{margin:0;font-variant-numeric:tabular-nums;font-size:16px;font-weight:600;white-space:nowrap}
+.mer-fond .instruments dd small{font-size:10.5px;font-weight:500;color:#a8bccc;margin-left:2px}
+
+.mer-fond .rejouer{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:4;
+  font:600 13.5px/1 system-ui,sans-serif;color:#08162a;background:var(--creme,#f4efe4);border:0;border-radius:999px;
+  padding:10px 17px;min-height:42px;cursor:pointer;pointer-events:auto}
+.mer-fond .rejouer:active{transform:translateX(-50%) scale(.97)}
+.mer-fond .secours{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:24px;text-align:center;color:var(--creme,#f4efe4);z-index:2}
+
+/* le héros : plus qu'un texte posé sur l'eau */
+.hero.hero-mer{position:relative;max-width:none;margin:0;padding:0;text-align:center;
+  min-height:100svh;display:flex;align-items:center;justify-content:center;background:transparent;pointer-events:none}
+.hero-mer .hero-texte{position:relative;z-index:3;padding:2rem 1.4rem 7.75rem;pointer-events:none}
+.contenu a,.contenu button,.contenu input,.contenu select,.contenu textarea,
+.contenu summary,.contenu [tabindex],.contenu video,.contenu audio{pointer-events:auto}
+
+@media (max-width:820px){
+  .mer-fond .choix{left:10px;top:64px}
+  .mer-fond .legende{display:none}
+  .mer-fond .vent{top:auto;bottom:150px;left:8px;right:auto;transform:none;width:84px}
+  .mer-fond .vent .cadran{width:78px;height:78px}
+  .mer-fond .rejouer{bottom:12px}
+  .hero.hero-mer{align-items:flex-start}
+  .hero-mer .hero-texte{padding:13.2rem 1.2rem .5rem}
+  .hero-mer .reseaux-barre{gap:1.3rem;flex-wrap:wrap;margin-top:2.2rem}
+}
+@media (prefers-reduced-motion: reduce){
+  .mer-fond canvas{transition-duration:.2s}
+  .mer-fond .heure,.mer-fond .choix,.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer{transition:none}
+}
+</style>
+<script src="mer-louvoyage.js?v=ec6f832f" defer></script>
+<script>
+/* les commandes de la scène s'effacent dès qu'on a quitté le haut de la page */
+(function(){
+  var m=document.getElementById('cadre'); if(!m) return;
+  function maj(){ var s=window.scrollY||window.pageYOffset||0;
+    m.classList.toggle('loin', s > window.innerHeight*0.72); }
+  window.addEventListener('scroll', maj, {passive:true});
+  window.addEventListener('resize', maj); maj();
+})();
+</script>
+<style>.mer-fond{z-index:-1}.mer-fond .vent,.mer-fond .legende,.mer-fond .rejouer,.mer-fond .geste{display:none!important}</style><!--mer-fin-->
+</body></html>
