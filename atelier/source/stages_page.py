@@ -202,6 +202,8 @@ input[type=search]{grid-column:span 2}
 /* Le bouton « Enregistrer » des favoris arrive dans l'en-tête de la carte : il se pose à droite,
    pas au milieu du titre (25/11/2026). */
 .offre .tete .fav-btn{margin-left:auto;align-self:flex-start;white-space:nowrap}
+.offre .ecole a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(95,211,196,.28)}
+.offre .ecole a:hover{border-bottom-color:var(--accent)}
 .badge{flex:0 0 auto;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:.8rem;letter-spacing:.02em;color:#dff3ef}
 .offre h2{font-size:1.02rem;margin:0 0 .2rem;line-height:1.3}
 .offre .ecole{color:var(--doux);font-size:.86rem}
@@ -264,7 +266,13 @@ table.cmp-t tr:last-child th,table.cmp-t tr:last-child td{border-bottom:0}
 .offre .bas-d{display:flex;align-items:center;gap:.55rem}
 /* Offres rangées par école, servies par lots (25/11/2026). */
 .grp{border:1px solid var(--trait);border-radius:14px;background:var(--fond);margin:0 0 1rem;overflow:hidden}
+.grp>summary{cursor:pointer;list-style:none}
+.grp>summary::-webkit-details-marker{display:none}
+.grp>summary::after{content:'▾';margin-left:auto;color:var(--doux);font-size:.9rem;transition:transform .18s}
+.grp[open]>summary::after{transform:rotate(180deg)}
 .grp-t{display:flex;align-items:center;gap:.6rem;padding:.65rem .85rem;background:var(--carte);border-bottom:1px solid var(--trait);flex-wrap:wrap}
+.grp>summary.grp-t{border-bottom:0}
+.grp[open]>summary.grp-t{border-bottom:1px solid var(--trait)}
 .grp-n{min-width:0}
 .grp-n h2{font-size:.98rem;margin:0;line-height:1.2}
 .grp-n .n{color:var(--doux);font-size:.78rem}
@@ -282,6 +290,12 @@ table.cmp-t tr:last-child th,table.cmp-t tr:last-child td{border-bottom:0}
 .ses>summary:hover .ses-t{color:var(--encre)}
 .ses-n{font-size:.7rem;color:var(--doux);opacity:.75}
 .ses-c{display:grid;gap:.7rem;padding:.15rem 0 .9rem}
+.tab-ecole{width:100%;border-collapse:collapse;font-size:.9rem;margin:1rem 0}
+.tab-ecole th,.tab-ecole td{border-bottom:1px solid var(--trait);padding:.5rem .6rem;text-align:left;vertical-align:top}
+.tab-ecole th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--doux);font-weight:500}
+.tab-ecole td.p{white-space:nowrap;font-weight:600}
+.tab-ecole a{color:var(--encre);text-decoration:none;border-bottom:1px solid rgba(95,211,196,.35)}
+.tab-ecole a:hover{border-bottom-color:var(--accent)}
 .offre .dates{grid-column:1/-1;color:var(--accent);font-size:.84rem;font-weight:600;letter-spacing:.01em;margin:.1rem 0 .1rem}
 .grp-l .sous{font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--doux);font-weight:500;
   margin:.9rem 0 .1rem;display:flex;align-items:baseline;gap:.5rem}
@@ -391,7 +405,7 @@ def _carte_html(o: dict) -> str:
     else:
         lieu = o.get("region") or o.get("pays_nom") or ""
     langue = LANGUES.get(o.get("langue") or "", (o.get("langue") or "").upper())
-    morceaux = [f"<span>{H.escape(lieu)}</span>", f"<span>{H.escape(dates)}</span>"]
+    morceaux = [f"<span>{H.escape(lieu)}</span>"]
     if o.get("langue_src") in ("offre", "page", "stage"):
         morceaux.append(f"<span>{H.escape(langue)}</span>")
     if o.get("niveau"):
@@ -401,7 +415,7 @@ def _carte_html(o: dict) -> str:
         f'<div class="tete"><span class="badge" style="background:hsl({_teinte(o.get("ecole_slug") or "")},38%,22%);'
         f'border:1px solid hsl({_teinte(o.get("ecole_slug") or "")},45%,34%)">{H.escape(_sigle(o.get("ecole") or ""))}</span>'
         f'<div><h2>{H.escape(o.get("titre") or "")}</h2>'
-        f'<div class="ecole">{H.escape(o.get("ecole") or "")}'
+        f'<div class="ecole"><a href="ecole-{_slug_fichier(o.get("ecole_slug") or "")}.html">{H.escape(o.get("ecole") or "")}</a>'
         + (f' · {H.escape(o["ecole_pays_nom"])}' if o.get("ecole_pays_nom") else "") + "</div></div></div>"
         f'<div class="prix">{_prix(o)}</div>'
         f'<div class="dates">{H.escape(dates)}'
@@ -459,14 +473,12 @@ def _liste_html(offres: list[dict], ecoles_max: int = 12, par_famille: int = 3) 
                 devise = {"EUR": "€", "GBP": "£"}.get(x.get("devise") or "EUR", x.get("devise") or "€")
                 break
         tete = (
-            '<div class="grp-t">'
             f'<span class="badge" style="background:hsl({_teinte(os_[0].get("ecole_slug") or "")},38%,22%);'
             f'border:1px solid hsl({_teinte(os_[0].get("ecole_slug") or "")},45%,34%)">{H.escape(_sigle(os_[0].get("ecole") or ""))}</span>'
             f'<div class="grp-n"><h2>{H.escape(os_[0].get("ecole") or "")}</h2>'
             f'<span class="n">{len(os_)} offres'
             + (f' · {H.escape(os_[0]["ecole_pays_nom"])}' if os_[0].get("ecole_pays_nom") else "") + "</span></div>"
             + (f'<span class="des">dès <b>{bas:,.0f}'.replace(",", " ") + f" {devise}</b></span>" if bas is not None else "")
-            + "</div>"
         )
         corps, montres, premier = "", 0, True
         for libelle, lot in _sessions(os_):
@@ -481,7 +493,9 @@ def _liste_html(offres: list[dict], ecoles_max: int = 12, par_famille: int = 3) 
         if reste > 0:
             corps += (f'<button type="button" class="grp-plus" data-g="{H.escape(os_[0].get("ecole_slug") or "")}">'
                       f"+ {reste} autres offres</button>")
-        blocs.append(f'<section class="grp">{tete}<div class="grp-l">{corps}</div></section>')
+        blocs.append(f'<details class="grp"{" open" if not blocs else ""}>'
+                     f'<summary class="grp-t">{tete}</summary>'
+                     f'<div class="grp-l">{corps}</div></details>')
     return "".join(blocs)
 
 
@@ -756,7 +770,7 @@ function moinsCher(os){var m=null;os.forEach(function(o){if(o.prix_eur!=null&&(m
 function ecrireListe(){
   var total=GROUPES.length;
   var lot=GROUPES.slice(0,LIM_E);
-  var html=lot.map(function(g){
+  var html=lot.map(function(g,ie){var premierEcole=(ie===0);
     var os=g.offres, ouv=!!OUVERTES[g.slug], bas=moinsCher(os);
     var corps='', montres=0, premier=true;
     sessions(os).forEach(function(s){
@@ -767,14 +781,14 @@ function ecrireListe(){
       premier=false; montres+=n;
     });
     var reste=os.length-montres;
-    return '<section class="grp">'
-      +'<div class="grp-t"><span class="badge" style="background:hsl('+teinte(g.slug)+',38%,22%);border:1px solid hsl('+teinte(g.slug)+',45%,34%)">'+esc(sigle(g.ecole))+'</span>'
+    return '<details class="grp"'+(premierEcole?' open':'')+'><summary class="grp-t">'
+      +'<span class="badge" style="background:hsl('+teinte(g.slug)+',38%,22%);border:1px solid hsl('+teinte(g.slug)+',45%,34%)">'+esc(sigle(g.ecole))+'</span>'
       +'<div class="grp-n"><h2>'+esc(g.ecole)+'</h2><span class="n">'+os.length+' '+(os.length>1?c('offres'):c('offre1'))+(g.pays?' · '+esc(g.pays):'')+'</span></div>'
       +(bas?'<span class="des">'+c('des')+' <b>'+bas.prix.toLocaleString(L)+' '+sym(bas.devise)+'</b></span>':'')
-      +'</div>'
+      +'</summary>'
       +'<div class="grp-l">'+corps
       +(reste>0?'<button type="button" class="grp-plus" data-g="'+esc(g.slug)+'">+ '+reste+' '+(reste>1?c('autres_offres'):c('autre_offre'))+'</button>':'')
-      +'</div></section>';
+      +'</div></details>';
   }).join('');
   if(total>LIM_E)html+='<button type="button" class="liste-plus" id="liste-plus">'+c('plus_ecoles').replace('{n}',total-LIM_E)+'</button>';
   document.getElementById('liste').innerHTML=html||('<p class="vide">'+(D.offres.length?t('aucune')+' <button type="button" id="tout-effacer" class="lien" style="cursor:pointer;font:inherit">'+esc(t('effacer'))+'</button>':t('vide'))+'</p>');
@@ -825,7 +839,8 @@ function carteHtml(o){
     return '<article class="offre">'
       +'<div class="tete"><span class="badge" style="background:hsl('+teinte(o.ecole_slug)+',38%,22%);border:1px solid hsl('+teinte(o.ecole_slug)+',45%,34%)">'+esc(sigle(o.ecole))+'</span>'
       +'<div><h2>'+esc(o.titre)+'</h2>'
-      +'<div class="ecole">'+esc(o.ecole)+(o.ecole_pays_nom?' · '+esc(o.ecole_pays_nom):'')+'</div></div></div>'
+      +'<div class="ecole"><a href="ecole-'+esc(o.ecole_slug||'ecole')+'.html">'+esc(o.ecole)+'</a>'
+      +(o.ecole_pays_nom?' · '+esc(o.ecole_pays_nom):'')+'</div></div></div>'
       +'<div class="prix">'+(o.prix!=null?o.prix.toLocaleString(L)+' '+sym(o.devise):'<span style="font-weight:400;font-size:.85rem">'+t('prix_vide')+'</span>')+'</div>' 
       +'<div class="dates">'+esc(dates)+(o.duree_jours?' · '+o.duree_jours+' '+(o.duree_jours===1?c('jour'):t('jours')):'')+'</div>'
       +'<div class="ligne"><span>'+esc(ou)+loin+'</span>' 
@@ -1374,6 +1389,89 @@ def injecter_bloc(dossier: Path = SITE) -> list[str]:
         p.write_text(h.replace("</body>", BLOC_HTML + "</body>", 1), encoding="utf-8")
         faites.append(nom)
     return faites
+
+
+
+# ---- Une page par école (25/11/2026) ---------------------------------------------------------
+# Nicolas : « les écoles sont des pages avec leur produit et info ? si non fais-le ». Non, elles ne
+# l'étaient pas : 63 écoles, une seule adresse. Chaque école a maintenant la sienne, avec ses stages,
+# ses prix, ses dates et son lien. C'est aussi ce qui rend le catalogue lisible par les moteurs :
+# « école de voile à Split » a enfin une page à qui répondre.
+def _slug_fichier(slug: str) -> str:
+    return re.sub(r"[^a-z0-9\-]+", "-", (slug or "").lower()).strip("-") or "ecole"
+
+
+def _page_ecole(slug: str, offres: list[dict]) -> str:
+    import site_blocks  # la barre du site : un seul endroit
+    nom = offres[0].get("ecole") or slug
+    pays = offres[0].get("ecole_pays_nom") or ""
+    prix = [o["prix"] for o in offres if o.get("prix") is not None]
+    dates = sorted(o["debut"] for o in offres if o.get("debut"))
+    bas, haut = (min(prix), max(prix)) if prix else (None, None)
+    devise = {"EUR": "€", "GBP": "£"}.get(offres[0].get("devise") or "EUR", offres[0].get("devise") or "€")
+    derniere = max((o.get("verifie") or "" for o in offres), default="")
+    titre = f"{nom} — stages de voile, prix et dates | Sailing More"
+    desc = (f"{len(offres)} stage(s) chez {nom}"
+            + (f" ({pays})" if pays else "")
+            + (f", de {bas:,.0f}".replace(",", " ") + f" à {haut:,.0f}".replace(",", " ") + f" {devise}" if bas is not None else "")
+            + ". Prix, dates et durée publiés, lien direct vers l'école.")
+    lignes = []
+    for o in sorted(offres, key=lambda x: (x.get("debut") or "9999", x.get("prix") or 0)):
+        quand = (f'{_dt(o["debut"])}' + (f' → {_dt(o["fin"])}' if o.get("fin") and o["fin"] != o.get("debut") else "")
+                 if o.get("debut") else "dates chez l'école")
+        duree = (f'{o["duree_jours"]} ' + ("jour" if o["duree_jours"] == 1 else "jours")) if o.get("duree_jours") else ""
+        p = (f'{o["prix"]:,.0f}'.replace(",", " ") + " " + {"EUR": "€", "GBP": "£"}.get(o.get("devise") or "EUR", o.get("devise") or "")) if o.get("prix") is not None else "prix non publié"
+        lignes.append(
+            '<tr>'
+            f'<td>{H.escape(quand)}</td>'
+            f'<td><a href="{H.escape(o.get("lien") or "")}" rel="noopener nofollow" target="_blank">{H.escape(o.get("titre") or "")}</a></td>'
+            f'<td>{H.escape(duree)}</td><td class="p">{H.escape(p)}</td></tr>')
+    itemlist = {"@type": "ItemList", "numberOfItems": len(offres), "itemListElement": [
+        {"@type": "ListItem", "position": i + 1,
+         "item": {"@type": "Course", "name": o.get("titre") or "", "url": o.get("lien") or "",
+                  "provider": {"@type": "Organization", "name": nom},
+                  **({"offers": {"@type": "Offer", "price": o["prix"], "priceCurrency": o.get("devise") or "EUR"}}
+                     if o.get("prix") is not None else {})}}
+        for i, o in enumerate(offres)]}
+    jsonld = __import__("jsonld")
+    return (
+        '<!doctype html><html lang="fr"><head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width,initial-scale=1">'
+        f"<title>{H.escape(titre)}</title>"
+        f'<link rel="canonical" href="https://sailingmore.fr/ecole-{_slug_fichier(slug)}.html">'
+        f'<meta name="description" content="{H.escape(desc, quote=True)}">'
+        + jsonld.bloc(jsonld.fil("stages.html", "Stages de voile"), itemlist)
+        + f"<style>{site_blocks.ENTETE_CSS}{CSS}</style></head><body>"
+        + site_blocks.entete_site("stages.html", site_blocks.LANGUES)
+        + '<main class="page">'
+        f'<a class="retour" href="/stages.html">← Tous les stages</a>'
+        f"<h1>{H.escape(nom)}</h1>"
+        f'<p class="chapo">{len(offres)} stage(s) publié(s)'
+        + (f" · {H.escape(pays)}" if pays else "")
+        + (f' · prix de {bas:,.0f}'.replace(",", " ") + f" à {haut:,.0f}".replace(",", " ") + f" {devise}" if bas is not None else "")
+        + (f' · première date le {_dt(dates[0])}' if dates else "")
+        + f" · prix vérifiés le {_dt(derniere)}.</p>"
+        '<table class="tab-ecole"><thead><tr><th>Dates</th><th>Stage</th><th>Durée</th><th>Prix</th></tr></thead>'
+        f'<tbody>{"".join(lignes)}</tbody></table>'
+        '<p class="pied">La langue du cours et le niveau ne sont pas affichés : nous ne les connaissons pas '
+        'pour cette école, et nous préférons ne rien dire plutôt que de deviner.</p>'
+        '<p class="pied"><a href="/stages.html">Comparer ces stages avec ceux des autres écoles</a></p>'
+        "</main></body></html>"
+    )
+
+
+def ecrire_ecoles(dossier: Path = SITE) -> int:
+    """Écrit une page par école : `ecole-<slug>.html`. Rend le nombre de pages écrites."""
+    d = charger()
+    offres = [avec_niveau(_avec_position(o)) for o in d.get("offres", [])
+              if affichable(o) and not non_stage(o.get("titre"), o.get("prix_eur"))]
+    par: dict[str, list[dict]] = {}
+    for o in offres:
+        par.setdefault(_slug_fichier(o.get("ecole_slug") or o.get("ecole") or ""), []).append(o)
+    dossier.mkdir(parents=True, exist_ok=True)
+    for slug, lot in par.items():
+        (dossier / f"ecole-{slug}.html").write_text(_page_ecole(slug, lot), encoding="utf-8")
+    return len(par)
 
 
 def ecrire_page(dossier: Path = SITE) -> int:
