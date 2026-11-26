@@ -20,7 +20,8 @@ URL = "https://sailingmore.fr"
 # Ordre du sitemap. `index.html` -> « / ». equivalences.html : absente tant qu'elle est noindex (page vide).
 PAGES = ["index.html", "cours.html", "lexique.html", "regles-de-course.html", "regates.html", "stages.html", "comparatif-stages.html",
          "carte.html", "ports.html", "simulateur.html", "bateaux.html", "chants-de-marin.html",
-         "equivalences.html", "securite-obligatoire.html", "jeux.html", "annonceurs.html"]
+         "equivalences.html", "securite-obligatoire.html", "jeux.html", "annonceurs.html",
+         "bourse-equipiers.html"]
 # Pages légales : indexables et déclarées comme le reste (26/11/2026 — elles avaient été oubliées, et
 # une correction faite la veille sur le sitemap publié s'était perdue à la reconstruction suivante :
 # c'est l'écrivain qu'il faut corriger, pas sa sortie).
