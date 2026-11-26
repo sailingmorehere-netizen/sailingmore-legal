@@ -847,7 +847,7 @@ function carteHtml(o){
       +'<span>'+esc(lng)+marque+'</span>'
       +(o.niveau?'<span>'+t(o.niveau)+'</span>':'')+'</div>'
       +'<div class="bas"><span>'+t('verifie')+' '+dt(o.verifie)+'</span>'
-      +'<div class="bas-d"><button type="button" class="cmp-b" data-i="'+o.__i+'" aria-pressed="'+(cmpPos(o.__i)>=0?'true':'false')+'">'+esc(c('ajouter'))+'</button>'
+      +'<div class="bas-d"><button type="button" class="cmp-b" data-i="'+o.__i+'" aria-pressed="'+(cmpPos(o.__i)>=0?'true':'false')+'">'+esc(cmpLibelle(o.__i))+'</button>'
       +'<a class="lien" href="'+esc(o.lien)+'" rel="noopener nofollow" target="_blank">'+t('voir')+'</a></div></div>'
       +'</article>';
 }
@@ -960,6 +960,7 @@ function lireUrl(){
   });
   var cp=p.get('cmp');
   if(cp){CMP=cp.split(',').map(Number).filter(function(i){return i>=0&&i<D.offres.length}).slice(0,4)}
+  else CMP=cmpDepuisIds(cmpLire());
 }
 function ecrireUrl(){
   var a=[];
@@ -987,6 +988,16 @@ function etiquettesCmp(){
   var x=document.getElementById('cmp-x');if(x)x.setAttribute('aria-label',c('fermer'));
   var ong=document.getElementById('cmp-o');if(ong)ong.title=c('onglet');
 }
+/* Stockage (sans compte) : localStorage « sm-comparatif » = {v:1, ids:[école|lien|titre|début,…], maj:ms}.
+   On range l'identité de l'offre (le lien seul ne suffit pas : 725 offres, 531 liens), pas son rang dans la page (le rang change à chaque régénération) ;
+   c'est le format qu'une synchronisation par l'API des favoris (rangs 500→507) pourra lire et
+   écrire tel quel. L'adresse (?cmp=) l'emporte sur le stockage quand elle est présente. */
+var CLE_CMP='sm-comparatif';
+function cmpId(o){return [o.ecole_slug,o.lien,o.titre,o.debut||''].join('|')}
+function cmpLire(){try{var s=JSON.parse(localStorage.getItem(CLE_CMP)||'null');return s&&s.v===1&&Array.isArray(s.ids)?s.ids:[]}catch(e){return[]}}
+function cmpSauve(){try{localStorage.setItem(CLE_CMP,JSON.stringify({v:1,ids:CMP.map(function(i){return cmpId(D.offres[i])}),maj:Date.now()}))}catch(e){}}
+function cmpDepuisIds(ids){var r=[];ids.forEach(function(id){for(var i=0;i<D.offres.length;i++)if(cmpId(D.offres[i])===id){if(r.indexOf(i)<0)r.push(i);break}});return r.slice(0,4)}
+function cmpLibelle(i){var p=cmpPos(i);return p>=0?'✓ '+(p+1)+' · '+c('dans'):c('ajouter')}
 function cmpPos(i){for(var k=0;k<CMP.length;k++)if(CMP[k]===i)return k;return -1}
 function cmpBascule(i){var p=cmpPos(i);if(p>=0){CMP.splice(p,1);return true}
   if(CMP.length>=4)return false;CMP.push(i);return true}
@@ -1046,7 +1057,7 @@ function dessinerListeCmp(){
 function majBoutonsCmp(){
   var bs=document.querySelectorAll('.offre .cmp-b');
   for(var k=0;k<bs.length;k++){var i=+bs[k].getAttribute('data-i');
-    bs[k].setAttribute('aria-pressed',cmpPos(i)>=0?'true':'false')}
+    bs[k].setAttribute('aria-pressed',cmpPos(i)>=0?'true':'false');bs[k].textContent=cmpLibelle(i)}
 }
 function ouvrirCmp(f,sansFocus){
   OUVERT=f!==false;
@@ -1061,14 +1072,14 @@ function ouvrirCmp(f,sansFocus){
   }else if(o&&!sansFocus)try{o.focus({preventScroll:true})}catch(e){}
 }
 function basculerCmp(i){
-  if(!cmpBascule(i)){var a=document.getElementById('cmp-aide');if(a)a.textContent=c('max');return}
-  majBoutonsCmp();dessinerCmp();ecrireUrl();
+  if(!cmpBascule(i)){ouvrirCmp(true,true);var a=document.getElementById('cmp-aide');if(a)a.textContent=c('max');return}
+  cmpSauve();majBoutonsCmp();dessinerCmp();ecrireUrl();
   if(!OUVERT&&CMP.length===1)ouvrirCmp(true);
 }
 document.getElementById('cmp-o').addEventListener('click',function(){ouvrirCmp(!OUVERT)});
 document.getElementById('cmp-x').addEventListener('click',function(){ouvrirCmp(false)});
 document.getElementById('cmp-v').addEventListener('click',function(){ouvrirCmp(false)});
-document.getElementById('cmp-vider').addEventListener('click',function(){CMP=[];majBoutonsCmp();dessinerCmp();ecrireUrl()});
+document.getElementById('cmp-vider').addEventListener('click',function(){CMP=[];cmpSauve();majBoutonsCmp();dessinerCmp();ecrireUrl()});
 document.addEventListener('keydown',function(e){if((e.key==='Escape'||e.key==='Esc')&&OUVERT)ouvrirCmp(false)});
 document.getElementById('cmp-selection').addEventListener('click',function(e){
   var b=e.target.closest?e.target.closest('button[data-i]'):null;if(!b)return;basculerCmp(+b.getAttribute('data-i'))});
@@ -1146,7 +1157,7 @@ CMP_TEXTES = {
     "fr": {"onglet": "Comparer", "titre": "Comparer les stages",
            "aide": "Cochez deux à quatre offres : elles se comparent ici, ligne par ligne. Le prix par jour met les durées sur la même base.",
            "vide": "Aucune offre cochée pour l'instant.", "toutes": "Toutes les offres de la page",
-           "vider": "Tout retirer", "fermer": "Fermer", "ajouter": "Comparer", "retirer": "Retirer",
+           "vider": "Tout retirer", "fermer": "Fermer", "ajouter": "Ajouter au comparatif", "dans": "Dans le comparatif", "retirer": "Retirer",
            "max": "Quatre offres au maximum : retirez-en une pour en ajouter une autre.",
            "stage": "Stage", "prix": "Prix", "prix_jour": "Prix par jour", "duree": "Durée", "jour": "jour",
            "dates": "Dates", "lieu": "Lieu", "langue": "Langue", "niveau": "Niveau", "type": "Type",
@@ -1162,7 +1173,7 @@ CMP_TEXTES = {
     "en": {"onglet": "Compare", "titre": "Compare the courses",
            "aide": "Tick two to four offers: they are compared here, line by line. Price per day puts the durations on the same footing.",
            "vide": "No offer ticked yet.", "toutes": "Every offer on this page",
-           "vider": "Clear all", "fermer": "Close", "ajouter": "Compare", "retirer": "Remove",
+           "vider": "Clear all", "fermer": "Close", "ajouter": "Add to comparison", "dans": "In comparison", "retirer": "Remove",
            "max": "Four offers at most: remove one to add another.",
            "stage": "Course", "prix": "Price", "prix_jour": "Price per day", "duree": "Duration", "jour": "day",
            "dates": "Dates", "lieu": "Place", "langue": "Language", "niveau": "Level", "type": "Type",
@@ -1178,7 +1189,7 @@ CMP_TEXTES = {
     "de": {"onglet": "Vergleichen", "titre": "Kurse vergleichen",
            "aide": "Zwei bis vier Angebote ankreuzen: sie werden hier Zeile für Zeile verglichen. Der Tagespreis bringt die Dauer auf dieselbe Basis.",
            "vide": "Noch kein Angebot angekreuzt.", "toutes": "Alle Angebote dieser Seite",
-           "vider": "Alles entfernen", "fermer": "Schließen", "ajouter": "Vergleichen", "retirer": "Entfernen",
+           "vider": "Alles entfernen", "fermer": "Schließen", "ajouter": "Zum Vergleich hinzufügen", "dans": "Im Vergleich", "retirer": "Entfernen",
            "max": "Höchstens vier Angebote: eines entfernen, um ein anderes hinzuzufügen.",
            "stage": "Kurs", "prix": "Preis", "prix_jour": "Preis pro Tag", "duree": "Dauer", "jour": "Tag",
            "dates": "Termine", "lieu": "Ort", "langue": "Sprache", "niveau": "Niveau", "type": "Art",
@@ -1194,7 +1205,7 @@ CMP_TEXTES = {
     "it": {"onglet": "Confronta", "titre": "Confrontare i corsi",
            "aide": "Spunta da due a quattro offerte: si confrontano qui, riga per riga. Il prezzo al giorno mette le durate sulla stessa base.",
            "vide": "Nessuna offerta spuntata.", "toutes": "Tutte le offerte della pagina",
-           "vider": "Togli tutto", "fermer": "Chiudi", "ajouter": "Confronta", "retirer": "Togli",
+           "vider": "Togli tutto", "fermer": "Chiudi", "ajouter": "Aggiungi al confronto", "dans": "Nel confronto", "retirer": "Togli",
            "max": "Quattro offerte al massimo: togli una per aggiungerne un'altra.",
            "stage": "Corso", "prix": "Prezzo", "prix_jour": "Prezzo al giorno", "duree": "Durata", "jour": "giorno",
            "dates": "Date", "lieu": "Luogo", "langue": "Lingua", "niveau": "Livello", "type": "Tipo",
@@ -1210,7 +1221,7 @@ CMP_TEXTES = {
     "es": {"onglet": "Comparar", "titre": "Comparar los cursos",
            "aide": "Marca de dos a cuatro ofertas: se comparan aquí, línea por línea. El precio por día pone las duraciones en la misma base.",
            "vide": "Ninguna oferta marcada.", "toutes": "Todas las ofertas de la página",
-           "vider": "Quitar todo", "fermer": "Cerrar", "ajouter": "Comparar", "retirer": "Quitar",
+           "vider": "Quitar todo", "fermer": "Cerrar", "ajouter": "Añadir a la comparación", "dans": "En la comparación", "retirer": "Quitar",
            "max": "Cuatro ofertas como máximo: quita una para añadir otra.",
            "stage": "Curso", "prix": "Precio", "prix_jour": "Precio por día", "duree": "Duración", "jour": "día",
            "dates": "Fechas", "lieu": "Lugar", "langue": "Idioma", "niveau": "Nivel", "type": "Tipo",
@@ -1226,7 +1237,7 @@ CMP_TEXTES = {
     "pt": {"onglet": "Comparar", "titre": "Comparar os cursos",
            "aide": "Marca de duas a quatro ofertas: comparam-se aqui, linha a linha. O preço por dia põe as durações na mesma base.",
            "vide": "Nenhuma oferta marcada.", "toutes": "Todas as ofertas da página",
-           "vider": "Retirar tudo", "fermer": "Fechar", "ajouter": "Comparar", "retirer": "Retirar",
+           "vider": "Retirar tudo", "fermer": "Fechar", "ajouter": "Adicionar à comparação", "dans": "Na comparação", "retirer": "Retirar",
            "max": "Quatro ofertas no máximo: retire uma para acrescentar outra.",
            "stage": "Curso", "prix": "Preço", "prix_jour": "Preço por dia", "duree": "Duração", "jour": "dia",
            "dates": "Datas", "lieu": "Local", "langue": "Língua", "niveau": "Nível", "type": "Tipo",
