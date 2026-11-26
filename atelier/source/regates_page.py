@@ -288,8 +288,10 @@ a{color:#fff;text-decoration:none}
 .dist{display:block;color:#fff;font-size:.68rem;letter-spacing:.06em;margin-top:.15rem;white-space:nowrap}
 
 /* ── la carte des épreuves : brique commune, voir carte_epreuves.py ── */
-.carte-regates h2{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gris);
-  font-weight:500;margin:0 0 .5rem}
+/* Titre de la carte : mêmes valeurs que stages.html et les fiches école (.74rem/.06em/400),
+   seule la variable de couleur reste celle de la page — Nicolas, 26/11/2026. */
+.carte-regates h2{font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--gris);
+  font-weight:400;margin:0 0 .5rem}
 __CARTE_CSS__
 @media (max-width:640px){
   .ligne-recherche{flex-direction:column}
