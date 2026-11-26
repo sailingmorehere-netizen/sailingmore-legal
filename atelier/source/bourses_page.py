@@ -86,7 +86,7 @@ a{color:inherit}
 /* Le sélecteur de bateau de la mer de fond (F50, TP52, 19 pieds) n'a rien à faire ici : il se pose
    en haut à gauche et passe par-dessus le titre (vu le 26/11/2026 à la première capture). La mer de
    fond reste, elle ne sert qu'à l'ambiance. */
-.mer-fond .choix{display:none}
+.mer-fond #choix{display:none}
 """
 
 
