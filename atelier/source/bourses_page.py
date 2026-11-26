@@ -34,7 +34,9 @@ UI = {
         "membres": "membres",
         "voir": "Ouvrir le groupe",
         "jeu": "jeu en ligne",
-        "note": ("Un groupe manque ? Écris à nicolas.baudu@sailingmore.fr et il rejoint la carte."),
+        "note": "Un groupe manque ?",
+        "note_lien": "Écris-nous",
+        "note_fin": " et il rejoint la carte.",
         "total": "{n} groupes, {m} membres en tout.",
         "alt": "Carte du monde des bourses aux équipiers : un bateau par groupe",
     },
@@ -51,7 +53,9 @@ UI = {
         "membres": "members",
         "voir": "Open the group",
         "jeu": "online game",
-        "note": "A group missing? Write to nicolas.baudu@sailingmore.fr and it goes on the map.",
+        "note": "A group missing?",
+        "note_lien": "Write to us",
+        "note_fin": " and it goes on the map.",
         "total": "{n} groups, {m} members in all.",
         "alt": "World map of crew finder groups: one boat per group",
     },
@@ -102,12 +106,27 @@ a{color:inherit}
   margin:0;z-index:4;box-shadow:0 8px 22px rgba(3,8,14,.5)}
 @media (max-width:700px){.planisphere .encart-france{position:static;width:100%;margin:.6rem 0 0;
   box-shadow:none}}
+/* Sur 250 px de large, le mot « France » de l'encart passe sous le bord et se coupe
+   (« FRANC » + un rond, vu le 26/11/2026) : la forme se reconnaît seule. */
+.planisphere .encart-france .titre-fr{display:none}
 /* Le sélecteur de bateau de la mer de fond (F50, TP52, 19 pieds) n'a rien à faire ici : il se pose
    en haut à gauche et passe par-dessus le titre (vu le 26/11/2026 à la première capture). La mer de
    fond reste, elle ne sert qu'à l'ambiance. */
 .mer-fond #choix{display:none}
 """
 
+
+# Aucune adresse lisible dans une page publiée (règle du 25/11/2026) : le HTML ne porte que les deux
+# morceaux, ce script les recolle au chargement. Sans JavaScript, le lien mène à /contact.html.
+SCRIPT_COURRIEL = """<script>(function () {
+  var liens = document.querySelectorAll('a.courriel[data-a][data-b]');
+  for (var i = 0; i < liens.length; i++) {
+    var a = liens[i], adresse = a.getAttribute('data-a') + '@' + a.getAttribute('data-b');
+    var sujet = a.getAttribute('data-sujet');
+    a.href = 'mailto:' + adresse + (sujet ? '?subject=' + encodeURIComponent(sujet) : '');
+    a.title = adresse;
+  }
+})();</script>"""
 
 JS = """<script>
 (function(){
@@ -203,11 +222,16 @@ def construire(dossier: Path | None = None) -> str:
             "</div></section>"
             f"<h2 data-t=\"liste\" style=\"margin-top:2.2rem\">{H.escape(f['liste'])}</h2>"
             f"<div class=\"bourses\">{''.join(cartes)}</div>"
-            f"<p class=\"note\" data-t=\"note\">{H.escape(f['note'])}</p>"
+            "<p class=\"note\"><span data-t=\"note\">"
+            f"{H.escape(f['note'])}</span> "
+            "<a class=\"courriel\" href=\"/contact.html\" data-a=\"hello\" data-b=\"sailingmore.fr\" "
+            "data-sujet=\"Bourse aux équipiers\" data-t=\"note_lien\">Écris-nous</a>"
+            f"<span data-t=\"note_fin\">{H.escape(f['note_fin'])}</span></p>"
             "</main>"
             f"{site_blocks.CARTE_CSS}"
             f"<script>window.SM_PAGE_UI={_json_script(UI)};</script>"
             f"{site_blocks.CARTE_JS}"
+            f"{SCRIPT_COURRIEL}"
             f"{JS}"
             "</body></html>\n")
 
