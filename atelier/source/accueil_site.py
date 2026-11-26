@@ -1228,16 +1228,31 @@ def publier_en_un_seul_envoi(fichiers: list[str], message: str = "accueil : mise
             return
         arbre.append({"path": nom, "mode": "100644", "type": "blob", "sha": blob["sha"]})
 
-    s, nouveau = appel(f"/repos/{depot}/git/trees", "POST",
-                       {"base_tree": commit["tree"]["sha"], "tree": arbre})
-    if s not in (200, 201):
-        print("arbre refusé", s, nouveau)
-        return
-    if nouveau["sha"] == commit["tree"]["sha"]:
+    # L'arbre part par tranches de 150 entrées. Un seul appel avec les 767 fichiers du site (92 Ko)
+    # dépasse ce que GitHub accepte de fusionner d'un coup : il répond 502, ou « your request timed
+    # out, your input was too large » (26/11/2026, deux publications perdues sans commit). Chaque
+    # tranche repart de l'arbre précédent, donc le résultat est identique, en plus petit.
+    import time as _time
+
+    base = commit["tree"]["sha"]
+    for debut in range(0, len(arbre), 150):
+        tranche = arbre[debut:debut + 150]
+        for essai in range(4):                    # 502 et délais : trois reprises, puis on parle
+            s, nouveau = appel(f"/repos/{depot}/git/trees", "POST",
+                               {"base_tree": base, "tree": tranche})
+            if s in (200, 201):
+                base = nouveau["sha"]
+                break
+            if essai == 3:
+                print("arbre refusé", s, nouveau)
+                return
+            _time.sleep(2 * (essai + 1))
+
+    if base == commit["tree"]["sha"]:
         print("rien de neuf : aucun commit, aucune construction")
         return
     s, c = appel(f"/repos/{depot}/git/commits", "POST",
-                 {"message": message, "tree": nouveau["sha"], "parents": [tete]})
+                 {"message": message, "tree": base, "parents": [tete]})
     if s not in (200, 201):
         print("commit refusé", s, c)
         return
@@ -1445,6 +1460,13 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         print(f"nomenclature des bateaux : {bateaux_page.ecrire_page(SITE)}")
     except Exception as e:  # noqa: BLE001
         print(f"nomenclature des bateaux non écrite : {e}")
+    # Fiches bateaux (26/11/2026, tâche 58) : fiches_bateaux.py est la source unique (bateaux-fiches.json),
+    # après le lexique et le cours dont il pose les liens retour (bloc balisé, idempotent).
+    try:
+        import fiches_bateaux
+        print(f"fiches bateaux : {fiches_bateaux.ecrire_page(SITE)}")
+    except Exception as e:  # noqa: BLE001
+        print(f"fiches bateaux non écrites : {e}")
     # Favoris (24/11/2026) : favoris_page.py est la source unique des trois scripts et de mes-favoris.html.
     # Les balises <script> viennent de site_blocks.entete_site() (liste PAGES_FAVORIS), posée plus bas
     # par poser_entete_partout() : mes-favoris.html reçoit ainsi la barre du site comme les autres.
