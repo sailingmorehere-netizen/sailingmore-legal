@@ -83,6 +83,10 @@ a{color:inherit}
   background:#081521}
 .planisphere img{display:block;width:100%;height:auto;opacity:.92}
 .encart-france{width:min(430px,100%);margin:.9rem 0 0}
+/* Le sélecteur de bateau de la mer de fond (F50, TP52, 19 pieds) n'a rien à faire ici : il se pose
+   en haut à gauche et passe par-dessus le titre (vu le 26/11/2026 à la première capture). La mer de
+   fond reste, elle ne sert qu'à l'ambiance. */
+.mer-fond .choix{display:none}
 """
 
 
