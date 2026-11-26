@@ -21,6 +21,10 @@ URL = "https://sailingmore.fr"
 PAGES = ["index.html", "cours.html", "lexique.html", "regles-de-course.html", "regates.html", "stages.html", "comparatif-stages.html",
          "carte.html", "ports.html", "simulateur.html", "bateaux.html", "chants-de-marin.html",
          "equivalences.html", "securite-obligatoire.html", "jeux.html", "annonceurs.html"]
+# Pages légales : indexables et déclarées comme le reste (26/11/2026 — elles avaient été oubliées, et
+# une correction faite la veille sur le sitemap publié s'était perdue à la reconstruction suivante :
+# c'est l'écrivain qu'il faut corriger, pas sa sortie).
+LEGALES = ["mentions-legales.html", "confidentialite.html", "delete.html"]
 NS = ('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
       'xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">')
 
@@ -43,10 +47,18 @@ def fusionner(site: Path) -> int:
     images = _images(f.read_text(encoding="utf-8")) if f.exists() else {}
     lignes = []
     # Une page par école (25/11/2026) : découvertes sur le disque, jamais dans une liste fermée.
-    noms = list(PAGES) + sorted(x.name for x in site.glob("ecole-*.html")) if site.is_dir() else list(PAGES)
+    noms = (list(PAGES) + LEGALES + sorted(x.name for x in site.glob("ecole-*.html"))
+            if site.is_dir() else list(PAGES) + LEGALES)
+    # Une page par chant de marin (26/11/2026) : découvertes sur le disque, comme les pages d'école.
+    if site.is_dir():
+        noms += sorted(x.name for x in site.glob("chant-*.html"))
     # Une page par mot du lexique (25/11/2026) : 505 fichiers dans `lexique/`, avec leur dossier.
     mot = sorted(x.relative_to(site).as_posix() for x in (site / "lexique").glob("*.html"))
-    for nom in dict.fromkeys(list(noms) + mot):
+    # Les stories publiées (26/11/2026) : `stories/AAAA-MM-JJ.html`, indexables et avec canonical,
+    # mais jamais déclarées — la correction de la veille n'avait porté que sur le sitemap publié,
+    # pas sur son écrivain, donc la reconstruction suivante l'avait effacée.
+    story = sorted(x.relative_to(site).as_posix() for x in (site / "stories").glob("*.html"))
+    for nom in dict.fromkeys(list(noms) + mot + story):
         p = site / nom
         if not _indexable(p):
             continue
