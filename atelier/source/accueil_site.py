@@ -1258,6 +1258,7 @@ def fichiers_a_publier() -> list[str]:
                          "regates.html", "regles-de-course.html", "lexique.html", "stages.html", "comparatif-stages.html",
                          "equivalences.html", "cours.html", "bateaux.html", "bateaux.json", "stages-proches.json", "404.html", "mentions-legales.html",
                          "bourse-equipiers.html", "ports.html", "simulateur.html", "chants-de-marin.html",
+                         "qui-sommes-nous.html",
                          "confidentialite.html", "delete.html", "sitemap.xml", "feed.xml")
              if (SITE / n).exists()]
     # Une page par pavillon (24/11/2026, chapitre des pavillons du cours) : 42 pages `pavillon-<id>.html`.

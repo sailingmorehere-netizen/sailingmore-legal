@@ -495,22 +495,21 @@ CARTE_CSS = """
 # Les pages du site, dans l'ordre où on les lit. Le juridique n'est plus ici (24/11/2026 :
 # « retire les mentions légales du menu ») : mentions légales, confidentialité et suppression de
 # données restent atteignables par le pied de page, comme les licences.
+# Ordre tranché par Nicolas le 26/11/2026 : les stages d'abord, puis le calendrier, les cours ;
+# l'ordre de lecture d'un marin qui cherche à naviguer avant celui qui révise. Pas de « Accueil »
+# (le nom du site ramène à l'accueil) ; ni hébergement gratuit, ni régales, ni jeux, ni carte du
+# Léman, ni simulateur : ces trois derniers restent en ligne, hors de la barre.
 MENU_PAGES = [
-    ("index.html", "Accueil", ""),
-    ("regates.html", "Calendrier des régates", ""),
-    ("regles-de-course.html", "Règles de course", ""),
     ("stages.html", "Stages de voile", ""),
+    ("regates.html", "Calendrier des régates", ""),
     ("cours.html", "Cours théoriques", ""),
-    ("jeux.html", "Jeux", ""),
-    ("bateaux.html", "Bateaux", ""),
     ("bourse-equipiers.html", "Bourse aux équipiers", ""),
-    ("carte.html", "Carte du Léman", ""),
+    ("bateaux.html", "Bateaux", ""),
     ("lexique.html", "Lexique", ""),
-    ("chants-de-marin.html", "Chants de marins", ""),
-    # Deux pages entières écrites par Claude, publiées le 24/11/2026 (règle : brancher sans demander).
     ("ports.html", "Ports du monde", ""),
-    ("simulateur.html", "Simulateur de priorités", ""),
+    ("chants-de-marin.html", "Chants de marins", ""),
     ("annonceurs.html", "Annonceurs", ""),
+    ("qui-sommes-nous.html", "Qui sommes-nous ?", ""),
 ]
 
 
@@ -898,7 +897,7 @@ def entete_site(actuelle: str, langues: list[str], auto: bool = True) -> str:
     """
     # Le menu passe en dernier : son panneau ouvert s'ancre sur le bord droit de la barre. Placé
     # avant les langues, il se décalait de la largeur du sélecteur et sortait de l'écran.
-    return ('<header class="entete"><a class="nom" href="/">Sailing More</a>'
+    return ('<header class="entete"><a class="nom" href="/" aria-label="Sailing More, retour à l\u2019accueil">Sailing More</a>'
             f'{selecteur_langue(langues, auto)}'
             f'{menu_site(actuelle)}</header>'
             + _LANGUE_CSS + _MENU_JS + _LANGUE_JS + balises_favoris(actuelle) + balises_comptes(actuelle))
@@ -1549,7 +1548,7 @@ def formulaire_kit(adresse: str = "hello.sailingmore" + "@" + "gmail.com") -> st
             f'<a class="courriel" href="#" data-a="{local}" data-b="{domaine}" '
             f'data-t="kit_lien">notre adresse</a>.</p>'
             "<noscript><p class=\"kit-ou\">Sans JavaScript, demandez la grille par la page "
-            "<a href=\"/contact.html\">contact</a> — elle part le jour même.</p></noscript>"
+            "<a href=\"/qui-sommes-nous.html\">contact</a> — elle part le jour même.</p></noscript>"
             "<script>(function(){"
             "document.querySelectorAll('form.kit-form').forEach(function(f){"
             "if(f.dataset.a&&f.dataset.b)f.action='https://formsubmit.co/'+f.dataset.a+'@'+f.dataset.b;});"

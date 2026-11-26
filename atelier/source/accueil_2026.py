@@ -369,15 +369,13 @@ PRIORITE = ["index.html", "stages.html", "regates.html", "cours.html"]
 
 
 def _ordonner_menu(mid: str) -> str:
-    """Le menu suit l'ordre des priorités : accueil, stages, régates, cours, puis le reste, dans son ordre."""
-    m = re.search(r'(<nav aria-label="Toutes les pages du site">)(.*?)(</nav>)', mid, re.S)
-    if not m:
-        return mid
-    liens = re.findall(r"<a .*?</a>", m.group(2), re.S)
-    cle = lambda a: re.search(r'href="([^"]+)"', a).group(1)
-    tete = [a for p in PRIORITE for a in liens if cle(a) == p]
-    reste = [a for a in liens if cle(a) not in PRIORITE]
-    return mid[:m.start(2)] + "".join(tete + reste) + mid[m.end(2):]
+    """Le menu garde l'ordre écrit dans `site_blocks.MENU_PAGES`, et rien d'autre.
+
+    26/11/2026 : cette fonction ne gardait que les `<a>` du panneau — le `<details>` du sous-menu des
+    chants disparaissait donc de l'accueil, qui affichait les 130 chants à plat dans la barre. Un
+    seul endroit décide de l'ordre : la liste `MENU_PAGES`.
+    """
+    return mid
 
 
 def refondre(html: str, racine: Path) -> str:
