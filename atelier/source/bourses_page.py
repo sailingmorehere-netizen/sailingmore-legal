@@ -58,9 +58,8 @@ CSS = """
 *{box-sizing:border-box}
 body{margin:0;background:var(--fond);color:var(--encre);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 a{color:inherit}
-.page{max-width:72rem;margin:0 auto;padding:2rem 1.2rem 5rem}
-.page h1{font-size:clamp(1.5rem,3.4vw,2.2rem);margin:.2rem 0 .7rem;letter-spacing:-.01em;
-  font-weight:500;text-transform:none;color:var(--encre)}
+.page{max-width:72rem;margin:0 auto;padding:11rem 1.4rem 5rem}
+.page h1{font-size:clamp(1.7rem,3.6vw,2.6rem);margin:.2rem 0 .7rem}
 .chapo{color:var(--doux);max-width:46rem;margin:0 0 .4rem}
 .total{color:var(--doux);font-size:.86rem;margin:0 0 1.6rem}
 .retour{display:inline-block;color:var(--doux);text-decoration:none;font-size:.9rem;margin-bottom:.6rem}
