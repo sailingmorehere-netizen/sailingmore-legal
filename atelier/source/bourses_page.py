@@ -27,6 +27,8 @@ UI = {
         "chapo": ("Ton prochain équipier est déjà là-dedans, en train de chercher un bateau. Treize groupes "
                   "Facebook où les équipages se font — tu entres, tu te présentes, tu embarques. On ne "
                   "prend rien, on ne modère rien, on ne s'interpose pas."),
+        "annonce": ("On développe une application nouvelle génération pour la bourse aux équipiers — "
+                    "en attendant, ces groupes restent le meilleur endroit pour embarquer."),
         "carte": "Où sont les groupes",
         "liste": "Les groupes, un par un",
         "membres": "membres",
@@ -42,6 +44,8 @@ UI = {
         "chapo": ("Your next crew member is already in there, looking for a boat. Thirteen Facebook groups "
                   "where crews come together — you join, you introduce yourself, you sail. We take "
                   "nothing, moderate nothing, and step into nothing."),
+        "annonce": ("We're building a next-generation app for crew finder — until it's out, these "
+                    "groups are still the best place to get aboard."),
         "carte": "Where the groups are",
         "liste": "The groups, one by one",
         "membres": "members",
@@ -58,9 +62,16 @@ CSS = """
 *{box-sizing:border-box}
 body{margin:0;background:var(--fond);color:var(--encre);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 a{color:inherit}
-.page{max-width:72rem;margin:0 auto;padding:11rem 1.4rem 5rem}
+.page{max-width:72rem;margin:0 auto;padding:11rem 1.4rem 5rem;
+  background:linear-gradient(180deg,rgba(8,20,32,0) 0,rgba(8,20,32,.55) 6rem,
+    rgba(8,20,32,.94) 13rem,#081420 18rem)}
 .page h1{font-size:clamp(1.7rem,3.6vw,2.6rem);margin:.2rem 0 .7rem}
 .chapo{color:var(--doux);max-width:46rem;margin:0 0 .4rem}
+/* L'annonce de l'application (Nicolas, 26/11/2026 : « tu peux dire en haut qu'on développe une
+   application nouvelle génération ») : en haut, avant l'accroche, sur un filet d'accent. */
+.annonce{margin:0 0 1rem;padding:.68rem .95rem;max-width:46rem;color:var(--encre);font-size:.94rem;
+  background:rgba(95,211,196,.07);border:1px solid rgba(95,211,196,.28);border-left:3px solid var(--accent);
+  border-radius:8px}
 .total{color:var(--doux);font-size:.86rem;margin:0 0 1.6rem}
 .retour{display:inline-block;color:var(--doux);text-decoration:none;font-size:.9rem;margin-bottom:.6rem}
 .bourses{display:flex;flex-direction:column;gap:.4rem;margin:1rem 0 0}
@@ -150,7 +161,7 @@ def construire(dossier: Path | None = None) -> str:
 
     cartes = []
     for b in bourses:
-        zone = (b.get("ou") or "").strip()
+        zone = site_blocks._zone(b).strip()
         gens = int(b.get("membres") or 0)
         lien = clics_sortants.lien(b["lien"], "bourse")
         tete = [f'<strong>{H.escape(b["groupe"])}</strong>']
@@ -180,6 +191,7 @@ def construire(dossier: Path | None = None) -> str:
             f"{site_blocks.entete_site(PAGE, site_blocks.LANGUES)}\n<main class=\"page\">"
             f"<a class=\"retour\" href=\"/\" data-t=\"retour\">{H.escape(f['retour'])}</a>"
             f"<h1 data-t=\"titre\">{H.escape(f['titre'])}</h1>"
+            f"<p class=\"annonce\" data-t=\"annonce\">{H.escape(f['annonce'])}</p>"
             f"<p class=\"chapo\" data-t=\"chapo\">{H.escape(f['chapo'])}</p>"
             f"<p class=\"total\" data-t=\"total\" data-n=\"{len(bourses)}\" data-m=\"{_nombre(total)}\">{H.escape(f['total'].format(n=len(bourses), m=_nombre(total)))}</p>"
             "<section class=\"monde\">"
@@ -195,6 +207,7 @@ def construire(dossier: Path | None = None) -> str:
             "</main>"
             f"{site_blocks.CARTE_CSS}"
             f"<script>window.SM_PAGE_UI={_json_script(UI)};</script>"
+            f"{site_blocks.CARTE_JS}"
             f"{JS}"
             "</body></html>\n")
 
