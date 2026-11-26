@@ -13,6 +13,7 @@ else:
 P = {
     76: (250, 'EUR', 'Compagnia della Vela'),        # Junior : inscription 1re semaine 250 EUR
     100: (600, 'EUR', 'EZS Zeilschool'),             # STCW : Basic Safety 600 EUR (autre cours 845)
+    101: (560, 'EUR', 'Segelschule Grosse Freiheit'),  # combinaisons : SBF See & Binnen Motor « ab 560 € » (Komplett ab 995)
     106: (253, 'CHF', 'Lagoo Segelschule Zürich'),   # cours d'initiation 253 CHF (leçons à l'heure exclues)
     211: (105, 'EUR', 'Soleil Scuola Nautica'),      # Corso BLSD : « Costo del corso 105€ »
     291: (300, 'EUR', 'Segelschule Überlingen'),     # yacht 4 pers. : week-end 300 EUR (basse saison)
@@ -21,7 +22,9 @@ P = {
 n = 0
 for i, (p, c, ecole) in P.items():
     o = d['o'][i]
-    assert o[4] == ecole and o[8] in (None, '', 0), i
+    assert o[4] == ecole, i
+    if o[8] not in (None, '', 0):
+        continue  # déjà posé (script rejouable)
     o[8], o[9] = float(p), c
     n += 1
 open(F, 'w', encoding='utf8').write(json.dumps(d, separators=sep, ensure_ascii=asc) + ('\n' if raw.endswith('\n') else ''))
