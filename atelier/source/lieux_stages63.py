@@ -124,4 +124,5 @@ def main():
         json.dump(d, open(P, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
 
-main()
+if __name__ == '__main__':
+    main()

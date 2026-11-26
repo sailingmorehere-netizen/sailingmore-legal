@@ -66,7 +66,7 @@
   strong{color:#fff;font-weight:500}
 </style>
   <link rel="alternate" type="application/rss+xml" title="Sailing More" href="https://sailingmore.fr/feed.xml">
-<link rel="canonical" href="https://sailingmore.fr/confidentialite.html"><meta name="description" content="Où sont hébergées vos données (OVH, France), ce que Sailing More conserve, combien de temps, comment exporter et supprimer votre compte."><style id="equilibre">
+<link rel="canonical" href="https://sailingmore.fr/confidentialite.html"><meta name="description" content="Où sont vos données (OVH, France), ce que Sailing More conserve, combien de temps, et comment les exporter ou les supprimer."><style id="equilibre">
 /* Rééquilibrage design — 20/11/2026. Posé en dernier dans chaque page : il l'emporte sur les styles d'origine. */
 
 /* 1. Une police de marque, la même sur tous les appareils (Inter, licence SIL OFL, hébergée sur le site) */
@@ -961,220 +961,151 @@ body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:fl
 
 
 
+
+
+
+
+
+
 <div class="bord-reserve" aria-hidden="true"></div>
 
 
 
 
 
-<h1 lang="fr">Sailing More — Confidentialité</h1>
-
+<h1>Sailing More — Confidentialité</h1>
 <p><small>Dernière mise à jour : 26 novembre 2026</small></p>
 
+<p>Sailing More est un média indépendant de voile et de course au large. Cette page dit, sans détour,
+où vivent vos données, qui les traite, ce que nous conservons, pendant combien de temps, et comment
+les exporter ou les supprimer.</p>
+
 <h2>Qui est responsable</h2>
-<p>Nicolas Baudu, éditeur de Sailing More, 74500 Lugrin (Haute-Savoie), France. Adresse postale complète communiquée sur simple demande écrite. Contact : <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>.</p>
+<p>Nicolas Baudu, éditeur de Sailing More, Lugrin (Haute-Savoie), France. Pour toute question ou
+pour exercer vos droits : <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">l'adresse de contact</a>.</p>
 
 <h2>Où sont vos données</h2>
-<ul><li>les données sont hébergées chez <strong>OVH</strong>, en France ;</li><li>le code du site (PHP) s'exécute chez <strong>OVH</strong> ;</li><li>les courriels transactionnels (validation d'adresse, mot de passe oublié) sont envoyés par <strong>Zoho</strong> (serveur européen smtp.zoho.eu), un message à la fois, jamais en masse ;</li><li>aucune régie publicitaire, aucun traceur tiers, aucune mesure d'audience.</li></ul>
+<ul>
+<li><strong>Hébergement : OVH, en France.</strong> Les pages du site et les données des comptes sont
+hébergées chez OVH, sur des serveurs situés en France.</li>
+<li><strong>Code : exécuté chez OVH.</strong> Le code PHP du site (création de compte, connexion,
+export, suppression) s'exécute sur les mêmes serveurs OVH. Il n'appelle aucun service tiers pour
+décider quoi que ce soit à votre sujet.</li>
+<li><strong>Courriels : Zoho.</strong> Les courriels transactionnels (confirmation d'adresse,
+réinitialisation de mot de passe, confirmation de suppression) sont envoyés par Zoho Mail. Zoho
+reçoit votre adresse de courriel et le texte du message, uniquement pour l'acheminer.</li>
+<li><strong>Aucune régie publicitaire, aucun traceur tiers.</strong> Aucune publicité, aucun pixel,
+aucun outil de mesure d'audience, aucun bouton ou widget de réseau social intégré.</li>
+</ul>
 
 <h2>Ce que nous conservons</h2>
-<p>Sans compte, le site ne vous demande rien et ne garde rien sur vous. Avec un compte :</p><ul><li>la date de création du compte et l'état de validation de l'adresse ;</li><li>votre mot de passe, sous forme hachée (illisible, même pour nous) ;</li><li>vos favoris ;</li><li>votre adresse courriel <strong>n'est pas conservée</strong> : seule une empreinte irréversible l'est, qui sert à vous reconnaître. L'adresse n'existe en clair que dans le jeton de validation, le temps d'envoyer le message (une heure au plus).</li></ul><p>Pour limiter les essais de connexion répétés, un compteur d'échecs, rattaché à une empreinte de votre adresse IP (pas l'adresse elle-même), est tenu pendant quinze minutes.</p><p>Si vous nous écrivez par courriel ou sur un réseau social : votre message et ses pièces jointes, seulement pour y répondre.</p>
-
-<h2>Combien de temps</h2>
-<ul><li>un compte : jusqu'à ce que vous le supprimiez ;</li><li>un lien de validation : une heure ; un lien de mot de passe oublié : trente minutes ; ils s'effacent à l'usage ou à l'expiration ;</li><li>un compteur d'essais : quinze minutes ;</li><li>une conversation par courriel ou message : le temps d'y répondre, puis trente jours au maximum ;</li><li>une demande de suppression écrite : la trace de la demande est gardée un an, pour prouver qu'elle a été honorée.</li></ul><p>Les courriels de compte transitent par Zoho, qui applique ses propres durées de journalisation.</p>
+<table>
+<tr><th>Donnée</th><th>Pourquoi</th><th>Combien de temps</th></tr>
+<tr><td>Compte : adresse de courriel, nom affiché, mot de passe (conservé uniquement sous forme chiffrée, jamais en clair), langue, date de création</td><td>Vous identifier et faire fonctionner votre compte</td><td>Tant que le compte existe ; un compte inactif depuis 24 mois est supprimé</td></tr>
+<tr><td>Contenus que vous déposez dans votre compte</td><td>Le service que vous avez demandé</td><td>Jusqu'à leur suppression par vous ou avec le compte</td></tr>
+<tr><td>Journaux techniques du serveur (adresse IP, date, page demandée)</td><td>Sécurité et bon fonctionnement</td><td>12 mois au plus, chez OVH</td></tr>
+<tr><td>Courriels transactionnels envoyés</td><td>Acheminer le message</td><td>Selon la politique de Zoho ; nous n'en gardons pas de copie au-delà de la livraison</td></tr>
+<tr><td>Messages que vous nous écrivez (courriel ou réseaux sociaux)</td><td>Vous répondre</td><td>Le temps de répondre, puis 30 jours au plus</td></tr>
+<tr><td>Trace d'une demande de suppression</td><td>Prouver qu'elle a été honorée</td><td>Un an</td></tr>
+</table>
+<p>Nous ne collectons rien d'autre. Nous ne vendons ni ne transmettons ces données à un annonceur,
+et nous ne faisons ni profilage ni prospection automatisée.</p>
 
 <h2>Exporter vos données</h2>
-<p>Connecté, ouvrez <code>/api/export.php</code> : le site vous remet un fichier JSON avec la date de création, l'état de validation et tous vos favoris. Le mot de passe haché et l'empreinte technique n'y figurent pas, et l'adresse courriel non plus, puisqu'elle n'est pas conservée. Vous pouvez aussi le demander par écrit à <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>.</p>
+<p>Écrivez à <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com" data-sujet="Export de mes données">l'adresse de contact</a> depuis l'adresse de votre compte : nous vous renvoyons, sous
+trente jours, l'ensemble de ce que nous détenons sur vous dans un fichier lisible (JSON ou CSV).</p>
 
-<h2>Supprimer votre compte</h2>
-<p>Connecté, la suppression se fait avec votre mot de passe (<code>DELETE /api/compte.php</code>) : le fichier du compte est effacé, pas désactivé. Vous pouvez aussi écrire à <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a> ; nous répondons sous trente jours. Voir aussi <a href="delete.html">Suppression de données</a>.</p>
+<h2>Supprimer vos données</h2>
+<p>Même démarche, par courriel, ou depuis la page <a href="delete.html">Suppression de données</a> :
+le compte et les contenus associés sont effacés des serveurs OVH sous trente jours, et vous recevez une
+confirmation. Les journaux techniques disparaissent d'eux-mêmes dans les 12 mois ; seule reste la
+trace de la demande, un an.</p>
 
-<h2>Cookies et stockage local</h2>
-<p>Sans compte : aucun cookie. Une fois connecté, un seul cookie de session (<code>sm_compte</code>), nécessaire au fonctionnement, qui ne sert à rien d'autre et disparaît à la fermeture du navigateur ou à la déconnexion. La préférence de langue et, tant que les comptes ne sont pas ouverts, vos favoris restent dans le stockage local de votre navigateur, sans être transmis.</p>
-
-<h2>Ce que nous ne faisons jamais</h2>
-<p>Ni publicité ciblée, ni profilage, ni vente ou transmission de données à un annonceur ou à un courtier.</p>
+<h2>Réseaux sociaux</h2>
+<p>Si vous nous écrivez via Facebook, Instagram, YouTube, Telegram ou X, le message transite par
+cette plateforme (Meta, Google, Telegram, X), selon sa propre politique. Ces plateformes sont établies
+hors de l'Union européenne ; ces transferts relèvent de leurs clauses contractuelles types, pas du
+site. Aucun message ne part sans qu'une personne de Sailing More l'ait lu.</p>
 
 <h2>Vos droits</h2>
-<p>Accès, rectification, suppression, portabilité, retrait de votre accord : écrivez à <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>. Si la réponse ne vous satisfait pas, vous pouvez saisir la CNIL (cnil.fr).</p>
+<p>Vous pouvez demander à savoir ce que nous détenons, le faire corriger, l'exporter, le faire
+supprimer, ou retirer votre accord pour une publication : écrivez à <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">l'adresse de contact</a>. Nous répondons sous trente jours.
+Si la réponse ne vous satisfait pas, vous pouvez saisir la CNIL (cnil.fr, 3 place de Fontenoy,
+75007 Paris).</p>
 
 <h2>Âge</h2>
-<p>Le site ne s'adresse pas aux enfants de moins de 15 ans. Un parent qui constate le contraire peut écrire à <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a> et obtient la suppression.</p>
+<p>Ce site ne s'adresse pas aux enfants de moins de 15 ans et ne collecte rien auprès d'eux
+volontairement. Un parent qui constate le contraire peut écrire à <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">l'adresse de contact</a> et obtient la
+suppression.</p>
+
+<h2>Cookies</h2>
+<p>Aucun cookie de mesure d'audience ni de publicité. Seuls sont gardés dans votre navigateur, jamais
+transmis à un tiers : la préférence de langue, le fait d'avoir lu le bandeau d'information et, si vous
+êtes connecté, ce qui maintient votre session. Tout disparaît si vous videz les données du site.</p>
 
 <hr>
-<h1 lang="en">Privacy policy (English)</h1>
-
+<h1>Privacy policy (English)</h1>
 <p><small>Last updated: 26 November 2026</small></p>
 
-<h2>Who is responsible</h2>
-<p>Nicolas Baudu, publisher of Sailing More, 74500 Lugrin (Haute-Savoie), France. Full postal address supplied on written request. Contact: <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>.</p>
+<p>Sailing More is an independent sailing and offshore racing outlet. This page says plainly where
+your data lives, who processes it, what we keep and for how long, and how to export or delete it.</p>
 
-<h2>Where your data lives</h2>
-<ul><li>data is hosted at <strong>OVH</strong>, in France;</li><li>the site's PHP code runs at <strong>OVH</strong>;</li><li>transactional emails (address validation, forgotten password) are sent by <strong>Zoho</strong> (European server smtp.zoho.eu), one message at a time, never in bulk;</li><li>no advertising network, no third-party tracker, no audience measurement.</li></ul>
+<h2>Who is responsible</h2>
+<p>Nicolas Baudu, publisher of Sailing More, Lugrin (Haute-Savoie), France. Contact: <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">l'adresse de contact</a>.</p>
+
+<h2>Where your data is</h2>
+<ul>
+<li><strong>Hosting: OVH, in France.</strong> The site's pages and account data are hosted by OVH on
+servers located in France.</li>
+<li><strong>Code: run at OVH.</strong> The site's PHP code (sign-up, login, export, deletion) runs on
+those same OVH servers and calls no third-party service to decide anything about you.</li>
+<li><strong>Email: Zoho.</strong> Transactional emails (address confirmation, password reset,
+deletion confirmation) are sent by Zoho Mail, which receives your email address and the message text
+only to deliver it.</li>
+<li><strong>No ad network, no third-party tracker.</strong> No advertising, no pixel, no analytics
+tool, no embedded social widget.</li>
+</ul>
 
 <h2>What we keep</h2>
-<p>Without an account the site asks nothing of you and keeps nothing. With an account:</p><ul><li>the account creation date and whether the address was validated;</li><li>your password, hashed (unreadable, even to us);</li><li>your favourites;</li><li>your email address is <strong>not stored</strong>: only an irreversible fingerprint is, used to recognise you. The address exists in clear text only inside the validation token while the message is sent (one hour at most).</li></ul><p>To limit repeated login attempts, a failure counter tied to a fingerprint of your IP address (not the address itself) is kept for fifteen minutes.</p><p>If you write to us by email or on a social network: your message and attachments, only to answer you.</p>
-
-<h2>How long</h2>
-<ul><li>an account: until you delete it;</li><li>a validation link: one hour; a password-reset link: thirty minutes; both vanish when used or expired;</li><li>an attempt counter: fifteen minutes;</li><li>an email or message conversation: until answered, then thirty days at most;</li><li>a written deletion request: the record of the request is kept one year to prove it was honoured.</li></ul><p>Account emails pass through Zoho, which applies its own log retention.</p>
+<table>
+<tr><th>Data</th><th>Why</th><th>How long</th></tr>
+<tr><td>Account: email address, display name, password (stored only hashed, never in clear), language, creation date</td><td>To identify you and run your account</td><td>As long as the account exists; an account inactive for 24 months is deleted</td></tr>
+<tr><td>Content you put in your account</td><td>The service you asked for</td><td>Until you delete it, or with the account</td></tr>
+<tr><td>Server technical logs (IP address, date, page requested)</td><td>Security and operation</td><td>12 months at most, at OVH</td></tr>
+<tr><td>Transactional emails sent</td><td>To deliver the message</td><td>Per Zoho's policy; we keep no copy beyond delivery</td></tr>
+<tr><td>Messages you write to us (email or social networks)</td><td>To reply</td><td>Until answered, then 30 days at most</td></tr>
+<tr><td>Record of a deletion request</td><td>To prove it was honoured</td><td>One year</td></tr>
+</table>
+<p>We collect nothing else. We do not sell or pass this data to any advertiser, and we do no
+profiling or automated marketing.</p>
 
 <h2>Export your data</h2>
-<p>When logged in, open <code>/api/export.php</code>: the site hands you a JSON file with the creation date, validation status and all your favourites. The hashed password and technical fingerprint are not included, nor is the email address, since it is not stored. You can also ask in writing at <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>.</p>
+<p>Write to <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com" data-sujet="Export of my data">l'adresse de contact</a> from your account's address: within thirty days we send you everything we hold
+about you in a readable file (JSON or CSV).</p>
 
-<h2>Delete your account</h2>
-<p>When logged in, deletion needs your password (<code>DELETE /api/compte.php</code>): the account file is erased, not deactivated. You can also write to <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>; we answer within thirty days. See also <a href="delete.html">Data deletion</a>.</p>
+<h2>Delete your data</h2>
+<p>Same route, by email, or from the <a href="delete.html">data deletion</a> page: the account and its
+content are erased from the OVH servers within thirty days and you get a confirmation. Technical logs
+expire by themselves within 12 months; only the record of the request stays, for one year.</p>
 
-<h2>Cookies and local storage</h2>
-<p>Without an account: no cookie. Once logged in, a single session cookie (<code>sm_compte</code>), strictly necessary, used for nothing else, which disappears when you close the browser or log out. Your language preference and, until accounts open, your favourites stay in your browser's local storage and are not transmitted.</p>
-
-<h2>What we never do</h2>
-<p>No targeted advertising, no profiling, no sale or transfer of data to an advertiser or broker.</p>
+<h2>Social networks</h2>
+<p>If you write to us through Facebook, Instagram, YouTube, Telegram or X, the message passes through
+that platform (Meta, Google, Telegram, X) under its own policy. Those companies are established
+outside the EU; their transfers rest on their own standard contractual clauses, not on this site. No
+message leaves without a person at Sailing More having read it first.</p>
 
 <h2>Your rights</h2>
-<p>Access, correction, deletion, portability, withdrawal of consent: write to <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>. If the answer does not satisfy you, you may complain to the French authority, the CNIL (cnil.fr).</p>
+<p>You may ask what we hold, have it corrected, exported or deleted, or withdraw consent for a
+publication: write to <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">l'adresse de contact</a>. We answer within thirty days. You may also complain to the French data
+protection authority, the CNIL (cnil.fr).</p>
 
 <h2>Children</h2>
-<p>The site is not aimed at children under 15. A parent who finds otherwise can write to <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a> and have it deleted.</p>
+<p>This site is not aimed at children under 15 and does not knowingly collect anything from them.</p>
 
-<hr>
-<h1 lang="de">Datenschutz (Deutsch)</h1>
-
-<p><small>Zuletzt aktualisiert: 26. November 2026</small></p>
-
-<h2>Verantwortlicher</h2>
-<p>Nicolas Baudu, Herausgeber von Sailing More, 74500 Lugrin (Haute-Savoie), Frankreich. Vollständige Postanschrift auf schriftliche Anfrage. Kontakt: <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>.</p>
-
-<h2>Wo Ihre Daten liegen</h2>
-<ul><li>Die Daten werden bei <strong>OVH</strong> in Frankreich gehostet;</li><li>der PHP-Code der Website läuft bei <strong>OVH</strong>;</li><li>Transaktions-E-Mails (Adressbestätigung, vergessenes Passwort) sendet <strong>Zoho</strong> (europäischer Server smtp.zoho.eu), einzeln, nie als Massenversand;</li><li>keine Werbenetzwerke, keine Tracker Dritter, keine Reichweitenmessung.</li></ul>
-
-<h2>Was wir speichern</h2>
-<p>Ohne Konto verlangt und speichert die Website nichts. Mit Konto:</p><ul><li>Erstellungsdatum und Bestätigungsstatus der Adresse;</li><li>Ihr Passwort, nur als Hash (auch für uns unlesbar);</li><li>Ihre Favoriten;</li><li>Ihre E-Mail-Adresse wird <strong>nicht gespeichert</strong>, nur ein nicht umkehrbarer Fingerabdruck. Im Klartext existiert sie nur im Bestätigungstoken, solange die Nachricht verschickt wird (höchstens eine Stunde).</li></ul><p>Gegen wiederholte Anmeldeversuche wird fünfzehn Minuten lang ein Fehlerzähler geführt, der an einen Fingerabdruck Ihrer IP-Adresse (nicht die Adresse selbst) gebunden ist.</p><p>Schreiben Sie uns per E-Mail oder über ein soziales Netzwerk: Ihre Nachricht samt Anhängen, nur um zu antworten.</p>
-
-<h2>Wie lange</h2>
-<ul><li>Konto: bis Sie es löschen;</li><li>Bestätigungslink: eine Stunde; Link zum Zurücksetzen des Passworts: dreißig Minuten; beide erlöschen bei Gebrauch oder Ablauf;</li><li>Versuchszähler: fünfzehn Minuten;</li><li>Unterhaltung per E-Mail oder Nachricht: bis zur Antwort, danach höchstens dreißig Tage;</li><li>schriftlicher Löschantrag: der Nachweis wird ein Jahr aufbewahrt.</li></ul><p>Konto-E-Mails laufen über Zoho, das eigene Protokollfristen anwendet.</p>
-
-<h2>Daten exportieren</h2>
-<p>Angemeldet öffnen Sie <code>/api/export.php</code>: Sie erhalten eine JSON-Datei mit Erstellungsdatum, Bestätigungsstatus und allen Favoriten. Passwort-Hash und technischer Fingerabdruck sind nicht enthalten, die E-Mail-Adresse auch nicht, da sie nicht gespeichert wird. Oder schriftlich an <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>.</p>
-
-<h2>Konto löschen</h2>
-<p>Angemeldet erfolgt die Löschung mit Ihrem Passwort (<code>DELETE /api/compte.php</code>): Die Kontodatei wird gelöscht, nicht deaktiviert. Oder schreiben Sie an <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>; wir antworten binnen dreißig Tagen. Siehe auch <a href="delete.html">Datenlöschung</a>.</p>
-
-<h2>Cookies und lokaler Speicher</h2>
-<p>Ohne Konto: kein Cookie. Nach der Anmeldung ein einziges Sitzungscookie (<code>sm_compte</code>), technisch notwendig, das mit dem Schließen des Browsers oder der Abmeldung verschwindet. Spracheinstellung und, solange Konten nicht geöffnet sind, Ihre Favoriten bleiben im lokalen Speicher Ihres Browsers und werden nicht übertragen.</p>
-
-<h2>Was wir nie tun</h2>
-<p>Keine gezielte Werbung, kein Profiling, kein Verkauf oder keine Weitergabe von Daten an Werbetreibende oder Datenhändler.</p>
-
-<h2>Ihre Rechte</h2>
-<p>Auskunft, Berichtigung, Löschung, Übertragbarkeit, Widerruf der Einwilligung: schreiben Sie an <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>. Beschwerde bei der französischen Behörde CNIL (cnil.fr) ist möglich.</p>
-
-<h2>Alter</h2>
-<p>Die Website richtet sich nicht an Kinder unter 15 Jahren. Eltern, die anderes feststellen, schreiben an <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a> und erhalten die Löschung.</p>
-
-<hr>
-<h1 lang="it">Informativa sulla privacy (Italiano)</h1>
-
-<p><small>Ultimo aggiornamento: 26 novembre 2026</small></p>
-
-<h2>Titolare</h2>
-<p>Nicolas Baudu, editore di Sailing More, 74500 Lugrin (Alta Savoia), Francia. Indirizzo postale completo su richiesta scritta. Contatto: <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>.</p>
-
-<h2>Dove sono i vostri dati</h2>
-<ul><li>i dati sono ospitati presso <strong>OVH</strong>, in Francia;</li><li>il codice PHP del sito gira presso <strong>OVH</strong>;</li><li>le e-mail transazionali (convalida dell'indirizzo, password dimenticata) sono inviate da <strong>Zoho</strong> (server europeo smtp.zoho.eu), una alla volta, mai in massa;</li><li>nessuna rete pubblicitaria, nessun tracciatore di terzi, nessuna misurazione del pubblico.</li></ul>
-
-<h2>Che cosa conserviamo</h2>
-<p>Senza account il sito non chiede né conserva nulla. Con un account:</p><ul><li>la data di creazione e lo stato di convalida dell'indirizzo;</li><li>la password, solo in forma di hash (illeggibile, anche per noi);</li><li>i preferiti;</li><li>l'indirizzo e-mail <strong>non è conservato</strong>: solo un'impronta irreversibile. In chiaro esiste solo nel token di convalida, il tempo dell'invio (al massimo un'ora).</li></ul><p>Per limitare i tentativi ripetuti di accesso, un contatore di errori legato a un'impronta del vostro indirizzo IP (non l'indirizzo) è tenuto per quindici minuti.</p><p>Se ci scrivete per e-mail o su un social: il messaggio e gli allegati, solo per rispondervi.</p>
-
-<h2>Per quanto tempo</h2>
-<ul><li>un account: finché non lo eliminate;</li><li>link di convalida: un'ora; link per la password dimenticata: trenta minuti; spariscono all'uso o alla scadenza;</li><li>contatore dei tentativi: quindici minuti;</li><li>una conversazione: il tempo di rispondere, poi al massimo trenta giorni;</li><li>una richiesta scritta di cancellazione: la traccia è tenuta un anno.</li></ul><p>Le e-mail di account passano da Zoho, che applica i propri tempi di registrazione.</p>
-
-<h2>Esportare i dati</h2>
-<p>Dopo l'accesso, aprite <code>/api/export.php</code>: ricevete un file JSON con data di creazione, stato di convalida e tutti i preferiti. Non vi figurano l'hash della password, l'impronta tecnica né l'e-mail (non conservata). Oppure per iscritto a <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>.</p>
-
-<h2>Eliminare l'account</h2>
-<p>Dopo l'accesso, l'eliminazione richiede la password (<code>DELETE /api/compte.php</code>): il file dell'account è cancellato, non disattivato. Oppure scrivete a <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>; rispondiamo entro trenta giorni. Vedi anche <a href="delete.html">Cancellazione dei dati</a>.</p>
-
-<h2>Cookie e archiviazione locale</h2>
-<p>Senza account: nessun cookie. Dopo l'accesso, un solo cookie di sessione (<code>sm_compte</code>), necessario, che scompare alla chiusura del browser o alla disconnessione. La lingua e, finché gli account non sono aperti, i preferiti restano nell'archiviazione locale del browser, senza essere trasmessi.</p>
-
-<h2>Che cosa non facciamo mai</h2>
-<p>Nessuna pubblicità mirata, nessuna profilazione, nessuna vendita o cessione di dati a inserzionisti o intermediari.</p>
-
-<h2>I vostri diritti</h2>
-<p>Accesso, rettifica, cancellazione, portabilità, revoca del consenso: scrivete a <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>. In caso di disaccordo potete rivolgervi alla CNIL francese (cnil.fr).</p>
-
-<h2>Età</h2>
-<p>Il sito non si rivolge a minori di 15 anni. Un genitore che rilevi il contrario scriva a <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a> e ottiene la cancellazione.</p>
-
-<hr>
-<h1 lang="es">Política de privacidad (Español)</h1>
-
-<p><small>Última actualización: 26 de noviembre de 2026</small></p>
-
-<h2>Responsable</h2>
-<p>Nicolas Baudu, editor de Sailing More, 74500 Lugrin (Alta Saboya), Francia. Dirección postal completa previa solicitud por escrito. Contacto: <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>.</p>
-
-<h2>Dónde están sus datos</h2>
-<ul><li>los datos se alojan en <strong>OVH</strong>, en Francia;</li><li>el código PHP del sitio se ejecuta en <strong>OVH</strong>;</li><li>los correos transaccionales (validación de la dirección, contraseña olvidada) los envía <strong>Zoho</strong> (servidor europeo smtp.zoho.eu), uno a uno, nunca en masa;</li><li>ninguna red publicitaria, ningún rastreador de terceros, ninguna medición de audiencia.</li></ul>
-
-<h2>Qué conservamos</h2>
-<p>Sin cuenta, el sitio no pide ni guarda nada. Con cuenta:</p><ul><li>la fecha de creación y el estado de validación de la dirección;</li><li>su contraseña, solo como hash (ilegible, incluso para nosotros);</li><li>sus favoritos;</li><li>su correo <strong>no se conserva</strong>: solo una huella irreversible. En claro existe únicamente en el token de validación, el tiempo del envío (una hora como máximo).</li></ul><p>Para limitar los intentos repetidos de acceso, se mantiene quince minutos un contador de fallos ligado a una huella de su IP (no la IP).</p><p>Si nos escribe por correo o en una red social: su mensaje y archivos adjuntos, solo para responderle.</p>
-
-<h2>Durante cuánto tiempo</h2>
-<ul><li>una cuenta: hasta que la elimine;</li><li>enlace de validación: una hora; enlace de contraseña olvidada: treinta minutos; se borran al usarse o caducar;</li><li>contador de intentos: quince minutos;</li><li>una conversación: el tiempo de responder y como máximo treinta días;</li><li>una solicitud escrita de supresión: la constancia se guarda un año.</li></ul><p>Los correos de cuenta pasan por Zoho, que aplica sus propios plazos de registro.</p>
-
-<h2>Exportar sus datos</h2>
-<p>Con la sesión iniciada, abra <code>/api/export.php</code>: recibe un archivo JSON con fecha de creación, estado de validación y todos sus favoritos. No incluye el hash de la contraseña, la huella técnica ni el correo (no se conserva). También por escrito a <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>.</p>
-
-<h2>Eliminar su cuenta</h2>
-<p>Con la sesión iniciada, se elimina con su contraseña (<code>DELETE /api/compte.php</code>): el archivo de la cuenta se borra, no se desactiva. También puede escribir a <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>; respondemos en treinta días. Véase <a href="delete.html">Supresión de datos</a>.</p>
-
-<h2>Cookies y almacenamiento local</h2>
-<p>Sin cuenta: ninguna cookie. Con la sesión iniciada, una sola cookie de sesión (<code>sm_compte</code>), necesaria, que desaparece al cerrar el navegador o cerrar sesión. El idioma y, mientras las cuentas no estén abiertas, los favoritos permanecen en el almacenamiento local del navegador, sin transmitirse.</p>
-
-<h2>Lo que nunca hacemos</h2>
-<p>Ni publicidad dirigida, ni elaboración de perfiles, ni venta o cesión de datos a anunciantes o intermediarios.</p>
-
-<h2>Sus derechos</h2>
-<p>Acceso, rectificación, supresión, portabilidad, retirada del consentimiento: escriba a <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>. Si no le satisface la respuesta, puede acudir a la CNIL francesa (cnil.fr).</p>
-
-<h2>Edad</h2>
-<p>El sitio no se dirige a menores de 15 años. Un padre o madre que lo constate puede escribir a <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a> y obtiene la supresión.</p>
-
-<hr>
-<h1 lang="pt">Política de privacidade (Português)</h1>
-
-<p><small>Última atualização: 26 de novembro de 2026</small></p>
-
-<h2>Responsável</h2>
-<p>Nicolas Baudu, editor do Sailing More, 74500 Lugrin (Alta Sabóia), França. Morada postal completa mediante pedido escrito. Contacto: <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>.</p>
-
-<h2>Onde estão os seus dados</h2>
-<ul><li>os dados são alojados na <strong>OVH</strong>, em França;</li><li>o código PHP do site é executado na <strong>OVH</strong>;</li><li>os e-mails transacionais (validação do endereço, palavra-passe esquecida) são enviados pela <strong>Zoho</strong> (servidor europeu smtp.zoho.eu), um de cada vez, nunca em massa;</li><li>nenhuma rede publicitária, nenhum rastreador de terceiros, nenhuma medição de audiência.</li></ul>
-
-<h2>O que conservamos</h2>
-<p>Sem conta, o site não pede nem guarda nada. Com conta:</p><ul><li>a data de criação e o estado de validação do endereço;</li><li>a palavra-passe, apenas em forma de hash (ilegível, mesmo para nós);</li><li>os favoritos;</li><li>o seu e-mail <strong>não é conservado</strong>: apenas uma impressão irreversível. Em claro existe só no token de validação, durante o envio (no máximo uma hora).</li></ul><p>Para limitar tentativas repetidas de acesso, um contador de falhas ligado a uma impressão do seu IP (não o IP) é mantido quinze minutos.</p><p>Se nos escrever por e-mail ou numa rede social: a mensagem e os anexos, só para responder.</p>
-
-<h2>Durante quanto tempo</h2>
-<ul><li>uma conta: até a eliminar;</li><li>ligação de validação: uma hora; ligação de palavra-passe esquecida: trinta minutos; apagam-se ao uso ou ao expirar;</li><li>contador de tentativas: quinze minutos;</li><li>uma conversa: o tempo de responder e no máximo trinta dias;</li><li>um pedido escrito de eliminação: o registo é guardado um ano.</li></ul><p>Os e-mails de conta passam pela Zoho, que aplica os seus próprios prazos de registo.</p>
-
-<h2>Exportar os seus dados</h2>
-<p>Com a sessão iniciada, abra <code>/api/export.php</code>: recebe um ficheiro JSON com data de criação, estado de validação e todos os favoritos. Não inclui o hash da palavra-passe, a impressão técnica nem o e-mail (não conservado). Ou por escrito para <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>.</p>
-
-<h2>Eliminar a sua conta</h2>
-<p>Com a sessão iniciada, a eliminação pede a palavra-passe (<code>DELETE /api/compte.php</code>): o ficheiro da conta é apagado, não desativado. Ou escreva para <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>; respondemos em trinta dias. Veja também <a href="delete.html">Eliminação de dados</a>.</p>
-
-<h2>Cookies e armazenamento local</h2>
-<p>Sem conta: nenhum cookie. Com a sessão iniciada, um único cookie de sessão (<code>sm_compte</code>), necessário, que desaparece ao fechar o navegador ou terminar a sessão. O idioma e, enquanto as contas não estiverem abertas, os favoritos ficam no armazenamento local do navegador, sem serem transmitidos.</p>
-
-<h2>O que nunca fazemos</h2>
-<p>Nem publicidade direcionada, nem criação de perfis, nem venda ou cedência de dados a anunciantes ou intermediários.</p>
-
-<h2>Os seus direitos</h2>
-<p>Acesso, retificação, eliminação, portabilidade, retirada do consentimento: escreva para <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a>. Se a resposta não o satisfizer, pode recorrer à CNIL francesa (cnil.fr).</p>
-
-<h2>Idade</h2>
-<p>O site não se dirige a menores de 15 anos. Um pai ou mãe que constate o contrário pode escrever para <a class="courriel" href="#" data-a="hello.sailingmore" data-b="gmail.com">hello.sailingmore@gmail.com</a> e obtém a eliminação.</p>
+<h2>Cookies</h2>
+<p>No analytics or advertising cookie. Only these stay in your browser, never sent to a third party:
+your language preference, the fact that you dismissed the notice and, if you are signed in, what keeps
+your session open. All of it vanishes when you clear the site's data.</p>
 
 <p><small><a href="./">← Sailing More</a> · <a href="mentions-legales.html">Mentions légales</a> · <a href="delete.html">Suppression de données</a></small></p>
 <script>
@@ -1185,6 +1116,10 @@ document.querySelectorAll('a.courriel').forEach(a => a.addEventListener('click',
   window.location.href = lien;
 }));
 </script>
+</div>
+
+</div>
+
 </div>
 
 </div>
