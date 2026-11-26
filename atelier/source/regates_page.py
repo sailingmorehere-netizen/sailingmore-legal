@@ -568,6 +568,22 @@ JS = r"""
     });
   }
 
+  // Position acceptée à l'arrivée (geo-accueil.js, 26/11/2026) : pays, distance « près de moi » et
+  // carte à 100 km se règlent d'eux-mêmes, une fois. Refus : rien ne bouge. L'adresse (?pays=…) prime.
+  var geoFait = false;
+  if(window.smGeo){ window.smGeo.sur(function(g){
+    if(geoFait || etat.moi) return;
+    geoFait = true;
+    var url = ''; try { url = new URLSearchParams(location.search).get('pays') || ''; } catch(x){}
+    if(!url && g.ioc && etat.pays === 'tous' && Array.prototype.some.call(selPays.options, function(o){ return o.value === g.ioc; })){
+      etat.pays = g.ioc; selPays.value = g.ioc;
+    }
+    etat.moi = {lat: g.lat, lon: g.lon};
+    if(btnProche){ btnProche.hidden = false; btnProche.classList.add('actif'); btnProche.textContent = G.stop; }
+    dessine();
+    if(carte && carte.zoomSur) carte.zoomSur(g.lat, g.lon, 100);
+  }); }
+
   // Filtres : quatre menus déroulants (lieu, type, bateau, quand). Le bateau est rempli ici parce
   // que ses options portent leur nombre d'épreuves : « Toutes » (ne filtre rien), « Tout bateau »
   // (jauges inter-séries), puis chaque classe par nombre d'épreuves décroissant, sigle brut si le
@@ -1099,7 +1115,7 @@ def construire(d: dict) -> str:
         "</div>"
         '<script type="application/json" id="donnees">'
         + json.dumps(donnees, ensure_ascii=False, separators=(",", ":"))
-        + "</script><script>" + carte_epreuves.js() + JS + "</script>"
+        + "</script><script src=\"/geo-accueil.js\"></script><script>" + carte_epreuves.js() + JS + "</script>"
         "</body></html>\n"
     )
 

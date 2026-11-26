@@ -635,7 +635,7 @@ def _html(d: dict) -> str:
              "</main>"
              "<script id=\"donnees\" type=\"application/json\">"
              + json.dumps(d, ensure_ascii=False).replace("</", "<\\/")
-             + "</script><script>" + carte_epreuves.js() + JS + "</script></body></html>")
+             + "</script><script src=\"/geo-accueil.js\"></script><script>" + carte_epreuves.js() + JS + "</script></body></html>")
     return corps
 
 
@@ -729,13 +729,22 @@ function distance(o){if(!POS||o.lat==null||o.lon==null)return null;return havers
 function poserPosition(){
   function parIP(){
     fetch('https://ipwho.is/?fields=latitude,longitude,success').then(function(r){return r.json()})
-      .then(function(d){if(d&&d.success&&d.latitude!=null){POS=[d.latitude,d.longitude,'ip'];dessiner()}})
+      .then(function(d){if(d&&d.success&&d.latitude!=null&&!(POS&&POS[2]==='gps')){POS=[d.latitude,d.longitude,'ip'];dessiner()}})
       .catch(function(){});
   }
-  if(!navigator.geolocation){parIP();return}
-  navigator.geolocation.getCurrentPosition(
-    function(p){POS=[p.coords.latitude,p.coords.longitude,'gps'];dessiner()},
-    function(){parIP()}, {timeout:6000,maximumAge:600000});
+  /* La demande de position est unique et vit dans geo-accueil.js (26/11/2026) : cette page ne la
+     déclenche plus. Accord : pays de l'école + langue pré-remplis, tri par proximité, carte à 100 km.
+     Refus ou pas de réponse : l'IP trie comme avant, aucun filtre ne bouge. */
+  var vuGeo=false;
+  if(window.smGeo){window.smGeo.sur(function(g){
+    POS=[g.lat,g.lon,'gps'];
+    function pre(id,val){var e=document.getElementById(id);if(!e||!val||e.value)return;
+      for(var i=0;i<e.options.length;i++){if(e.options[i].value===val){e.value=val;e.dispatchEvent(new Event('change'));return}}}
+    if(!vuGeo){vuGeo=true;pre('f-pays-ecole',g.iso3);pre('f-langue',g.langue)}
+    dessiner();
+    if(window.carteStages&&window.carteStages.zoomSur)window.carteStages.zoomSur(g.lat,g.lon,100);
+  })}
+  parIP();
 }
 function futur(o){if(!o.debut)return true;var a=new Date().toISOString().slice(0,10);return (o.fin||o.debut)>=a}
 
@@ -1269,8 +1278,10 @@ var DATA=null,POS=null,posFaite=false,vu=false;
 function position(fin){
   function ip(){fetch('https://ipwho.is/?fields=latitude,longitude,success').then(function(r){return r.json()})
     .then(function(d){if(d&&d.success&&d.latitude!=null)POS=[d.latitude,d.longitude]}).catch(function(){}).then(fin)}
-  if(!navigator.geolocation){ip();return}
-  navigator.geolocation.getCurrentPosition(function(p){POS=[p.coords.latitude,p.coords.longitude];fin()},ip,{timeout:6000,maximumAge:600000});
+  /* demande unique : geo-accueil.js (26/11/2026) ; ici on lit seulement la position déjà accordée */
+  var g=window.smGeo&&window.smGeo.get();
+  if(g){POS=[g.lat,g.lon];fin();return}
+  ip();
 }
 function dessiner(){
   var a=new Date().toISOString().slice(0,10);

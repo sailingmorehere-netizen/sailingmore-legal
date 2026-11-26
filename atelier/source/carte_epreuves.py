@@ -217,7 +217,15 @@ var CarteEpreuves = (function(){
     reset.addEventListener('click', function(){ vue = cadre(pts); zoome = false; dessine(); info.textContent = C.aide; });
     var minuteur = null;
     window.addEventListener('resize', function(){ clearTimeout(minuteur); minuteur = setTimeout(dessine, 150); });
-    return {
+    var aZoome = false;
+    var api = {
+      // zoom sur la position du visiteur : 100 km autour (26/11/2026), une seule fois par page.
+      zoomSur: function(lat, lon, km){
+        km = km || 100;
+        var dl = km / 111.32, w = Math.max(4 * dl, 2 * dl / Math.max(Math.cos(lat * Math.PI / 180), 0.2)), h = w / 2;
+        vue = {x: Math.min(Math.max(lon + 180 - w / 2, 0), 360 - w), y: Math.min(Math.max(90 - lat - h / 2, 0), 180 - h), w: w, h: h};
+        zoome = true; aZoome = true; dessine();
+      },
       // liste = points affichables ; nTotal = nombre d'éléments de la liste sous la carte.
       montre: function(liste, nTotal){
         maj(); svg.setAttribute('aria-label', C.carte); reset.textContent = C.reset;
@@ -225,11 +233,13 @@ var CarteEpreuves = (function(){
         pts = liste; total = nTotal;
         vue = cadre(pts); zoome = false;
         dessine();
+        if(!aZoome && window.smGeo && window.smGeo.get()){ var g0 = window.smGeo.get(); api.zoomSur(g0.lat, g0.lon, 100); }
         info.textContent = pts.length ? C.aide : C.sans;
         note.textContent = C.compte.replace('{n}', pts.length).replace('{m}', Math.max(nTotal - pts.length, 0));
       },
       titre: C.carte
     };
+    return api;
   }
   return {creer: creer};
 })();
