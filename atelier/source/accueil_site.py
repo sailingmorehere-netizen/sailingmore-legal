@@ -1257,6 +1257,7 @@ def fichiers_a_publier() -> list[str]:
     pages = [n for n in ("index.html", "carte.html", "jeux.html", "annonceurs.html", "merci.html",
                          "regates.html", "regles-de-course.html", "lexique.html", "stages.html", "comparatif-stages.html",
                          "equivalences.html", "cours.html", "bateaux.html", "bateaux.json", "stages-proches.json", "404.html", "mentions-legales.html",
+                         "bourse-equipiers.html", "ports.html", "simulateur.html", "chants-de-marin.html",
                          "confidentialite.html", "delete.html", "sitemap.xml", "feed.xml")
              if (SITE / n).exists()]
     # Une page par pavillon (24/11/2026, chapitre des pavillons du cours) : 42 pages `pavillon-<id>.html`.
@@ -1400,6 +1401,14 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         print(f"comparatif des stages : {comparatif_stages_page.ecrire_page(SITE)} offre(s) comparée(s)")
     except Exception as e:  # noqa: BLE001
         print(f"comparatif des stages non écrit : {e}")
+    # Bourse aux équipiers (26/11/2026, « on va faire une page bourse aux équipiers pour afficher la
+    # carte qu'on avait créée pour l'accueil et on présente les différents groupes facebook »).
+    # La carte vient de site_blocks, les groupes de bourses.json : rien n'est recopié ici.
+    try:
+        import bourses_page
+        print(f"bourse aux équipiers : {bourses_page.ecrire_page(SITE)} groupe(s)")
+    except Exception as e:  # noqa: BLE001
+        print(f"bourse aux équipiers non écrite : {e}")
     # Équivalences des diplômes (23/11/2026) : même chemin ; equivalences_page.py est la source unique.
     # Seules les lignes validées par Nicolas et sourcées sont publiées ; l'aperçu (non publié) montre tout.
     try:
