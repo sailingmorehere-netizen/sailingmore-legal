@@ -503,6 +503,7 @@ MENU_PAGES = [
     ("cours.html", "Cours théoriques", ""),
     ("jeux.html", "Jeux", ""),
     ("bateaux.html", "Bateaux", ""),
+    ("bourse-equipiers.html", "Bourse aux équipiers", ""),
     ("carte.html", "Carte du Léman", ""),
     ("lexique.html", "Lexique", ""),
     ("chants-de-marin.html", "Chants de marins", ""),
