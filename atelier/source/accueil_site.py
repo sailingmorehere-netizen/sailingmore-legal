@@ -1497,6 +1497,14 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
     print(f"mer posée sur {n} page(s) supplémentaire(s)")
     print(f"barre du site posée sur {poser_entete_partout()} page(s)")
     print(f"lien du flux posé sur {poser_flux_partout()} page(s)")
+    # La liste blanche des liens sortants (26/11/2026) : elle était reconstruite à la main, donc
+    # périmée — la page bourse aux équipiers pointait 13 adresses absentes de `go-liens.json`, et
+    # `go.php` répondait 404. Elle se refait maintenant à chaque reconstruction, après toutes les pages.
+    try:
+        import clics_sortants
+        print(f"liens sortants : {len(clics_sortants.ecrire(SITE))} adresse(s) dans go-liens.json")
+    except Exception as e:  # noqa: BLE001
+        print(f"liste des liens sortants non écrite : {e}")
     # Le sitemap est reconstruit ici, après toutes les pages : c'est le seul écrivain de la liste
     # (24/11/2026). `ports.html` et `simulateur.html` n'y figuraient jamais — publiées, jamais
     # déclarées, donc jamais envoyées à Bing par IndexNow. Les générateurs qui ajoutaient leur
