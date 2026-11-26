@@ -513,6 +513,29 @@ MENU_PAGES = [
 ]
 
 
+def _chants_pour_menu() -> list[dict]:
+    """Les chants de la page, lus dans l'index de `chants_page.ecrire_page()` (26/11/2026)."""
+    try:
+        return json.loads(Path("/opt/data/projets/sailingmore/chants-menu.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+
+
+def _sous_menu_chants(actuelle: str) -> str:
+    """Le sous-menu des chants : un seul panneau qui défile, la page où l'on est marquée."""
+    chants = _chants_pour_menu()
+    if not chants:
+        return ""
+    liens = []
+    for c in chants:
+        page = f'chant-{c["id"]}.html'
+        courant = ' aria-current="page"' if page == actuelle else ""
+        liens.append(f'<a href="{page}"{courant}>{c["titre"]}</a>')
+    return ('<details class="sous-m" data-sous="chants"><summary>'
+            f'Les {len(chants)} chants de marins</summary>'
+            '<nav class="sous-liste" aria-label="Chants de marins">' + "".join(liens) + '</nav></details>')
+
+
 def menu_site(actuelle: str = "index.html") -> str:
     """Le panneau de toutes les pages.
 
@@ -526,6 +549,12 @@ def menu_site(actuelle: str = "index.html") -> str:
         classe = f' class="{genre}"' if genre else ""
         cible = "/" if fichier == "index.html" else fichier
         liens.append(f'<a href="{cible}"{classe}{courant}>{titre}</a>')
+        # Sous-menu des chants (26/11/2026, « que les musiques s'affichent en sous menu ») : la liste
+        # vient de l'index écrit par chants_page.ecrire_page(), pas d'une liste tenue à la main.
+        if fichier == "chants-de-marin.html":
+            sous = _sous_menu_chants(actuelle)
+            if sous:
+                liens.append(sous)
     return ('<details class="menu-d"><summary>Menu</summary>'
             f'<nav aria-label="Toutes les pages du site">{"".join(liens)}</nav></details>')
 
@@ -810,6 +839,29 @@ _BARRE_CSS = """<style>
 .entete .menu-d>nav a{color:#dbe6ef;text-decoration:none;font-size:.82rem;padding:.35rem .4rem;border-radius:.35rem}
 .entete .menu-d>nav a:hover{background:rgba(255,255,255,.08)}
 .entete .menu-d>nav a[aria-current="page"]{color:#fff;box-shadow:inset 2px 0 0 #e23a3e}
+.entete .menu-d>nav>.sous-m{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.14);margin-top:.35rem}
+.entete .menu-d>nav>.sous-m>summary{list-style:none;cursor:pointer;font-size:.72rem;letter-spacing:.12em;
+  text-transform:uppercase;color:#9fb3c4;padding:.5rem .4rem}
+.entete .menu-d>nav>.sous-m>summary::-webkit-details-marker{display:none}
+.entete .menu-d>nav>.sous-m[open]>summary::after{content:" \25B4"}
+.entete .menu-d>nav>.sous-m>summary::after{content:" \25BE"}
+.entete .menu-d>nav .sous-liste{display:grid;grid-template-columns:1fr 1fr;gap:.1rem .5rem;
+  max-height:48vh;overflow-y:auto;overscroll-behavior:contain;padding:.1rem .1rem .3rem}
+.entete .menu-d>nav .sous-liste a{font-size:.78rem;padding:.24rem .35rem;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+@media (max-width:600px){.entete .menu-d>nav .sous-liste{grid-template-columns:1fr;max-height:none}}
+/* Sous-menu des chants (26/11/2026) : il prend les deux colonnes du panneau et défile tout seul. */
+.entete .menu-d>nav>.sous-m{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.14);margin-top:.35rem}
+.entete .menu-d>nav>.sous-m>summary{list-style:none;cursor:pointer;font-size:.72rem;letter-spacing:.12em;
+  text-transform:uppercase;color:#9fb3c4;padding:.5rem .4rem}
+.entete .menu-d>nav>.sous-m>summary::-webkit-details-marker{display:none}
+.entete .menu-d>nav>.sous-m>summary::after{content:" ▾"}
+.entete .menu-d>nav>.sous-m[open]>summary::after{content:" ▴"}
+.entete .menu-d>nav .sous-liste{display:grid;grid-template-columns:1fr 1fr;gap:.1rem .5rem;
+  max-height:48vh;overflow-y:auto;overscroll-behavior:contain;padding:.1rem .1rem .3rem}
+.entete .menu-d>nav .sous-liste a{font-size:.78rem;padding:.24rem .35rem;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+@media (max-width:600px){.entete .menu-d>nav .sous-liste{grid-template-columns:1fr;max-height:none}}
 body:has(> .entete){flex-direction:column;align-items:stretch;justify-content:flex-start}
 @media (max-width:520px){.entete{padding:.45rem .6rem;gap:.4rem}.entete .nom{font-size:.68rem}}
 /* Téléphone : le panneau du menu en une colonne, texte de 16 px et lignes de 48 px (23/11/2026 :
@@ -1467,10 +1519,15 @@ def html_carte(items: list[dict] | None = None) -> str:
             + CARTE_JS)
 
 
-def formulaire_kit(adresse: str = "[secret-masqué]") -> str:
-    """Le formulaire, seul — l'accueil et la page annonceurs partagent ce même bloc."""
+def formulaire_kit(adresse: str = "hello.sailingmore" + "@" + "gmail.com") -> str:
+    """Le formulaire, seul — l'accueil et la page annonceurs partagent ce même bloc.
+
+    L'adresse n'écrit jamais son `@` dans le HTML servi (Nicolas, 25/11/2026 : « l'adresse
+    nicolas.baudu ne doit pas être lisible sur le site, seulement la hello »). Le bloc la
+    recompose en deux morceaux `data-a` / `data-b`, comme le reste du site.
+    """
     local, _, domaine = adresse.partition("@")
-    return (f'<form class="kit-form" method="POST" action="https://formsubmit.co/{adresse}" '
+    return (f'<form class="kit-form" method="POST" action="" '
             f'data-a="{local}" data-b="{domaine}">'
             '<input type="hidden" name="_subject" value="Demande de grille — Sailing More">'
             '<input type="hidden" name="_template" value="table">'
@@ -1488,11 +1545,10 @@ def formulaire_kit(adresse: str = "[secret-masqué]") -> str:
             '<p class="kit-note" data-t="kit_note">Vos données servent seulement à vous répondre. '
             'Suppression sur demande.</p>'
             f'<p class="kit-ou"><span data-t="kit_ou">Ou écrivez à</span> '
-            f'<a class="courriel" href="mailto:{adresse}" data-a="{local}" data-b="{domaine}" '
+            f'<a class="courriel" href="#" data-a="{local}" data-b="{domaine}" '
             f'data-t="kit_lien">notre adresse</a>.</p>'
-            "<noscript><p class=\"kit-ou\">Sans JavaScript, écrivez à "
-            "<a href=\"mailto:[secret-masqué]\">[secret-masqué]</a> — "
-            "la grille part le jour même.</p></noscript>"
+            "<noscript><p class=\"kit-ou\">Sans JavaScript, demandez la grille par la page "
+            "<a href=\"/contact.html\">contact</a> — elle part le jour même.</p></noscript>"
             "<script>(function(){"
             "document.querySelectorAll('form.kit-form').forEach(function(f){"
             "if(f.dataset.a&&f.dataset.b)f.action='https://formsubmit.co/'+f.dataset.a+'@'+f.dataset.b;});"
@@ -1617,7 +1673,7 @@ def tarifs(fr: dict | None = None) -> str:
             + detail_packs(fr))
 
 
-def html_kit(adresse: str = "[secret-masqué]", fr: dict | None = None) -> str:
+def html_kit(adresse: str = "hello.sailingmore" + "@" + "gmail.com", fr: dict | None = None) -> str:
     """Le bloc annonceurs de l'accueil : la promesse, les prix, puis le formulaire."""
     local, _, domaine = adresse.partition("@")
     return ('<section class="kit-bloc" id="annonceurs"><div class="carte-kit">'

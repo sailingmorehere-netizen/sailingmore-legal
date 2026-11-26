@@ -650,12 +650,12 @@ JS = r"""
   // Mention Sailing More : seulement le PRODID (invisible) et une dernière ligne de la description
   // (« Via sailingmore.fr ») ; jamais dans le titre ni le lieu, que l'internaute garde propre.
   var IC = {
-    fr:{un:'Agenda', tout:'Tout ajouter à mon agenda (.ics)', titre:'Ajouter cette épreuve à mon agenda (fichier .ics)', via:'Via'},
-    de:{un:'Kalender', tout:'Alle in meinen Kalender (.ics)', titre:'Diese Veranstaltung in meinen Kalender übernehmen (.ics-Datei)', via:'Über'},
-    en:{un:'Calendar', tout:'Add all to my calendar (.ics)', titre:'Add this race to my calendar (.ics file)', via:'Via'},
-    it:{un:'Agenda', tout:'Aggiungi tutte alla mia agenda (.ics)', titre:'Aggiungi questa regata alla mia agenda (file .ics)', via:'Tramite'},
-    es:{un:'Agenda', tout:'Añadir todas a mi agenda (.ics)', titre:'Añadir esta regata a mi agenda (archivo .ics)', via:'Vía'},
-    pt:{un:'Agenda', tout:'Adicionar todas à minha agenda (.ics)', titre:'Adicionar esta regata à minha agenda (ficheiro .ics)', via:'Via'}
+    fr:{un:'Agenda', tout:'Tout ajouter à mon agenda (.ics)', abo:'S’abonner à tout le calendrier (se met à jour tout seul)', titre:'Ajouter cette épreuve à mon agenda (fichier .ics)', via:'Via'},
+    de:{un:'Kalender', tout:'Alle in meinen Kalender (.ics)', abo:'Den ganzen Kalender abonnieren (aktualisiert sich selbst)', titre:'Diese Veranstaltung in meinen Kalender übernehmen (.ics-Datei)', via:'Über'},
+    en:{un:'Calendar', tout:'Add all to my calendar (.ics)', abo:'Subscribe to the whole calendar (updates itself)', titre:'Add this race to my calendar (.ics file)', via:'Via'},
+    it:{un:'Agenda', tout:'Aggiungi tutte alla mia agenda (.ics)', abo:'Iscriviti a tutto il calendario (si aggiorna da solo)', titre:'Aggiungi questa regata alla mia agenda (file .ics)', via:'Tramite'},
+    es:{un:'Agenda', tout:'Añadir todas a mi agenda (.ics)', abo:'Suscribirse a todo el calendario (se actualiza solo)', titre:'Añadir esta regata a mi agenda (archivo .ics)', via:'Vía'},
+    pt:{un:'Agenda', tout:'Adicionar todas à minha agenda (.ics)', abo:'Subscrever todo o calendário (atualiza-se sozinho)', titre:'Adicionar esta regata à minha agenda (ficheiro .ics)', via:'Via'}
   };
   var I = IC[lang] || IC.fr;
   var gardesCourantes = [];
@@ -692,7 +692,7 @@ JS = r"""
   function icsTelecharge(liste, nom){
     var d = new Date(), p = function(n){ return ('0'+n).slice(-2); };
     var stamp = d.getUTCFullYear() + p(d.getUTCMonth()+1) + p(d.getUTCDate()) + 'T' + p(d.getUTCHours()) + p(d.getUTCMinutes()) + p(d.getUTCSeconds()) + 'Z';
-    var txt = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Sailing More//Calendrier des regates//FR\r\n[secret-masqué]\r\n'
+    var txt = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Sailing More//Calendrier des regates//FR\r\nUID:regates@sailingmore.fr\r\n'
       + liste.map(function(e){ return icsEvt(e, stamp); }).join('\r\n') + '\r\nEND:VCALENDAR\r\n';
     var blob = new Blob([txt], {type:'text/calendar;charset=utf-8'});
     var a = document.createElement('a');
@@ -707,6 +707,8 @@ JS = r"""
     if(e) icsTelecharge([e], normalise(e.nom).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60) || 'regate');
   });
   var btnIcsTout = document.getElementById('btn-ics-tout');
+  var aboIcs = document.getElementById('abo-ics');
+  if (aboIcs) { aboIcs.textContent = I.abo; aboIcs.title = I.abo; }
   btnIcsTout.addEventListener('click', function(){
     var l = gardesCourantes.filter(function(e){ return !e.annulee; });
     if(l.length) icsTelecharge(l, 'regates-sailingmore');
@@ -1079,7 +1081,8 @@ def construire(d: dict) -> str:
         '<form class="alerte" id="alerte" hidden></form>'
         "</div>"
         '<div class="compte"><span id="compte" role="status" aria-live="polite"></span>'
-        '<span><button class="lien-effacer" id="btn-ics-tout" type="button" hidden></button> '
+        '<span><a class="lien-effacer" id="abo-ics" href="regates.ics"></a> '
+        '<button class="lien-effacer" id="btn-ics-tout" type="button" hidden></button> '
         '<button class="lien-effacer" id="effacer" type="button">Tout effacer</button></span></div>'
         + carte_epreuves.html() +
         '<div id="liste"></div>'
