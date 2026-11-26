@@ -1,0 +1,482 @@
+[
+ {
+  "slug": "zeezeil",
+  "nom": "Zeezeilschool Scheveningen",
+  "pays": "NLD",
+  "langue": "nl",
+  "urls": [
+   "https://zeezeilschool.nl/alle-cursussen/"
+  ]
+ },
+ {
+  "slug": "schluchsee",
+  "nom": "Segelschule Schluchsee",
+  "pays": "DEU",
+  "langue": "de",
+  "urls": [
+   "https://segelschule-schluchsee.de/preise/",
+   "https://segelschule-schluchsee.de/segel-kurse-scheine/"
+  ]
+ },
+ {
+  "slug": "oltremare",
+  "nom": "Oltremare Vela",
+  "pays": "ITA",
+  "langue": "it",
+  "urls": [
+   "https://www.oltremare.it/corsi-di-vela-in-adriatico/"
+  ]
+ },
+ {
+  "slug": "compagniadellavela",
+  "nom": "Compagnia della Vela",
+  "pays": "ITA",
+  "langue": "it",
+  "urls": [
+   "https://www.compagniadellavela.org/corso/adulti-e-ragazzi/",
+   "https://www.compagniadellavela.org/corso/junior/"
+  ]
+ },
+ {
+  "slug": "solentsail",
+  "nom": "Solent Sail",
+  "pays": "GBR",
+  "langue": "en",
+  "urls": [
+   "https://solentsail.com/rya-sea-school/"
+  ]
+ },
+ {
+  "slug": "sailionian",
+  "nom": "Sail Ionian",
+  "pays": "GRC",
+  "langue": "en",
+  "urls": [
+   "https://www.sailionian.com/rya-sailing-courses/"
+  ]
+ },
+ {
+  "slug": "lowlife",
+  "nom": "École de croisière Slowlife",
+  "pays": "FRA",
+  "langue": "fr",
+  "urls": [
+   "https://ecoledecroisiereslowlife.com/calendrier-formation-voile"
+  ]
+ },
+ {
+  "slug": "zeilschoolup",
+  "nom": "Zeilschool Ûp",
+  "pays": "NLD",
+  "langue": "nl",
+  "urls": [
+   "https://www.zeilschoolup.nl/prijs-beschikbaarheid"
+  ]
+ },
+ {
+  "slug": "virgins",
+  "nom": "Sailing Virgins",
+  "pays": "USA",
+  "langue": "en",
+  "urls": [
+   "https://sailingvirgins.com/destinations/greece",
+   "https://sailingvirgins.com/destinations/bvi"
+  ]
+ },
+ {
+  "slug": "hamble",
+  "nom": "Hamble School of Yachting",
+  "pays": "GBR",
+  "langue": "en",
+  "urls": [
+   "https://www.hambleschool.co.uk/courses/"
+  ]
+ },
+ {
+  "slug": "uksa",
+  "nom": "UKSA",
+  "pays": "GBR",
+  "langue": "en",
+  "urls": [
+   "https://www.uksa.org/courses/"
+  ]
+ },
+ {
+  "slug": "rockley",
+  "nom": "Rockley Watersports",
+  "pays": "GBR",
+  "langue": "en",
+  "urls": [
+   "https://www.rockleywatersports.com/sailing-courses/"
+  ]
+ },
+ {
+  "slug": "firstclass",
+  "nom": "First Class Sailing",
+  "pays": "GBR",
+  "langue": "en",
+  "urls": [
+   "https://www.firstclasssailing.com/courses/"
+  ]
+ },
+ {
+  "slug": "elite",
+  "nom": "Elite Sailing",
+  "pays": "GBR",
+  "langue": "en",
+  "urls": [
+   "https://www.elitesailing.co.uk/courses/"
+  ]
+ },
+ {
+  "slug": "sportif",
+  "nom": "Sportif Sailing",
+  "pays": "GBR",
+  "langue": "en",
+  "urls": [
+   "https://www.sportifsailing.com/courses/"
+  ]
+ },
+ {
+  "slug": "plasmenai",
+  "nom": "Plas Menai",
+  "pays": "GBR",
+  "langue": "en",
+  "urls": [
+   "https://www.plasmenai.co.uk/courses/"
+  ]
+ },
+ {
+  "slug": "bhmarine",
+  "nom": "BH Marine",
+  "pays": "GBR",
+  "langue": "en",
+  "urls": [
+   "https://www.bhmarine.co.uk/training/sail-cruising"
+  ]
+ },
+ {
+  "slug": "enkhuizen",
+  "nom": "Zeilschool Enkhuizen",
+  "pays": "NLD",
+  "langue": "nl",
+  "urls": [
+   "https://www.zeilschoolenkhuizen.nl/cursussen/"
+  ]
+ },
+ {
+  "slug": "aquavitesse",
+  "nom": "Aquavitesse",
+  "pays": "NLD",
+  "langue": "nl",
+  "urls": [
+   "https://www.aquavitesse.nl/zeilschool-zeeland/zeilles-voor-jeugd/prijzen-en-data"
+  ]
+ },
+ {
+  "slug": "ezs",
+  "nom": "EZS Zeilschool",
+  "pays": "NLD",
+  "langue": "nl",
+  "urls": [
+   "https://www.ezs.nl/tarieven.html"
+  ]
+ },
+ {
+  "slug": "grossefreiheit",
+  "nom": "Segelschule Grosse Freiheit",
+  "pays": "DEU",
+  "langue": "de",
+  "urls": [
+   "https://segelschule-grosse-freiheit.de/kurse/"
+  ]
+ },
+ {
+  "slug": "strande",
+  "nom": "Segelschule Strande",
+  "pays": "DEU",
+  "langue": "de",
+  "urls": [
+   "https://www.segelschule-strande.de/"
+  ]
+ },
+ {
+  "slug": "lagoo",
+  "nom": "Lagoo Segelschule Zürich",
+  "pays": "CHE",
+  "langue": "de",
+  "urls": [
+   "https://lagoo.ch/pages/segelschule-zuerich-zuerichsee"
+  ]
+ },
+ {
+  "slug": "scuolavela",
+  "nom": "La Scuola della Vela",
+  "pays": "ITA",
+  "langue": "it",
+  "urls": [
+   "https://www.scuolavela.com/it/tariffe/corsi-di-vela/"
+  ]
+ },
+ {
+  "slug": "alturavela",
+  "nom": "Altura Vela",
+  "pays": "ITA",
+  "langue": "it",
+  "urls": [
+   "https://alturavela.it/scuola-vela/"
+  ]
+ },
+ {
+  "slug": "soleil",
+  "nom": "Soleil Scuola Nautica",
+  "pays": "ITA",
+  "langue": "it",
+  "urls": [
+   "https://www.soleil-scuola-nautica.it/corsi-di-vela/"
+  ]
+ },
+ {
+  "slug": "ventdularge",
+  "nom": "Vent du Large",
+  "pays": "FRA",
+  "langue": "fr",
+  "urls": [
+   "https://ventdularge.org/stages-formation-traversee-transat-voilier/"
+  ]
+ },
+ {
+  "slug": "portitxol",
+  "nom": "Club Nàutic Portitxol",
+  "pays": "ESP",
+  "langue": "es",
+  "urls": [
+   "https://www.cnportitxol.info/escuela-de-vela/"
+  ]
+ },
+ {
+  "slug": "7seas",
+  "nom": "Seven Seas School of Yachting",
+  "pays": "GRC",
+  "langue": "en",
+  "urls": [
+   "https://7seassailing.com/all-courses/"
+  ]
+ },
+ {
+  "slug": "happysailing",
+  "nom": "Happy Sailing",
+  "pays": "CAN",
+  "langue": "en",
+  "urls": [
+   "https://www.happysailing.ca/caribbean"
+  ]
+ },
+ {
+  "slug": "sailingxperience",
+  "nom": "Sailing Xperience",
+  "pays": "ESP",
+  "langue": "en",
+  "urls": [
+   "https://sailingxperience.com/courses"
+  ]
+ },
+ {
+  "slug": "solentboat",
+  "nom": "Solent Boat Training",
+  "pays": "GBR",
+  "langue": "en",
+  "urls": [
+   "https://www.solentboattraining.co.uk/rya-sailing-courses"
+  ]
+ },
+ {
+  "slug": "urbantruant",
+  "nom": "Urban Truant",
+  "pays": "GBR",
+  "langue": "en",
+  "urls": [
+   "https://urbantruant.co.uk/courses/"
+  ]
+ },
+ {
+  "slug": "plymsail",
+  "nom": "PlymSail",
+  "pays": "GBR",
+  "langue": "en",
+  "urls": [
+   "https://plymsail.co.uk/"
+  ]
+ },
+ {
+  "slug": "seafarer",
+  "nom": "Seafarer Sailing",
+  "pays": "GBR",
+  "langue": "en",
+  "urls": [
+   "https://seafarersailing.co.uk/rya-training-centres/greece/"
+  ]
+ },
+ {
+  "slug": "neilson",
+  "nom": "Neilson",
+  "pays": "GBR",
+  "langue": "en",
+  "urls": [
+   "https://www.neilson.co.uk/sailing/courses"
+  ]
+ },
+ {
+  "slug": "isail",
+  "nom": "Zeilschool iSail",
+  "pays": "NLD",
+  "langue": "nl",
+  "urls": [
+   "https://www.zeilschoolisail.nl/"
+  ]
+ },
+ {
+  "slug": "aalsmeer",
+  "nom": "Zeilschool Aalsmeer",
+  "pays": "NLD",
+  "langue": "nl",
+  "urls": [
+   "https://www.zeilschoolaalsmeer.nl/tarieven/"
+  ]
+ },
+ {
+  "slug": "debirt",
+  "nom": "De Bird",
+  "pays": "NLD",
+  "langue": "nl",
+  "urls": [
+   "https://www.debird.nl/zeilschool/data-prijzen/"
+  ]
+ },
+ {
+  "slug": "tiptop",
+  "nom": "Tip Top Sailing",
+  "pays": "NLD",
+  "langue": "nl",
+  "urls": [
+   "https://tiptopsailing.nl/zeilschool/tarieven-zeilschool/"
+  ]
+ },
+ {
+  "slug": "stipe",
+  "nom": "Zeilschool De Stipe",
+  "pays": "NLD",
+  "langue": "nl",
+  "urls": [
+   "https://zeilschooldestipe.nl/zeilkamp-data-en-prijzen"
+  ]
+ },
+ {
+  "slug": "ueberlingen",
+  "nom": "Segelschule Überlingen",
+  "pays": "DEU",
+  "langue": "de",
+  "urls": [
+   "https://segelschule-ueberlingen.de/ausbildung/preise/"
+  ]
+ },
+ {
+  "slug": "reichenau",
+  "nom": "Segelschule Insel Reichenau",
+  "pays": "DEU",
+  "langue": "de",
+  "urls": [
+   "https://www.segelschule-insel-reichenau.de/preise/"
+  ]
+ },
+ {
+  "slug": "weber",
+  "nom": "Segelschule Weber",
+  "pays": "DEU",
+  "langue": "de",
+  "urls": [
+   "https://www.segelschule-weber.de/Segelkurse"
+  ]
+ },
+ {
+  "slug": "rehbach",
+  "nom": "Segelschule Rehbach",
+  "pays": "DEU",
+  "langue": "de",
+  "urls": [
+   "https://segelschule-rehbach.de/preise/"
+  ]
+ },
+ {
+  "slug": "rueckenwind",
+  "nom": "Segelschule Rückenwind",
+  "pays": "DEU",
+  "langue": "de",
+  "urls": [
+   "https://www.segelschule-rueckenwind.de/alle-kurse-termine-und-preise/"
+  ]
+ },
+ {
+  "slug": "ultra",
+  "nom": "Ultra Sailing",
+  "pays": "HRV",
+  "langue": "en",
+  "urls": [
+   "https://www.ultra-sailing.hr/sailing-school-prices-and-booking"
+  ]
+ },
+ {
+  "slug": "odyssey",
+  "nom": "Odyssey Sailing",
+  "pays": "GRC",
+  "langue": "en",
+  "urls": [
+   "https://odysseysailing.gr/rya-sailing-courses-aegina/"
+  ]
+ },
+ {
+  "slug": "ulysses",
+  "nom": "Ulysses Sailing",
+  "pays": "GRC",
+  "langue": "en",
+  "urls": [
+   "https://www.ulyssessailing.gr/training-schedule/"
+  ]
+ },
+ {
+  "slug": "rcmar",
+  "nom": "Real Club de Mar",
+  "pays": "ESP",
+  "langue": "es",
+  "urls": [
+   "https://www.rcmarsc.es/oferta-formativa-cursos/cursos-de-vela"
+  ]
+ },
+ {
+  "slug": "windzone",
+  "nom": "Windzone",
+  "pays": "ESP",
+  "langue": "es",
+  "urls": [
+   "https://www.windzone.es/inicio/tarifas/"
+  ]
+ },
+ {
+  "slug": "bluespirit",
+  "nom": "Blue Spirit",
+  "pays": "ESP",
+  "langue": "es",
+  "urls": [
+   "https://bluespirit.es/escuela/"
+  ]
+ },
+ {
+  "slug": "sailway",
+  "nom": "Sailway",
+  "pays": "ESP",
+  "langue": "es",
+  "urls": [
+   "https://sailway.es/"
+  ]
+ }
+]
