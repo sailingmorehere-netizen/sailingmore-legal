@@ -24,9 +24,9 @@ UI = {
     "fr": {
         "titre": "La bourse aux équipiers",
         "retour": "← Le site",
-        "chapo": ("Les groupes Facebook où un bateau cherche un équipier — et où un équipier cherche un "
-                  "bateau. Un clic ouvre le groupe : Sailing More ne modère rien, ne prend rien, "
-                  "ne s'interpose pas."),
+        "chapo": ("Ton prochain équipier est déjà là-dedans, en train de chercher un bateau. Treize groupes "
+                  "Facebook où les équipages se font — tu entres, tu te présentes, tu embarques. On ne "
+                  "prend rien, on ne modère rien, on ne s'interpose pas."),
         "carte": "Où sont les groupes",
         "liste": "Les groupes, un par un",
         "membres": "membres",
@@ -39,9 +39,9 @@ UI = {
     "en": {
         "titre": "Crew finder groups",
         "retour": "← The site",
-        "chapo": ("The Facebook groups where a boat looks for crew — and where crew look for a boat. "
-                  "One click opens the group: Sailing More moderates nothing, takes nothing, "
-                  "and does not step in."),
+        "chapo": ("Your next crew member is already in there, looking for a boat. Thirteen Facebook groups "
+                  "where crews come together — you join, you introduce yourself, you sail. We take "
+                  "nothing, moderate nothing, and step into nothing."),
         "carte": "Where the groups are",
         "liste": "The groups, one by one",
         "membres": "members",
@@ -64,13 +64,16 @@ a{color:inherit}
 .chapo{color:var(--doux);max-width:46rem;margin:0 0 .4rem}
 .total{color:var(--doux);font-size:.86rem;margin:0 0 1.6rem}
 .retour{display:inline-block;color:var(--doux);text-decoration:none;font-size:.9rem;margin-bottom:.6rem}
-.bourses{display:grid;gap:.7rem;grid-template-columns:repeat(auto-fill,minmax(15.5rem,1fr));margin:1rem 0 0}
-.bourse{display:flex;flex-direction:column;gap:.2rem;padding:.85rem .95rem;background:var(--carte);
-  border:1px solid var(--trait);border-radius:12px;text-decoration:none;min-width:0;min-height:6.2rem}
-.bourse:hover,.bourse:focus-visible{border-color:var(--accent)}
+.bourses{display:flex;flex-direction:column;gap:.4rem;margin:1rem 0 0}
+.bourse{display:grid;grid-template-columns:minmax(0,1fr) auto 1.1rem;align-items:center;gap:.9rem;
+  padding:.62rem .9rem;background:var(--carte);border:1px solid var(--trait);border-radius:10px;
+  text-decoration:none;min-width:0}
+.bourse:hover,.bourse:focus-visible{border-color:var(--accent);background:#12293e}
+.bourse .b-tete{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;min-width:0}
 .bourse strong{font-weight:600;font-size:.98rem;line-height:1.25}
-.bourse .ou{color:var(--doux);font-size:.8rem;letter-spacing:.04em;text-transform:uppercase}
-.bourse .nb{color:var(--accent);font-size:.86rem}
+.bourse .ou{color:var(--doux);font-size:.78rem;letter-spacing:.04em;text-transform:uppercase}
+.bourse .nb{color:var(--accent);font-size:.86rem;white-space:nowrap}
+.bourse .fl{color:var(--doux);font-size:1rem;text-align:right}
 .bourse .badge{align-self:flex-start;color:var(--doux);border:1px solid var(--trait);border-radius:99px;
   padding:.05rem .5rem;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase}
 .note{margin-top:1.6rem;color:var(--doux);font-size:.86rem;border-top:1px solid var(--trait);padding-top:1rem}
@@ -82,7 +85,13 @@ a{color:inherit}
 .planisphere{position:relative;border:1px solid var(--trait);border-radius:12px;overflow:hidden;
   background:#081521}
 .planisphere img{display:block;width:100%;height:auto;opacity:.92}
-.encart-france{width:min(430px,100%);margin:.9rem 0 0}
+/* La mini-carte France se pose en bas à droite DANS la carte (Nicolas, 26/11/2026 : « la mini carte
+   doit être en bas à droite dans la carte reçue »). Elle recouvre le Pacifique sud, la seule zone de
+   la carte où aucun bateau ne navigue. Sur téléphone, elle repasse dessous en pleine largeur. */
+.planisphere .encart-france{position:absolute;right:.7rem;bottom:.7rem;width:min(250px,40%);
+  margin:0;z-index:4;box-shadow:0 8px 22px rgba(3,8,14,.5)}
+@media (max-width:700px){.planisphere .encart-france{position:static;width:100%;margin:.6rem 0 0;
+  box-shadow:none}}
 /* Le sélecteur de bateau de la mer de fond (F50, TP52, 19 pieds) n'a rien à faire ici : il se pose
    en haut à gauche et passe par-dessus le titre (vu le 26/11/2026 à la première capture). La mer de
    fond reste, elle ne sert qu'à l'ambiance. */
@@ -145,16 +154,16 @@ def construire(dossier: Path | None = None) -> str:
         zone = (b.get("ou") or "").strip()
         gens = int(b.get("membres") or 0)
         lien = clics_sortants.lien(b["lien"], "bourse")
-        morceaux = [f'<strong>{H.escape(b["groupe"])}</strong>']
+        tete = [f'<strong>{H.escape(b["groupe"])}</strong>']
         if zone:
-            morceaux.append(f'<span class="ou">{H.escape(zone)}</span>')
-        if gens:
-            morceaux.append(f'<span class="nb">{_nombre(gens)} <span data-t="membres">membres</span></span>')
+            tete.append(f'<span class="ou">{H.escape(zone)}</span>')
         if b.get("jeu"):
-            morceaux.append('<span class="badge" data-t="jeu">jeu en ligne</span>')
+            tete.append('<span class="badge" data-t="jeu">jeu en ligne</span>')
+        droite = f'<span class="nb">{_nombre(gens)} <span data-t="membres">membres</span></span>' if gens else ""
         cartes.append(f'<a class="bourse" href="{H.escape(lien, quote=True)}" rel="nofollow noopener" '
                       f'title="{H.escape(f["voir"])} : {H.escape(b["groupe"], quote=True)}">'
-                      + "".join(morceaux) + "</a>")
+                      f'<span class="b-tete">{"".join(tete)}</span>{droite}'
+                      '<span class="fl" aria-hidden="true">↗</span></a>')
 
     seo_titre = (f"Bourse aux équipiers : {len(bourses)} groupes Facebook pour embarquer | Sailing More")
     seo_desc = (f"La carte des groupes Facebook où l'on trouve un équipier ou un bateau : "
