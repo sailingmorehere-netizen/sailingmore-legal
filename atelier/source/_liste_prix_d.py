@@ -1,11 +1,11 @@
 import json, os
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-L = json.load(open(R + '/projets/sailingmore/site/stages-proches.json'))['o']
-LOT = ['Segelschule Insel Reichenau', 'Compagnia della Vela', 'École de croisière Slowlife',
-       'Urban Truant', 'Segelschule Grosse Freiheit', 'La Scuola della Vela', 'Soleil Scuola Nautica',
-       'Segelschule Überlingen', 'EZS Zeilschool', 'Real Club de Mar', 'Blue Spirit', 'Solent Sail',
-       'Vent du Large', 'Lagoo Segelschule Zürich', 'Segelschule Rehbach', 'Segelschule Schluchsee', 'Windzone']
-print(len(L), L[0])
-for i, o in enumerate(L):
-    if o[4] in LOT and o[8] in (None, '', 0):
+d = json.load(open(os.path.join(R, 'projets/sailingmore/site/stages-proches.json')))
+print({k: (v if not isinstance(v, list) else len(v)) for k, v in d.items() if k != 'o'})
+lot = ['Segelschule Insel Reichenau', 'Compagnia della Vela', 'École de croisière Slowlife', 'Urban Truant',
+       'Segelschule Grosse Freiheit', 'La Scuola della Vela', 'Soleil Scuola Nautica', 'Segelschule Überlingen',
+       'EZS Zeilschool', 'Real Club de Mar', 'Blue Spirit', 'Solent Sail', 'Vent du Large',
+       'Lagoo Segelschule Zürich', 'Segelschule Rehbach', 'Segelschule Schluchsee', 'Windzone']
+for i, o in enumerate(d['o']):
+    if o[4] in lot and o[8] in (None, '', 0):
         print(i, o)
