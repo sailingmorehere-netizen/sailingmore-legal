@@ -1,6 +1,38 @@
 <!doctype html>
 <html lang="fr">
-<head>
+<head><!--langue-debut--><script id="sm-langue-detecteur">
+(function(){
+  var L = ["fr", "en", "de", "it", "es", "pt"], ALIAS = {"nb": "no", "nn": "no", "iw": "he", "in": "id", "ji": "yi", "jw": "jv", "mo": "ro", "sh": "hr", "tl": "fil"};
+  function lu(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function ec(k,v){ try{ if(v===null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){} }
+  function base(c){ c = String(c||'').toLowerCase().replace(/_/g,'-'); var b = c.split('-')[0]; return ALIAS[b]||b; }
+  function connue(b){ return b === 'bzh' || L.indexOf(b) >= 0; }
+  /* Le choix d'une langue, mémorisé pour toutes les pages. Le breton garde le texte français. */
+  function retenir(v){
+    if(v === 'auto'){ ec('sm-bzh', null); ec('sm-langue', 'auto'); }
+    else if(v === 'bzh'){ ec('sm-bzh', '1'); ec('sm-langue', 'fr'); }
+    else { ec('sm-bzh', null); ec('sm-langue', v); }
+  }
+  window.smLangue = function(){
+    /* 1. l'adresse demandée */
+    var q = null; try{ q = new URLSearchParams(location.search).get('lang'); }catch(e){}
+    if(q){ var b = base(q); if(connue(b)){ retenir(b); return b; } }
+    /* 2. le choix du visiteur, s'il en a fait un */
+    var v = lu('sm-langue');
+    if(v && v !== 'auto' && connue(v)) return (v === 'fr' && lu('sm-bzh') === '1') ? 'bzh' : v;
+    /* 3. le français, toujours : aucune détection par le navigateur (25/11/2026) */
+    return 'fr';
+  };
+  window.smChoisirLangue = function(v){ retenir(v); };
+  window.SM_LANGUES = L;
+  /* Avant le premier pixel : la langue retenue dans l'attribut, pour le CSS et pour les pages. */
+  try{
+    var retenu = window.smLangue();
+    document.documentElement.setAttribute('data-sm-langue', retenu);
+    if(retenu !== 'bzh') document.documentElement.setAttribute('lang', retenu);
+  }catch(e){}
+})();
+</script><!--langue-fin-->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Stages, régates et cours de voile en Europe | Sailing More</title>
@@ -378,9 +410,6 @@
   @keyframes menu-descend{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
   .entete .menu-d nav a{padding:.6rem .7rem;border-radius:.55rem;font-size:.82rem;line-height:1.2;
     color:#e9f1f7;transition:background .14s ease,color .14s ease}
-  /* Une sous-page : plus petite et en retrait de couleur, sous sa page mère (le menu se range en
-     colonnes, un retrait en pixels ne se verrait pas). */
-  .entete .menu-d nav a.sous-page{font-size:.75rem;opacity:.82;padding:.34rem .7rem .28rem}
   .entete .menu-d nav a:hover,.entete .menu-d nav a:focus-visible{background:rgba(126,214,214,.14);
     color:#fff;outline:none}
   .entete .menu-d nav a[aria-current="page"]{color:#fff;box-shadow:inset 2px 0 0 var(--rouge);
@@ -646,11 +675,74 @@ header.entete{position:sticky;top:0;z-index:30;height:var(--h-entete);flex-wrap:
   }
 
 </style>
+  <link rel="alternate" type="application/rss+xml" title="Sailing More" href="https://sailingmore.fr/feed.xml">
+<style id="equilibre">
+/* Rééquilibrage design — 20/11/2026. Posé en dernier dans chaque page : il l'emporte sur les styles d'origine. */
+
+/* 1. Une police de marque, la même sur tous les appareils (Inter, licence SIL OFL, hébergée sur le site) */
+@font-face{font-family:"Inter SM";src:url(fonts/inter-light.woff) format("woff");font-weight:300;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-regular.woff) format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-semibold.woff) format("woff");font-weight:500 700;font-display:swap}
+@font-face{font-family:"Inter SM";src:url(fonts/inter-black.woff) format("woff");font-weight:800 900;font-display:swap}
+body,button,input,textarea,select{font-family:"Inter SM",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+
+/* 2. Les couleurs de la charte : marine, panneaux, crème, rouge. Le turquoise et l'or rentrent dans le rang. */
+:root{--eau:#f4efe4;--ambre:#f4efe4}
+.grand b{color:#f4efe4!important}
+
+/* 3. « Le rouge souligne, il n'écrit pas » */
+.accroche .rouge{color:inherit!important;text-decoration:underline;text-decoration-color:#e23a3e;
+  text-decoration-thickness:2px;text-underline-offset:.24em}
+.bulle i,.bulle i span{color:#f4efe4!important}
+.bulle{border-left:2px solid #e23a3e!important}
+
+/* 4. « Filets droits, rien de franchement arrondi » */
+.cadre,.carte-kit,.planisphere,.bulle,.carte-jeu,.cookies,.cookies button,.langues button,
+.anneau,.anneau img,.vignette img{border-radius:0!important}
+.cadre,.carte-kit,.carte-jeu{background-image:none!important;background-color:#0f2438!important;
+  border:1px solid rgba(244,239,228,.12)!important;box-shadow:none!important}
+.anneau{background:rgba(244,239,228,.22)!important}
+
+/* 5. Rien sous 12 px : le cœur de cible a souvent plus de 50 ans */
+.grand span,.tarif-ce,.tarif-notes,.kit-note,label span,.bulle b,.bulle i,.bulle i span,
+figcaption strong,figcaption span:not(.siecle),.retour,.ann-carte,.page h2,.date,.geste,.bouton span{font-size:12px!important}
+.siecle{font-size:11px!important;color:rgba(195,214,230,.75)!important}
+
+/* 6. Réseaux en crème, couleur d'origine au survol */
+.reseau svg{filter:grayscale(1) brightness(2.4);transition:filter .2s}
+.reseau:hover svg,.reseau:focus-visible svg{filter:none}
+
+/* 7. Bandeau cookies : une ligne fine sous l'en-tête, dans le vide du haut de page, qui ne cache plus les chiffres */
+.cookies{top:3.4rem!important;bottom:auto!important;left:50%!important;right:auto!important;transform:translateX(-50%);
+  width:max-content;max-width:calc(100% - 1.2rem)!important;margin:0!important;display:flex!important;align-items:center;gap:.9rem;
+  padding:.45rem .55rem .45rem .9rem!important;font-size:12px!important;line-height:1.35;background:#0f2438!important;
+  border:1px solid rgba(244,239,228,.15)!important;border-left:2px solid #e23a3e!important;box-shadow:none!important;animation:none!important}
+.cookies[hidden]{display:none!important}
+.cookies p{margin:0!important}
+.cookies button{flex:none;background:transparent!important;color:#f4efe4!important;border:1px solid #e23a3e!important;
+  padding:.35rem .8rem!important;font-size:12px!important;margin:0!important}
+.cookies a{text-decoration:underline;text-decoration-color:#e23a3e}
+body:has(#cookies:not([hidden])) footer{padding-bottom:inherit}
+
+/* 8. En-tête mobile : le nom sur une ligne */
+.entete .nom{white-space:nowrap}
+@media (max-width:480px){
+  .entete .nom{font-size:.72rem;letter-spacing:.1em}
+  .langues button{padding-left:.3rem!important;padding-right:.3rem!important}
+  .accroche{padding:0 1.2rem}
+  .cookies{top:auto!important;bottom:.6rem!important;left:.6rem!important;right:.6rem!important;transform:none;width:auto;
+    max-width:none!important;gap:.6rem;padding:.4rem .45rem .4rem .7rem!important;font-size:11.5px!important}
+  .cookies button{padding:.3rem .6rem!important}
+}
+
+/* 9. Un seul style de titre pour les pages secondaires */
+.page h1{font-weight:300;text-transform:uppercase;letter-spacing:.02em}
+</style>
 </head>
 <body>
 
 <div class="contenu">
-<header class="entete"><a class="nom" href="/" aria-label="Sailing More, retour à l’accueil">Sailing More</a><div class="lg"><span hidden>Langue</span><span class="globe" aria-hidden="true"></span><span class="code" aria-hidden="true">FR</span><span class="chev" aria-hidden="true"></span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto (langue du navigateur)</option><option value="fr">FR · Français</option><option value="en">EN · English</option><option value="de">DE · Deutsch</option><option value="it">IT · Italiano</option><option value="es">ES · Español</option><option value="pt">PT · Português</option><option value="bzh">BZH · Brezhoneg</option></select></div><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="de" aria-pressed="false">DE</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="stages.html">Stages de voile</a><a href="regates.html">Calendrier des régates</a><a href="cours.html">Cours théoriques</a><a href="references.html" class="sous-page">Références</a><a href="regles-de-course.html">Règles de course</a><a href="bourse-equipiers.html">Bourse aux équipiers</a><a href="bateaux.html">Bateaux</a><a href="lexique.html">Lexique</a><a href="ports.html">Ports du monde</a><a href="chants-de-marin.html">Chants de marins</a><a href="annonceurs.html">Annonceurs</a><a href="qui-sommes-nous.html">Qui sommes-nous ?</a></nav></details></header><style>
+<header class="entete"><a class="nom" href="/" aria-label="Sailing More, retour à l’accueil">Sailing More</a><div class="lg"><span hidden>Langue</span><span class="globe" aria-hidden="true"></span><span class="code" aria-hidden="true">FR</span><span class="chev" aria-hidden="true"></span><select id="langue-sel" aria-label="Langue du site"><option value="auto">Auto (langue du navigateur)</option><option value="fr">FR · Français</option><option value="en">EN · English</option><option value="de">DE · Deutsch</option><option value="it">IT · Italiano</option><option value="es">ES · Español</option><option value="pt">PT · Português</option><option value="bzh">BZH · Brezhoneg</option></select></div><div class="langues" id="langues" style="display:none" aria-hidden="true"><button data-lang="auto" aria-pressed="true">Auto</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="de" aria-pressed="false">DE</button><button data-lang="it" aria-pressed="false">IT</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="pt" aria-pressed="false">PT</button></div><details class="menu-d"><summary>Menu</summary><nav aria-label="Toutes les pages du site"><a href="stages.html">Stages de voile</a><a href="regates.html">Calendrier des régates</a><a href="cours.html">Cours théoriques</a><a href="regles-de-course.html">Règles de course</a><a href="bourse-equipiers.html">Bourse aux équipiers</a><a href="bateaux.html">Bateaux</a><a href="lexique.html">Lexique</a><a href="ports.html">Ports du monde</a><a href="chants-de-marin.html">Chants de marins</a><a href="annonceurs.html">Annonceurs</a><a href="qui-sommes-nous.html">Qui sommes-nous ?</a></nav></details></header><style>
 /* La langue : une pastille du site, pas un contrôle du système (Nicolas, 23/11/2026 : « pour la barre
    des langues il faut un truc plus joli »). Plus de cadre blanc : un globe, le code de la langue en
    capitales comme les libellés de la barre, le filet rouge de MENU dessous, et le <select> natif posé
@@ -880,5 +972,5 @@ document.querySelectorAll("#langues button").forEach(b => b.addEventListener("cl
 })();
 appliquer(choisir());
 </script>
-</body>
+<!--stages-proches--><section id="stages-proches" style="max-width:60rem;margin:2rem auto;padding:0 1.2rem" hidden></section><script src="/stages-proches.js" defer></script></body>
 </html>
