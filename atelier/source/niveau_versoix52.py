@@ -59,5 +59,5 @@ for x in V:
     else:
         rate += 1
         print('non résolu :', x['lien'][-20:], x['titre'], niv)
-json.dump(d, open(FICH, 'w', encoding='utf-8'), ensure_ascii=False)
+json.dump(d, open(FICH, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
 print('remplis', rempli, 'non résolus', rate, {u: len(v) for u, v in cache.items()})
