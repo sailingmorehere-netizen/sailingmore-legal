@@ -85,6 +85,15 @@ UI = {
         "aucune": "Nenhuma regra publicada para esta combinação. Não significa que nada seja exigido: consulte a autoridade da bandeira.",
         "avert": "Indicativo: vale o texto oficial, que pode ter mudado desde a data indicada.",
         "par_equ": "por tripulante", "stages": "Ver os cursos de vela →"},
+ "pl": {"titre": "Obowiązkowe wyposażenie bezpieczeństwa według bandery i strefy",
+        "chapo": "Podaj banderę, odległość od schronienia i liczbę członków załogi: zobaczysz wymagany sprzęt wraz z tekstem oficjalnym i jego datą. Żadnego przepisu bez źródła.",
+        "pavillon": "Bandera", "distance": "Odległość od schronienia (mile)", "equipiers": "Członkowie załogi",
+        "materiel": "Wymagany sprzęt", "quantite": "Ilość", "source": "Źródło", "date": "tekst z dnia",
+        "prix": "cena sprawdzona dnia", "acheter": "zobacz w sklepie", "pub": "link afiliacyjny",
+        "vide": "Przepisy są sprawdzane w tekstach oficjalnych. Pojawią się tutaj kolejno, każdy ze źródłem i datą.",
+        "aucune": "Brak opublikowanych przepisów dla tego zestawienia. To nie znaczy, że nic nie jest wymagane: zapytaj organ bandery.",
+        "avert": "Informacja orientacyjna: obowiązuje tekst oficjalny, który mógł się zmienić od wskazanej daty.",
+        "par_equ": "na członka załogi", "stages": "Zobacz kursy żeglarskie →"},
 }
 
 JS = r"""

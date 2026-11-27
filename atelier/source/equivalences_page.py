@@ -120,6 +120,16 @@ UI = {
            "a_verifier": "zu prüfen", "compte": "{n} Gleichwertigkeit(en) veröffentlicht",
            "pied": "Eine Gleichwertigkeit scheint falsch, oder ein amtliches Dokument hat sich geändert? Schreiben Sie uns: die Zeile wird bis zur Prüfung entfernt.",
            "stages": "Segelkurse ansehen →"},
+    "pl": {"titre": "Równoważność patentów żeglarskich",
+           "chapo": "Do jakiego poziomu FFVoile, SKS lub ICC prowadzi ten kurs RYA w Grecji? Każda równoważność na tej stronie pochodzi z oficjalnego dokumentu, do którego prowadzi odnośnik, i została sprawdzona przez instruktora przed publikacją.",
+           "de": "System źródłowy", "vers": "System docelowy", "tous": "Wszystkie",
+           "niveau_source": "Posiadany poziom", "niveau_cible": "Poziom równoważny",
+           "prerequis": "Wymagania wstępne", "passerelle": "Jak go uzyskać", "source": "Źródło", "voir_source": "dokument oficjalny",
+           "vide": "Równoważności są sprawdzane w oficjalnych dokumentach. Pojawią się tutaj kolejno, każda z własnym źródłem.",
+           "aucune": "Dla tej pary systemów nie opublikowano żadnej równoważności.",
+           "a_verifier": "do sprawdzenia", "compte": "Opublikowane równoważności: {n}",
+           "pied": "Równoważność wydaje się błędna albo oficjalny dokument się zmienił? Napisz do nas: wiersz zostanie wycofany na czas sprawdzenia.",
+           "stages": "Zobacz kursy żeglarskie →"},
 }
 
 CSS = """
