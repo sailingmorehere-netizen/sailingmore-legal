@@ -1,6 +1,1 @@
-<?xml version="1.0" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600">
-<rect fill="#F00" width="600" height="600"/>
-<path stroke="#FF0" stroke-width="850" stroke-dasharray="84,86" d="M0,0 600,600"/>
-<path fill="none" stroke="#000" stroke-width="2.5" d="M0,0H600V600H0z"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2" width="200" height="200"><rect x="0" y="0" width="2" height="2" fill="#e30613"/><polygon points="0.0,0.0 0.4,0.0 0.0,0.4" fill="#ffd400"/><polygon points="0.4,0.0 0.8,0.0 0.0,0.8 0.0,0.4" fill="#e30613"/><polygon points="0.8,0.0 1.2,0.0 0.0,1.2 0.0,0.8" fill="#ffd400"/><polygon points="1.2,0.0 1.6,0.0 0.0,1.6 0.0,1.2" fill="#e30613"/><polygon points="1.6,0.0 2.0,0.0 2.0,0.0 0.0,2.0 0.0,2.0 0.0,1.6" fill="#ffd400"/><polygon points="2.0,0.0 2.0,0.0 2.0,0.4 0.4,2.0 0.0,2.0 0.0,2.0" fill="#e30613"/><polygon points="2.0,0.4 2.0,0.8 0.8,2.0 0.4,2.0" fill="#ffd400"/><polygon points="2.0,0.8 2.0,1.2 1.2,2.0 0.8,2.0" fill="#e30613"/><polygon points="2.0,1.2 2.0,1.6 1.6,2.0 1.2,2.0" fill="#ffd400"/><polygon points="2.0,1.6 2.0,2.0 1.6,2.0" fill="#e30613"/></svg>

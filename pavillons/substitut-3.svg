@@ -1,5 +1,1 @@
-<?xml version="1.0" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="550" height="350">
-<path stroke="#000" stroke-width="2.5" fill="#FFF" d="M1.5,2 547,175 1.5,348z"/>
-<path d="M1,115H357L547,175 357,235H1z"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3.14 2" width="314" height="200"><clipPath id="f"><polygon points="0.0,0.0 3.14,1.0 0.0,2.0"/></clipPath><g clip-path="url(#f)"><rect x="0" y="0" width="3.14" height="2" fill="#ffffff"/><rect x="0" y="0.66" width="3.14" height="0.68" fill="#111111"/></g></svg>
