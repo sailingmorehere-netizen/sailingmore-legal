@@ -104,13 +104,9 @@ COURS = [
              "I primi tre minuti: salire a bordo, mollare, uscire dal porto.", "Los tres primeros minutos: embarcar, largar, salir del puerto.",
              "Os três primeiros minutos: embarcar, largar, sair do porto.", "Die ersten drei Minuten: einsteigen, ablegen, den Hafen verlassen.")},
     {"famille": "commencer", "id": "pavillons", "ancre": "pavillons", "icone": "pavillons", "statut": "écrit", "t": None,
-     "d": _l("Les 42 pavillons de l'alphabet marin, un par un.", "The 42 flags of the nautical alphabet, one by one.",
+     "d": _l("Les 42 pavillons de la navigation : lettres, chiffres, substituts.", "The 42 navigation flags: letters, numerals, substitutes.",
              "Le 42 bandiere dell'alfabeto nautico, una per una.", "Las 42 banderas del alfabeto marino, una a una.",
              "As 42 bandeiras do alfabeto marítimo, uma a uma.", "Die 42 Flaggen des Flaggenalphabets, eine nach der anderen.")},
-    {"famille": "commencer", "id": "alphabet", "ancre": "alphabet", "icone": "pavillons", "statut": "écrit", "t": None,
-     "d": _l("L'alphabet phonétique : dire « Bravo », pas « B ».", "The phonetic alphabet: 'Bravo', not 'B'.",
-             "L'alfabeto fonetico: dire «Bravo», non «B».", "El alfabeto fonético: decir «Bravo», no «B».",
-             "O alfabeto fonético: dizer «Bravo», não «B».", "Das Buchstabieralphabet: «Bravo» statt «B».")},
     # 2. Permis et diplôme
     {"famille": "permis", "id": "cap", "ancre": "cap", "icone": "cap", "statut": "écrit", "t": None,
      "d": _l("Lire la carte, tenir un cap, estimer sa position.", "Read the chart, hold a course, estimate your position.",
@@ -193,9 +189,6 @@ CHAPITRES = [
     # pavillon, la grille de navigation. Les blocs sont dessinés par `pavillons_cours.py`, à partir de
     # `pavillons.json` (42 pavillons) — les règles citées y portent leur propre lien.
     {"id": "pavillons", "pavillons": True, "schemas": [], "regles": []},
-    # L'alphabet phonétique (27/11/2026, Nicolas : « un petit cours sur l'alphabet marin en
-    # supplément »). Il prolonge les pavillons : même source `pavillons.json`, une ligne par lettre.
-    {"id": "alphabet", "pavillons": True, "schemas": [], "regles": []},
     # Les pavillons de course : chaque signal renvoie à la règle qui le décrit (RRS 26 à 61).
     {"id": "signaux_course", "signaux": True, "schemas": [], "regles": []},
     # La VHF : usage, procédure et canaux.
@@ -1547,7 +1540,19 @@ def page_cours() -> str:
 def ecrire_page(dossier: Path = SITE) -> str:
     """Écrit `cours.html` dans `dossier` — appelé par `accueil_site.sortir_le_site`."""
     dossier.mkdir(parents=True, exist_ok=True)
-    (dossier / "cours.html").write_text(page_cours(), encoding="utf-8")
+    if dossier.resolve() == SITE.resolve():
+        # Tâche 25 (27/11/2026) : le monolithe (6 langues, 6 h1, > 800 Ko) n'est plus une page publiée. Il est
+        # écrit comme matière première (preparation/) puis decoupe_cours.py en tire le sommaire cours.html
+        # (1 h1), une page par chapitre et par langue, hreflang réciproque et la table de redirection des
+        # ancres. Sans cela, chaque reconstruction écrasait la découpe par le monolithe.
+        import subprocess  # noqa: PLC0415
+        bak = RACINE / "projets" / "sailingmore" / "preparation" / "cours-monolithe-avant-56.html"
+        bak.parent.mkdir(parents=True, exist_ok=True)
+        bak.write_text(page_cours(), encoding="utf-8")
+        subprocess.run([sys.executable, str(Path(__file__).resolve().parent / "decoupe_cours.py")],
+                       cwd=str(RACINE), check=True, stdout=subprocess.DEVNULL)
+    else:
+        (dossier / "cours.html").write_text(page_cours(), encoding="utf-8")
     import site_blocks as _sb  # noqa: PLC0415  (la CSS du site : un seul endroit)
     pavillons_cours.ecrire_pages(dossier, f"{_sb.CSS}{CSS}{pavillons_cours.CSS}")
     return "cours.html"

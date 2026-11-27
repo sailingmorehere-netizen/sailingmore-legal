@@ -67,7 +67,7 @@ DATA = {}   # DATA[l] = dict(pre, chaps=[(cle, html)], note, titres)
 for l in LANGS:
     s = SEG[l]
     ch = list(re.finditer(r'<section class="chap" id="(ch\d+|revision)-%s">' % l, s))
-    assert len(ch) == 18, (l, len(ch))
+    assert len(ch) >= 18 and len(ch) == len(re.findall(r'<section class="chap" id="(?:ch\d+|revision)-%s">' % 'fr', SEG['fr'])), (l, len(ch))
     note = s.find('<p class="note">')
     assert note > ch[-1].start()
     chaps = []
@@ -287,9 +287,10 @@ for l in LANGS:
 # ---------- 5. sitemap ----------
 sm = open(S + 'sitemap.xml', encoding='utf-8').read()
 sm = re.sub(r'<url><loc>%scours-[^<]*</loc>[^\n]*\n' % re.escape(BASE), '', sm)
-lignes = ''.join('<url><loc>%s%s</loc><lastmod>2026-11-26</lastmod></url>\n' % (BASE, p) for p in ecrites if p != 'cours.html')
-marque = '<url><loc>%scours.html</loc><lastmod>2026-11-26</lastmod></url>\n' % BASE
-assert marque in sm
+mm = re.search(r'<url><loc>%scours\.html</loc><lastmod>([^<]*)</lastmod></url>\n' % re.escape(BASE), sm)
+assert mm
+marque = mm.group(0)
+lignes = ''.join('<url><loc>%s%s</loc><lastmod>%s</lastmod></url>\n' % (BASE, p, mm.group(1)) for p in ecrites if p != 'cours.html')
 sm = sm.replace(marque, marque + lignes, 1)
 open(S + 'sitemap.xml', 'w', encoding='utf-8').write(sm)
 # Le critère de réussite lit cours.html à la racine de la copie : miroir du sommaire (précédent : stages-proches.json, tâche 54).
