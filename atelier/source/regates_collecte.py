@@ -130,6 +130,22 @@ def manage2sail(annee: int) -> list[dict]:
 # ────────────────────────────────────────────────────────────────────── FFVoile
 
 
+def _joli_lieu(t: str) -> str:
+    """Un lieu lisible tiré de l'API : « HONG KONG » → « Hong Kong », « 1300 LISBOA - PORTUGAL »
+    → « Lisboa ». Vide quand la valeur n'est pas un lieu (« ? », « ffvoile »)."""
+    t = " ".join((t or "").split())
+    if not t or t.lower() in ("?", "-", "0", "nc", "inconnu", "ffvoile", "non renseigne",
+                              "non renseigné", "a confirmer"):
+        return ""
+    t = t.split(" - ")[0]
+    t = re.sub(r"^\d{4,5}\s+", "", t).strip(" ,.-")
+    if not t:
+        return ""
+    if t.isupper():
+        return t.title()
+    return t[0].upper() + t[1:]
+
+
 def ffvoile(annee: int) -> list[dict]:
     sortie, page = [], 1
     while page <= 80:
@@ -146,13 +162,42 @@ def ffvoile(annee: int) -> list[dict]:
             dep = (cdv.get("nomCourt") or "").strip()
             if not dep or dep == "99":
                 dep = (club.get("code") or "")[:2]
+            ligue = ((c.get("ligue") or {}).get("nom") or "").strip()
+            adresse = c.get("adresse") or {}
+            adresse_club = club.get("adresse") or {}
+            plan = str(c.get("planDEau") or "").strip()
+            etranger = "ETRANGER" in ligue.upper()
+            # Le pays ne se déduit pas de la fédération : la FFVoile publie aussi les épreuves
+            # de ses clubs à l'étranger (ligue « CLUBS ETRANGERS »), et le « FRA » écrit pour
+            # tout le monde affichait un drapeau français sur un championnat du monde à Hong
+            # Kong (24/11/2026). On lit donc, dans l'ordre : le code pays de la compétition
+            # (« POR »), le pays du club (« FRANCE », « ? »), le plan d'eau, le nom du club,
+            # la ville du club (« 1300 LISBOA - PORTUGAL »). Rien de lisible et club étranger :
+            # pays vide, « Monde » sans drapeau — mieux vaut pas de drapeau qu'un drapeau faux.
+            code = str(adresse.get("pays") or "").strip().upper()
+            pays = code if (len(code) == 3 and code.isalpha()) else ""
+            # Le code du club, pour un club étranger, est le pays en trois lettres (« USA »,
+            # « POR ») : c'est la donnée la plus sûre de cette API.
+            code_club = str(club.get("code") or "").strip().upper()
+            if etranger and code_club in regates_lieux.CODES:
+                pays = code_club
+            if not pays:
+                pays = (regates_lieux.pays_par_nom(str(adresse_club.get("pays") or ""))
+                        or regates_lieux.pays_par_nom(plan)
+                        or regates_lieux.pays_par_nom(str(club.get("nom") or ""))
+                        or regates_lieux.pays_par_nom(str(adresse_club.get("ville") or "")))
+            if not pays and not etranger:
+                pays = "FRA"
+            etranger = etranger or (bool(pays) and pays != "FRA")
+            ville = _joli_lieu(plan) or _joli_lieu(str(adresse_club.get("ville") or ""))
             sortie.append(
                 {
                     "nom": (c.get("competitionNom") or "").strip(),
                     "debut": (c.get("dateDebut") or "")[:10],
                     "fin": (c.get("dateFin") or c.get("dateDebut") or "")[:10],
-                    "pays": "FRA",
-                    "ville": "",
+                    "pays": pays,
+                    "etranger": etranger,
+                    "ville": ville,
                     "club": (club.get("nom") or "").strip(),
                     "cdv": (cdv.get("nom") or "").strip(),
                     "departement": dep,
@@ -166,6 +211,24 @@ def ffvoile(annee: int) -> list[dict]:
         if page >= int(meta.get("lastPage") or 1):
             break
         page += 1
+
+    # Une soixantaine d'épreuves étrangères n'ont de pays nulle part dans la liste : le détail
+    # d'une compétition, lui, donne son `adresse.pays` (« POR ») et son plan d'eau. Un appel
+    # par épreuve, plafonné, et l'échec ne change rien — elle reste « Monde », sans drapeau.
+    for e in [x for x in sortie if not x["pays"]][:90]:
+        cid = (e.get("lien") or "").rstrip("/").split("/")[-1]
+        if not cid.isdigit():
+            continue
+        try:
+            x = json.loads(lit(f"https://regates.ffvoile.fr/api/competitions/{cid}/"))
+        except Exception:  # noqa: BLE001
+            continue
+        code = str((x.get("adresse") or {}).get("pays") or "").strip().upper()
+        if len(code) == 3 and code.isalpha():
+            e["pays"] = code
+            e["etranger"] = code != "FRA"
+        if not e["ville"]:
+            e["ville"] = _joli_lieu(str(x.get("planDEau") or ""))
     return sortie
 
 
@@ -444,11 +507,12 @@ def fusionner(listes: list[tuple[str, list[dict]]]) -> list[dict]:
                 "ocean": bool(p.get("ocean")),
                 "departement": p.get("departement") or "",
                 "ligue": p.get("ligue") or "",
+                "etranger": bool(p.get("etranger")),
                 "sources": [source],
             }
             if len(e["pays"]) != 3 or not e["pays"].isalpha():
                 e["pays"] = regates_lieux.pays(e["ville"], e["club"], e["nom"],
-                                               [source], e["departement"])
+                                               [source], e["departement"], e["etranger"])
             e["region"] = region(e)
             e["type"] = type_de(e)
             if k in index:
@@ -464,6 +528,10 @@ def fusionner(listes: list[tuple[str, list[dict]]]) -> list[dict]:
                     g["fin"] = e["fin"]
                 if e["ocean"] and not g["ocean"]:
                     g["ocean"] = True
+                # le pays étranger aussi : une source qui situe la course hors de France
+                # l'emporte sur le « FRA » par défaut de la fédération (24/11/2026)
+                if e.get("etranger") and not g.get("etranger"):
+                    g["etranger"] = True
                 # une entrée « hors-regate » ne doit pas absorber une vraie régate
                 if g["type"] == "hors-regate" and e["type"] != "hors-regate":
                     g["type"] = e["type"]
@@ -497,6 +565,7 @@ def _fusionner_deux(g: dict, e: dict) -> dict:
     g["classes"] = g["classes"] + [c for c in e["classes"] if c not in g["classes"]]
     g["sources"] = sorted(set(g["sources"]) | set(e["sources"]))
     g["ocean"] = bool(g["ocean"] or e["ocean"])
+    g["etranger"] = bool(g.get("etranger") or e.get("etranger"))
     g["annulee"] = bool(g["annulee"])
     if e["fin"] > g["fin"]:
         g["fin"] = e["fin"]
@@ -690,6 +759,23 @@ def main() -> int:
 
     tout = fusionner(listes)
     tout, doublons = dedoublonner(tout)
+    # Le pays qu'aucune source ne donne se lit dans ce que l'épreuve dit d'elle-même : son
+    # intitulé, puis sa ville, puis son club. Dernier recours, pour les sources qui ne
+    # publient pas de pays du tout (spencer, une partie des clubs) — et mieux vaut un pays
+    # lu qu'un « Monde » sans drapeau.
+    for p in tout:
+        if not p.get("pays"):
+            p["pays"] = (regates_lieux.pays_par_nom(p.get("nom") or "")
+                         or regates_lieux.pays_par_nom(p.get("ville") or "")
+                         or regates_lieux.pays_par_nom(p.get("club") or ""))
+            if p["pays"]:
+                p["etranger"] = p["pays"] != "FRA"
+                p["region"] = region(p)
+    # `etranger` se déduit du pays, jamais l'inverse : il valait false pour Melbourne (AUS) et
+    # Constance (DEU), true pour Monaco (revue du 26/11/2026). Une seule règle, appliquée en dernier.
+    for p in tout:
+        if p.get("pays"):
+            p["etranger"] = p["pays"] != "FRA"
     if doublons:
         print(f"  doublons réunis : {len(doublons)}")
         for nom, garde, autre, src, r1, r2 in doublons:

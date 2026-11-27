@@ -26,7 +26,7 @@ import regates_classes  # noqa: E402  (table sigle → nom, jauges « tout batea
 import regates_drapeaux  # noqa: E402  (drapeaux SVG, noms de pays en six langues)
 import carte_epreuves  # noqa: E402  (la carte, commune aux régates et aux stages)
 
-ICI = Path(os.environ.get("SAILINGMORE_RACINE", "/opt/data"))
+ICI = Path(os.environ.get("SAILINGMORE_RACINE", str(Path(__file__).resolve().parent.parent)))
 JSON = ICI / "projets/sailingmore/regates.json"
 SORTIE = ICI / "projets/sailingmore/site"
 
@@ -441,7 +441,7 @@ JS = r"""
     }
     var groupes = [], vus = {};
     gardes.forEach(function(e){
-      var k = etat.moi ? 'proche' : moisCle(e.debut);
+      var k = etat.moi ? 'proche' : (e.zone + '|' + moisCle(e.debut));
       if(!vus[k]){vus[k]=[];groupes.push(k);}
       vus[k].push(e);
     });
@@ -449,7 +449,7 @@ JS = r"""
     var html = '';
     groupes.forEach(function(k){
       var l = vus[k];
-      html += '<section class="mois"><h2>' + (etat.moi ? G.tri : moisLisible(k)) + ' <span>' + l.length + (l.length>1?' épreuves':' épreuve') + '</span></h2>';
+      html += '<section class="mois"><h2>' + (etat.moi ? G.tri : (data.zones[+k.split('|')[0]] + ' · ' + moisLisible(k.split('|')[1]))) + ' <span>' + l.length + (l.length>1?' épreuves':' épreuve') + '</span></h2>';
       l.forEach(function(e){
         var an = e.debut.slice(0,4) !== data.aujourdhui.slice(0,4) || etat.quand === 'tout';
         var dates = (e.fin && e.fin !== e.debut) ? jour(e.debut, an) + ' → ' + jour(e.fin, an) : jour(e.debut, an);
@@ -483,7 +483,7 @@ JS = r"""
     btnIcsTout.hidden = !nIcs;
     btnIcsTout.textContent = I.tout + ' · ' + nIcs;
     compte.innerHTML = '<span><b>' + gardes.length + '</b> épreuve' + (gardes.length>1?'s':'') + '</span>'
-      + (etat.quand==='venir' && gardes.length && !etat.moi ? '<span>la prochaine : <b>' + casse(gardes[0].nom) + '</b></span>' : '');
+      + (etat.quand==='venir' && gardes.length && !etat.moi ? '<span>la prochaine : <b>' + casse(gardes.slice().sort(function(a,b){ return a.debut < b.debut ? -1 : a.debut > b.debut ? 1 : 0; })[0].nom) + '</b></span>' : '');
     if(etat.moi){
       var p = gardes[0];
       msgProche.hidden = false;
@@ -873,7 +873,8 @@ def epreuves_pour_page(d: dict) -> list[dict]:
     Le passé n'a pas sa place dans un calendrier — il reste dans le JSON."""
     out = []
     for e in d["regates"]:
-        if not affichable(e):
+        # Les annulées sont retirées (revue du 26/11/2026) ; les « hors-regate » le sont déjà par `affichable`.
+        if not affichable(e) or e.get("annulee"):
             continue
         lien_quoi = "inscription" if "manage2sail" in e.get("lien", "") else "site"
         pos = position(e)
@@ -896,9 +897,54 @@ def epreuves_pour_page(d: dict) -> list[dict]:
             "lien": e.get("lien", ""),
             "lien_quoi": lien_quoi,
             "annulee": e.get("annulee", False),
+            "zone": zone(e),
         })
-    out.sort(key=lambda x: (x["debut"], x["nom"].lower()))
+    # L'Europe d'abord : Léman, France, Suisse, puis le monde ; à l'intérieur, par date.
+    out.sort(key=lambda x: (x["zone"], x["debut"], x["nom"].lower()))
     return out
+
+
+ZONES = ("Léman", "France", "Suisse", "Monde")
+STATIQUE_MAX = 200  # épreuves écrites en HTML réel dans la page, lisibles sans JavaScript
+
+
+def zone(e: dict) -> int:
+    """0 Léman, 1 France, 2 Suisse (hors Léman), 3 le monde."""
+    if e.get("region") == "Léman":
+        return 0
+    if e.get("pays") == "FRA" or e.get("region") in ("Haute-Savoie", "Savoie", "Ain", "France", "Océan"):
+        return 1
+    if e.get("pays") == "SUI":
+        return 2
+    return 3
+
+
+def html_epreuves(epreuves: list[dict], n: int = STATIQUE_MAX) -> str:
+    """Les n premières épreuves en HTML réel (même ordre que le JavaScript, qui les remplace
+    ensuite en gardant filtres et recherche par-dessus : le HTML d'abord, jamais l'inverse)."""
+    from html import escape as x
+    sortie, courant = [], None
+    for e in epreuves[:n]:
+        cle = (e["zone"], e["debut"][:7])
+        if cle != courant:
+            if courant is not None:
+                sortie.append("</section>")
+            m = int(e["debut"][5:7])
+            sortie.append(f'<section class="mois"><h2>{ZONES[e["zone"]]} · {MOIS_FR[m]} {e["debut"][:4]}</h2>')
+            courant = cle
+        j = lambda s: f"{int(s[8:10])}/{int(s[5:7])}/{s[2:4]}"  # noqa: E731
+        dates = j(e["debut"]) + (f" → {j(e['fin'])}" if e["fin"] and e["fin"] != e["debut"] else "")
+        lieu = " · ".join(v for v in (e["ville"], e["club"]) if v)
+        lien = (f'<a href="{x(e["lien"])}" target="_blank" rel="noopener">{e["lien_quoi"]} →</a>'
+                if e["lien"] else "")
+        sortie.append(
+            f'<article class="epreuve"><div class="quand"><span class="j">{dates}</span></div>'
+            f'<div><div class="titre">{x(e["nom"])}</div>'
+            f'<div class="ou"><span class="vil">{x(lieu)}</span> · {x(e["pays_fr"] or "")}</div></div>'
+            f'<div class="cles">{lien}</div></article>')
+    if courant is not None:
+        sortie.append("</section>")
+    return "".join(sortie)
 
 
 LD_MAX = 100  # plafond de l'ItemList : au-delà, le bloc pèse plus que la page n'y gagne
@@ -994,6 +1040,7 @@ def construire(d: dict) -> str:
         "alertes_url": os.environ.get("ALERTES_BASE_URL", ""),
         "centres": {c: list(v) for c, v in _PAYS_CENTRE.items()},
         "mois": MOIS_FR[1:],
+        "zones": list(ZONES),
         "epreuves": epreuves,
         "prochaine": prochaine,
         "classes": classes,
@@ -1103,7 +1150,7 @@ def construire(d: dict) -> str:
         '<button class="lien-effacer" id="btn-ics-tout" type="button" hidden></button> '
         '<button class="lien-effacer" id="effacer" type="button">Tout effacer</button></span></div>'
         + carte_epreuves.html() +
-        '<div id="liste"></div>'
+        '<div id="liste">' + html_epreuves(epreuves) + '</div>'
         "</div>"
         '<p class="pied">Calendrier relevé le ' + (maj_lisible or "—") + " depuis "
         + ", ".join(noms_source.get(s, s) for s in sources) + ". "

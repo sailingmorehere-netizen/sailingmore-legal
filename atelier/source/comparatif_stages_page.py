@@ -91,7 +91,123 @@ UI = {
         "pied": "Preços lidos nas páginas das escolas a {d}. Mudou um preço ou falta um curso? A escola é quem decide."},
 }
 
+# Bloc « Prix de référence en France » (tâche n°22, 26/11/2026). Moyennes FFVoile 2025 : étude tarifaire EFVoile.
+# Le prix d'un stage français se donne à l'HEURE (5 demi-journées de 2 h 45 = 13,75 h), jamais « 199 € contre
+# 488 € » (correction du 26/11 après revue croisée) : 199,25 / 13,75 = 14,49 €/h ; la FFVoile donne 12,82 à 15,64 €/h.
+REF_URL = "https://clubs.ffvoile.fr/media/rs0o3sio/mbc-etude-tarif-efvoile-2026.pdf"
+REF_PRIX = [("ref_jardin", "167 €"), ("ref_deriv", "180 €"), ("ref_cata_ado", "202 €"), ("ref_cata_adulte", "214 €"),
+            ("ref_planche", "186–190 €"), ("ref_croisiere", "307 €"), ("ref_wing", "341 €")]
+REF_HEURE = [("ref_h_seances", "ref_v_seances"), ("ref_h_duree", "ref_v_duree"), ("ref_h_median", "ref_v_median"),
+             ("ref_h_heure", "ref_v_heure"), ("ref_h_ffv", "ref_v_ffv")]
+REF = {
+ "fr": {"ref_titre": "Prix de référence en France",
+        "ref_chapo": "Prix moyens d'un stage dans les écoles françaises de voile (EFVoile) en 2025, selon l'étude tarifaire de la FFVoile. Les offres du tableau se comparent à ces repères.",
+        "ref_jardin": "Jardin des mers", "ref_deriv": "Dériveur enfant", "ref_cata_ado": "Catamaran ado",
+        "ref_cata_adulte": "Catamaran adulte", "ref_planche": "Planche à voile", "ref_croisiere": "Croisière, une semaine",
+        "ref_wing": "Wingfoil", "ref_hausse": "Les prix des stages ont augmenté de 23 % depuis 2018.",
+        "ref_h_titre": "Le prix à l'heure",
+        "ref_h_intro": "Un stage d'école française, ce sont 5 demi-journées. Sur nos offres, 232 sur 236 qui indiquent leur durée font 5 jours ou moins : on compare donc le prix à l'heure, pas le prix du stage.",
+        "ref_h_seances": "Séances", "ref_v_seances": "5 demi-journées", "ref_h_duree": "Durée d'un stage type",
+        "ref_v_duree": "5 × 2 h 45 = 13,75 h", "ref_h_median": "Prix médian relevé (320 offres, 45 écoles)",
+        "ref_v_median": "199,25 €", "ref_h_heure": "Prix par heure", "ref_v_heure": "14,49 € / h",
+        "ref_h_ffv": "Fourchette FFVoile", "ref_v_ffv": "12,82 à 15,64 € / h",
+        "ref_note": "Une offre en journées complètes compte plus d'heures : son prix par heure est plus bas. Prix relevés sur les sites des clubs le 26/11/2026.",
+        "ref_src": "Étude tarifaire FFVoile 2026, données 2025 (PDF) →"},
+ "en": {"ref_titre": "Reference prices in France",
+        "ref_chapo": "Average price of a course at French sailing schools (EFVoile) in 2025, from the FFVoile price study. The offers in the table can be set against these benchmarks.",
+        "ref_jardin": "Jardin des mers (youngest)", "ref_deriv": "Children's dinghy", "ref_cata_ado": "Teen catamaran",
+        "ref_cata_adulte": "Adult catamaran", "ref_planche": "Windsurfing", "ref_croisiere": "Cruising, one week",
+        "ref_wing": "Wingfoil", "ref_hausse": "Course prices have risen 23% since 2018.",
+        "ref_h_titre": "Price per hour",
+        "ref_h_intro": "A French sailing-school course is 5 half-days. Of our offers, 232 of the 236 that state a length last 5 days or fewer: so we compare the price per hour, not the price of the course.",
+        "ref_h_seances": "Sessions", "ref_v_seances": "5 half-days", "ref_h_duree": "Length of a typical course",
+        "ref_v_duree": "5 × 2 h 45 = 13.75 h", "ref_h_median": "Median price found (320 offers, 45 schools)",
+        "ref_v_median": "€199.25", "ref_h_heure": "Price per hour", "ref_v_heure": "€14.49 / h",
+        "ref_h_ffv": "FFVoile range", "ref_v_ffv": "€12.82 to €15.64 / h",
+        "ref_note": "A full-day offer has more hours: its price per hour is lower. Prices read off the clubs' websites on 26/11/2026.",
+        "ref_src": "FFVoile price study 2026, 2025 data (PDF) →"},
+ "de": {"ref_titre": "Referenzpreise in Frankreich",
+        "ref_chapo": "Durchschnittspreis eines Kurses an französischen Segelschulen (EFVoile) 2025, laut der Preisstudie der FFVoile. Die Angebote der Tabelle lassen sich daran messen.",
+        "ref_jardin": "Jardin des mers (Jüngste)", "ref_deriv": "Jollen für Kinder", "ref_cata_ado": "Katamaran Jugendliche",
+        "ref_cata_adulte": "Katamaran Erwachsene", "ref_planche": "Windsurfen", "ref_croisiere": "Törn, eine Woche",
+        "ref_wing": "Wingfoil", "ref_hausse": "Die Kurspreise sind seit 2018 um 23 % gestiegen.",
+        "ref_h_titre": "Preis pro Stunde",
+        "ref_h_intro": "Ein Kurs einer französischen Segelschule besteht aus 5 Halbtagen. Von unseren Angeboten mit Dauerangabe dauern 232 von 236 höchstens 5 Tage: Verglichen wird daher der Preis pro Stunde, nicht der Kurspreis.",
+        "ref_h_seances": "Einheiten", "ref_v_seances": "5 Halbtage", "ref_h_duree": "Dauer eines typischen Kurses",
+        "ref_v_duree": "5 × 2 h 45 = 13,75 h", "ref_h_median": "Gefundener Medianpreis (320 Angebote, 45 Schulen)",
+        "ref_v_median": "199,25 €", "ref_h_heure": "Preis pro Stunde", "ref_v_heure": "14,49 € / h",
+        "ref_h_ffv": "Spanne der FFVoile", "ref_v_ffv": "12,82 bis 15,64 € / h",
+        "ref_note": "Ein Angebot mit ganzen Tagen hat mehr Stunden: sein Stundenpreis ist niedriger. Preise am 26.11.2026 auf den Seiten der Clubs gelesen.",
+        "ref_src": "Preisstudie FFVoile 2026, Daten 2025 (PDF) →"},
+ "it": {"ref_titre": "Prezzi di riferimento in Francia",
+        "ref_chapo": "Prezzo medio di un corso nelle scuole di vela francesi (EFVoile) nel 2025, secondo lo studio tariffario della FFVoile. Le offerte della tabella si confrontano con questi riferimenti.",
+        "ref_jardin": "Jardin des mers (i più piccoli)", "ref_deriv": "Derive per bambini", "ref_cata_ado": "Catamarano ragazzi",
+        "ref_cata_adulte": "Catamarano adulti", "ref_planche": "Windsurf", "ref_croisiere": "Crociera, una settimana",
+        "ref_wing": "Wingfoil", "ref_hausse": "I prezzi dei corsi sono aumentati del 23 % dal 2018.",
+        "ref_h_titre": "Prezzo all'ora",
+        "ref_h_intro": "Un corso di una scuola francese sono 5 mezze giornate. Tra le nostre offerte che indicano la durata, 232 su 236 durano al massimo 5 giorni: si confronta quindi il prezzo all'ora, non il prezzo del corso.",
+        "ref_h_seances": "Sessioni", "ref_v_seances": "5 mezze giornate", "ref_h_duree": "Durata di un corso tipo",
+        "ref_v_duree": "5 × 2 h 45 = 13,75 h", "ref_h_median": "Prezzo mediano rilevato (320 offerte, 45 scuole)",
+        "ref_v_median": "199,25 €", "ref_h_heure": "Prezzo all'ora", "ref_v_heure": "14,49 € / h",
+        "ref_h_ffv": "Forbice FFVoile", "ref_v_ffv": "da 12,82 a 15,64 € / h",
+        "ref_note": "Un'offerta a giornate intere ha più ore: il suo prezzo all'ora è più basso. Prezzi letti sui siti dei club il 26/11/2026.",
+        "ref_src": "Studio tariffario FFVoile 2026, dati 2025 (PDF) →"},
+ "es": {"ref_titre": "Precios de referencia en Francia",
+        "ref_chapo": "Precio medio de un curso en las escuelas de vela francesas (EFVoile) en 2025, según el estudio tarifario de la FFVoile. Las ofertas de la tabla se comparan con estas referencias.",
+        "ref_jardin": "Jardin des mers (los más pequeños)", "ref_deriv": "Derivas para niños", "ref_cata_ado": "Catamarán adolescentes",
+        "ref_cata_adulte": "Catamarán adultos", "ref_planche": "Windsurf", "ref_croisiere": "Crucero, una semana",
+        "ref_wing": "Wingfoil", "ref_hausse": "Los precios de los cursos han subido un 23 % desde 2018.",
+        "ref_h_titre": "Precio por hora",
+        "ref_h_intro": "Un curso de una escuela francesa son 5 medias jornadas. De nuestras ofertas que indican la duración, 232 de 236 duran 5 días o menos: se compara por tanto el precio por hora, no el precio del curso.",
+        "ref_h_seances": "Sesiones", "ref_v_seances": "5 medias jornadas", "ref_h_duree": "Duración de un curso tipo",
+        "ref_v_duree": "5 × 2 h 45 = 13,75 h", "ref_h_median": "Precio mediano encontrado (320 ofertas, 45 escuelas)",
+        "ref_v_median": "199,25 €", "ref_h_heure": "Precio por hora", "ref_v_heure": "14,49 € / h",
+        "ref_h_ffv": "Horquilla FFVoile", "ref_v_ffv": "de 12,82 a 15,64 € / h",
+        "ref_note": "Una oferta de jornadas completas tiene más horas: su precio por hora es menor. Precios leídos en las webs de los clubes el 26/11/2026.",
+        "ref_src": "Estudio tarifario FFVoile 2026, datos 2025 (PDF) →"},
+ "pt": {"ref_titre": "Preços de referência em França",
+        "ref_chapo": "Preço médio de um curso nas escolas de vela francesas (EFVoile) em 2025, segundo o estudo tarifário da FFVoile. As ofertas da tabela comparam-se com estas referências.",
+        "ref_jardin": "Jardin des mers (os mais pequenos)", "ref_deriv": "Derivas para crianças", "ref_cata_ado": "Catamarã adolescentes",
+        "ref_cata_adulte": "Catamarã adultos", "ref_planche": "Windsurf", "ref_croisiere": "Cruzeiro, uma semana",
+        "ref_wing": "Wingfoil", "ref_hausse": "Os preços dos cursos subiram 23 % desde 2018.",
+        "ref_h_titre": "Preço por hora",
+        "ref_h_intro": "Um curso de uma escola francesa são 5 meios dias. Das nossas ofertas que indicam a duração, 232 em 236 duram 5 dias ou menos: compara-se por isso o preço por hora, não o preço do curso.",
+        "ref_h_seances": "Sessões", "ref_v_seances": "5 meios dias", "ref_h_duree": "Duração de um curso tipo",
+        "ref_v_duree": "5 × 2 h 45 = 13,75 h", "ref_h_median": "Preço mediano encontrado (320 ofertas, 45 escolas)",
+        "ref_v_median": "199,25 €", "ref_h_heure": "Preço por hora", "ref_v_heure": "14,49 € / h",
+        "ref_h_ffv": "Intervalo FFVoile", "ref_v_ffv": "de 12,82 a 15,64 € / h",
+        "ref_note": "Uma oferta de dias inteiros tem mais horas: o seu preço por hora é menor. Preços lidos nos sites dos clubes a 26/11/2026.",
+        "ref_src": "Estudo tarifário FFVoile 2026, dados 2025 (PDF) →"},
+}
+for _lg, _t in REF.items():
+    UI[_lg].update(_t)
+
+
+def bloc_reference() -> str:
+    f = UI["fr"]
+    e = lambda k: f"<span data-t=\"{k}\">{H.escape(f[k])}</span>"
+    prix = "".join(f"<tr><th scope=\"row\">{e(k)}</th><td class=\"n\">{v}</td></tr>" for k, v in REF_PRIX)
+    heure = "".join(f"<tr><th scope=\"row\">{e(k)}</th><td class=\"n\">{e(v)}</td></tr>" for k, v in REF_HEURE)
+    return ("<section class=\"ref\" id=\"prix-reference\">"
+            f"<h2 data-t=\"ref_titre\">{H.escape(f['ref_titre'])}</h2>"
+            f"<p class=\"ref-chapo\" data-t=\"ref_chapo\">{H.escape(f['ref_chapo'])}</p>"
+            f"<div class=\"ref-cols\"><table><tbody>{prix}</tbody></table>"
+            f"<div><h3 data-t=\"ref_h_titre\">{H.escape(f['ref_h_titre'])}</h3>"
+            f"<p class=\"ref-chapo\" data-t=\"ref_h_intro\">{H.escape(f['ref_h_intro'])}</p>"
+            f"<table><tbody>{heure}</tbody></table></div></div>"
+            f"<p class=\"ref-hausse\" data-t=\"ref_hausse\">{H.escape(f['ref_hausse'])}</p>"
+            f"<p class=\"ref-note\" data-t=\"ref_note\">{H.escape(f['ref_note'])}</p>"
+            f"<p class=\"ref-src\"><a href=\"{REF_URL}\" rel=\"noopener\" data-t=\"ref_src\">{H.escape(f['ref_src'])}</a></p>"
+            "</section>")
+
+
 CSS = """
+.ref{background:var(--carte);border:1px solid var(--trait);border-radius:14px;padding:1rem 1.1rem;margin:1.4rem 0}
+.ref h2{font-size:1.15rem;margin:0 0 .3rem}.ref h3{font-size:.95rem;margin:0 0 .3rem}
+.ref-chapo,.ref-note{color:var(--doux);font-size:.88rem;margin:.2rem 0 .6rem}
+.ref-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));gap:1.2rem}
+.ref table th{text-transform:none;letter-spacing:0;font-size:.9rem;color:var(--encre);white-space:normal}
+.ref-hausse{font-weight:600;margin:.8rem 0 .2rem}.ref-src{margin:.4rem 0 0}.ref-src a{color:var(--accent)}
 :root{--fond:#0a1a2b;--carte:#0f2438;--trait:#1d3549;--encre:#e8eef5;--doux:#9db2c7;--accent:#5fd3c4}
 *{box-sizing:border-box}
 body{margin:0;background:var(--fond);color:var(--encre);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
@@ -252,6 +368,7 @@ def construire(d: dict | None = None) -> str:
             + "".join(f"<th data-t=\"{k}\">{H.escape(f[k])}</th>"
                       for k in ("col_stage", "col_prix", "col_jour", "col_duree", "col_niv", "col_lang", "col_pays"))
             + "<th></th></tr></thead><tbody id=\"tb\">" + "".join(trs) + "</tbody></table></div>"
+            + bloc_reference() +
             "<p class=\"aucune\" id=\"aucune\" hidden data-t=\"aucune\">" + H.escape(f["aucune"]) + "</p>"
             f"<p class=\"sans-prix\" data-t=\"sans_prix\" data-sub=\"{sans}|\">{H.escape(f['sans_prix'].format(n=sans))}</p>"
             f"<p class=\"pied\"><a href=\"stages.html\" data-t=\"stages\">{H.escape(f['stages'])}</a></p>"
