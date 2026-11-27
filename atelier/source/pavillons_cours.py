@@ -144,10 +144,12 @@ def poser_textes(textes: dict) -> None:
 def bloc(chapitre: str, lang: str) -> str:
     if chapitre == "pavillons":
         return _grille(lang)
+    if chapitre == "alphabet":
+        return _alphabet(lang)
     if chapitre == "signaux_course":
         return _signaux(lang)
     if chapitre == "vhf":
-        return _canaux(lang)
+        return _canaux(lang) + _appels(lang)
     return ""
 
 
@@ -205,6 +207,67 @@ def _canaux(lang: str) -> str:
     lignes = "".join(f'<tr><td class="canal">{_e(c[0])}</td><td>{_e(c[i])}</td></tr>' for c in _CANAUX)
     return (f'<div class="vhf-canaux"><table><thead><tr><th>Canal</th>'
             f'<th>{"Usage" if lang == "fr" else "Use"}</th></tr></thead><tbody>{lignes}</tbody></table></div>')
+
+
+# ── L'alphabet marin, lettre par lettre ──────────────────────────────────────────────────────────────
+def _alphabet(lang: str) -> str:
+    """Les 26 lettres : symbole, nom OTAN, pavillon, sens du pavillon seul."""
+    lignes = []
+    for p in donnees()["pavillons"]:
+        if p["type"] != "lettre":
+            continue
+        sens = _langue(p["ics"], lang) if lang in p["ics"] else _langue(p["ics"], "fr")
+        lignes.append(
+            f'<tr><td class="alpha-l">{_e(p["code"])}</td>'
+            f'<td class="alpha-n"><a href="pavillon-{p["id"]}.html">{_e(p["otan"])}</a></td>'
+            f'<td class="alpha-img">{_img(p["id"])}</td><td>{_e(sens)}</td></tr>')
+    entete = ("Lettre", "Nom", "Pavillon", "Sens du pavillon seul") if lang == "fr" else \
+             ("Letter", "Name", "Flag", "Meaning of the flag alone")
+    return (f'<div class="pav-alpha"><table><thead><tr>'
+            f'<th>{entete[0]}</th><th>{entete[1]}</th><th>{entete[2]}</th><th>{entete[3]}</th>'
+            f'</tr></thead><tbody>{"".join(lignes)}</tbody></table></div>')
+
+
+# ── La VHF : les quatre appels, mot pour mot ────────────────────────────────────────────────────────
+_APPELS = [
+    ("mayday", "DÉTRESSE", "DISTRESS",
+     "« Mayday, Mayday, Mayday » — ici <nom du bateau> trois fois, indicatif, « Mayday », nom et "
+     "indicatif, position en latitude et longitude ou en relèvement et distance d'un point connu, "
+     "nature du danger, nombre de personnes à bord, assistance demandée. Puis passer sur le 16 et "
+     "suivre les instructions. Le silence radio est obligatoire : nul ne parle plus.",
+     "'Mayday, Mayday, Mayday' — this is <boat name> three times, call sign, 'Mayday', name and "
+     "call sign, position in latitude and longitude or bearing and distance from a known point, "
+     "nature of distress, number of people on board, assistance required. Then stay on 16 and "
+     "follow instructions. Radio silence is mandatory."),
+    ("pan pan", "URGENCE", "URGENCY",
+     "« Pan pan, Pan pan, Pan pan » — urgence grave sans danger immédiat pour les vies : avarie de "
+     "moteur, démâtage, voie d'eau maîtrisée, échouement. Même ordre de renseignements que le "
+     "Mayday. Priorité sur toute autre communication, sauf détresse.",
+     "'Pan pan, Pan pan, Pan pan' — serious urgency without immediate danger to life: engine "
+     "failure, dismasting, controlled leak, grounding. Same information order as Mayday. Priority "
+     "over all traffic except distress."),
+    ("securite", "SÉCURITÉ", "SAFETY",
+     "« Sécurité, Sécurité, Sécurité » — avis de sécurité : objet dangereux à la mer, bouée "
+     "manquante, exercice de sauvetage, essai radio, tir de l'artillerie. Annoncé sur le 16, puis "
+     "détaillé sur un canal de travail.",
+     "'Sécurité, Sécurité, Sécurité' — safety notice: dangerous object adrift, missing buoy, "
+     "rescue exercise, radio test. Announced on 16, then detailed on a working channel."),
+    ("appel", "APPEL ORDINAIRE", "ROUTINE CALL",
+     "« <station appelée> trois fois, ici <ma station> trois fois » — puis « sur le canal <n> ». "
+     "On attend la réponse, on change de canal, et on ne s'y attarde pas : l'appel reste bref et "
+     "le 16 se libère.",
+     "'<station called> three times, this is <my station> three times' — then 'on channel <n>'. "
+     "Wait for the answer, change channel, and do not linger: keep it short and free up 16."),
+]
+
+
+def _appels(lang: str) -> str:
+    i = 3 if lang == "fr" else 4
+    lignes = "".join(f'<tr><td class="appel-mot">{_e(a[0])}</td><td>{_e(a[i])}</td></tr>'
+                     for a in _APPELS)
+    return (f'<div class="vhf-appels"><table><thead><tr><th>{"Mot" if lang == "fr" else "Word"}</th>'
+            f'<th>{"Ce qu\'on dit, dans l\'ordre" if lang == "fr" else "What to say, in order"}</th>'
+            f'</tr></thead><tbody>{lignes}</tbody></table></div>')
 
 
 # ── Les textes des trois chapitres ───────────────────────────────────────────────────────────────────
@@ -287,6 +350,105 @@ _poser("pavillons", ("fr", "en", "it", "es", "pt", "de"), {
            "q": "Welche Flagge setzt man für einen Taucher im Wasser, und was bedeutet eine einzelne "
                 "Flagge N?",
            "a": "Flagge A (Alfa, weiß und blau, geschwalbt). Flagge N allein heißt «Nein»."},
+})
+
+_poser("alphabet", ("fr", "en", "it", "es", "pt", "de"), {
+    "fr": {"t": "L'alphabet marin, lettre par lettre",
+           "p": ["À la VHF, on n'épelle pas « B, E, R » : un B et un D se confondent dans le bruit "
+                 "d'un moteur, un M et un N aussi. On dit « Bravo, Echo, Romeo ». C'est l'alphabet "
+                 "phonétique de l'OTAN, le même depuis 1956 dans l'aviation, la marine et les "
+                 "services d'urgence.",
+                 "Chaque lettre porte aussi un pavillon, et ce pavillon, hissé seul, veut dire "
+                 "quelque chose : {pav:a|A} signale un plongeur, {pav:o|O} un homme à la mer, "
+                 "{pav:v|V} un besoin de secours, {pav:w|W} un besoin d'assistance médicale, "
+                 "{pav:n|N} un refus, {pav:c|C} un accord. Le tableau ci-dessous donne les trois "
+                 "ensemble : la lettre, le nom qu'on prononce, le pavillon et son sens.",
+                 "Trois règles d'épellation, apprises à la VHF : prononcer le nom entier et sans "
+                 "hésitation ; pour un chiffre, dire le chiffre puis son nom (« neuf, Niner ») ; "
+                 "faire répéter — « je répète » ou « say again » — plutôt que de deviner. Un nom de "
+                 "bateau épelé faux envoie les secours au mauvais endroit.",
+                 "Quelques lettres piègent : {pav:r|R} et {pav:e|E} se ressemblent à l'œil mais pas "
+                 "à l'oreille (Romeo, Echo) ; {pav:p|P} et {pav:b|B} (Papa, Bravo) non plus. C'est "
+                 "précisément pourquoi cet alphabet existe."],
+           "q": "Votre bateau s'appelle « PALOMA ». Comment l'épellez-vous à la VHF, et que "
+                "signifie le pavillon P hissé seul au port ?",
+           "a": "« Papa, Alfa, Lima, Oscar, Mike, Alfa ». Le pavillon P seul au port signifie « tout "
+                "l'équipage doit se présenter à bord, le navire va prendre la mer » (le « Blue "
+                "Peter »)."},
+    "en": {"t": "The marine alphabet, letter by letter",
+           "p": ["On the VHF you do not spell out 'B, E, R': B and D blur in engine noise, and so do "
+                 "M and N. You say 'Bravo, Echo, Romeo'. That is the NATO phonetic alphabet, "
+                 "unchanged since 1956 in aviation, the navy and emergency services.",
+                 "Each letter also has a flag, and that flag flown alone means something: A warns "
+                 "of a diver, O of a man overboard, V of a need for help, W of medical assistance, "
+                 "N means no, C means yes. The table below gives all three together: letter, spoken "
+                 "name, flag and meaning.",
+                 "Three spelling rules: say the whole name without hesitation; for a digit say the "
+                 "figure then its name ('nine, Niner'); ask for a repeat — 'say again' — rather than "
+                 "guess. A boat name spelled wrongly sends rescuers to the wrong place.",
+                 "A few letters trap you: R and E look alike but never sound alike (Romeo, Echo), "
+                 "and neither do P and B (Papa, Bravo). That is exactly why this alphabet exists."],
+           "q": "Your boat is called 'PALOMA'. How do you spell it on the VHF, and what does flag P "
+                "flown alone in harbour mean?",
+           "a": "'Papa, Alfa, Lima, Oscar, Mike, Alfa'. Flag P alone in harbour means 'all persons "
+                "should report on board as the vessel is about to proceed to sea' (the Blue Peter)."},
+    "it": {"t": "L'alfabeto marino, lettera per lettera",
+           "p": ["In VHF non si compita «B, E, R»: la B e la D si confondono nel rumore del motore, "
+                 "così la M e la N. Si dice «Bravo, Echo, Romeo». È l'alfabeto fonetico NATO, "
+                 "identico dal 1956 nell'aviazione, nella marina e nei soccorsi.",
+                 "Ogni lettera ha anche una bandiera, e issata da sola significa qualcosa: A segnala "
+                 "un palombaro, O un uomo in mare, V la necessità di soccorso, W di assistenza "
+                 "medica, N un rifiuto, C un assenso. La tabella qui sotto dà le tre cose insieme.",
+                 "Tre regole: pronunciare il nome intero senza esitare; per una cifra dire la cifra e "
+                 "poi il nome («nove, Niner»); far ripetere — «ripeto» — invece di indovinare. Un "
+                 "nome di barca compitato male manda i soccorsi nel posto sbagliato."],
+           "q": "La vostra barca si chiama «PALOMA». Come lo compitate in VHF, e cosa significa la "
+                "bandiera P issata da sola in porto?",
+           "a": "«Papa, Alfa, Lima, Oscar, Mike, Alfa». La P da sola in porto significa che tutto "
+                "l'equipaggio deve presentarsi a bordo, la nave sta per prendere il mare."},
+    "es": {"t": "El alfabeto marino, letra por letra",
+           "p": ["En la VHF no se deletrea «B, E, R»: la B y la D se confunden con el ruido del "
+                 "motor, y la M y la N también. Se dice «Bravo, Echo, Romeo». Es el alfabeto "
+                 "fonético de la OTAN, el mismo desde 1956 en aviación, marina y emergencias.",
+                 "Cada letra tiene también una bandera, y esa bandera izada sola significa algo: A "
+                 "avisa de un buceador, O de un hombre al agua, V de la necesidad de socorro, W de "
+                 "asistencia médica, N de negativa, C de afirmación. La tabla de abajo reúne las "
+                 "tres cosas.",
+                 "Tres reglas: pronunciar el nombre entero sin dudar; para una cifra decir el número "
+                 "y luego su nombre («nueve, Niner»); pedir repetición en vez de adivinar. Un nombre "
+                 "de barco mal deletreado manda a los rescatadores al lugar equivocado."],
+           "q": "Su barco se llama «PALOMA». ¿Cómo lo deletrea en la VHF, y qué significa la "
+                "bandera P izada sola en puerto?",
+           "a": "«Papa, Alfa, Lima, Oscar, Mike, Alfa». La P sola en puerto significa que toda la "
+                "tripulación debe presentarse a bordo: el buque va a hacerse a la mar."},
+    "pt": {"t": "O alfabeto marítimo, letra por letra",
+           "p": ["No VHF não se soletra «B, E, R»: o B e o D confundem-se no ruído do motor, o M e o "
+                 "N também. Diz-se «Bravo, Echo, Romeo». É o alfabeto fonético da OTAN, o mesmo "
+                 "desde 1956 na aviação, na marinha e nos serviços de emergência.",
+                 "Cada letra tem também uma bandeira, e içada sozinha significa algo: A avisa de um "
+                 "mergulhador, O de homem ao mar, V da necessidade de socorro, W de assistência "
+                 "médica, N de recusa, C de concordância. A tabela abaixo reúne as três coisas.",
+                 "Três regras: pronunciar o nome inteiro sem hesitar; para um algarismo dizer o "
+                 "número e depois o nome («nove, Niner»); pedir repetição em vez de adivinhar. Um "
+                 "nome de barco soletrado mal manda o salvamento para o lugar errado."],
+           "q": "O seu barco chama-se «PALOMA». Como o soletra no VHF, e o que significa a bandeira "
+                "P içada sozinha no porto?",
+           "a": "«Papa, Alfa, Lima, Oscar, Mike, Alfa». A P sozinha no porto significa que toda a "
+                "tripulação se deve apresentar a bordo: o navio vai largar."},
+    "de": {"t": "Das marine Alphabet, Buchstabe für Buchstabe",
+           "p": ["Über UKW buchstabiert man nicht «B, E, R»: B und D gehen im Motorlärm unter, M und "
+                 "N ebenso. Man sagt «Bravo, Echo, Romeo». Das ist das NATO-Alphabet, seit 1956 "
+                 "gleich in Luftfahrt, Marine und Rettungsdienst.",
+                 "Jeder Buchstabe hat auch eine Flagge, und allein gesetzt bedeutet sie etwas: A "
+                 "warnt vor einem Taucher, O vor einem Mann über Bord, V vor Hilfsbedarf, W vor "
+                 "medizinischer Hilfe, N heißt Nein, C heißt Ja. Die Tabelle unten zeigt alles drei.",
+                 "Drei Regeln: den vollen Namen zügig aussprechen; bei einer Ziffer die Zahl und dann "
+                 "den Namen sagen («neun, Niner»); lieber um Wiederholung bitten als raten. Ein "
+                 "falsch buchstabierter Bootsname schickt die Rettung an die falsche Stelle."],
+           "q": "Ihr Boot heißt «PALOMA». Wie buchstabieren Sie das über UKW, und was bedeutet "
+                "Flagge P allein im Hafen?",
+           "a": "«Papa, Alfa, Lima, Oscar, Mike, Alfa». Flagge P allein im Hafen heißt: alle "
+                "Personen haben sich an Bord zu melden, das Schiff läuft aus."},
 })
 
 _poser("signaux_course", ("fr", "en", "it", "es", "pt", "de"), {
@@ -381,6 +543,19 @@ _poser("vhf", ("fr", "en", "it", "es", "pt", "de"), {
                  "position. Un danger grave sans danger vital, c'est « Pan pan » ; un avis de sécurité "
                  "(objet à la mer, essai radio), « Sécurité ». On ne parle jamais sur le canal 70 : il "
                  "est réservé à l'appel sélectif numérique.",
+                 "Comment on appelle, en pratique. Avant d'appuyer sur la gâchette, on écoute quelques "
+                 "secondes : on ne coupe pas un message en cours. Puis l'appel, court : le nom de la "
+                 "station appelée trois fois, « ici » et le vôtre trois fois, et le canal demandé. "
+                 "« Rolle Radio, Rolle Radio, Rolle Radio, ici Paloma, Paloma, Paloma, sur le "
+                 "soixante-douze » ; on lâche la gâchette, on attend. Vient la réponse : « Paloma, ici "
+                 "Rolle Radio, passez sur le soixante-douze ». On change de canal, on refait un appel "
+                 "bref — « Rolle Radio, ici Paloma » — et la conversation commence. Jamais plus de "
+                 "deux minutes sur un canal de travail quand un autre bateau attend.",
+                 "Les deux fautes qui coûtent le plus. D'abord parler trop près du micro : on le tient "
+                 "à cinq centimètres et de côté, la gâchette enfoncée une demi-seconde avant de "
+                 "parler. Ensuite épeler à l'oreille — voir le chapitre sur l'alphabet : un nom mal "
+                 "épelé envoie les secours ailleurs. Et l'essai radio se fait sur un canal de travail, "
+                 "pas sur le 16 : « essai radio, essai radio, un, deux, trois ».",
                  "Les canaux ont chacun leur usage, ci-dessous. Sur un bateau, la VHF fixe demande un "
                  "certificat restreint de radiotéléphoniste ; la veille sur le 16 ne se coupe pas quand "
                  "on double le canal de travail. On ne bavarde pas : la VHF n'est pas un téléphone, et "
@@ -397,6 +572,19 @@ _poser("vhf", ("fr", "en", "it", "es", "pt", "de"), {
                  "A distress call starts with 'Mayday' three times, then the boat's name and position. "
                  "Serious danger without danger to life is 'Pan pan'; a safety notice is 'Sécurité'. "
                  "Never speak on channel 70: it is reserved for digital selective calling.",
+                 "How to call, in practice. Listen for a few seconds before pressing the key: never cut "
+                 "into a message. Then call short: the name of the station you are calling three times, "
+                 "'this is' and your own name three times, and the channel you want. 'Rolle Radio, "
+                 "Rolle Radio, Rolle Radio, this is Paloma, Paloma, Paloma, on channel seventy-two'; "
+                 "release the key and wait. The answer comes: 'Paloma, this is Rolle Radio, go to "
+                 "channel seventy-two'. Change channel, call again briefly — 'Rolle Radio, this is "
+                 "Paloma' — and the conversation starts. Never more than two minutes on a working "
+                 "channel when another boat is waiting.",
+                 "The two costliest mistakes. First, talking too close to the microphone: hold it five "
+                 "centimetres away, off to the side, key down half a second before speaking. Second, "
+                 "spelling by ear — see the alphabet chapter: a badly spelled name sends rescuers "
+                 "elsewhere. And a radio check belongs on a working channel, not 16: 'radio check, "
+                 "radio check, one, two, three'.",
                  "Each channel has its use, below. On board, a fixed VHF requires a restricted "
                  "radiotelephone certificate; the watch on 16 keeps running while you talk on a working "
                  "channel. Do not chat: the VHF is not a telephone, and others may need 16."],
@@ -555,6 +743,17 @@ CSS = """
 .vhf-canaux table{border-collapse:collapse;margin:1em 0;font-size:.95em}
 .vhf-canaux th,.vhf-canaux td{border-bottom:1px solid #e2e2e2;padding:.35em .8em .35em 0;text-align:left}
 .vhf-canaux .canal{font-weight:700;white-space:nowrap}
+.vhf-appels table{border-collapse:collapse;margin:1em 0;font-size:.92em}
+.vhf-appels th,.vhf-appels td{border-bottom:1px solid #e2e2e2;padding:.5em .8em .5em 0;text-align:left;vertical-align:top}
+.vhf-appels .appel-mot{font-weight:700;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}
+.pav-alpha{margin:1.2em 0;overflow-x:auto}
+.pav-alpha table{border-collapse:collapse;width:100%;font-size:.92em}
+.pav-alpha th,.pav-alpha td{border-bottom:1px solid #e2e2e2;padding:.4em .6em .4em 0;text-align:left;vertical-align:middle}
+.pav-alpha .alpha-l{font-weight:700;font-size:1.1em;width:2em}
+.pav-alpha .alpha-n{white-space:nowrap}
+.pav-alpha .alpha-img{width:56px}
+.pav-alpha .alpha-img img{height:1.6em;width:auto;border:1px solid #c9c9c9;border-radius:2px}
+.pav-inline{height:1em;width:auto}
 .pav-fiche{display:flex;flex-wrap:wrap;gap:1.6em;align-items:flex-start;margin:1.2em 0}
 .pav-fiche dl{margin:0;flex:1 1 22em;min-width:0;max-width:34em}
 .pav-fiche dt{font-size:.75em;text-transform:uppercase;letter-spacing:.05em;color:#666;margin-top:.7em}
