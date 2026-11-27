@@ -107,6 +107,10 @@ COURS = [
      "d": _l("Les 42 pavillons de l'alphabet marin, un par un.", "The 42 flags of the nautical alphabet, one by one.",
              "Le 42 bandiere dell'alfabeto nautico, una per una.", "Las 42 banderas del alfabeto marino, una a una.",
              "As 42 bandeiras do alfabeto marítimo, uma a uma.", "Die 42 Flaggen des Flaggenalphabets, eine nach der anderen.")},
+    {"famille": "commencer", "id": "alphabet", "ancre": "alphabet", "icone": "pavillons", "statut": "écrit", "t": None,
+     "d": _l("L'alphabet phonétique : dire « Bravo », pas « B ».", "The phonetic alphabet: 'Bravo', not 'B'.",
+             "L'alfabeto fonetico: dire «Bravo», non «B».", "El alfabeto fonético: decir «Bravo», no «B».",
+             "O alfabeto fonético: dizer «Bravo», não «B».", "Das Buchstabieralphabet: «Bravo» statt «B».")},
     # 2. Permis et diplôme
     {"famille": "permis", "id": "cap", "ancre": "cap", "icone": "cap", "statut": "écrit", "t": None,
      "d": _l("Lire la carte, tenir un cap, estimer sa position.", "Read the chart, hold a course, estimate your position.",
@@ -189,6 +193,9 @@ CHAPITRES = [
     # pavillon, la grille de navigation. Les blocs sont dessinés par `pavillons_cours.py`, à partir de
     # `pavillons.json` (42 pavillons) — les règles citées y portent leur propre lien.
     {"id": "pavillons", "pavillons": True, "schemas": [], "regles": []},
+    # L'alphabet phonétique (27/11/2026, Nicolas : « un petit cours sur l'alphabet marin en
+    # supplément »). Il prolonge les pavillons : même source `pavillons.json`, une ligne par lettre.
+    {"id": "alphabet", "pavillons": True, "schemas": [], "regles": []},
     # Les pavillons de course : chaque signal renvoie à la règle qui le décrit (RRS 26 à 61).
     {"id": "signaux_course", "signaux": True, "schemas": [], "regles": []},
     # La VHF : usage, procédure et canaux.
@@ -1220,6 +1227,11 @@ h3{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gri
 a.regle,span.regle{display:inline-block;font-size:.74rem;letter-spacing:.05em;color:var(--ivoire);border:1px solid #27425b;border-radius:3px;padding:0 .4rem;margin-right:.3rem;white-space:nowrap;text-decoration:none}
 a.regle:hover{border-color:var(--rouge)}
 .exo{border-top:1px dashed #27425b;margin-top:1rem}
+.encart-stage{border-left:3px solid var(--rouge);background:rgba(255,255,255,.03);padding:.8rem 1rem;margin:1.4rem 0}
+.encart-stage h3{margin:.1rem 0 .4rem;font-size:1rem}
+.encart-stage p{margin:.3rem 0}
+a.cta-stage{display:inline-block;border:1px solid var(--rouge);border-radius:4px;padding:.35rem .8rem;
+ text-decoration:none;font-size:.9rem}
 details{margin:.4rem 0}
 summary{cursor:pointer;color:var(--gris)}
 a.haut-lien{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);text-decoration:none}
@@ -1373,6 +1385,44 @@ def _lib_regle(k: str, lang: str) -> tuple[str, str, str]:
     return (f"COLREG {COL_LIB.get(num, num)}", COL_T[num], "")
 
 
+# ── L'encart qui mène aux stages, posé dans chaque chapitre ───────────────────────────────────────────
+# Un seul endroit pour les six langues : le texte ne se réécrit pas dans les 17 chapitres. Il ne promet pas
+# un prix (« à partir de ») et ne cite aucun chiffre, parce que le nombre d'offres change chaque semaine.
+ENCART_STAGE = {
+    "fr": ("Passer de la théorie au bateau",
+           "Une journée sur l'eau apprend plus qu'un chapitre entier. Les stages dont l'école publie le prix "
+           "sont comparés ici, classés par prix au jour.",
+           "Voir les stages comparés"),
+    "en": ("From theory to the boat",
+           "One day on the water teaches more than a whole chapter. Courses whose school publishes the price "
+           "are compared here, sorted by price per day.",
+           "See the compared courses"),
+    "it": ("Dalla teoria alla barca",
+           "Una giornata in acqua insegna più di un capitolo intero. I corsi il cui prezzo è pubblicato dalla "
+           "scuola sono confrontati qui, ordinati per prezzo al giorno.",
+           "Vedi i corsi confrontati"),
+    "es": ("De la teoría al barco",
+           "Un día en el agua enseña más que un capítulo entero. Los cursos cuyo precio publica la escuela se "
+           "comparan aquí, ordenados por precio por día.",
+           "Ver los cursos comparados"),
+    "pt": ("Da teoria ao barco",
+           "Um dia na água ensina mais do que um capítulo inteiro. Os cursos cujo preço é publicado pela "
+           "escola são comparados aqui, ordenados por preço por dia.",
+           "Ver os cursos comparados"),
+    "de": ("Von der Theorie aufs Boot",
+           "Ein Tag auf dem Wasser lehrt mehr als ein ganzes Kapitel. Kurse, deren Preis die Schule "
+           "veröffentlicht, werden hier nach Preis pro Tag verglichen.",
+           "Verglichene Kurse ansehen"),
+}
+
+
+def _encart_stage(lang: str) -> str:
+    """Le passage du cours vers les stages : un lien interne, posé après chaque exercice."""
+    t, corps, cta = ENCART_STAGE.get(lang, ENCART_STAGE["fr"])
+    return (f'<aside class="encart-stage"><h3>{_e(t)}</h3><p>{_e(corps)}</p>'
+            f'<p><a class="cta-stage" href="comparatif-stages.html">{_e(cta)}</a></p></aside>')
+
+
 def _chapitre(n: int, ch: dict, lang: str) -> str:
     t = TEXTES[lang]
     c = t["ch"][ch["id"]]
@@ -1398,7 +1448,7 @@ def _chapitre(n: int, ch: dict, lang: str) -> str:
     exo = (f'<div class="exo"><h3>{_e(t["exo"])}</h3><p>{_txt(c["q"])}</p>'
            f'<details><summary>{_e(t["corr"])}</summary><p>{_txt(c["a"])}</p></details></div>')
     return (f'<section class="chap" id="ch{n}-{lang}"><h2><span class="no">{n}</span>{_e(_brut(c["t"]))}</h2>'
-            f'{corps}{pav}{regles}{schemas}{simu}{exo}'
+            f'{corps}{pav}{regles}{schemas}{simu}{exo}{_encart_stage(lang)}'
             f'<p><a class="haut-lien" href="#sommaire-{lang}">{_e(t["haut"])}</a></p></section>')
 
 
