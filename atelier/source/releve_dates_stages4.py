@@ -11,6 +11,16 @@ SEP = r'\s*(?:-|–|—|bis|until|au|to|à|al|a)\s*'
 R1 = re.compile(r'(?<![\d./])(\d{1,2})[./](\d{1,2})[./](20\d\d)\.?' + SEP + r'(\d{1,2})[./](\d{1,2})[./](20\d\d)(?!\d)')
 R2 = re.compile(r'(?<!\d)(20\d\d)-(\d\d)-(\d\d)' + SEP + r'(20\d\d)-(\d\d)-(\d\d)(?!\d)')
 
+MOIS = {}
+for i, ns in enumerate([
+    'januari january janvier januar', 'februari february février fevrier februar', 'maart march mars märz',
+    'april avril', 'mei may mai', 'juni june juin', 'juli july juillet', 'augustus august août aout',
+    'september septembre', 'oktober october octobre', 'november novembre', 'december décembre decembre dezember'], 1):
+    for n in ns.split(): MOIS[n] = i
+_M = '|'.join(sorted(MOIS, key=len, reverse=True))
+# « 23-25 februari 2027 », « 14 t/m 17 mei 2026 », « 28 June - 2 July 2027 » (année obligatoire, écrite)
+R3 = re.compile(r'(?<![\d./])(\d{1,2})(?:\.|st|nd|rd|th|er)?\s*(?:(' + _M + r')\s*(20\d\d)?)?\s*(?:-|–|—|t/m|to|au|bis|until)\s*(\d{1,2})(?:\.|st|nd|rd|th)?\s*(' + _M + r')\s*(20\d\d)(?!\d)', re.I)
+
 def D(a, m, j):
     try: return dt.date(int(a), int(m), int(j))
     except ValueError: return None
@@ -23,6 +33,14 @@ def periodes(t):
     for m in R2.finditer(t):
         a1, m1, j1, a2, m2, j2 = m.groups()
         out.add((D(a1, m1, j1), D(a2, m2, j2)))
+    txt = set()
+    for m in R3.finditer(t):
+        j1, m1, a1, j2, m2, a2 = m.groups()
+        mo1 = MOIS.get((m1 or m2).lower()); mo2 = MOIS.get(m2.lower())
+        if not (mo1 and mo2): continue
+        y2 = a2; y1 = a1 or a2
+        txt.add((D(y1, mo1, j1), D(y2, mo2, j2)))
+    if len(txt) <= 4: out |= txt   # page-calendrier trop riche : on ne devine pas
     ok = [p for p in out if p[0] and p[1] and 0 <= (p[1] - p[0]).days <= 60]
     fut = sorted(p for p in ok if p[0] >= AUJ)
     # --passe : à défaut de session à venir, la dernière session écrite sur la page
