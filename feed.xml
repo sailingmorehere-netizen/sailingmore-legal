@@ -5,11 +5,25 @@
   <link>https://sailingmore.fr/</link>
   <description>Stages de voile, calendrier des régates d&#x27;Europe, cours théoriques, règles de course : les pages de Sailing More, mises à jour au fil de l&#x27;eau.</description>
   <language>fr-fr</language>
-  <lastBuildDate>Sat, 28 Nov 2026 10:44:34 +0000</lastBuildDate>
+  <lastBuildDate>Sat, 28 Nov 2026 17:21:18 +0000</lastBuildDate>
   <atom:link href="https://sailingmore.fr/feed.xml" rel="self" type="application/rss+xml"/>
   <ttl>720</ttl>
   <copyright>Sailing More</copyright>
   <generator>sailingmore.fr/feed_rss.py</generator>
+  <item>
+    <title>Cours théorique de voile gratuit | Sailing More</title>
+    <link>https://sailingmore.fr/cours.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/cours.html</guid>
+    <pubDate>Sat, 28 Nov 2026 17:21:14 +0000</pubDate>
+    <description>Apprenez la théorie de la voile gratuitement : allures, réglages, cartes, marées, météo, balisage, RIPAM et règles de course, avec exercices corrigés.</description>
+  </item>
+  <item>
+    <title>Règles de course à la voile (RCV 2025-2028) | Sailing More</title>
+    <link>https://sailingmore.fr/regles-de-course.html</link>
+    <guid isPermaLink="true">https://sailingmore.fr/regles-de-course.html</guid>
+    <pubDate>Sat, 28 Nov 2026 17:21:13 +0000</pubDate>
+    <description>Toutes les règles de course à la voile 2025-2028 résumées en clair, avec un exemple pour chaque règle. Cherchez une règle par numéro ou par mot.</description>
+  </item>
   <item>
     <title>Stages de voile en Europe, prix publiés | Sailing More</title>
     <link>https://sailingmore.fr/stages.html</link>
@@ -60,13 +74,6 @@
     <description>903 stages de voile à prix publiés dans 28 pays, 1 002 régates à venir, un cours théorique gratuit et les règles de course en clair. Le média de la voile.</description>
   </item>
   <item>
-    <title>Cours théorique de voile gratuit | Sailing More</title>
-    <link>https://sailingmore.fr/cours.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/cours.html</guid>
-    <pubDate>Sat, 28 Nov 2026 10:44:29 +0000</pubDate>
-    <description>Apprenez la théorie de la voile gratuitement : allures, réglages, cartes, marées, météo, balisage, RIPAM et règles de course, avec exercices corrigés.</description>
-  </item>
-  <item>
     <title>Chants de marins : paroles et histoire | Sailing More</title>
     <link>https://sailingmore.fr/chants-de-marin.html</link>
     <guid isPermaLink="true">https://sailingmore.fr/chants-de-marin.html</guid>
@@ -92,13 +99,6 @@
     <link>https://sailingmore.fr/carte.html</link>
     <guid isPermaLink="true">https://sailingmore.fr/carte.html</guid>
     <pubDate>Sat, 28 Nov 2026 10:44:29 +0000</pubDate>
-  </item>
-  <item>
-    <title>Règles de course à la voile (RCV 2025-2028) | Sailing More</title>
-    <link>https://sailingmore.fr/regles-de-course.html</link>
-    <guid isPermaLink="true">https://sailingmore.fr/regles-de-course.html</guid>
-    <pubDate>Sat, 28 Nov 2026 10:44:29 +0000</pubDate>
-    <description>Toutes les règles de course à la voile 2025-2028 résumées en clair, avec un exemple pour chaque règle. Cherchez une règle par numéro ou par mot.</description>
   </item>
 </channel>
 </rss>
