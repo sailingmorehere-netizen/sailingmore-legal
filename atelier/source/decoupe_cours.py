@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 56 (26/11/2026) : découpe cours.html (monolithe, 6 langues) en une page par chapitre et par langue.
 
 Source unique : la copie du monolithe d'avant (preparation/cours-monolithe-avant-56.html), créée au premier

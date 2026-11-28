@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Sources supplémentaires du calendrier (tâche 52, 24/11/2026) : classes et plateformes.
 
     python3 scripts/regates_sources_plus.py [base]      # base = racine de la copie (défaut « . »)

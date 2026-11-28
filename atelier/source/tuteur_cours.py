@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tuteur du cours (tâche 63) : la réponse ne sort jamais sans sa phrase-source cliquable.
 
 PRINCIPE

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Vérifie que les images à nous s'ouvrent encore, et portent Artist/Copyright (EXIF), Credit (IPTC) ou Copyright (PNG)."""
 import sys
 from pathlib import Path

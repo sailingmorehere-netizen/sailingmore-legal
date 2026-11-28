@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 63 : renseigne `lieu` des offres de stages sans lieu quand la page du lien (titre, URL, <title>, <h1>,
 meta description) nomme un port ou une ville connus. Jamais la ville de l'école par défaut.
 Usage : python3 scripts/lieux_stages63.py [--ecrit]   (sans --ecrit : simulation)"""

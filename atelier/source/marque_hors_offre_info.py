@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 52 : marque hors_offre les pages d'information (hubs, présentation, théorie, entreprise...)
 sans prix, sans date de début. Ne supprime rien. Indices = positions dans stages.json."""
 import json

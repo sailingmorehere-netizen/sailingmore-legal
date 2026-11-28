@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import json, collections
 d = json.load(open('projets/sailingmore/site/stages-proches.json'))
 L = d['o']

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Inventaire des images du site + titres. Écrit images-inventaire.md à la racine de la copie."""
 import os, re, glob, sys
 RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

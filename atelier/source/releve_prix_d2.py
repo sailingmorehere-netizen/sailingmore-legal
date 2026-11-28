@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Lecture seule : second passage sur les pages sans montant repéré (mots-clés prix/Preis/precio/tariff + chiffre)."""
 import json, os, re, subprocess, html
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

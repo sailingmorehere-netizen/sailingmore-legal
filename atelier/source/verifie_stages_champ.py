@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Critère des tâches « remplir un champ des stages ». Sort 0 si le lot est rempli.
 Usage : python3 verifie_stages_champ.py <lot>   (prix_a, prix_b, prix_c, prix_d, lieu, debut, image)
 Lit projets/sailingmore/site/stages-proches.json (colonnes : 5 lieu, 7 debut, 8 prix, 11 image, 4 école)

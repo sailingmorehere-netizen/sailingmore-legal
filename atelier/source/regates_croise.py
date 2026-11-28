@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import json, re, unicodedata, collections
 B = '/opt/data/cache/claude-nuit/travail/projets/sailingmore/'
 d = json.load(open(B + 'regates.json', encoding='utf-8'))

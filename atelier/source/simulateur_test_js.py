@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 # Test de fumée du JS du simulateur sous node, avec un faux DOM : parcourt les 50 scénarios
 # dans les six langues, répond, et vérifie qu'aucun rendu ne contient NaN / undefined.
 import os, re, shutil, subprocess, sys

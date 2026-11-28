@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Génère site/chants-de-marin.html : sommaire des pages chant-*.html existantes.
 Brouillon de cadrage (tâche 8) : texte seul, aucune balise audio, aucun enregistrement."""
 import glob, html, os, re

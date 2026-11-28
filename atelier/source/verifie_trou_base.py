@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Usage: verifie_trou_base.py <base.json> <champ> <max_vides> [--avec CHAMP]
 Sort 0 si le nombre d'entrées dont <champ> est vide (parmi celles dont CHAMP est rempli, si --avec)
 est <= max_vides. Base cherchée dans /opt/data/projets/sailingmore/, sinon projets/sailingmore/."""

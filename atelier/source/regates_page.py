@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Construit la page `regates.html` du site : le calendrier des régates, avec recherche et filtres.
 
 Entrée  : `projets/sailingmore/regates.json`, écrit par `regates_collecte.py`.

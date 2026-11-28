@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Remplit regates.json[].lien pour les événements manage2sail sans lien, par le lien officiel
 trouvé dans la recherche manage2sail (lecture seule). Clé : nom + début (+ pays). Sinon vide."""
 import json, re, sys, time, html as H, unicodedata, urllib.request, collections

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Geocode les bourses sans lat via la ville du port dans ports.sqlite. Usage: geocode_bourses.py [--ecrire]"""
 import json, sqlite3, sys, os
 R = '/opt/data/cache/claude-nuit/travail/projets/sailingmore'

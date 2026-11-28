@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import json, collections, sys
 R = '/opt/data/cache/claude-nuit/travail/projets/sailingmore/stages.json'
 d = json.load(open(R, encoding='utf-8'))

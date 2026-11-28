@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """La marque Sailing More : une seule source pour tout ce qui est partagé.
 
 Nicolas, 21/11/2026 : « tout ce qu'on fait sur le site doit être lié à nos publications story etc ».

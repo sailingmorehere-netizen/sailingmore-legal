@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 # Génère projets/sailingmore/site/simulateur.html (page autonome, six langues) et lance les tests.
 # Usage : python3 scripts/simulateur_priorites.py   (depuis la copie de travail)
 import json, math, os, re, shutil, subprocess, sys

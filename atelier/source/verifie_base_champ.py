@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Critere des taches 'remplir un champ'. Usage :
   verifie_base_champ.py <base.json> <champ> <max_manque>   -> 0 si le nombre d'entrees SANS le champ est <= max_manque
   verifie_base_champ.py stages.json titre-hors-offre 0      -> 0 si aucune non-offre sans drapeau hors_offre
 La base est cherchee dans /opt/data/projets/sailingmore/ puis .../site/."""
 import json, os, re, sys
 
-RACINES = ['/opt/data/projets/sailingmore', '/opt/data/projets/sailingmore/site']
+RACINES = [os.environ.get('NUIT_TRAVAIL', '').rstrip('/') or '/opt/data/projets/sailingmore',
+           '/opt/data/projets/sailingmore', '/opt/data/projets/sailingmore/site']
+# La copie de travail de Claude passe en tête : un critère juge ce que la tâche a produit, pas
+# l'original qu'elle n'a pas le droit de toucher (27/11/2026 : deux tâches justes jugées en échec).
+if os.path.isdir('/opt/data/cache/claude-nuit/travail/projets/sailingmore'):
+    RACINES.insert(0, '/opt/data/cache/claude-nuit/travail/projets/sailingmore')
 HORS_OFFRE = re.compile(r'galer[ií]a|galer.a de im|informatie|offerte aanvragen|erkenningen|cenizas al mar|bono regalo|'
                         r'^le sedi$|our sailing areas|sailing distance calculator|rya training centres|zeilschool gezocht|'
                         r'campeonato del mundo|abre inscripciones|thema.s seizoen|locatie van de zeilschool|'

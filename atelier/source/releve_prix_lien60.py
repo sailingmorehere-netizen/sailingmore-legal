@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 60 : lit la page `lien` des offres sans prix_eur (lecture seule) et écrit
 les extraits contenant un montant en euros dans releve_prix60.json. Ne modifie pas stages.json."""
 import json, re, html, urllib.request, concurrent.futures as cf

@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import re, urllib.request, html as H
 UA = {'User-Agent': 'Mozilla/5.0'}
 def lit(u):

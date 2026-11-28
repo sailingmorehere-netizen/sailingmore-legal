@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import json, os
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 F = os.path.join(R, 'projets/sailingmore/site/stages-proches.json')

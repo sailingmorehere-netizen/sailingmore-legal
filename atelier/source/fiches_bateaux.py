@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Seul écrivain des fiches bateaux (tâche 58, Nicolas 26/11/2026).
 
 Source unique : site/bateaux-fiches.json. Appelé par `accueil_site.sortir_le_site` ; aucun HTML de fiche

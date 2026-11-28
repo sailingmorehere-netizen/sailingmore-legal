@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Écrit la marque DANS le fichier image : EXIF (Artist, Copyright) + IPTC (By-line, Credit, CopyrightNotice) pour les
 JPEG, tEXt pour les PNG. Sans ré-encoder les pixels (insertion de segments : aucune perte).
 

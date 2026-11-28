@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Interface en breton — BROUILLON NON BRANCHÉ (tâche 39, nuit du 25/11/2026).
 
 Une seule source pour les textes d'interface bretons. Aucun générateur ne l'importe encore :

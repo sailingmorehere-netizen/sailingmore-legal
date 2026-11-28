@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Contrôle de la page des bateaux, en lecture seule : poids, ancres, correspondance, XML, polices, équilibre du JS.
 
     python3 scripts/bateaux_controle.py

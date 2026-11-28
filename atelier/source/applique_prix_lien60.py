@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 60 : prix lus le 28/11/2026 sur la page `lien` de l'offre (relevés : releve_prix_lien60*.py).
 Règle : prix affiché en toutes lettres pour cette offre ; tarif horaire, acompte, frais d'inscription,
 remise conditionnelle exclus ; devise d'origine gardée, prix_eur converti avec d['taux'] (HUF/RON divisés,

@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import re, urllib.request, html, sys
 U = open('scripts/lire_pages.py').read().split('"""')[1].split()
 for u in U[3:9] + U[9:10] + U[0:3]:

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Construit la page `lexique.html` du site : le lexique de voile, avec recherche et filtres par thème.
 
 Entrée  : `projets/sailingmore/lexique.json` — la seule source des mots (six langues par terme).

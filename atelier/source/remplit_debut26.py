@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 26 : début = la plus proche date FUTURE publiée sur la page de l'offre (cache/debut53).
 Ignore le 31/12, la date du jour+1 et les pages sans date. Une page = une même date pour toutes ses offres
 n'est gardée que si la page n'a qu'une URL d'offre.

@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Lot A (prix_a) : écrit les prix relevés sur les pages des offres (lecture seule, 25/11/2026).
 Prix « à partir de » quand la page donne une fourchette ou une liste de dates. Rien d'estimé."""
 import json, os

@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import json, os, re, sys, time, urllib.request, urllib.parse, urllib.error
 
 UA = "SailingMore-chants-illustrations/1.0 (usage editorial, lecture seule; site sailingmore.fr)"

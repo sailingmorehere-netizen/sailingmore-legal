@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import json, os, collections
 B = '/opt/data/cache/claude-nuit/travail/projets/sailingmore/'
 print(sorted(os.listdir(B))[:60])

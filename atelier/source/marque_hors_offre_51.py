@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 51 : marque hors_offre les pages d'info (sans prix, sans date, sans inscription).
 Vérifie chaque lien (statut HTTP + signaux d'inscription) avant de marquer. Ne supprime rien."""
 import json, re, sys, urllib.request

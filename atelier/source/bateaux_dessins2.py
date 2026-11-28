@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Les dessins de la page des bateaux — seconde moitié : planche, kite, wing, IMOCA, Ultim.
 
 Même repère et mêmes classes que `bateaux_dessins.py`. Trois supports à foil qui n'ont rien en commun

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Pages par destination (audit SEO 24/11/2026, correction 12) : PAGE MODÈLE, rien n'est publié.
 
 Source unique : le bloc de données `<script id="donnees">` de site/stages.html (les offres déjà présentes).

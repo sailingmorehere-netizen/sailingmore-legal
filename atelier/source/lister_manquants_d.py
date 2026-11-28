@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import json, os, re
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 src = open(os.path.join(R, 'scripts/verifie_stages_champ.py')).read()

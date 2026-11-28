@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Niveau des offres Tip Top Sailing dont la page annonce l'étendue des niveaux CWO.
 
 Relevé en ligne le 27/11/2026 :

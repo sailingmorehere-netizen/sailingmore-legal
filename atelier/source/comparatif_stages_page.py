@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Construit `comparatif-stages.html` : les stages à prix publié, côte à côte, classés par prix au jour.
 
 Entrée : `projets/sailingmore/stages.json` (même source que `stages_page.py`, mêmes filtres de fraîcheur

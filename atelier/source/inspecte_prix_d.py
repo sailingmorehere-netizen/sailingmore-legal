@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import json, os, sys, collections
 sys.argv = ['x', 'none']
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

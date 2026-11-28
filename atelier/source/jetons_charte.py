@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Jetons de la charte v2.0 : lit projets/sailingmore/jetons.json, produit le bloc
 <style id="jetons"> et l'applique à toutes les pages du site (idempotent).
 

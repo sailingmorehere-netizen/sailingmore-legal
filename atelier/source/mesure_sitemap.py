@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Mesure sitemap / statut / canonical / noindex / hreflang, en ligne (GET seul) et dans la copie.
 Usage : python3 scripts/mesure_sitemap.py  -> sortie-test/mesure-sitemap.json + tableau markdown."""
 import urllib.request, re, json, os, time, datetime

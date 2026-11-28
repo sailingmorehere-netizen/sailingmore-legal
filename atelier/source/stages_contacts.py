@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Récolte les adresses publiées par les écoles de stages.
 
     python3 scripts/stages_contacts.py [racine] [--max N]

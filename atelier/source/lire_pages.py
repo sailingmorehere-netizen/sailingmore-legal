@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import re, urllib.request, html
 U = """https://7seassailing.com/all-courses/rya-motor-cruising/rya-day-skipper-motor/
 https://7seassailing.com/all-courses/rya-motor-cruising/rya-coastal-skipper-motor/

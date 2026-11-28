@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Usage: verifie_champ_stages.py <champ> <max_manquants> [chemin stages.json]
 Sort 0 si le nombre d'entrées sans <champ> est <= max_manquants."""
 import json, sys

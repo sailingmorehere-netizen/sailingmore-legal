@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import json,collections,os
 R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 d=json.load(open(R+'/projets/sailingmore/stages.json'))

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Niveau et certification d'une offre de stage, lus dans son **titre** — et seulement là.
 
 Utilisé par `stages_page.py` à chaque construction (les deux champs sont recalculés depuis le titre,

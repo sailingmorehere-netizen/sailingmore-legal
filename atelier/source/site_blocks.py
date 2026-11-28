@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Les quatre blocs « vitrine » de la page d'accueil : stories, reels, carte, kit.
 
 Ce module ne fabrique que des morceaux : les vignettes (avec PIL et ffmpeg) et le HTML d'un bloc.
@@ -495,14 +496,16 @@ CARTE_CSS = """
 # Les pages du site, dans l'ordre où on les lit. Le juridique n'est plus ici (24/11/2026 :
 # « retire les mentions légales du menu ») : mentions légales, confidentialité et suppression de
 # données restent atteignables par le pied de page, comme les licences.
-# Ordre tranché par Nicolas le 26/11/2026 : les stages d'abord, puis le calendrier, les cours ;
-# l'ordre de lecture d'un marin qui cherche à naviguer avant celui qui révise. Pas de « Accueil »
-# (le nom du site ramène à l'accueil) ; ni hébergement gratuit, ni régales, ni jeux, ni carte du
-# Léman, ni simulateur : ces trois derniers restent en ligne, hors de la barre.
 MENU_PAGES = [
     ("stages.html", "Stages de voile", ""),
     ("regates.html", "Calendrier des régates", ""),
     ("cours.html", "Cours théoriques", ""),
+    # « Références » devient une sous-page des cours théoriques le 27/11/2026, à la demande de
+    # Nicolas : tout ce que le site sait, chapitre par chapitre, pavillons et règles compris.
+    ("references.html", "Références", "sous-page"),
+    # « Règles de course » entre dans le menu le 26/11/2026, à la demande de Nicolas, juste après
+    # les cours théoriques : c'est la même matière, la règle du jeu.
+    ("regles-de-course.html", "Règles de course", ""),
     ("bourse-equipiers.html", "Bourse aux équipiers", ""),
     ("bateaux.html", "Bateaux", ""),
     ("lexique.html", "Lexique", ""),
@@ -546,15 +549,13 @@ def menu_site(actuelle: str = "index.html") -> str:
     liens = []
     for fichier, titre, genre in MENU_PAGES:
         courant = ' aria-current="page"' if fichier == actuelle else ""
-        classe = f' class="{genre}"' if genre else ""
+        classe = f' class="sous-page"' if genre == "sous-page" else (f' class="{genre}"' if genre else "")
         cible = "/" if fichier == "index.html" else fichier
         liens.append(f'<a href="{cible}"{classe}{courant}>{titre}</a>')
-        # Sous-menu des chants (26/11/2026, « que les musiques s'affichent en sous menu ») : la liste
-        # vient de l'index écrit par chants_page.ecrire_page(), pas d'une liste tenue à la main.
-        if fichier == "chants-de-marin.html":
-            sous = _sous_menu_chants(actuelle)
-            if sous:
-                liens.append(sous)
+        # Une `sous-page` suit immédiatement sa page mère (27/11/2026 : « Références » après « Cours
+        # théoriques ») et s'affiche en retrait, plus petite.
+        # Plus de sous-menu (26/11/2026) : déplier 130 titres dans le panneau du menu le cassait.
+        # La page des chants porte le sommaire (recherche, familles, les 130 titres).
     return ('<details class="menu-d"><summary>Menu</summary>'
             f'<nav aria-label="Toutes les pages du site">{"".join(liens)}</nav></details>')
 
@@ -1715,6 +1716,9 @@ MENU_CSS = """
   @keyframes menu-descend{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
   .entete .menu-d nav a{padding:.6rem .7rem;border-radius:.55rem;font-size:.82rem;line-height:1.2;
     color:#e9f1f7;transition:background .14s ease,color .14s ease}
+  /* Une sous-page : plus petite et en retrait de couleur, sous sa page mère (le menu se range en
+     colonnes, un retrait en pixels ne se verrait pas). */
+  .entete .menu-d nav a.sous-page{font-size:.75rem;opacity:.82;padding:.34rem .7rem .28rem}
   .entete .menu-d nav a:hover,.entete .menu-d nav a:focus-visible{background:rgba(126,214,214,.14);
     color:#fff;outline:none}
   .entete .menu-d nav a[aria-current="page"]{color:#fff;box-shadow:inset 2px 0 0 var(--rouge);

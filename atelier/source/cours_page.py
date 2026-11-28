@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Construit la page `cours.html` : un cours théorique de voile, progressif, en six langues.
 
 Source unique du contenu : ce fichier (plan CHAPITRES + textes par langue). Rien n'est écrit à la main

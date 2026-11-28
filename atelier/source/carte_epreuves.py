@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Carte des épreuves — la brique commune aux pages `regates.html` et `stages.html`.
 
 Une seule source : le CSS, le bloc HTML et le JS vivent ici, les deux pages les recopient (inline,

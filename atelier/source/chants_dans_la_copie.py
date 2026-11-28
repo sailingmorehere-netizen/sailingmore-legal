@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Écrit la page chants dans la copie de travail, puis la contrôle (rien n'est envoyé nulle part).
 
     python3 scripts/chants_dans_la_copie.py
@@ -32,17 +33,22 @@ def verif(nom: str, cond: bool, detail: str = "") -> None:
 
 
 d = chants_page.charger()
+N = len(d["chants"])
 pb = chants_page.verifier(d)
 verif("données conformes", not pb, "; ".join(pb))
 print(chants_page.ecrire_page(chants_page.SITE))
 h = (chants_page.SITE / chants_page.PAGE).read_text(encoding="utf-8")
 statique = h.split('<script type="application/json" id="chants-donnees">')[0]   # le HTML sans les gabarits du script
-verif("six fiches dans le HTML", len(re.findall(r'<article class="fiche"', statique)) == 6)
+verif(f"{N} fiches dans le HTML", len(re.findall(r'<article class="fiche"', statique)) == N)
 verif("quatre lecteurs dans le HTML", statique.count('<div class="lecteur"') == 4)
-verif("six emplacements vidéo, vides", len(re.findall(r'<div class="emplacement-video" data-chant="\w+"></div>', h)) == 6)
+verif(f"{N} emplacements vidéo, vides", len(re.findall(r'<div class="emplacement-video" data-chant="[^"]+"></div>', h)) == N)
 verif("h1 français non vide", "<h1 id=\"h1\">Chants de marins</h1>" in h)
 hl = re.findall(r'hreflang="([^"]+)"', h)
-verif("hreflang fr en it es pt de + x-default, sans br", hl == ["fr", "en", "it", "es", "pt", "de", "x-default"], str(hl))
+# Même HTML pour toutes les langues (audit SEO du 24/11) : un seul hreflang fr + x-default,
+# et `br` seulement le jour où la page est traduite.
+from site_blocks import PAGES_BZH as _BZH
+attendu = ["fr"] + (["br"] if chants_page.PAGE in _BZH else []) + ["x-default"]
+verif("hreflang = fr + x-default, sans br", hl == attendu, str(hl))
 verif("canonical", '<link rel="canonical" href="https://sailingmore.fr/chants-de-marin.html">' in h)
 ld = re.findall(r'<script type="application/ld\+json">(.*?)</script>', h, re.S)
 verif("un seul bloc JSON-LD valide", len(ld) == 1 and json.loads(ld[0])["@graph"])
@@ -53,6 +59,30 @@ verif("menu du site porte la page", any(f == chants_page.PAGE for f, _, _ in sit
 verif("barre pas encore posée ici (le fera poser_entete_partout)", 'class="entete"' not in h)
 sm = chants_page.SITE / "sitemap.xml"
 verif("sitemap", sm.exists() and chants_page.PAGE in sm.read_text(encoding="utf-8"))
+
+# Pages de chant et sous-menu (26/11/2026) : une page par chant, atteignable depuis le menu.
+pages = sorted(chants_page.SITE.glob("chant-*.html"))
+verif(f"{N} pages de chant écrites", len(pages) == N, str(len(pages)))
+souci = []
+for c in d["chants"]:
+    f = chants_page.SITE / f"chant-{c['id']}.html"
+    if not f.exists():
+        souci.append(f"{c['id']} absente")
+        continue
+    x = f.read_text(encoding="utf-8")
+    if x.count("<h1") != 1:
+        souci.append(f"{c['id']} : {x.count('<h1')} h1")
+    if f'<link rel="canonical" href="https://sailingmore.fr/chant-{c["id"]}.html">' not in x:
+        souci.append(f"{c['id']} : canonique")
+    if 'href="chants-de-marin.html"' not in x:
+        souci.append(f"{c['id']} : pas de retour à la liste")
+    if len(x) < 3000 or not x.rstrip().endswith("</html>"):
+        souci.append(f"{c['id']} : page maigre ou non fermée")
+verif("chaque page de chant : un h1, sa canonique, un retour à la liste", not souci, " ; ".join(souci[:4]))
+verif(f"sous-menu : {N} entrées de chant dans le menu du site",
+      site_blocks.menu_site(chants_page.PAGE).count('href="chant-') == N)
+verif("sitemap : les pages de chant y sont",
+      sm.exists() and f"/chant-{d['chants'][0]['id']}.html" in sm.read_text(encoding="utf-8"))
 
 # La barre du site posée comme le fait la construction, pour tester la bascule de langue de bout en bout.
 barre = site_blocks.barre_autonome(chants_page.PAGE, site_blocks.LANGUES, True)
@@ -79,9 +109,10 @@ global.document={getElementById:E,documentElement:{lang:''},body:E('body'),query
 global.location={search:''};Object.defineProperty(global,'navigator',{value:{languages:['fr']},configurable:true});
 global.Audio=function(){this.pause=()=>{};this.load=()=>{};this.removeAttribute=()=>{}};
 let store={};global.localStorage={getItem:k=>store[k]??null,setItem:(k,v)=>{store[k]=v}};
-E('chants-donnees').textContent=process.env.DONNEES;
+const fs=require('fs');
+E('chants-donnees').textContent=fs.readFileSync(process.env.FICHIER_DONNEES,'utf8');
 const res=[];
-eval(process.env.SCRIPT);
+eval(fs.readFileSync(process.env.FICHIER_SCRIPT,'utf8'));
 const fr=E('h1').textContent;res.push(['fr',document.documentElement.lang,fr,fiches()]);
 for(const l of ['en','it','es','pt','de','bzh']){
   store['sm-langue']=l==='bzh'?'fr':l; store['sm-bzh']=l==='bzh'?'1':null;
@@ -90,16 +121,22 @@ for(const l of ['en','it','es','pt','de','bzh']){
 }
 console.log(JSON.stringify(res));
 """
+    # les données dépassent la taille maximale d'un argument de commande : on passe par des fichiers
+    tmp = Path(os.environ.get("TMPDIR", "/opt/data/cache/scratch"))
+    tmp.mkdir(parents=True, exist_ok=True)
+    f_script, f_donnees = tmp / "chants_script.js", tmp / "chants_donnees.json"
+    f_script.write_text(script, encoding="utf-8")
+    f_donnees.write_text(donnees, encoding="utf-8")
     r = subprocess.run([node, "-e", harnais], capture_output=True, text=True,
-                       env={**os.environ, "SCRIPT": script, "DONNEES": donnees})
+                       env={**os.environ, "FICHIER_SCRIPT": str(f_script), "FICHIER_DONNEES": str(f_donnees)})
     if r.returncode:
         verif("script exécutable", False, r.stderr[-400:])
     else:
         res = json.loads(r.stdout.strip().splitlines()[-1])
         print(res)
-        verif("bascule : 7 langues, six fiches chacune", len(res) == 7 and all(x[3] == 6 for x in res))
+        verif(f"bascule : 7 langues, {N} fiches chacune", len(res) == 7 and all(x[3] == N for x in res))
         verif("le breton retombe sur le français", res[-1][2] == "Chants de marins" and res[-1][1] == "fr")
-        verif("titres distincts dans les six langues", len({x[2] for x in res[:6]}) == 6)
+        verif("titres distincts dans les sept langues testées", len({x[2] for x in res[:6]}) == 6)
 
 print("\nTOUT TIENT" if ok else "\nÀ CORRIGER")
 sys.exit(0 if ok else 1)

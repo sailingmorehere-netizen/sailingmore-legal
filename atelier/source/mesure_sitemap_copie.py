@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import re, os
 S = "/opt/data/cache/claude-nuit/travail/projets/sailingmore/site/"
 B = "https://sailingmore.fr/"

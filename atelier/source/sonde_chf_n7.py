@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Sonde en lecture seule : pour chaque URL, statut, taille, nombre de « CHF » / « Fr. » et liens internes utiles."""
 import re
 import sys

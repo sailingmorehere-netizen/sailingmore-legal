@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Corrige dans les pages déjà générées les alt vagues (même texte que scripts/site_blocks.html_stories)."""
 import re
 from pathlib import Path

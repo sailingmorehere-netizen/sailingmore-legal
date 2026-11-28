@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Lot D (prix_d) : prix relevés sur les pages des offres (lecture seule, 26/11/2026).
 Plus bas prix de cours affiché ; tarifs horaires, frais d'inscription seuls et minimums légaux exclus."""
 import json, os

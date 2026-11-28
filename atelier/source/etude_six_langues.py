@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Étude six langues : mesure data-t, tables T, head, sans-JS, en ligne. Lecture seule.
 Usage : python3 scripts/etude_six_langues.py [--ligne]   -> écrit sortie-test/etude-six-langues.json et imprime un tableau."""
 import json, re, sys, glob, os, datetime, urllib.request, html as H

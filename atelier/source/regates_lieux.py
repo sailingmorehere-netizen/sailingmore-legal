@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Le pays d'une épreuve quand aucune source ne le donne.
 
 Trois sources le donnent (Manage2Sail, FFVoile, ACVL) ; World Sailing, spencer.club et notre

@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 52 : niveau des sessions du Club Nautique de Versoix, lu sur la page du club.
 Le niveau n'est écrit que si la page l'affiche pour la session (étiquette de la liste).
 Débutant -> debutant ; Perfectionnement -> intermediaire ; « Tous niveaux / Perfectionnement »

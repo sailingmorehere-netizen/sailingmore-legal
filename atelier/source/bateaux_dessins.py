@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Les dessins de la page des bateaux : formes, pièces, fiches. Première moitié (voiliers à coque).
 
 Repère local : x de 0 à 480, y de 0 à `h` ; l'étrave est à droite. Chaque forme dessinée porte le mot du
@@ -283,76 +284,4 @@ S49 = {
              "es": "del skiff 49er", "pt": "do skiff 49er", "de": "des 49er-Skiffs"},
 }
 
-# ───────────────────────────────────────────────────────────────────────────── Surprise
-# Monotype habitable de 7,65 m (Joubert/Nivelt, 1977) : c'est le bateau des cours de permis
-# suisse à Rolle, d'où sa présence ici à la place du X35 (Nicolas, 23/11/2026).
-SURPRISE = {
-    "id": "surprise", "cat": "habitable", "nom": "Surprise", "h": 470,
-    "slug": "surprise",
-    "ins": (52, 452, 14), "vs": (378, 92),
-    "eau": 336,
-    "shapes": [
-        P("coque", [(46, 290), (240, 300), (340, 290), (440, 278), (437, 290), (420, 314), (382, 328), (318, 334),
-                    (240, 336), (152, 334), (100, 330), (66, 322), (48, 310), (46, 298)]),
-        P("quille", [(232, 336), (280, 336), (272, 404), (250, 404)], "c"),
-        E("lest", 261, 428, 34, 9, "c"),
-        P("safran", [(74, 306), (94, 304), (92, 376), (79, 380)], "c"),
-        P("cockpit", [(72, 284), (158, 284), (158, 292), (72, 292)], "c"),
-        P(None, [(148, 298), (182, 278), (312, 274), (340, 290), (340, 300)], "c"),
-        P("capot", [(252, 270), (288, 270), (288, 276), (252, 276)], "o"),
-        E("hublot", 210, 306, 10, 4, "o"), E("hublot", 244, 306, 10, 4, "o"),
-        P("mat", [(219, 282), (225, 282), (225, 24), (219, 24)], "m"),
-        P("grand-voile", [(226, 42), (188, 106), (152, 168), (118, 224), (92, 270), (226, 276)], "s"),
-        L("latte", [(188, 106), (223, 113)], [(152, 168), (223, 175)], [(118, 224), (223, 231)], cls="f"),
-        L("guindant", [(229, 46), (229, 272)], cls="e"),
-        L("chute", [(226, 42), (188, 106), (152, 168), (118, 224), (92, 270)], cls="e"),
-        L("bordure", [(92, 270), (226, 276)], cls="e"),
-        L("bome", [(223, 280), (90, 274)], cls="l"),
-        L("hale-bas", [(223, 288), (162, 274)], cls="f"),
-        L("ecoute", [(126, 274), (128, 290)], cls="f"),
-        P("foc", [(240, 84), (452, 270), (292, 274), (262, 178)], "s"),
-        L("etai", [(222, 70), (458, 278)], cls="f"),
-        L("hauban", [(222, 78), (258, 302)], cls="f"),
-        L("pataras", [(222, 26), (68, 296)], cls="f"),
-        L("bout-dehors", [(428, 286), (458, 278)], cls="l"),
-        L("sous-barbe", [(458, 279), (418, 332)], cls="f"),
-        P("guindeau", [(352, 286), (370, 286), (370, 292), (352, 292)], "o"),
-        P("chaumard", [(70, 291), (82, 291), (82, 298), (70, 298)], "o"),
-        L("balcon-avant", [(428, 282), (424, 260), (396, 263), (394, 284)], cls="f"),
-        P("taquet", [(316, 286), (330, 286), (330, 292), (316, 292)], "o"),
-        E("winch", 144, 302, 7, 4, "o"),
-        L("barre", [(86, 298), (146, 280)], cls="l"),
-        L("etrave", [(438, 282), (434, 300), (414, 330)], cls="e"),
-        L("etambot", [(44, 294), (44, 304), (46, 324)], cls="e"),
-        L("pont", [(44, 294), (240, 306), (340, 294), (438, 282)], cls="e"),
-    ],
-    "parts": [
-        A("mat", "e", 222, 44), A("grand-voile", "e", 154, 182), A("bome", "e", 98, 290), A("foc", "e", 372, 222, side="r"),
-        A("etai", "e", 392, 250, side="r"), A("hauban", "e", 226, 122), A("pataras", "e", 100, 250),
-        A("coque", "e", 98, 356, side="l"), A("quille", "e", 268, 420),        A("safran", "e", 85, 392, side="l"),
-        A("barre", "e", 108, 302, side="l"), A("cockpit", "e", 66, 306, side="l"),
-        A("etrave", "t", 437, 304, side="r"),        A("etambot", "t", 45, 322, side="l"), A("winch", "t", 144, 297),
-        A("taquet", "t", 323, 308), A("balcon-avant", "t", 424, 276, side="r"), A("lest", "t", 292, 455, side="r"),
-        A("hale-bas", "t", 190, 297), A("ecoute", "t", 127, 297), A("latte", "t", 152, 184, side="l"),
-        A("guindant", "t", 229, 182), A("chute", "t", 118, 240, side="l"), A("bordure", "t", 152, 288),
-        A("bout-dehors", "t", 458, 294, side="r"), A("sous-barbe", "t", 442, 322, side="r"),
-        A("guindeau", "t", 361, 302), A("chaumard", "t", 76, 307, side="l"), A("capot", "t", 268, 292),
-        A("hublot", "t", 242, 312), A("pont", "t", 290, 316),
-    ],
-    "alt_mots": ["grand-voile", "bome", "quille", "safran"],
-    "fiche": {"long": "7,65", "crew": "plus",
-              "rig": {"fr": "sloop fractionné, grand-voile et génois",
-                      "en": "fractional sloop, mainsail and genoa", "it": "sloop frazionato, randa e genoa",
-                      "es": "balandro fraccionado, mayor y génova", "pt": "sloop fracionado, vela grande e genoa",
-                      "de": "Slup mit Fraktionalrigg, Groß und Genua"},
-              "serie": {"fr": "dessiné en 1977 par Joubert/Nivelt, plus de 1 500 exemplaires construits",
-                        "en": "designed in 1977 by Joubert/Nivelt, over 1,500 built",
-                        "it": "progettato nel 1977 da Joubert/Nivelt, oltre 1 500 esemplari costruiti",
-                        "es": "diseñado en 1977 por Joubert/Nivelt, más de 1 500 unidades construidas",
-                        "pt": "desenhado em 1977 por Joubert/Nivelt, mais de 1 500 exemplares construídos",
-                        "de": "1977 von Joubert/Nivelt entworfen, über 1 500 gebaute Einheiten"}},
-    "desc": {"fr": "du Surprise", "en": "of the Surprise", "it": "del Surprise",
-             "es": "del Surprise", "pt": "do Surprise", "de": "der Surprise"},
-}
-
-BATEAUX_1 = [SURPRISE, X35, HOBIE, LASER, S49]
+BATEAUX_1 = [X35, HOBIE, LASER, S49]

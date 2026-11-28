@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 # Données du simulateur de priorités : 50 scénarios, textes en six langues.
 # Convention : vent venant du haut (nord) ; cap 0 = vers le haut, en degrés, sens horaire ;
 # x vers la droite, y vers le bas ; bateau long de 8 unités, zone des trois longueurs = rayon 24.

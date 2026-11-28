@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Check complet hebdomadaire de sailingmore.fr (tâche 53, demandé par Nicolas le 27/11/2026).
 
 DIAGNOSTIQUE ET POSE DES TÂCHES. N'AGIT JAMAIS : aucune modification du site, pas de noindex,

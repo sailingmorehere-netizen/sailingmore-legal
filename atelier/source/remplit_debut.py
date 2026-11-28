@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 28 : renseigne le début (col. 7) des offres sans date, à partir des pages d'offre en cache
 (cache/debut53, clé = md5 de l'URL réelle donnée par go-liens.json). Dates publiées seulement :
 1) balise structurée startDate / start_date / datetime= ; 2) à défaut, une page qui ne publie

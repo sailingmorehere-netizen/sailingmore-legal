@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 59 : niveau des offres CNV Versoix, lu sur la page de l'école (étiquette de chaque session :
 Beginner / All levels / Advanced / Advanced). Appariement session <-> offre par (date de début, heure, prix).
   Beginner -> debutant ; Advanced -> confirme ; « All levels / Advanced » = pas un niveau unique -> laissé vide.

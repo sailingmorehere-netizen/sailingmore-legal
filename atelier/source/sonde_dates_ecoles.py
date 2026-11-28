@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Sonde (lecture seule) : une page par école sans debut, extraits contenant une année 2026/2027."""
 import json, re, html, urllib.request, collections, concurrent.futures as cf
 o = json.load(open('projets/sailingmore/stages.json'))['offres']

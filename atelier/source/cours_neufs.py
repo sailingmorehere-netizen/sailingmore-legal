@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Les cours neufs de la tâche 68 (24/11/2026) : « S'équiper » et « Embarquer et quitter le ponton ».
 
 Même structure que les chapitres de `cours_page.py` : un titre (t), des paragraphes (p), un exercice (q) et sa

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Moisson des régates hors fédérations et hors Manage2Sail (tâche 62, 24/11/2026) — source n°1 : YCM.
 
     python3 scripts/regates_clubs.py [--reseau] [--ecrire]

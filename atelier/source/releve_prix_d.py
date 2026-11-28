@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Lecture seule : télécharge les 60 pages sans prix du lot D et liste les montants repérés (€, CHF, £, EUR)."""
 import json, os, re, subprocess, sys, html
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

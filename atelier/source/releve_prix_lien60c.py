@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 60, passe 3 : devises £ / $ / CHF / PLN etc. sur les offres encore sans prix. Écrit releve_prix60c.json."""
 import json, re, html, urllib.request, concurrent.futures as cf
 d = json.load(open('projets/sailingmore/stages.json', encoding='utf-8'))

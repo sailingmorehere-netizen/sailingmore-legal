@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import re, urllib.request
 URLS = ['https://www.oltremare.it/calendario-corsi-e-allenamenti/',
         'https://www.oltremare.it/campus-vela-ragazzi-2027/',

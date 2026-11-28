@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import time, sys
 t = time.time()
 while time.time() - t < 570:

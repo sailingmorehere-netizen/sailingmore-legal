@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Ecrit 'niveau' dans stages.json pour les offres sans niveau des écoles nommées, d'après le TITRE seul.
 Rien n'est écrit quand le titre ne le dit pas. Usage : python3 scripts/niveau_depuis_titre.py"""
 import json, re

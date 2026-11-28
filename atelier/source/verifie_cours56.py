@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Contrôle de la découpe du cours (tâche 56). Bibliothèque standard seulement. Sortie 0 si tout passe."""
 import glob
 import json

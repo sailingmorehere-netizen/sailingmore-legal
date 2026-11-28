@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 53 : dates début/fin des stages UKSA, relevées sur uksa.org (lecture seule).
 
 Pour chaque fiche UKSA, lit la page du cours, prend la plus proche date publiée du tableau

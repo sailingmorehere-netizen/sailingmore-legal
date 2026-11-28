@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Seul écrivain de site/sitemap.xml (règle 7, 25/11/2026).
 
 Appelé par `accueil_site.sortir_le_site` ; aucun autre script n'écrit le sitemap.
@@ -18,7 +19,7 @@ from pathlib import Path
 
 URL = "https://sailingmore.fr"
 # Ordre du sitemap. `index.html` -> « / ». equivalences.html : absente tant qu'elle est noindex (page vide).
-PAGES = ["index.html", "cours.html", "lexique.html", "regles-de-course.html", "regates.html", "stages.html", "comparatif-stages.html",
+PAGES = ["index.html", "cours.html", "references.html", "lexique.html", "regles-de-course.html", "regates.html", "stages.html", "comparatif-stages.html",
          "carte.html", "ports.html", "simulateur.html", "bateaux.html", "bateaux/index.html", "chants-de-marin.html",
          "equivalences.html", "securite-obligatoire.html", "jeux.html", "annonceurs.html",
          "bourse-equipiers.html", "qui-sommes-nous.html"]
@@ -59,6 +60,9 @@ def fusionner(site: Path) -> int:
     # mais jamais déclarées — la correction de la veille n'avait porté que sur le sitemap publié,
     # pas sur son écrivain, donc la reconstruction suivante l'avait effacée.
     story = sorted(x.relative_to(site).as_posix() for x in (site / "stories").glob("*.html"))
+    # La clé IndexNow n'est pas une page : elle vit à la racine (`<clé>.txt`) et dans la copie gardée
+    # sous `cache/atelier/...`, jamais au sitemap — un sitemap liste des pages, et l'y mettre faisait
+    # compter un fichier de 32 caractères comme « page vide » par `pages_vivantes` (28/11/2026).
     for nom in dict.fromkeys(list(noms) + mot + story):
         p = site / nom
         if not _indexable(p):

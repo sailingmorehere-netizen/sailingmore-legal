@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 44 : renseigne debut/fin/duree_jours ensemble pour les offres de stages.json
 dont la page publie une période datée. Règles strictes :
  - uniquement des PÉRIODES (début + fin), jamais une date seule (avis, 'Stand', promos) ;

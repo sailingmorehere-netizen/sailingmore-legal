@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 61 : relève debut/fin ÉCRITS avec année complète sur la page de l'offre (jamais déduits).
 Formes : JJ.MM.AAAA[.] (until|bis|au|-|–) JJ.MM.AAAA[.] ; AAAA-MM-JJ (to|-|–) AAAA-MM-JJ ;
 JJ/MM/AAAA - JJ/MM/AAAA. Décision : première période À VENIR (>= aujourd'hui), durée 0..60 j,

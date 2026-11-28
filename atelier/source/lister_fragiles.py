@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import json, re
 d = json.load(open('projets/sailingmore/site/stages-proches.json', encoding='utf-8'))
 pref = ["rya day skipper motor", "rya coastal skipper motor", "rya motor boat coastal skipper",

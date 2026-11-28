@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 22 : verse les 222 offres Europe vague 1 (AUT SWE DNK NOR CZE POL) dans stages.json et ecoles.json.
 Idempotent (clé école+titre+lien), n'écrase rien : ajoute seulement. Prix en devise locale, prix_eur seulement
 si EUR (pas de conversion). duree_jours seulement si statut 'ok' (ou absent) ; sinon None + duree_texte.

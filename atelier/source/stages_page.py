@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Construit la page `stages.html` : les stages et cours que vendent des écoles de voile européennes,
 sur leurs propres eaux comme aux Antilles, en Atlantique ou en mer du Nord.
 

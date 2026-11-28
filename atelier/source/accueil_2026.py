@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """L'accueil 2026 de sailingmore.fr : des cases, deux familles de chiffres, rien d'animé.
 
 Tâche n°47 (Nicolas, 24/11/2026). Une seule source par objet :

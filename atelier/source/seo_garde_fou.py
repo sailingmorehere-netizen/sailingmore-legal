@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Garde-fou SEO : mesure les 9 défauts de gabarit sur les pages HTML du site.
 
 Usage : python3 scripts/seo_garde_fou.py [--exemples N]

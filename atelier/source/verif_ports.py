@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import sqlite3, os, sys
 c = sqlite3.connect('projets/sailingmore/ports.sqlite')
 n = c.execute('select count(*) from ports').fetchone()[0]

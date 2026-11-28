@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Contrôle de la charte graphique v2.0 — c'est ce script qui tranche, pas une impression.
 
 Lit les pages du site (les *.html de la racine, hors pavillon-* et hors _*) et sort, page par page :

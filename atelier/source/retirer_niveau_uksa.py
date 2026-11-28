@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import json
 p = "projets/sailingmore/site/stages-proches.json"
 d = json.load(open(p, encoding="utf-8"))

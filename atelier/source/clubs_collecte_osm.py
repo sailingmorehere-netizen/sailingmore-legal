@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Collecte les clubs de voile d'OpenStreetMap (lecture seule, GET Overpass) -> projets/clubs-monde/osm.json.
 Lancer depuis la racine de la copie : python3 scripts/clubs_collecte_osm.py
 """

@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Garde-fous des écrans de compte : python3 scripts/test_comptes_page.py (code de sortie 1 si un interdit apparaît)."""
 import re
 import shutil

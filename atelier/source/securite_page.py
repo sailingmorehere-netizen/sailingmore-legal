@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Page `securite-obligatoire.html` : matériel de sécurité exigé selon pavillon, distance d'un abri, équipage.
 
 Tâche 30 (24/11/2026). **Aucune exigence n'est écrite ici ni de mémoire** : les règles viennent de

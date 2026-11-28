@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """La page d'accueil de sailingmore.fr — une vitrine, rien d'autre.
 
 Nicolas, 18/11/2026 : « le but du site pour l'instant c'est de présenter Sailing More avec classe »,
@@ -1542,6 +1543,12 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
     print(f"mer posée sur {n} page(s) supplémentaire(s)")
     print(f"barre du site posée sur {poser_entete_partout()} page(s)")
     print(f"lien du flux posé sur {poser_flux_partout()} page(s)")
+    # © visible en pied + en-tête © sur toutes les pages (28/11/2026), en dernier pour ne rien écraser.
+    try:
+        import copyright_site
+        print(f"pied © posé sur {copyright_site.poser_pied(SITE)} page(s)")
+    except Exception as e:  # noqa: BLE001
+        print(f"pied © non posé : {e}")
     # La liste blanche des liens sortants (26/11/2026) : elle était reconstruite à la main, donc
     # périmée — la page bourse aux équipiers pointait 13 adresses absentes de `go-liens.json`, et
     # `go.php` répondait 404. Elle se refait maintenant à chaque reconstruction, après toutes les pages.

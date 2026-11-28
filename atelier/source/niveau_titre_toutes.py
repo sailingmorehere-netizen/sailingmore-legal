@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Ecrit 'niveau' dans stages.json pour TOUTES les offres sans niveau, d'après le TITRE seul (multilingue).
 Rien n'est écrit quand le titre ne le dit pas. Les pages sans prix ni dates (infos, accès...) ne sont pas touchées
 par cette règle : seul un mot de niveau explicite dans le titre compte.

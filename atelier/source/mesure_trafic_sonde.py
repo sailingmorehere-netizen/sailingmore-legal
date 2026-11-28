@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Sonde en lecture seule : état de la mesure de trafic sur sailingmore.fr.
 Vérifie : balise google-site-verification, scripts de comptage, robots.txt, sitemap.
 Aucune écriture vers l'extérieur (GET uniquement)."""

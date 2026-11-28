@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Mots de lexique ajoutés pour la page des bateaux (nomenclature illustrée).
 
 Source unique de ces 44 entrées : `python3 scripts/bateaux_page.py --lexique` les range dans

@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 30 : lieu des offres de stages. À défaut du lieu trouvé sur la page (voir lieux_stages63.py), le port
 d'attache de l'école — seulement pour les écoles à UN site de formation, vérifié sur leur page contact
 (23-26/11/2026). Écoles multi-destinations (charters, flottilles) : jamais de repli. Offre située dans un autre

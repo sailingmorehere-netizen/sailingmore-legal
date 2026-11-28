@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Comptes : la source unique de js/comptes.js, js/comptes-ui.js, connexion.html, inscription.html, mon-compte.html.
 
 Nicolas, 24/11/2026 : « il peut coder les comptes sans changement d'hébergement en attendant ? » — oui pour

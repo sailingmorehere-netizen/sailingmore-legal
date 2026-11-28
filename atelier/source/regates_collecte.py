@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Calendrier des régates de Sailing More : collecte les sources, écrit un JSON unique.
 
 Une seule sortie : `projets/sailingmore/regates.json`, lue par `regates_page.py`.

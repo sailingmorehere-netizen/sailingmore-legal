@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Niveau des offres Zeilschool Ûp, lu sur la page « Bootkeuze » de l'école (champ « Zeilervaring »).
 
 Relevé en ligne le 27/11/2026 : Optimist, Laser Pico 1/2 mans, Polyvalk, Keus22 = « geen » (aucune

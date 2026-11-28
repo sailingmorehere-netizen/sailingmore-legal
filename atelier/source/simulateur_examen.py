@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Simulateur d'examen : moteur unique, permis en fichiers de données.
 
 Données : projets/sailingmore/examens/*.json (un fichier = un examen).

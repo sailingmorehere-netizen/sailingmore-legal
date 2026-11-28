@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Construit projets/sailingmore/chants-de-marin.json à partir des livres téléchargés (cache/chants/src).
 
     python3 scripts/chants_construire.py      # réécrit le JSON (les six chants d'origine sont conservés tels quels)
@@ -6,6 +7,7 @@ Aucune parole n'est écrite ici : elles sont lues dans l'OCR des livres, ligne p
 nettoyées (apostrophes, guillemets, numéros de couplet, astérisques de notes) et jamais réécrites.
 """
 import json
+import shutil
 import re
 import sys
 from pathlib import Path
@@ -42,7 +44,9 @@ BRUIT = [(r"\}", ""), (r"\bQO\b", "O"), (r"\bOQ\b", "O"), (r"\b0'", "o'"), (r"\(
          (r"(?<=mail\.\") 2$", ""), (r"(?<=meal\.) 3$", ""), (r", luna\)$", ","), (r"\s*\|\s*\(twice$", ""),
          (r"^%\s+", ""), (r"hundied", "hundred"), (r"thefosey", "the Josey"), (r"^Chorus\s+(?=\w)", ""),
          (r"^Solo & Chorus\.\s*", ""), (r"^So[/lI1]o\.\s*", ""), (r"^Solo\.\s+(?=South Australia is)", ""), (r"^,\s*\d{1,2}\.\s+", ""), (r"\bete\.$", "etc."), (r"^I\.\s+", ""), (r"^\d{1,2}\.\s+(?=King Louis)", ""),
-         (r"^S\.olo\.\s*-?\s*", ""), (r"(?<=o'foyre\.) 1$", ""), (r"(?<=Elbow,) 2$", ""), (r"\bW T hisky\b", "Whisky"), (r"\bmy johnny\b", "my Johnny")]
+         (r"^S\.olo\.\s*-?\s*", ""), (r"(?<=o'foyre\.) 1$", ""), (r"(?<=Elbow,) 2$", ""), (r"\bW T hisky\b", "Whisky"), (r"\bmy johnny\b", "my Johnny"),
+         (r"\bItl \b", "I'll "), (r"\bfcr \b", "for "), (r"\bIlove\b", "I love"), (r"\bœ\b", "of"),
+         (r"(?<=above her\.) 4$", ""), (r"^O! ", "O "), (r"\bO! ", "O "), (r"(?<=92,) 2$", "")]
 
 
 def nettoyer(t: str, livre: str):
@@ -174,7 +178,63 @@ def main():
                         "resume": {"fr": BILLY_NOTE[0], "en": BILLY_NOTE[1]}, "paroles": BILLY_BOY, "accords": "", "audio": None,
                         "video": None, "partiel": True,
                         "source": source("billy-boy", "Billy Boy", T1, 0, marq) + " — paroles partielles : couplets 2 à 4 ; le premier est noté sous la portée"})
-    d["maj"] = "2026-11-25"
+    # Compléments moissonnés à la main (scripts/chants_ajouts.py les a déjà vérifiés verset par verset)
+    ajouts = Path("/opt/data/cache/chants/ajouts.json")
+    n_aj = 0
+    if ajouts.exists():
+        vus_id = {c["id"] for c in d["chants"]}
+        vus_t = {c["titre"].strip().lower() for c in d["chants"]}
+        for e in json.loads(ajouts.read_text(encoding="utf-8")):
+            if e["id"] in vus_id or e["titre"].strip().lower() in vus_t:
+                continue
+            d["chants"].append(e)
+            vus_id.add(e["id"])
+            vus_t.add(e["titre"].strip().lower())
+            n_aj += 1
+        print(f"ajouts moissonnés : {n_aj}")
+    # Illustrations (26/11/2026) : Claude les dépose dans `claude/livrables/`, je les pose ici — une
+    # image sans crédit lisible n'entre pas, une image pour un chant absent est ignorée.
+    # Deux emplacements (26/11/2026) : le dépôt propre (`claude/livrables/`) et la copie de travail de
+    # Claude, où il écrit vraiment. Fusion par `id`, la copie de travail gagne : ainsi une illustration
+    # produite par une passe n'attend pas que quelqu'un pense à la copier à la main.
+    racine = Path("/opt/data")
+    imgs = racine / "claude/livrables/chants-images.json"
+    travail = racine / "cache/claude-nuit/travail/claude/livrables/chants-images.json"
+    n_img = 0
+    if imgs.exists():
+        dossier = Path("/opt/data/projets/sailingmore/site/img/chants")
+        dossier.mkdir(parents=True, exist_ok=True)
+        par_id = {c["id"]: c for c in d["chants"]}
+        for e_ in json.loads(imgs.read_text(encoding="utf-8")):
+            c = par_id.get(e_.get("id"))
+            src = imgs.parent / "chants-images" / (e_.get("fichier") or "")
+            if not c or not src.is_file() or not (e_.get("credit") or "").strip():
+                continue
+            dst = dossier / f'{c["id"]}.jpg'
+            if not dst.exists() or dst.stat().st_size != src.stat().st_size:
+                shutil.copyfile(src, dst)
+            c["image"] = {"fichier": f'img/chants/{c["id"]}.jpg', "credit": e_["credit"],
+                          "licence": e_.get("licence", ""), "source": e_.get("source", ""),
+                          "largeur": e_.get("largeur")}
+            n_img += 1
+        if travail.is_file():
+            deja = {c["id"] for c in d["chants"] if c.get("image")}
+            for e_ in json.loads(travail.read_text(encoding="utf-8")):
+                if e_.get("id") in deja:
+                    continue
+                c = par_id.get(e_.get("id"))
+                src = travail.parent / "chants-images" / (e_.get("fichier") or "")
+                if not c or not src.is_file() or not (e_.get("credit") or "").strip():
+                    continue
+                dst = dossier / f'{c["id"]}.jpg'
+                if not dst.exists() or dst.stat().st_size != src.stat().st_size:
+                    shutil.copyfile(src, dst)
+                c["image"] = {"fichier": f'img/chants/{c["id"]}.jpg', "credit": e_["credit"],
+                              "licence": e_.get("licence", ""), "source": e_.get("source", ""),
+                              "largeur": e_.get("largeur")}
+                n_img += 1
+        print(f"illustrations posées : {n_img}")
+    d["maj"] = "2026-11-26"
     d["note"] = ("Source unique de la page chants-de-marin.html (générateur : scripts/chants_page.py ; construit par scripts/chants_construire.py "
                  "depuis les livres Terry I-II et Whall, cache/chants/src). Les chants ne se traduisent JAMAIS : titre et paroles restent dans la langue d'origine (lg). "
                  "`resume` : fr et en obligatoires, les autres langues retombent sur le français. `source` : livre et page ou n° du chant. `partiel` : couplets manquants "
@@ -195,10 +255,24 @@ def main():
     no = {"fr": "Norvégien", "en": "Norwegian", "it": "Norvegese", "es": "Noruego", "pt": "Norueguês", "de": "Norwegisch"}
     for l in d["langueNoms"]:
         d["langueNoms"][l]["no"] = no[l]
+    ja = {"fr": "Japonais", "en": "Japanese", "it": "Giapponese", "es": "Japonés", "pt": "Japonês", "de": "Japanisch"}
+    for l in d["langueNoms"]:
+        d["langueNoms"][l]["ja"] = ja[l]
     for l in d["ui"]:
         d["ui"][l]["pompe"] = pompe[l]
         d["ui"][l]["sommaire"] = grp[l]
         d["ui"][l]["srcLib"] = {"fr": "Source", "en": "Source", "it": "Fonte", "es": "Fuente", "pt": "Fonte", "de": "Quelle"}[l]
+    # Pages de chant (26/11/2026) : navigation et absence de paroles, dans les six langues de l'interface.
+    nav = {"fr": ("Chant précédent", "Chant suivant", "Paroles non transcrites à ce jour : le livre ne les donne pas lisibles."),
+           "en": ("Previous song", "Next song", "Lyrics not transcribed yet: the book does not give them legibly."),
+           "it": ("Canto precedente", "Canto seguente", "Testo non ancora trascritto: il libro non lo dà leggibile."),
+           "es": ("Canto anterior", "Canto siguiente", "Letra sin transcribir todavía: el libro no la da legible."),
+           "pt": ("Canto anterior", "Canto seguinte", "Letra ainda não transcrita: o livro não a dá legível."),
+           "de": ("Voriges Lied", "Nächstes Lied", "Text noch nicht übertragen: das Buch gibt ihn nicht lesbar.")}
+    for l in d["ui"]:
+        d["ui"][l]["precedent"], d["ui"][l]["suivant"], d["ui"][l]["sansParoles"] = nav[l]
+        d["ui"][l]["saPage"] = {"fr": "La page du chant", "en": "The song's page", "it": "La pagina del canto",
+                                "es": "La página del canto", "pt": "A página do canto", "de": "Die Liedseite"}[l]
     ecrire_json(d)
     n = len(d["chants"])
     print(f"{n} chants ; {sum(1 for c in d['chants'] if c.get('paroles') and not c.get('partiel'))} à paroles complètes (dont anciens) ; rejets : {rejets}")

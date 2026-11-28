@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Favoris : la source unique de js/config.js, js/favoris.js, js/favoris-ui.js et de mes-favoris.html.
 
 Nicolas, 24/11/2026 : le site est reconstruit depuis les générateurs et l'atelier republie toutes les

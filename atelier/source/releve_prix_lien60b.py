@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 60, passe 2 : offres sans prix_eur dont la passe 1 n'a rien trouvé (ou en HUF/RON).
 Motifs élargis : EUR 250, 250,-, Ft, lei/RON, 'euro'. Écrit releve_prix60b.json (lecture seule du site)."""
 import json, re, html, urllib.request, concurrent.futures as cf

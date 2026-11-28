@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import re, html, urllib.request
 for p in ['ado', 'optimist', 'rs-feva', 'adultes', 'parents-enfants']:
     s = urllib.request.urlopen('https://www.cnv.ch/fr/stages-voile/' + p, timeout=20).read().decode('utf-8', 'replace')

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Page `equivalences.html` : à quel niveau d'un autre référentiel mène un stage (RYA, ICC, FFVoile, DSV…).
 
 Sprint 1 (23/11/2026) : **la structure seulement.** Aucune correspondance n'est écrite ici ni dans les

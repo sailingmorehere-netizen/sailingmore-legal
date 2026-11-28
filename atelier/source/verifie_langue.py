@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """verifie_langue.py — compte le TEXTE manquant d'une langue, famille par famille (règle du 27/11/2026).
 
 Usage :

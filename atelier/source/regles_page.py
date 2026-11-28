@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Construit la page `regles-de-course.html` : les règles de course à la voile (RRS 2025-2028), avec
 recherche (numéro, titre, résumé, situation vécue) et filtres (partie, thème).
 

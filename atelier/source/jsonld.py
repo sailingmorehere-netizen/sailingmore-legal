@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Données structurées (JSON-LD) : une seule source pour toutes les pages générées.
 
 Règle : un seul bloc <script type="application/ld+json"> par page, un seul objet {"@context", "@graph": [...]}.

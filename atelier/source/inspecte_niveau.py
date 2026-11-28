@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import json,collections
 d=json.load(open('projets/sailingmore/stages.json',encoding='utf-8'))
 L=d if isinstance(d,list) else max([v for v in d.values() if isinstance(v,list)],key=len)

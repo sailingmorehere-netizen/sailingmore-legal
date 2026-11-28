@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 43 : complète releve_dates_stages.py (tâche 44) avec des formats de période
 supplémentaires (finnois, slovène, tchèque/slovaque, hongrois, néerlandais, ISO).
 Mêmes règles strictes : périodes début+fin seulement, début >= aujourd'hui, durée 0..30 j,

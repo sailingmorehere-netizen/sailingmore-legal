@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Régénère stages.html DANS la copie de travail (stages_page.py écrit sinon sous /opt/data)."""
 import sys
 from pathlib import Path

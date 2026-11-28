@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Table sigle FFVoile → nom lisible, et liste des jauges « inter-séries » (tout bateau).
 
 Fichier à part, lu par `regates_page.py`. Une seule source :

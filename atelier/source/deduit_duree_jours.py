@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 50 : si debut et fin existent et duree_jours est vide, poser fin-debut+1. Sinon rien.
 Usage: deduit_duree_jours.py [chemin stages.json]"""
 import json, sys

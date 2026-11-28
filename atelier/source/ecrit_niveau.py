@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Ecrit `niveau` dans stages.json quand le TITRE de l'offre le dit (echelle RYA / ASA / ISPA, mots explicites).
 Ne touche jamais un niveau deja present. Rien d'ecrit quand le titre ne dit rien."""
 import json, re

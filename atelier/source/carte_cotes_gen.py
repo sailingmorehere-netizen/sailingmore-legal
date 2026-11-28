@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Fabrique `carte_cotes.txt` (le tracé des côtes de la carte) depuis un GeoJSON de terres émergées.
 
 Usage : python3 scripts/carte_cotes_gen.py <ne_110m_land.geojson> [tolérance en degrés, 0.35 par défaut]

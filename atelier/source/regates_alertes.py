@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Alertes régates par filtre : relais d'inscription + résumé du lundi.
 
 Deux usages, une seule source pour les filtres (segment) et pour Brevo :

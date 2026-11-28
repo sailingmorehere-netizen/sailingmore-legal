@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import json, re, sys, urllib.request
 d = json.load(open('/opt/data/cache/claude-nuit/travail/projets/sailingmore/stages.json', encoding='utf-8'))
 ecoles = sys.argv[1:]

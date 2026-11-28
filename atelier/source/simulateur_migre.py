@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Migration unique : projets/sailingmore/examens/*.json -> simulateur/permis/<cle>.json,
 avec source par matière, langue de question, et les permis à venir en matières vides.
 Les anciens fichiers ne sont pas supprimés ici (à retirer à la main : ils ne sont plus lus)."""

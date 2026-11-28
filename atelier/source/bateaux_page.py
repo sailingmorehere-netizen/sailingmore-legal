@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Construit `bateaux.html` : la nomenclature illustrée de neuf bateaux, avec filtre, deux niveaux et renvoi au lexique.
 
 Sources uniques : `bateaux_dessins.py` / `bateaux_dessins2.py` (formes et pièces), `bateaux_mots.py` (44 mots

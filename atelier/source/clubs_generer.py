@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """osm.json + federations.json -> projets/clubs-monde/clubs.json et site/clubs.html (FR).
 Lancer depuis la racine de la copie : python3 scripts/clubs_generer.py
 Aucun contact sans source : chaque contact porte {valeur, source, url, date}. Sans source, pas de ligne.

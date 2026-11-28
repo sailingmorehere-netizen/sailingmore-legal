@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Critère des tâches « remplir un champ de projets/sailingmore/stages.json » (offres hors `hors_offre`).
 Usage : python3 /opt/data/scripts/verifie_stages_trou.py <champ> [<seuil>] [<école>]
   champ  : prix_eur, debut, fin, duree_jours, niveau, lieu, image, lat

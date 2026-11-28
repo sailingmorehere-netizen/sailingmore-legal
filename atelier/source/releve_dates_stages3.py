@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Tâche 41 : complète releve_dates_stages.py / 2 pour les pages-CALENDRIER (plus de 6 périodes).
 Décision prise : pour une offre dont la page publie un calendrier de sessions, debut/fin = la PROCHAINE
 session (la première période à venir), avec debut, fin, duree_jours écrits ensemble. Année absente :

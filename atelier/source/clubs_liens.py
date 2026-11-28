@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Lien automatique club -> fiche. UNE seule fonction de détection, à appeler partout (pages, articles, régates, stages).
 
     from clubs_liens import charger, lier

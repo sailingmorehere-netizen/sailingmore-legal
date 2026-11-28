@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Conseiller de stage — tri et réponse 100 % déterministes (tâche 62).
 
 Aucune IA : la demande est lue par des règles, les offres viennent de

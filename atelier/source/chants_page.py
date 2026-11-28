@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Page `chants-de-marin.html` : six chants de marins, paroles du domaine public, un enregistrement libre.
 
 Publiée le 24/11/2026 d'après la maquette validée par Nicolas le 23/11/2026
@@ -96,6 +97,9 @@ h1::after{content:"";display:block;width:3.4rem;height:3px;background:var(--roug
 .badge.lng{color:#a9d3ff;border-color:rgba(169,211,255,.3)}
 .fiche h3{margin:.9rem 0 .35rem;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:#6f8598;font-weight:600}
 .txt{margin:.6rem 0 0;font-size:.92rem;color:#cfdae4}
+.illus{margin:.7rem 0 1.1rem}
+.illus img{width:100%;max-width:560px;height:auto;border:1px solid rgba(255,255,255,.14)}
+.illus figcaption{font-size:.66rem;color:#6f8598;line-height:1.5;margin-top:.35rem;max-width:560px}
 .paroles{white-space:pre-line;font-size:.88rem;color:#e3ebf2;border-left:2px solid rgba(226,58,62,.6);padding-left:.9rem;line-height:1.75;margin:0}
 .acords{font-family:ui-monospace,Menlo,monospace;font-size:.84rem;color:#a9d3ff;background:rgba(255,255,255,.04);padding:.6rem .7rem;border-radius:2px;white-space:pre-line;margin:0 0 .4rem}
 .transp{display:flex;align-items:center;gap:.4rem}
@@ -333,11 +337,16 @@ def fiche_html(c: dict, d: dict, L: str = "fr") -> str:
             f'<h2 class="titre" lang="{e(c["lg"])}">{e(c["titre"])}<span class="fam">{e(T[c["type"]])} · {e(nom)}</span></h2>'
             f'<div class="badges"><span class="badge {badge}">{e(T[badge])}</span><span class="badge lng">{e(c["lg"])}</span></div></div>'
             f'<p class="annee">{e(T["an"]["l"])} : <b>{e(_annee(c["annees"], T["an"]))}</b><em> · {e(T["an"]["a"])}</em></p>'
-            f'<p class="txt">{e(c["resume"].get(L) or c["resume"]["fr"])}</p>{paroles}'
+            f'<p class="txt">{e(c["resume"].get(L) or c["resume"]["fr"])}</p>'
+            + (f'<figure class="illus"><img src="{e(c["image"]["fichier"])}" alt="{e(c["titre"])}" loading="lazy" '
+               f'width="{e(c["image"].get("largeur") or 900)}" decoding="async"><figcaption>{e(c["image"]["credit"])}'
+               '</figcaption></figure>' if c.get("image") else "")
+            + f'{paroles}'
             + (f'<p class="src">{e(T["srcLib"])} : {e(c["source"])}</p>' if c.get("source") else "") + '</div>'
             f'<div><h3>{e(T["ecouter"])}</h3>{son}{liens}{accords}'
             + (f'<p class="src">{e(_note_audio(c["audio"], T))}</p>' if c.get("audio") else "")
-            + f'<div class="emplacement-video" data-chant="{c["id"]}">{vid}</div></div></article>')
+            + f'<div class="emplacement-video" data-chant="{c["id"]}">{vid}</div>'
+            + f'<a class="son-lien" href="chant-{c["id"]}.html">{e(T["saPage"])}<em>→</em></a></div></article>')
 
 
 def _noeuds_jsonld(d: dict) -> list[dict]:
@@ -439,8 +448,10 @@ def ecrire_page(dossier: Path = SITE) -> str:
         raise SystemExit("chants-de-marin.html non écrite : " + " ; ".join(pb))
     dossier.mkdir(parents=True, exist_ok=True)
     (dossier / PAGE).write_text(construire(d), encoding="utf-8")
+    import chants_chanson
+    nb_ch = chants_chanson.ecrire(dossier)
     sm = maj_sitemap(dossier)
-    return (f"{len(d['chants'])} fiches · {sum(1 for c in d['chants'] if c.get('audio'))} lecteurs · "
+    return (f"{len(d['chants'])} fiches · {nb_ch} page(s) de chant · {sum(1 for c in d['chants'] if c.get('audio'))} lecteurs · "
             f"{sum(1 for c in d['chants'] if (c.get('video') or {}).get('id'))} vidéo(s) · sitemap {'à jour' if sm else 'absent'}")
 
 

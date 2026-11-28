@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """La mer en fond du site : la scène du louvoyage reste fixe derrière toute la page d'accueil,
 et le voilier continue de naviguer pendant qu'on descend.
 

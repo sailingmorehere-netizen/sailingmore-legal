@@ -1,3 +1,4 @@
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 import re,sys,urllib.request,subprocess
 for ligne in open(sys.argv[1]):
     p=ligne.split(' ')

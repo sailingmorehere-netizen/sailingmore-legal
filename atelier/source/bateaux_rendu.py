@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# © 2026 Sailing More — tous droits réservés. All rights reserved.
 """Rend les SVG de nomenclature en WebP, sans autre dépendance que Pillow.
 
 Chaîne unique (une seule source, un seul chemin) :
