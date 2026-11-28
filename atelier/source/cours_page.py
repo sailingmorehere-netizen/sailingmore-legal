@@ -11,6 +11,15 @@ Règle de la page : une règle n'est citée que par son numéro et son intitulé
 intitulés repris de regles.json ; COLREG 1972, intitulés du texte anglais officiel de l'OMI).
 
     python3 scripts/cours_page.py --ecrire    # écrit projets/sailingmore/site/cours.html
+
+IDENTIFIANTS DE PASSAGE (propositions de texte des moniteurs, tâche 53) : chaque paragraphe du corps d'un
+chapitre porte `<p id="p-<id du chapitre>-<langue>-<n>">`. <id du chapitre> = la clé de CHAPITRES (slug, pas
+le numéro d'affichage, qui change si l'ordre change) ; <n> = rang 1-based du paragraphe dans la liste
+`TEXTES[lang]["ch"][<id>]["p"]`. Rien n'est tiré au hasard ni de la date : la même source donne les mêmes
+identifiants à chaque construction. RÈGLE D'ÉDITION : pour ne pas décaler les propositions déjà déposées,
+ajouter un paragraphe À LA FIN de la liste, ne pas en insérer ni en supprimer au milieu ; remplacer le
+texte d'un paragraphe garde son identifiant. Si l'on doit insérer quand même, la proposition garde
+`texte_actuel` (copie au dépôt) pour retrouver le passage visé.
 """
 from __future__ import annotations
 
@@ -1419,7 +1428,7 @@ def _encart_stage(lang: str) -> str:
 def _chapitre(n: int, ch: dict, lang: str) -> str:
     t = TEXTES[lang]
     c = t["ch"][ch["id"]]
-    corps = "".join(f"<p>{_txt(p)}</p>" for p in c["p"])
+    corps = "".join(f'<p id="p-{ch["id"]}-{lang}-{i}">{_txt(p)}</p>' for i, p in enumerate(c["p"], 1))
     regles = ""
     if ch["regles"]:
         items = []

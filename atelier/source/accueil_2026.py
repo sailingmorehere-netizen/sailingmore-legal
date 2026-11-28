@@ -129,9 +129,9 @@ def textes(x: dict) -> dict:
                "Corsi di vela, regate e lezioni, in Europa e oltre.",
                "Cursos de vela, regatas y clases, en Europa y más allá.",
                "Cursos de vela, regatas e aulas, na Europa e além."],
-        "sous": ["Une plateforme de passionnés, faite par des passionnés.", "A platform of enthusiasts, made by enthusiasts.",
-                 "Eine Plattform von Begeisterten, gemacht von Begeisterten.", "Una piattaforma di appassionati, fatta da appassionati.",
-                 "Una plataforma de aficionados, hecha por aficionados.", "Uma plataforma de apaixonados, feita por apaixonados."],
+        "sous": ["Média indépendant de la voile, fait par des passionnés.", "An independent sailing outlet, made by enthusiasts.",
+                 "Unabhängiges Segelmedium, von Enthusiasten gemacht.", "Media indipendente di vela, fatto da appassionati.",
+                 "Medio independiente de vela, hecho por apasionados.", "Meio independente de vela, feito por apaixonados."],
         "c_stages": ["Stages", "Courses", "Segelkurse", "Corsi", "Cursos", "Cursos"],
         "c_regates": ["Régates", "Regattas", "Regatten", "Regate", "Regatas", "Regatas"],
         "c_cours": ["Cours", "Lessons", "Theorie", "Lezioni", "Clases", "Aulas"],
@@ -239,6 +239,18 @@ CSS = """
 .liens-sobres{max-width:62rem;margin:1.8rem auto 0;padding:0 1.4rem;display:flex;flex-wrap:wrap;gap:.5rem 1.4rem;font-size:.88rem;color:#9db2c6}
 .liens-sobres a{border-bottom:1px dotted rgba(159,179,200,.5)}
 .liens-sobres a:hover{color:#fff}
+/* Finition (tâche 51, 28/11/2026) : pas de nouvelle charte, seulement des états et des mesures.
+   Échelle des écarts : .5 / 1 / 1.4 / 2.4 rem. Gris de texte unique : #9db2c6 (≥ 7:1 sur le fond nuit). */
+.nombre b{font-variant-numeric:tabular-nums}
+.nombre small{font-size:.74rem;line-height:1.35}
+.blocn{padding-top:1rem}
+.blocn .date{margin-bottom:1rem}
+.liens-sobres{gap:.2rem 1.4rem}
+.liens-sobres a{padding:.45rem 0;border-bottom:0;text-decoration:underline dotted rgba(159,179,200,.5);
+  text-underline-offset:.3em;transition:color .18s ease,text-decoration-color .18s ease}
+.liens-sobres a:hover{text-decoration-color:#e23a3e}
+.liens-sobres a:focus-visible{outline:2px solid #e23a3e;outline-offset:3px;color:#fff}
+@media (prefers-reduced-motion:reduce){.liens-sobres a{transition:none}}
 @media (max-width:760px){
   .cases-2{margin-top:.6rem}
   .tete{padding:1.4rem 1.4rem 1rem}
@@ -369,13 +381,15 @@ PRIORITE = ["index.html", "stages.html", "regates.html", "cours.html"]
 
 
 def _ordonner_menu(mid: str) -> str:
-    """Le menu garde l'ordre écrit dans `site_blocks.MENU_PAGES`, et rien d'autre.
-
-    26/11/2026 : cette fonction ne gardait que les `<a>` du panneau — le `<details>` du sous-menu des
-    chants disparaissait donc de l'accueil, qui affichait les 130 chants à plat dans la barre. Un
-    seul endroit décide de l'ordre : la liste `MENU_PAGES`.
-    """
-    return mid
+    """Le menu suit l'ordre des priorités : accueil, stages, régates, cours, puis le reste, dans son ordre."""
+    m = re.search(r'(<nav aria-label="Toutes les pages du site">)(.*?)(</nav>)', mid, re.S)
+    if not m:
+        return mid
+    liens = re.findall(r"<a .*?</a>", m.group(2), re.S)
+    cle = lambda a: re.search(r'href="([^"]+)"', a).group(1)
+    tete = [a for p in PRIORITE for a in liens if cle(a) == p]
+    reste = [a for a in liens if cle(a) not in PRIORITE]
+    return mid[:m.start(2)] + "".join(tete + reste) + mid[m.end(2):]
 
 
 def refondre(html: str, racine: Path) -> str:
