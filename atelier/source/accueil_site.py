@@ -1274,7 +1274,10 @@ def fichiers_a_publier() -> list[str]:
                          "equivalences.html", "cours.html", "bateaux.html", "bateaux.json", "stages-proches.json", "404.html", "mentions-legales.html",
                          "bourse-equipiers.html", "ports.html", "simulateur.html", "chants-de-marin.html",
                          "qui-sommes-nous.html",
-                         "confidentialite.html", "delete.html", "sitemap.xml", "feed.xml")
+                         "confidentialite.html", "delete.html", "sitemap.xml", "feed.xml",
+                         # La clé IndexNow est servie à la racine, sinon Bing ne peut pas vérifier le
+                         # site et `indexnow.py` n'a jamais rien envoyé (27/11/2026).
+                         "indexnow-cle.txt")
              if (SITE / n).exists()]
     # Une page par pavillon (24/11/2026, chapitre des pavillons du cours) : 42 pages `pavillon-<id>.html`.
     # Elles se publient avec les autres, sinon elles restent locales et les liens du cours mènent à un 404.
@@ -1306,7 +1309,18 @@ def miroir_vers_sortie(liste: list[str] | None = None) -> int:
     la publication envoyait l'ancien `cache/rhum/site`, resté en arrière. Les deux sortent
     maintenant de la même génération, à l'octet près.
     """
-    liste = liste or fichiers_a_publier()
+    # La clé IndexNow se pose dans le site lui-même avant le miroir : elle vient d'un fichier unique
+    # (`scripts/indexnow-cle.txt`), donc une seule source pour le nom et pour le contenu.
+    liste = list(liste or fichiers_a_publier())
+    try:
+        import indexnow as _ix  # noqa: PLC0415
+        cle = _ix.CLE_LOCALE.read_text(encoding="utf-8").strip()
+        if len(cle) == 32:
+            (SITE / f"{cle}.txt").write_text(cle, encoding="utf-8")
+            if f"{cle}.txt" not in liste:
+                liste.append(f"{cle}.txt")
+    except Exception:  # noqa: BLE001  (sans clé, le site sort quand même)
+        pass
     for nom in liste:
         dst = SORTIE / nom
         dst.parent.mkdir(parents=True, exist_ok=True)
@@ -1445,6 +1459,14 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
         print(f"cours théoriques : {cours_page.ecrire_page(SITE)}")
     except Exception as e:  # noqa: BLE001
         print(f"cours théoriques non écrits : {e}")
+    # Les références (27/11/2026, sous-page des cours : « tu le laisses dans cours de voile, tu fais une
+    # sous-page ») : elle lit les chapitres du cours et les 42 pavillons, donc elle vient après eux.
+    try:
+        import references_page
+        (SITE / "references.html").write_text(references_page.page(), encoding="utf-8")
+        print("références : page écrite")
+    except Exception as e:  # noqa: BLE001
+        print(f"références non écrites : {e}")
     # Une page par mot du lexique (25/11/2026, « on ferait pas une page par mots ? ») : même chemin, après le
     # cours, puisque les pages lisent ses phrases. Rien à la main : le mot, sa phrase et ses questions viennent
     # du lexique et du cours, une reconstruction les remet à jour.
@@ -1549,6 +1571,7 @@ def sortir_le_site(jeu: str, blocs: str, miroir_complet: bool = True) -> int:
     # Le détecteur passe en dernier : plusieurs pages (régates, chants, jeux, annonceurs) sont
     # écrites plus loin dans la chaîne, et une page réécrite après lui perdait son bloc (24/11/2026).
     print(f"détecteur de langue posé sur {poser_langue_partout()} page(s)")
+    print(f"balise Search Console posée sur {poser_verification_partout()} page(s)")
     print(f"site écrit dans {SITE} — {len(list(SITE.rglob('*')))} entrées")
     liste = fichiers_a_publier()
     # `--page` ne recopie que la page demandée : recopier tout `cache/rhum/site` depuis un cron
@@ -1713,6 +1736,36 @@ def poser_langue_partout() -> int:
         if "<!--langue-debut-->" in html:
             html = re.sub(r"<!--langue-debut-->.*?<!--langue-fin-->", lambda m: bloc, html, count=1, flags=re.S)
         elif ('data-lang="fr"' in html or 'data-l="' in html) and re.search(r"<head[^>]*>", html):
+            html = re.sub(r"(<head[^>]*>)", lambda m: m.group(1) + bloc, html, count=1)
+        if html != avant:
+            page.write_text(html, encoding="utf-8")
+            fait += 1
+    return fait
+
+
+def poser_verification_partout() -> int:
+    """La balise de propriété Search Console dans le `<head>` de chaque page (28/11/2026, tâche 60).
+
+    Le jeton est donné par Google dans le compte de Nicolas : il vit dans UN fichier,
+    `projets/sailingmore/search-console-jeton.txt` (la valeur seule de `content=`, ou la ligne
+    `google-site-verification=XXXX` collée telle quelle). Fichier absent ou vide = aucune balise,
+    et une balise déjà posée est retirée. Idempotent : encadrée par deux marqueurs, remplacée à
+    chaque construction, jamais empilée. Pas de jeton inventé.
+    """
+    fichier = RACINE / "projets/sailingmore/search-console-jeton.txt"
+    jeton = fichier.read_text(encoding="utf-8").strip() if fichier.exists() else ""
+    jeton = re.sub(r"^google-site-verification=", "", jeton)
+    if jeton and not re.fullmatch(r"[A-Za-z0-9_\-]{10,100}", jeton):
+        print(f"jeton Search Console ignoré : format inattendu ({fichier.name})")
+        jeton = ""
+    bloc = ('<!--gsc-debut--><meta name="google-site-verification" content="%s"><!--gsc-fin-->' % jeton) if jeton else ""
+    fait = 0
+    for page in sorted(SITE.rglob("*.html")):  # rglob : les fiches de port vivent dans ports/
+        html = page.read_text(encoding="utf-8")
+        avant = html
+        if "<!--gsc-debut-->" in html:
+            html = re.sub(r"<!--gsc-debut-->.*?<!--gsc-fin-->", lambda m: bloc, html, count=1, flags=re.S)
+        elif bloc and re.search(r"<head[^>]*>", html):
             html = re.sub(r"(<head[^>]*>)", lambda m: m.group(1) + bloc, html, count=1)
         if html != avant:
             page.write_text(html, encoding="utf-8")
